@@ -5,6 +5,7 @@ from qiskit.circuit.random import random_circuit
 import argparse
 import json
 from util import profile
+from reorder import Reorder
 
 def parse_args():
     parser = argparse.ArgumentParser(description='')
@@ -40,9 +41,12 @@ def print_qobj(qobj):
 
 def analysis(qobj):
     op_lists = get_op_list(qobj.to_dict()) 
+    reorder = Reorder.get_reorder('static')
     for op_list in op_lists:
-        for op in op_list:
-            print(op)
+        # for op in op_list:
+        #     print(op)
+        reorder.run(op_list)
+        
 
 #@profile
 def run(qobj, backend):
