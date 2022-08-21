@@ -3,15 +3,21 @@ import numpy as np
 from qiskit import *
 from qiskit.circuit.random import random_circuit
 import argparse
+import json
 
 def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--num-qubits', type=int, default=10, help='number of qubits')
-    parser.add_argument('--backend', type=str, default='statevector_simulator', help='simulation method')
+    parser.add_argument('--backend', type=str, default='aer_simulator', help='simulation method')
     parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit')
     parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path')
     parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit')
     return parser.parse_args()
+
+def print_qobj(qobj):
+    qobj_dict = qobj.to_dict()
+    qobj_json = json.dumps(qobj_dict, sort_keys=True, indent=4, separators=(',', ':'))
+    print(qobj_json)
 
 def main():
     args = parse_args()
@@ -31,7 +37,10 @@ def main():
     backend = Aer.get_backend(args.backend)
     test = transpile(circ, backend)
     qobj = assemble(test)
-    job = backend.run(qobj)
+    
+    print_qobj(qobj)
+    
+    # job = backend.run(qobj)
     # result = job.result()
 
 if __name__ == '__main__':
