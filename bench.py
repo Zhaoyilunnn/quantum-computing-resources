@@ -17,6 +17,7 @@ def parse_args():
     parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis')
     parser.add_argument('--run', type=int, default=1, help='Whether run experiments')
     parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion')
+    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster')
     return parser.parse_args()
 
 def get_op_list(qobj_dict):
@@ -48,12 +49,12 @@ def print_qobj(qobj):
     qobj_json = json.dumps(qobj_dict, sort_keys=True, indent=4, separators=(',', ':'))
     print(qobj_json)
 
-def analysis(qobj):
+def analysis(qobj, local_qubits=10):
     qobj_dict = qobj.to_dict()
     op_lists = get_op_list(qobj_dict) 
     n_qubits = get_n_qubits(qobj_dict)
     reorder = Reorder.get_reorder('static')
-    reorder.local_qubits = 20
+    reorder.local_qubits = local_qubits
     for op_list in op_lists:
         print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
         print("Num ops before: {}".format(len(op_list)))
@@ -61,7 +62,7 @@ def analysis(qobj):
         result = reorder.result
         # for cluster in result["clustered_insts"]:
         #     print(cluster)
-        print(json.dumps(result["clustered_insts"], sort_keys=True, indent=4, separators=(',', ':')))
+        #print(json.dumps(result["clustered_insts"], sort_keys=True, indent=4, separators=(',', ':')))
         print("Num ops after: {}".format(result["n_cluster"]))
         
 #@profile
@@ -89,7 +90,7 @@ def main():
     qobj = assemble(test)
     
     if args.analysis == 1:
-        analysis(qobj)
+        analysis(qobj, args.local_qubits)
     if args.run == 1:
         run(qobj, backend) 
 
