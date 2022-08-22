@@ -30,9 +30,18 @@ def get_op_list(qobj_dict):
             op_list = exp["instructions"]
             op_lists.append(op_list)
     except Exception:
-        print("Error processing qobj dictionary")
+        print("Error processing qobj dictionary: no instructions!")
         sys.exit(1)
     return op_lists
+
+def get_n_qubits(qobj_dict):
+    n_qubits = None
+    try:
+        n_qubits = qobj_dict["config"]["n_qubits"]
+    except KeyError:
+        print("Error processing qobj dictionary: no n_qubits!")
+        sys.exit(1)
+    return n_qubits
 
 def print_qobj(qobj):
     qobj_dict = qobj.to_dict()
@@ -40,14 +49,21 @@ def print_qobj(qobj):
     print(qobj_json)
 
 def analysis(qobj):
-    op_lists = get_op_list(qobj.to_dict()) 
+    qobj_dict = qobj.to_dict()
+    op_lists = get_op_list(qobj_dict) 
+    n_qubits = get_n_qubits(qobj_dict)
     reorder = Reorder.get_reorder('static')
+    reorder.local_qubits = 20
     for op_list in op_lists:
-        # for op in op_list:
-        #     print(op)
+        print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
+        print("Num ops before: {}".format(len(op_list)))
         reorder.run(op_list)
+        result = reorder.result
+        # for cluster in result["clustered_insts"]:
+        #     print(cluster)
+        print(json.dumps(result["clustered_insts"], sort_keys=True, indent=4, separators=(',', ':')))
+        print("Num ops after: {}".format(result["n_cluster"]))
         
-
 #@profile
 def run(qobj, backend):
     backend.run(qobj)
