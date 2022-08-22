@@ -1,3 +1,4 @@
+import sys
 
 class ReroderMethod:
     _n_local = 5
@@ -27,7 +28,11 @@ class ReroderMethod:
 
     @staticmethod
     def get_op_qubits(op):
-        return op["qubits"]
+        try:
+            return op["qubits"]
+        except KeyError:
+            print(op)
+            sys.exit(1)
 
     def run(self, op_list):
         pass
