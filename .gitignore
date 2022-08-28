@@ -1,3 +1,5 @@
 __pycache__*
 log*
 test_data*
+.ccls-cache*
+nohup.out

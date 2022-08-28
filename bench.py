@@ -4,7 +4,7 @@ from qiskit import *
 from qiskit.circuit.random import random_circuit
 import argparse
 import json
-from util import profile
+from util import *
 from reorder import Reorder
 
 def parse_args():
@@ -21,45 +21,6 @@ def parse_args():
     parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (Only for analysis==1)')
     return parser.parse_args()
 
-def get_op_lists(qobj_dict):
-    """
-    Get operation list from Qobj
-    """
-    op_lists = []
-    try:
-        exps = qobj_dict["experiments"]
-        for exp_id, exp in enumerate(exps):
-            op_list = exp["instructions"]
-            op_lists.append(op_list)
-    except Exception:
-        print("Error processing qobj dictionary: no instructions!")
-        sys.exit(1)
-    return op_lists
-
-def get_op_list_without_measure(op_list):
-    op_list_wo_meas = []
-    for op in op_list:
-        if op["name"] == "measure":
-            continue
-        if "qubits" not in op:
-            continue
-        op_list_wo_meas.append(op)
-    return op_list_wo_meas
-
-def get_n_qubits(qobj_dict):
-    n_qubits = None
-    try:
-        n_qubits = qobj_dict["config"]["n_qubits"]
-    except KeyError:
-        print("Error processing qobj dictionary: no n_qubits!")
-        sys.exit(1)
-    return n_qubits
-
-def print_qobj(qobj):
-    qobj_dict = qobj.to_dict()
-    qobj_json = json.dumps(qobj_dict, sort_keys=True, indent=4, separators=(',', ':'))
-    print(qobj_json)
-
 def analysis(qobj, local_qubits=10):
     qobj_dict = qobj.to_dict()
     op_lists = get_op_lists(qobj_dict) 
@@ -68,7 +29,8 @@ def analysis(qobj, local_qubits=10):
     reorder.local_qubits = local_qubits
     for op_list in op_lists:
         #print(json.dumps(op_list))
-        print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
+        #print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
+        print_op_list(op_list)
         op_list = get_op_list_without_measure(op_list) 
         #print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
         #print(json.dumps(op_list))
@@ -76,6 +38,9 @@ def analysis(qobj, local_qubits=10):
         reorder.run(op_list)
         result = reorder.result
         #print(json.dumps(result["clustered_insts"], sort_keys=True, indent=4, separators=(',', ':')))
+        for cluster in result["clustered_insts"]:
+            print('-------------------------')
+            print_op_list(cluster)
         print("Num ops after: {}".format(result["n_cluster"]))
         
 #@profile
@@ -104,7 +69,6 @@ def main():
 
     if args.analysis == 1:
         if args.draw_circ == 1:
-            print("drawing circuit ...")
             print(circ.draw(output='text'))
         analysis(qobj, local_qubits=args.local_qubits)
     if args.run == 1:
