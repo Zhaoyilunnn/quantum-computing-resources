@@ -9,15 +9,16 @@ from reorder import Reorder
 
 def parse_args():
     parser = argparse.ArgumentParser(description='')
+    parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion')
     parser.add_argument('--num-qubits', type=int, default=10, help='number of qubits')
     parser.add_argument('--backend', type=str, default='aer_simulator', help='simulation method')
     parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit')
     parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path')
     parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit')
-    parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis')
     parser.add_argument('--run', type=int, default=1, help='Whether run experiments')
-    parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion')
-    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster')
+    parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis')
+    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (Only for analysis==1)')
+    parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (Only for analysis==1)')
     return parser.parse_args()
 
 def get_op_lists(qobj_dict):
@@ -100,8 +101,11 @@ def main():
     backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
     test = transpile(circ, backend)
     qobj = assemble(test)
-    
+
     if args.analysis == 1:
+        if args.draw_circ == 1:
+            print("drawing circuit ...")
+            print(circ.draw(output='text'))
         analysis(qobj, local_qubits=args.local_qubits)
     if args.run == 1:
         run(qobj, backend) 
