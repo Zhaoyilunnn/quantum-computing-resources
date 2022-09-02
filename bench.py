@@ -17,12 +17,22 @@ def parse_args():
     parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit')
     parser.add_argument('--run', type=int, default=1, help='Whether run experiments')
     parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis')
+    parser.add_argument('--save-qobj', type=int, default=0, help='Whether save qobj file')
+    parser.add_argument('--qobj-file', type=str, default='qobj', help='qobj file path')
     parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (Only for analysis==1)')
     parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (Only for analysis==1)')
     return parser.parse_args()
 
-def analysis(qobj, local_qubits=10):
+def analysis(qobj, 
+        local_qubits=10, 
+        save_qobj=False, 
+        qobj_file=None):
     qobj_dict = qobj.to_dict()
+    if save_qobj:
+        if qobj_file is None:
+            raise ValueError("Set qobj file name when save_qobj is True!")
+        with open(qobj_file, 'w') as f:
+            f.write(json.dumps(qobj_dict))
     op_lists = get_op_lists(qobj_dict) 
     n_qubits = get_n_qubits(qobj_dict)
     reorder = Reorder.get_reorder('static')
@@ -70,7 +80,10 @@ def main():
     if args.analysis == 1:
         if args.draw_circ == 1:
             print(circ.draw(output='text'))
-        analysis(qobj, local_qubits=args.local_qubits)
+        analysis(qobj, 
+                local_qubits=args.local_qubits,
+                save_qobj=(False if args.save_qobj == 0 else True),
+                qobj_file=args.qobj_file)
     if args.run == 1:
         run(qobj, backend) 
 
