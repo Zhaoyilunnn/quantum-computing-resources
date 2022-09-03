@@ -28,7 +28,9 @@ public:
     // 1. Only see the chunk in primary storage
     // 2. 
     void apply_op();
-
+    
+    // Apply a multi-controlled single-qubit unitary gate
+    void apply_mcu();
 private:
     Chunk _chunk; 
 

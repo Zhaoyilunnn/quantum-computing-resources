@@ -9,9 +9,17 @@ class Chunk {
 public:
     Chunk(); 
 
-    // Apply a gate
-    void apply_gate(const op::Op& op);
+    void to_secondary();
 
+    // Apply a function
+    void apply_func(
+            const reg_t& qubits,
+            int n_threads);
+
+    // TODO `Add` data representing vector
+    //       Add a manager to manager to actually perform 
+    //       data movement
+    //       This manager should be configurable use template? 
 };
 
 Chunk::Chunk() {}
