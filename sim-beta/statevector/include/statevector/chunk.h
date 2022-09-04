@@ -7,7 +7,11 @@ namespace sv {
 
 class Chunk {
 public:
+    uint_t chunk_size_ = 0;
+
     Chunk(); 
+
+    uint_t chunk_size() const;
 
     void save_to_secondary();
 
@@ -26,9 +30,15 @@ public:
     //       Add a manager to manager to actually perform 
     //       data movement
     //       This manager should be configurable use template? 
+
+
 };
 
 Chunk::Chunk() {}
+
+uint_t Chunk::chunk_size() const {
+    return chunk_size_;
+}
 
 } // namespace sv
 

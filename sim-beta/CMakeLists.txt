@@ -10,3 +10,5 @@ add_subdirectory(framework)
 add_subdirectory(simulator)
 #add_subdirectory(operation)
 add_subdirectory(statevector)
+add_subdirectory(test)
+
