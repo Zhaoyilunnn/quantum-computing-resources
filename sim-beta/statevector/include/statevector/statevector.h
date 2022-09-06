@@ -5,16 +5,15 @@
 
 namespace sv {
 
-/*
- * A StateVector is a manager to control chunks and circuits.
- * Chunks may be stored in secondary storage
- * TODO: Should have a storage manager providing save/load 
- * The StateVector should only operate on one chunk in primary storage
- * TODO: We should have a `Hyper Logical` qubits.
- *       E.g., Consider an op on qubits 3,6,7,20, when it maps to 
- *       primary storage, the qubits looks like: 0,1,2,3 
- *
- * */
+
+// A StateVector is a manager to control chunks and circuits.
+// Chunks may be stored in secondary storage
+// TODO: Should have a storage manager providing save/load 
+// The StateVector should only operate on one chunk in primary storage
+// TODO: We should have a `Hyper Logical` qubits.
+//       E.g., Consider an op on qubits 3,6,7,20, when it maps to 
+//       primary storage, the qubits looks like: 0,1,2,3 
+// 
 class StateVector {
 public:
     void print();

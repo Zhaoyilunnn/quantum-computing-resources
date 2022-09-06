@@ -10,11 +10,10 @@
 
 namespace circ {
 
-/*
- * Here a `Circuit` is actually a sequence of operations
- * clustered together, i.e. a cluster
- *
- * */
+// 
+// Here a `Circuit` is actually a sequence of operations
+// clustered together, i.e. a cluster
+// 
 class Circuit {
 public:
 

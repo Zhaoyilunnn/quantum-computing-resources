@@ -17,8 +17,13 @@ public:
     uint_t chunk_size_ = 0;
 
     Chunk(); 
+    ~Chunk();
 
     uint_t chunk_size() const;
+
+    void free_mem();
+
+    void allocate_mem();
 
     void save_to_secondary();
 
@@ -33,10 +38,19 @@ public:
 
     void apply_mcu(const reg_t& qubits, const cvector_t& mat);
 
+private:
+
+    complex_t* _data; // The chunk vector 
 
 };
 
-Chunk::Chunk() {}
+Chunk::Chunk() : _data(nullptr) {
+
+}
+
+Chunk::~Chunk() {
+    free_mem();
+}
 
 uint_t Chunk::chunk_size() const {
     return chunk_size_;
