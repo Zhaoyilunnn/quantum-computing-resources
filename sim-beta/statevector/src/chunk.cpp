@@ -5,6 +5,8 @@
 
 namespace sv {
 
+template <size_t N> using areg_t = std::array<uint_t, N>;
+
 // BITS
 // BITS[i] = 2^i
 const std::array<uint_t, 64> BITS {{
@@ -47,7 +49,8 @@ const std::array<uint_t, 64> MASKS {{
     1152921504606846975ULL, 2305843009213693951ULL, 4611686018427387903ULL, 9223372036854775807ULL
 }};
 
-Chunk::Chunk() : _data(nullptr) {
+Chunk::Chunk() : _data(nullptr),
+                _omp_threads(1) {
 
 }
 
@@ -55,14 +58,49 @@ Chunk::~Chunk() {
     free_mem();
 }
 
-void Chunk::free_mem() {
-
-}
-
 uint_t Chunk::chunk_size() const {
     return chunk_size_;
 }
 
+void Chunk::free_mem() {
+    if (_data != nullptr) {
+        free(_data);
+    }
+    _data = nullptr;
+}
+
+void Chunk::allocate_mem(const size_t chunk_size) {
+    if (_data == nullptr) {
+        _data = reinterpret_cast<complex_t*>(malloc(sizeof(complex_t) * chunk_size));
+    }
+    // TODO: is chunk size fixed when allocating??
+    chunk_size_ = chunk_size;
+}
+
+complex_t Chunk::get_data(uint_t idx) {
+    if (_data == nullptr) {
+        return 0.;
+    }
+    if (idx >= chunk_size_) {
+        throw std::runtime_error("Trying to access element out of chunk data boundary");
+    }
+    return _data[idx];
+}
+
+void Chunk::set_data(uint_t idx, double real, double img) {
+    if (_data == nullptr) {
+        return;
+    }
+    if (idx >= chunk_size_) {
+        throw std::runtime_error("Trying to access element out of chunk data boundary");
+    }  
+    _data[idx] = std::complex<double>(real, img);
+}
+
+void Chunk::set_omp_threads(uint_t n) {
+    // TODO: used for test only?
+    _omp_threads = n;
+}
 
 // Used to find the start entry of an single matrix-vector multiplication
 // E.g., an op is operating on qubit 0 and 2
@@ -86,7 +124,8 @@ uint_t Chunk::chunk_size() const {
 //  4. Third, add lowbits using | (i.e., abcd00 | e = abcd0e)
 // Reference:
 //  https://github.com/Qiskit/qiskit-aer/blob/main/src/simulators/statevector/indexes.hpp#L121
-uint_t index0(const reg_t& qubits, const uint_t k) {
+template<typename list_t>
+uint_t index0(const list_t& qubits, const uint_t k) {
     uint_t lowbits= 0, retval = k;   
     for (size_t j = 0; j < qubits.size(); j++) {
         lowbits = retval & MASKS[qubits[j]];
@@ -103,14 +142,15 @@ uint_t index0(const reg_t& qubits, const uint_t k) {
 // E.g., qubits = [1, 3], k = 0, ==> [00000,00010,01000,01010]
 //                        k = 1, ==> [00001,00011,01001,01011]
 // Explanation: TODO: Add doc link 
-inline indexes_t indexes(const reg_t& qubits,
+template<size_t N>
+areg_t<1ULL << N> indexes(const areg_t<N>& qubits,
                     const uint_t k) {
     const auto NUM_QUBITS = qubits.size();
     const auto NUM_INDEXES = BITS[NUM_QUBITS];
-    indexes_t ret(new uint_t[NUM_INDEXES]);
+    areg_t<1ULL << N> ret; 
     // Get the starting entry
     ret[0] = index0(qubits, k); 
-    for (size_t i = 0; i < NUM_INDEXES; i++) {
+    for (size_t i = 0; i < NUM_QUBITS; i++) {
         // `n`: number of states 
         // that can be deduced from previous half
         auto n = BITS[i];   
@@ -123,11 +163,11 @@ inline indexes_t indexes(const reg_t& qubits,
     return ret;
 }
 
-template<typename Lambda, typename param_t>
+template<typename Lambda, typename list_t, typename param_t>
 inline void apply_lambda(const size_t start,
                          const size_t stop,   
                          const uint_t omp_threads,
-                         const reg_t& qubits,
+                         const list_t& qubits,
                          Lambda&& func,
                          const param_t& params) {
     const auto NUM_QUBITS = qubits.size();
@@ -140,6 +180,51 @@ inline void apply_lambda(const size_t start,
             std::forward<Lambda>(func)(inds, params);
         }
     }
+}
+
+// Apply matrix, where N means a matrix involving N qubits
+template<size_t N>
+void apply_matrix_n(
+        complex_t* data,
+        const size_t start,
+        const size_t stop,   
+        const uint_t omp_threads, 
+        const reg_t& qubits, 
+        const cvector_t& mat) {
+
+    const size_t DIM = 1ULL << N;
+    auto func = [&](
+            const std::array<uint_t, 1ULL << N> &inds,
+            const cvector_t &_fmat) -> void {
+        std::array<complex_t, 1ULL << N> cache;
+        for (size_t i = 0; i < DIM; i++) {
+            const auto ii = inds[i]; // get index 
+            cache[i] = data[ii];
+            data[ii] = 0.;
+        }
+        for (size_t i = 0; i < DIM; i++) {
+            for (size_t j = 0; j < DIM; j++) {
+                data[inds[i]] += _fmat[i + j * DIM] * cache[j];
+            }
+        }
+    };
+    areg_t<N> qs;
+    std::copy_n(qubits.begin(), N, qs.begin());
+    apply_lambda(start, stop, omp_threads, qs, func, mat); 
+}
+
+void Chunk::apply_matrix(const reg_t &qubits, 
+                const cvector_t &mat) {
+    switch (qubits.size()) {
+        case 1:
+            return apply_matrix_n<1>(_data, 0, chunk_size_, _omp_threads, qubits, mat);
+        case 2:
+            return apply_matrix_n<2>(_data, 0, chunk_size_, _omp_threads, qubits, mat);
+        default:
+            throw std::runtime_error(
+                    "Maximum size of apply matrix is a 20-qubit matrix.");
+
+    } 
 }
 
 }

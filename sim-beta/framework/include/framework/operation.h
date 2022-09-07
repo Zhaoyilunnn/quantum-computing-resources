@@ -15,6 +15,14 @@ enum class OpType {
     gate
 };
 
+enum class GateType {
+    unitary
+};
+
+const std::unordered_map<std::string, GateType> MAP_GATETYPE = {
+    {"u2", GateType::unitary}
+};
+
 struct Op {
 public:
     // OpType type;                            // operations type
@@ -31,6 +39,9 @@ public:
 
 void to_json(const Op& op, json& js);
 void from_json(const json& js, Op& op);
+
+// Operation matrixes
+cvector_t u4(double theta, double phi, double lambda, double gamma);
 
 } // namespace op
 

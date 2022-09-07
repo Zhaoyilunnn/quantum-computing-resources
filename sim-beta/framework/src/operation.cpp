@@ -46,4 +46,14 @@ void to_json(const Op& op, json& js) {
     }
 }
 
+cvector_t u4(double theta, double phi, double lambda, double gamma) {
+    cvector_t mat(2 * 2);
+    const complex_t i(0., 1.);
+    mat[0 + 0 * 2] = std::exp(i * gamma) * std::cos(0.5 * theta);
+    mat[0 + 1 * 2] = -std::exp(i * (lambda + gamma)) * std::sin(0.5 * theta);
+    mat[1 + 0 * 2] = std::exp(i * (phi + gamma)) * std::sin(0.5 * theta);
+    mat[1 + 1 * 2] = std::exp(i * (phi + lambda + gamma)) * std::cos(0.5 * theta);
+    return mat; 
+}
+
 }
