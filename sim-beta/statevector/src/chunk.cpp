@@ -47,6 +47,23 @@ const std::array<uint_t, 64> MASKS {{
     1152921504606846975ULL, 2305843009213693951ULL, 4611686018427387903ULL, 9223372036854775807ULL
 }};
 
+Chunk::Chunk() : _data(nullptr) {
+
+}
+
+Chunk::~Chunk() {
+    free_mem();
+}
+
+void Chunk::free_mem() {
+
+}
+
+uint_t Chunk::chunk_size() const {
+    return chunk_size_;
+}
+
+
 // Used to find the start entry of an single matrix-vector multiplication
 // E.g., an op is operating on qubit 0 and 2
 //  The indexes of states are as follows

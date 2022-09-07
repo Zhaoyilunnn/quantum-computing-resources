@@ -1,6 +1,4 @@
-#include <gtest/gtest.h>
-
-#include "statevector/chunk.h"
+#include "simtest.h"
 
 namespace ut {
 

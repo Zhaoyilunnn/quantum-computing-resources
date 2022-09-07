@@ -20,37 +20,17 @@ public:
     // OpType type;                            // operations type
     std::string name;                       // operation name
     reg_t qubits;                           // qubits operations acts on
+    reg_t super_qubits;                     // super qubits
     // std::vector<complex_t> params;          // real or complex params for gates
     std::vector<double> params;             // real params
 
+    void set_super_qubits(
+            const std::map<uint_t, uint_t>& q_map);
+
 };
 
-// Create to_json / from_json 
-// NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Op, name, qubits, params);
-// TODO: Currently don't know how to set default value, write manually
-void from_json(const json& js, Op& op) {
-    js.at("name").get_to(op.name);
-
-    if (js.find("qubits") != js.end()) {
-        js.at("qubits").get_to(op.qubits); 
-    }
-
-    if (js.find("params") != js.end()) {
-        js.at("params").get_to(op.params);
-    }
-}
-
-void to_json(const Op& op, json& js) {
-    js["name"] = op.name;
-
-    if (!op.qubits.empty()) {
-        js["qubits"] = op.qubits;
-    }
-
-    if (!op.params.empty()) {
-        js["params"] = op.params;
-    }
-}
+void to_json(const Op& op, json& js);
+void from_json(const json& js, Op& op);
 
 } // namespace op
 

@@ -44,18 +44,6 @@ private:
 
 };
 
-Chunk::Chunk() : _data(nullptr) {
-
-}
-
-Chunk::~Chunk() {
-    free_mem();
-}
-
-uint_t Chunk::chunk_size() const {
-    return chunk_size_;
-}
-
 } // namespace sv
 
 #endif
