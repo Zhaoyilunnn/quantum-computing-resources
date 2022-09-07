@@ -72,6 +72,8 @@ void Chunk::free_mem() {
 void Chunk::allocate_mem(const size_t chunk_size) {
     if (_data == nullptr) {
         _data = reinterpret_cast<complex_t*>(malloc(sizeof(complex_t) * chunk_size));
+        // TODO: replace memset with parallel method, memset is used for test only
+        memset(_data, 0, chunk_size*sizeof(complex_t));
     }
     // TODO: is chunk size fixed when allocating??
     chunk_size_ = chunk_size;
