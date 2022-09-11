@@ -21,9 +21,31 @@ public:
     StateVector();
     ~StateVector();
 
+    uint_t num_local_sub_chunks() const;
+
+    // Set some private member values, maybe used for test only
+    void set_local_qubits(uint_t num_local_qubits);
+
     // TODO:
     // 1. Set three numbers of qubits (see private members)
     void initialize();
+
+    // Load/store based on current cluster and local qubits
+    // E.g. (Local qubits = 2)
+    //  chunks: 00000 ~ 00011
+    //          00100 ~ 00111
+    //          01000 ~ 01011
+    //          ...
+    //  When we have a qubit operating on q0, q1, q3, then chunk in 
+    //  primary storage is:
+    //          00000 ~ 00011
+    //          01000 ~ 01011
+    //  So the index mapping from primary to secondary is
+    //          0 : 0
+    //          1 : 2
+    //  Which is actually 1ULL << (q - local_qubits)
+    void load();
+    void store(const std::vector<uint_t>& org_qubits);
 
     // TODO: 
     // 1. At cluster level we perform logical qubit <-> hyper logical qubit conversion

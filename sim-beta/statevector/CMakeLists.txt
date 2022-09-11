@@ -2,7 +2,11 @@
 project (statevector)
 
 # Add a library with the above sources
-add_library(${PROJECT_NAME} src/statevector.cpp src/chunk.cpp)
+add_library(${PROJECT_NAME} 
+    src/statevector.cpp 
+    src/chunk.cpp 
+    src/util.cpp
+)
 add_library(sub::state ALIAS ${PROJECT_NAME})
 
 target_include_directories( ${PROJECT_NAME}

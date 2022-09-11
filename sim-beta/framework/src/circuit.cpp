@@ -11,18 +11,21 @@ Circuit::Circuit() {}
 //
 
 void Circuit::initialize() {
-    get_q_map();
-    to_super_qubits();
+    init_q_map();
+    set_ops_super_qubits();
 }
 
 // TODO: Maybe we can replace std::map and std::set
 //      and use a more elegant way
-void Circuit::get_q_map() {
+void Circuit::init_q_map() {
     if (ops.empty()) {
         return;
     }
     if (!_q_map.empty()) {
         _q_map.clear();
+    }
+    if (!_org_qubits.empty()) {
+        _org_qubits.clear();
     }
     // std::unordered_set<uint_t> q_set;
     std::set<uint_t> q_set;
@@ -32,9 +35,10 @@ void Circuit::get_q_map() {
         }
     }    
 
-    uint_t hyper_index = 0;
+    uint_t super_index = 0;
     for (auto it = q_set.begin(); it != q_set.end(); ++it) {
-        _q_map.insert(std::make_pair(*it, hyper_index++));
+        _org_qubits.push_back(*it);
+        _q_map.insert(std::make_pair(*it, super_index++));
     }
 }
 
@@ -47,7 +51,7 @@ void Circuit::print_q_map() const {
     }
 }
 
-void Circuit::to_super_qubits() {
+void Circuit::set_ops_super_qubits() {
     if (_q_map.empty()) {
         // TODO: log warning
         return;
@@ -67,6 +71,14 @@ uint_t Circuit::get_super_qubit(uint_t q) const {
         return -1;
     }
     return it->second;
+}
+
+std::map<uint_t, uint_t>& Circuit::get_q_map() {
+    return _q_map;
+}
+
+std::vector<uint_t>& Circuit::get_org_qubits() {
+    return _org_qubits;
 }
 
 // TODO

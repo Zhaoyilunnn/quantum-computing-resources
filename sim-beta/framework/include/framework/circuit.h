@@ -30,17 +30,24 @@ public:
     // Initialize
     void initialize();
 
-    // Get _q_map from ops
-    void get_q_map();
+    // Processing super logical qubits
+    void init_q_map();
     void print_q_map() const;
-    void to_super_qubits();
+    void set_ops_super_qubits();
     uint_t get_super_qubit(uint_t q) const;
+    std::map<uint_t, uint_t>& get_q_map();
+    std::vector<uint_t>& get_org_qubits();
 
 private:
     
-    // Mappings from logical to hyperlogical
+    // Mappings from qubits to super qubits
     // std::unordered_map<uint_t, uint_t> _q_map;
     std::map<uint_t, uint_t> _q_map;
+
+    // Mappings from super qubits to original logical qubits
+    // The vector index is super qubits since super qubits 
+    // always starts from 0 and are sequencial
+    std::vector<uint_t> _org_qubits;
 
 };
 

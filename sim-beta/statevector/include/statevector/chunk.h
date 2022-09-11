@@ -16,7 +16,14 @@ namespace sv {
 class Chunk {
 public:
     uint_t chunk_size_ = 0;
+    
+    // A state vector consists of multiple chunks,
+    // Each time we update one chunk in primary storage
+    // We record the chunk idx to calculate destinations 
+    // in secondary storage
+    uint_t chunk_idx = 0;
 
+public:
     Chunk(); 
     ~Chunk();
 

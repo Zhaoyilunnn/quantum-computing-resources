@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     // std::cout << std::endl;
     auto circ = qobj_data.get<circ::Circuit>();
     circ::print_circ(circ);
-    circ.get_q_map();
+    circ.init_q_map();
     circ.print_q_map();
 
     return 0;
