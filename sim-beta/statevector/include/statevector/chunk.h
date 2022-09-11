@@ -6,6 +6,7 @@
 namespace sv {
 
 // TODO 
+// 1. We assume a `chunk` does not know anything about qubits
 // 2. Add a manager to manager to actually perform data movement
 //    This manager should be configurable use template? 
 //    When storing current chunk to secondary storage,
@@ -32,7 +33,15 @@ public:
 
     void set_omp_threads(uint_t n);
 
-    void save_to_secondary();
+    void read_from_secondary(const std::string& file_name,
+                        const size_t start,
+                        const size_t count);
+
+    //void save_to_secondary(const uint_t local_qubits);
+
+    void save_to_secondary(const size_t start, 
+                        const size_t count, 
+                        const std::string& file_name);
 
     // Apply a function
     void apply_func(

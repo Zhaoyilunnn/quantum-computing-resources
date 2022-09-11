@@ -104,6 +104,28 @@ void Chunk::set_omp_threads(uint_t n) {
     _omp_threads = n;
 }
 
+void Chunk::read_from_secondary(
+                    const std::string &file_name, 
+                    const size_t start, 
+                    const size_t count) {
+    std::FILE* f = std::fopen(file_name.c_str(), "r");
+    std::fread(_data + start, sizeof(complex_t), count, f);
+}
+
+// void Chunk::save_to_secondary(const uint_t local_qubits) {
+//     
+// }
+
+void Chunk::save_to_secondary(const size_t start,
+                    const size_t count, 
+                    const std::string& file_name) {
+    if (std::FILE* f = std::fopen(file_name.c_str(), "wb")) {
+        std::fwrite(_data + start, sizeof(complex_t), count, f);
+        std::fclose(f); 
+    }
+    // TODO: log warning
+}
+
 // Used to find the start entry of an single matrix-vector multiplication
 // E.g., an op is operating on qubit 0 and 2
 //  The indexes of states are as follows

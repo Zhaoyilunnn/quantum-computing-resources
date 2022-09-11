@@ -18,6 +18,13 @@ class StateVector {
 public:
     void print();
 
+    StateVector();
+    ~StateVector();
+
+    // TODO:
+    // 1. Set three numbers of qubits (see private members)
+    void initialize();
+
     // TODO: 
     // 1. At cluster level we perform logical qubit <-> hyper logical qubit conversion
     // 2. Maintain a map from logical to hyperlogical
@@ -33,6 +40,11 @@ public:
 private:
     Chunk _chunk; 
 
+    uint_t _num_qubits;         // Number of qubits in total
+
+    uint_t _num_primary;        // Number of qubits in primary storage (memory)
+    
+    uint_t _num_local;          // Number of qubits per micro-chunk in storage (both primary and secondary)
 };
 
 } // namespace sv

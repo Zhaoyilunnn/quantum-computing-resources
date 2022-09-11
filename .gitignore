@@ -7,3 +7,4 @@ sim-beta/.ccls*
 sim-beta/Debug
 sim-beta/build
 sim-beta/compile_commands.json
+sim-beta/test/*.bin
