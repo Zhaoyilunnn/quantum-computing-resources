@@ -8,4 +8,12 @@ void StateVector::print() {
     std::cout << "StateVector!" << std::endl;
 }
 
+StateVector::StateVector() {
+
+}
+
+StateVector::~StateVector() {
+
+}
+
 }
