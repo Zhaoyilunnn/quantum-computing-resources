@@ -26,9 +26,14 @@ public:
     // Set some private member values, maybe used for test only
     void set_local_qubits(uint_t num_local_qubits);
 
+    complex_t* get_primary_vec() const;
+
     // TODO:
     // 1. Set three numbers of qubits (see private members)
-    void initialize();
+    // 2. This method should only be called at the first cluster
+    void initialize(const uint_t num_qubits, 
+                    const uint_t num_primary, 
+                    const uint_t num_local);
 
     // Load/store based on current cluster and local qubits
     // E.g. (Local qubits = 2)
@@ -44,7 +49,7 @@ public:
     //          0 : 0
     //          1 : 2
     //  Which is actually 1ULL << (q - local_qubits)
-    void load();
+    void load(const std::vector<uint_t>& org_qubits);
     void store(const std::vector<uint_t>& org_qubits);
 
     // TODO: 

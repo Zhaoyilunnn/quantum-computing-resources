@@ -32,10 +32,12 @@ public:
     void free_mem();
 
     void allocate_mem(const size_t chunk_size);
+
+    complex_t* get_data() const;
     
     // Test only
-    complex_t get_data(uint_t idx);
-    void set_data(uint_t idx, double real, double img);
+    complex_t get_element(uint_t idx);
+    void set_element(uint_t idx, double real, double img);
     // Test end
 
     void set_omp_threads(uint_t n);

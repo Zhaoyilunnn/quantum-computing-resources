@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.5)
 
 project(sim-beta)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
@@ -25,7 +27,6 @@ FetchContent_MakeAvailable(googletest)
 add_subdirectory(framework)
 add_subdirectory(simulator)
 add_subdirectory(statevector)
-
 
 # enable CTest testing
 include(CTest)

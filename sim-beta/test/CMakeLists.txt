@@ -4,6 +4,7 @@ project (simtest)
 add_executable(${PROJECT_NAME} 
     src/chunk_test.cpp
     src/circuit_test.cpp
+    src/statevector_test.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

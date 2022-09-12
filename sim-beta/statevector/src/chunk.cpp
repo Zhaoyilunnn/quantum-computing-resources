@@ -36,7 +36,11 @@ void Chunk::allocate_mem(const size_t chunk_size) {
     chunk_size_ = chunk_size;
 }
 
-complex_t Chunk::get_data(uint_t idx) {
+complex_t* Chunk::get_data() const {
+    return _data;
+}
+
+complex_t Chunk::get_element(uint_t idx) {
     if (_data == nullptr) {
         return 0.;
     }
@@ -46,7 +50,7 @@ complex_t Chunk::get_data(uint_t idx) {
     return _data[idx];
 }
 
-void Chunk::set_data(uint_t idx, double real, double img) {
+void Chunk::set_element(uint_t idx, double real, double img) {
     if (_data == nullptr) {
         return;
     }
