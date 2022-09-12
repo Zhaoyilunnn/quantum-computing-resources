@@ -2,6 +2,7 @@
 #define __SV_STATEVECTOR_H__
 
 #include "statevector/chunk.h"
+#include "framework/qobj.h"
 
 namespace sv {
 
@@ -35,6 +36,8 @@ public:
                     const uint_t num_primary, 
                     const uint_t num_local);
 
+    void run(const qo::Qobj& qobj);
+
     // Load/store based on current cluster and local qubits
     // E.g. (Local qubits = 2)
     //  chunks: 00000 ~ 00011
@@ -60,10 +63,10 @@ public:
     // TODO:
     // 1. Only see the chunk in primary storage
     // 2. 
-    void apply_op();
+    void apply_op(const op::Op& operation);
     
     // Apply a multi-controlled single-qubit unitary gate
-    void apply_mcu();
+    void apply_gate(const op::Op& operation);
 private:
     Chunk _chunk; 
 

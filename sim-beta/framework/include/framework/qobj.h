@@ -6,7 +6,7 @@
 
 #include "framework/circuit.h"
 
-namespace qobj {
+namespace qo {
 
 class Qobj {
 public:

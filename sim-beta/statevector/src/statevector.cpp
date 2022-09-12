@@ -47,6 +47,21 @@ void StateVector::initialize(
     //TODO: init omp
 }
 
+// For fist cluster, no need to load before store
+void StateVector::run(const qo::Qobj &qobj) {
+    for (size_t ic = 0; ic < qobj.circuits.size(); ic++) {
+        const auto& CIRC = qobj.circuits[ic];
+        const auto& ORG_QUBITS = CIRC.org_qubits; 
+        if (ic > 0) {
+            load(ORG_QUBITS);
+        }
+        for (const auto& op : CIRC.ops) {
+            apply_op(op);
+        }
+        store(ORG_QUBITS);
+    }
+}
+
 // Get the `relative` global qubits
 // E.g.
 //  primary storage is:
@@ -83,6 +98,25 @@ void StateVector::store(const std::vector<uint_t> &org_qubits) {
         const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
         _chunk.save_to_secondary(inds[isub], 1ULL<<_num_local, fn);
     }
+}
+
+void StateVector::apply_op(const op::Op &operation) {
+    switch (operation.type) {
+        default:
+            apply_gate(operation);
+    }
+}
+
+void StateVector::apply_gate(const op::Op &operation) {
+    auto gate_type = op::MAP_GATETYPE.at(operation.name);
+    switch (gate_type) {
+        case op::GateType::unitary:
+            // apply_mcu
+            break;
+        default:
+            throw std::runtime_error("Unsupported operation"); 
+    }
+
 }
 
 }

@@ -25,7 +25,7 @@ const std::unordered_map<std::string, GateType> MAP_GATETYPE = {
 
 struct Op {
 public:
-    // OpType type;                            // operations type
+    OpType type;                            // operations type
     std::string name;                       // operation name
     reg_t qubits;                           // qubits operations acts on
     reg_t super_qubits;                     // super qubits

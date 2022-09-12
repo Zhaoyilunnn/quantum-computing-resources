@@ -32,6 +32,10 @@ void from_json(const json& js, Op& op) {
     if (js.find("params") != js.end()) {
         js.at("params").get_to(op.params);
     }
+
+    // Currently only `gate` type
+    // TODO: figure out how to set op type
+    op.type = OpType::gate;
 }
 
 void to_json(const Op& op, json& js) {
