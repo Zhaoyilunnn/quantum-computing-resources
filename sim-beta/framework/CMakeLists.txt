@@ -3,6 +3,7 @@ project (framework)
 add_library(${PROJECT_NAME} 
     src/circuit.cpp 
     src/operation.cpp
+    src/qobj.cpp
 )
 add_library(sub::frame ALIAS ${PROJECT_NAME})
 

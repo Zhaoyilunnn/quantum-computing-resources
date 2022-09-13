@@ -8,3 +8,7 @@ sim-beta/Debug
 sim-beta/build
 sim-beta/compile_commands.json
 sim-beta/test/*.bin
+sim-beta/test/*.bak*
+sim-beta/test/*/*tmp
+sim-beta/*core*
+sim-beta/test/*core*

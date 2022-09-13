@@ -26,6 +26,7 @@ enum class GateType {
 const std::unordered_map<std::string, GateType> MAP_GATETYPE = {
     {"u2", GateType::mcu2},
     {"u", GateType::mcu3},
+    {"u3", GateType::mcu3},
     // 2-qubit gates
     {"cu2", GateType::mcu2},
     // Mutli-qubit controlled gates

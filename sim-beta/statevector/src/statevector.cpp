@@ -73,12 +73,15 @@ void StateVector::run(const frame::Qobj &qobj) {
 //          00000 ~ 00011
 //          01000 ~ 01011
 //  Then the result `relative` global qubit is 1
+// TODO: fix
 inline void get_global_qubits(
             const std::vector<uint_t> &org_qubits, 
             const uint_t local_qubits, 
             reg_t* logical_global_qubits) {
-    for (size_t i = local_qubits; i < org_qubits.size(); i++) {
-        logical_global_qubits->push_back(org_qubits[i] - local_qubits);
+    for (size_t i = 0; i < org_qubits.size(); i++) {
+        if (org_qubits[i] >= local_qubits) {
+            logical_global_qubits->push_back(org_qubits[i] - local_qubits);
+        }
     } 
 }
 
@@ -90,7 +93,7 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
     for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
         const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
         //_chunk.save_to_secondary(inds[isub], 1ULL<<_num_local, fn);
-        _chunk.read_from_secondary(fn, inds[isub]<<_num_local, 1ULL<<_num_local);
+        _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
     }
 }
 
@@ -101,7 +104,7 @@ void StateVector::store(const std::vector<uint_t> &org_qubits) {
     // TODO: check inds size equals to num_local_sub_chunks
     for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
         const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
-        _chunk.save_to_secondary(inds[isub]<<_num_local, 1ULL<<_num_local, fn);
+        _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
     }
 }
 

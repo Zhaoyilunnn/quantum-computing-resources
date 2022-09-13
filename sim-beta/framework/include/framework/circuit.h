@@ -28,10 +28,10 @@ public:
     Circuit(const std::vector<Op>& ops);
 
     // Initialize
-    void initialize();
+    void initialize(const uint_t num_local);
 
     // Processing super logical qubits
-    void init_q_map();
+    void init_q_map(const uint_t num_local);
     void print_q_map() const;
     void set_ops_super_qubits();
     uint_t get_super_qubit(uint_t q) const;

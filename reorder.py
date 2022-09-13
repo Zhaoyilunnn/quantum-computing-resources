@@ -1,6 +1,6 @@
 import sys
 
-class ReroderMethod:
+class ReorderMethod:
     _n_local = 5
     _result = {
         "clustered_insts": [],
@@ -37,7 +37,7 @@ class ReroderMethod:
     def run(self, op_list):
         pass
 
-class StaticReorder(ReroderMethod):
+class StaticReorder(ReorderMethod):
     """ 
     Simply traverse op list 
     Continues ops that reach the limit of local qubits form a cluster
@@ -67,9 +67,40 @@ class StaticReorder(ReroderMethod):
         self._result["n_cluster"] = len(self._result["clustered_insts"]) 
     
 
+class StaticReorderNew(ReorderMethod):
+    """ 
+    Simply traverse op list 
+    Continues ops that reach the limit of local qubits form a cluster
+    """
+
+    def __init__(self):
+        super().__init__()
+        self._result = []
+
+    def run(self, op_list):
+        local_qubit_set = set()
+        local_inst_list = {"instructions": []}
+        for op in op_list:
+            q_list = self.get_op_qubits(op)
+            n_new = 0
+            for q in q_list:
+                if q not in local_qubit_set:
+                    n_new += 1
+            if n_new + len(local_qubit_set) > self._n_local:
+                # Form a cluster
+                local_qubit_set.clear()
+                self._result.append(local_inst_list)
+                local_inst_list = {"instructions": []} # Create a new list to store new cluster
+            local_inst_list["instructions"].append(op)
+            for q in q_list:
+                local_qubit_set.add(q)     
+        self._result.append(local_inst_list)
+
+
 class ReorderProvidor:
     _REORDERS = {
-        'static': StaticReorder
+        'static': StaticReorder,
+        'static-new': StaticReorderNew
     }
     
     def get_reorder(self, method_name):

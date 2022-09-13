@@ -10,14 +10,14 @@ Circuit::Circuit() {}
 //
 //
 
-void Circuit::initialize() {
-    init_q_map();
+void Circuit::initialize(const uint_t num_local) {
+    init_q_map(num_local);
     set_ops_super_qubits();
 }
 
 // TODO: Maybe we can replace std::map and std::set
 //      and use a more elegant way
-void Circuit::init_q_map() {
+void Circuit::init_q_map(const uint_t num_local) {
     if (ops.empty()) {
         return;
     }
@@ -35,10 +35,10 @@ void Circuit::init_q_map() {
         }
     }    
 
-    uint_t super_index = 0;
+    uint_t super_index = num_local;
     for (auto it = q_set.begin(); it != q_set.end(); ++it) {
         org_qubits.push_back(*it);
-        q_map.insert(std::make_pair(*it, super_index++));
+        q_map.insert(std::make_pair(*it, *it < num_local ? *it : super_index++));
     }
 }
 
@@ -92,7 +92,7 @@ void from_json(const json& js, Circuit& circ) {
     }
 
     // Currently circ must be inited here
-    circ.initialize();
+    //circ.initialize();
 }
 
 void print_circ(Circuit& circ) {
