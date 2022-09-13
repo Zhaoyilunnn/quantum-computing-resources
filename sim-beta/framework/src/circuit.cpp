@@ -1,6 +1,6 @@
 #include "framework/circuit.h"
 
-namespace circ {
+namespace frame {
 
 Circuit::Circuit() {}
 
@@ -88,7 +88,7 @@ void to_json() {
 
 void from_json(const json& js, Circuit& circ) {
     if (js.find("instructions") != js.end()) {
-        circ.ops = js["instructions"].get<std::vector<op::Op>>();
+        circ.ops = js["instructions"].get<std::vector<frame::Op>>();
     }
 
     // Currently circ must be inited here
@@ -98,7 +98,7 @@ void from_json(const json& js, Circuit& circ) {
 void print_circ(Circuit& circ) {
     for (auto& op: circ.ops) {
         json js;
-        op::to_json(op, js);
+        frame::to_json(op, js);
         std::cout << js.dump() << std::endl;
         //std::cout << op.name << std::endl;
     }

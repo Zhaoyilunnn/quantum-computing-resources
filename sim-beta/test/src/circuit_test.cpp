@@ -9,11 +9,11 @@ class CircuitTest : public ::testing::Test {
     void SetUp() {
         auto t_circ_file = std::fstream(T_CIRC_PATH);
         auto t_circ_data = json::parse(t_circ_file);
-        t_circ = t_circ_data.get<circ::Circuit>(); 
+        t_circ = t_circ_data.get<frame::Circuit>(); 
     }
 
 protected:
-    circ::Circuit t_circ;
+    frame::Circuit t_circ;
 
 };
 

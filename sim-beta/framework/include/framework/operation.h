@@ -9,18 +9,27 @@
 
 using json = nlohmann::json;
 
-namespace op {
+namespace frame {
 
 enum class OpType {
     gate
 };
 
 enum class GateType {
-    unitary
+    // 2 param unitary gate
+    mcu2,
+    // 3 param unitary gate
+    mcu3
 };
 
+// Reference
 const std::unordered_map<std::string, GateType> MAP_GATETYPE = {
-    {"u2", GateType::unitary}
+    {"u2", GateType::mcu2},
+    {"u", GateType::mcu3},
+    // 2-qubit gates
+    {"cu2", GateType::mcu2},
+    // Mutli-qubit controlled gates
+    {"mcu2", GateType::mcu2}
 };
 
 struct Op {
@@ -43,6 +52,6 @@ void from_json(const json& js, Op& op);
 // Operation matrixes
 cvector_t u4(double theta, double phi, double lambda, double gamma);
 
-} // namespace op
+} // namespace frame
 
 #endif

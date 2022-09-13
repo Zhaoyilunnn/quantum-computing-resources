@@ -6,13 +6,13 @@
 
 #include "framework/circuit.h"
 
-namespace qo {
+namespace frame {
 
 class Qobj {
 public:
 
     // Circuits
-    std::vector<circ::Circuit> circuits;
+    std::vector<Circuit> circuits;
 
 };
 

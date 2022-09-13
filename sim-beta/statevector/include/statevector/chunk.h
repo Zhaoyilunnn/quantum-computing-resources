@@ -29,6 +29,10 @@ public:
 
     uint_t chunk_size() const;
 
+    void set_chunk_idx(const uint_t idx);
+
+    void reset();
+
     void free_mem();
 
     void allocate_mem(const size_t chunk_size);
@@ -45,8 +49,6 @@ public:
     void read_from_secondary(const std::string& file_name,
                         const size_t start,
                         const size_t count);
-
-    //void save_to_secondary(const uint_t local_qubits);
 
     void save_to_secondary(const size_t start, 
                         const size_t count, 

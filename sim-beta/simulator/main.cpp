@@ -32,10 +32,12 @@ int main(int argc, char *argv[]) {
     //     std::cout << q << " ";
     // }
     // std::cout << std::endl;
-    auto circ = qobj_data.get<circ::Circuit>();
-    circ::print_circ(circ);
-    circ.init_q_map();
-    circ.print_q_map();
+    auto circ = qobj_data.get<frame::Circuit>();
+    //frame::print_circ(circ);
+    //circ.init_q_map();
+    //circ.print_q_map();
+    svec.initialize(4, 4, 2);
+    svec.apply_cluster(circ, 0);
 
     return 0;
 }

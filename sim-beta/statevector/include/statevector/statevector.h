@@ -22,10 +22,14 @@ public:
     StateVector();
     ~StateVector();
 
+    uint_t num_chunks() const;
+
     uint_t num_local_sub_chunks() const;
 
-    // Set some private member values, maybe used for test only
+    // test only
     void set_local_qubits(uint_t num_local_qubits);
+    void set_primary_idx(uint_t idx);
+    // test only
 
     complex_t* get_primary_vec() const;
 
@@ -35,8 +39,11 @@ public:
     void initialize(const uint_t num_qubits, 
                     const uint_t num_primary, 
                     const uint_t num_local);
+    
+    // Reset primary memory to 0
+    void reset_primary();
 
-    void run(const qo::Qobj& qobj);
+    void run(const frame::Qobj& qobj);
 
     // Load/store based on current cluster and local qubits
     // E.g. (Local qubits = 2)
@@ -52,21 +59,29 @@ public:
     //          0 : 0
     //          1 : 2
     //  Which is actually 1ULL << (q - local_qubits)
+    // TODO: Current input param org_qubits is meaningless,
+    //  need improve
     void load(const std::vector<uint_t>& org_qubits);
     void store(const std::vector<uint_t>& org_qubits);
 
     // TODO: 
     // 1. At cluster level we perform logical qubit <-> hyper logical qubit conversion
     // 2. Maintain a map from logical to hyperlogical
-    void apply_cluster();
+    void apply_cluster(const frame::Circuit& circ, 
+                    uint_t icirc);
 
     // TODO:
     // 1. Only see the chunk in primary storage
     // 2. 
-    void apply_op(const op::Op& operation);
+    void apply_op(const frame::Op& operation);
     
     // Apply a multi-controlled single-qubit unitary gate
-    void apply_gate(const op::Op& operation);
+    void apply_gate(const frame::Op& operation);
+
+    // Apply mcu
+    void apply_mcu(const reg_t& qubits, 
+                double theta, double phi,
+                double lambda, double gamma);
 private:
     Chunk _chunk; 
 

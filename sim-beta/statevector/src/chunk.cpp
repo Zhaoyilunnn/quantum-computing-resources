@@ -19,6 +19,16 @@ uint_t Chunk::chunk_size() const {
     return chunk_size_;
 }
 
+void Chunk::set_chunk_idx(const uint_t idx) {
+    chunk_idx = idx;
+}
+
+void Chunk::reset() {
+    if (_data != nullptr) {
+        memset(_data, 0, chunk_size_*sizeof(complex_t));
+    }
+}
+
 void Chunk::free_mem() {
     if (_data != nullptr) {
         free(_data);

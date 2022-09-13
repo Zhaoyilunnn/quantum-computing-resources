@@ -1,6 +1,6 @@
 #include "framework/operation.h"
 
-namespace op {
+namespace frame {
 
 void Op::set_super_qubits(
         const std::map<uint_t, uint_t>& q_map) {

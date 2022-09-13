@@ -8,7 +8,7 @@
 
 #include "framework/operation.h"
 
-namespace circ {
+namespace frame {
 
 // 
 // Here a `Circuit` is actually a sequence of operations
@@ -18,14 +18,14 @@ class Circuit {
 public:
 
     // Circuit operations
-    std::vector<op::Op> ops;
+    std::vector<Op> ops;
     
     // Number of qubits that a cluster operate on
     uint_t num_qubits = 0;
 
     // Constructor
     Circuit(); 
-    Circuit(const std::vector<op::Op>& ops);
+    Circuit(const std::vector<Op>& ops);
 
     // Initialize
     void initialize();
