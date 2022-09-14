@@ -13,6 +13,7 @@ const std::string T_UNITARY_COMPLETE_PATH = "data/unitary_complete_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_PATH = "data/unitary_complete_new_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_1_PATH = "data/unitary_complete_new_1_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_2_PATH = "data/unitary_complete_new_2_inst.json";
+const std::string T_UNITARY_LARGE_PATH = "data/unitary_large_inst.json";
 
 class StateVectorTest : public ::testing::Test {
     void SetUp() {
@@ -467,6 +468,22 @@ TEST_F(StateVectorTest, run_3) {
     EXPECT_FLOAT_EQ(0, (*(vec+13)).real());
     EXPECT_FLOAT_EQ(0, (*(vec+14)).real());
     EXPECT_FLOAT_EQ(0, (*(vec+15)).real());
+}
+
+TEST_F(StateVectorTest, run_4) {
+    auto t_unitary_complete_file = std::fstream(T_UNITARY_LARGE_PATH);
+    auto t_unitary_complete_data = json::parse(t_unitary_complete_file);
+    auto t_qobj = t_unitary_complete_data.get<frame::Qobj>();
+    t_qobj.initialize(6);
+
+    state().initialize(10, 8, 6);
+    state().run(t_qobj);
+
+    state().set_primary_idx(0);
+    state().load({0,1,2,3,4,5});
+    auto* vec = state().get_primary_vec();
+
+    EXPECT_FLOAT_EQ(0.03125000000000001  , (*vec).real());
 }
 
 }
