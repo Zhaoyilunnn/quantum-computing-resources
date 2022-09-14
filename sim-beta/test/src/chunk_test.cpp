@@ -33,7 +33,7 @@ TEST_F(ChunkTest, save_to_secondary) {
     }
 }
 
-TEST_F(ChunkTest, apply_matrix) {
+TEST_F(ChunkTest, apply_matrix_0) {
     sv::Chunk chunk;
     
     // Case 0
@@ -79,6 +79,23 @@ TEST_F(ChunkTest, apply_matrix) {
     EXPECT_FLOAT_EQ(0, chunk.get_element(5).real());
     EXPECT_FLOAT_EQ(-1, chunk.get_element(6).real());
     EXPECT_FLOAT_EQ(0, chunk.get_element(7).real());
+} 
+
+TEST_F(ChunkTest, apply_matrix_1) {
+    sv::Chunk chunk;
+    
+    // Case 0
+    chunk.set_omp_threads(1);
+    chunk.allocate_mem(1ULL << 4);
+    chunk.set_element(0, 1, 0);
+    cvector_t mat = {1, 0.5, -0.5, 1};
+    reg_t qubits = {2};
+    chunk.apply_matrix(qubits, mat);
+    EXPECT_FLOAT_EQ(1, chunk.get_element(0).real());
+    EXPECT_FLOAT_EQ(0, chunk.get_element(1).real());
+    EXPECT_FLOAT_EQ(0, chunk.get_element(2).real());
+    EXPECT_FLOAT_EQ(0, chunk.get_element(3).real());
+    EXPECT_FLOAT_EQ(0.5, chunk.get_element(4).real());
 } 
 
 }

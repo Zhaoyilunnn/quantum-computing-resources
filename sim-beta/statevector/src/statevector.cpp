@@ -69,42 +69,114 @@ void StateVector::run(const frame::Qobj &qobj) {
 
 // Get the `relative` global qubits
 // E.g.
-//  primary storage is:
+//  primary storage is: (num_primary = 4)
 //          00000 ~ 00011
 //          01000 ~ 01011
 //  Then the result `relative` global qubit is 1
-// TODO: fix
+// TODO: ensure org_qubits is sorted
+//       Add more explanations for this function
+//inline void get_global_qubits(
+//            const std::vector<uint_t> &org_qubits, 
+//            const uint_t local_qubits, 
+//            reg_t* logical_global_qubits) {
+//    uint_t ilg = 0, q_lg = local_qubits;
+//    for (size_t i = 0; i < org_qubits.size(); i++) {
+//        if (org_qubits[i] >= local_qubits) {
+//            //logical_global_qubits->push_back(org_qubits[i] - local_qubits);
+//            //(*logical_global_qubits)[ilg++] = q_lg++;
+//            (*logical_global_qubits)[ilg++] = org_qubits[i] - local_qubits;
+//        }
+//    } 
+//    while (ilg < logical_global_qubits->size()) {
+//        (*logical_global_qubits)[ilg++] = q_lg++;
+//    }
+//}
+
 inline void get_global_qubits(
             const std::vector<uint_t> &org_qubits, 
             const uint_t local_qubits, 
             reg_t* logical_global_qubits) {
+    uint_t ilg = 0, q_lg = local_qubits;
     for (size_t i = 0; i < org_qubits.size(); i++) {
         if (org_qubits[i] >= local_qubits) {
-            logical_global_qubits->push_back(org_qubits[i] - local_qubits);
+             logical_global_qubits->push_back(org_qubits[i] - local_qubits);
         }
     } 
 }
 
+// A `group` is the subvector that multiplied with operation
+inline uint_t num_primary_groups(
+            const uint_t num_logical_global, 
+            const uint_t num_primary, 
+            const uint_t num_local) {
+    return 1ULL << (num_primary - num_local - num_logical_global); 
+}
+
+inline uint_t get_start_group_id(const uint_t num_primary_groups, 
+                        const uint_t chunk_idx) {
+    return chunk_idx * num_primary_groups;
+}
+
+//void StateVector::load(const std::vector<uint_t> &org_qubits) {
+//    //reg_t logical_global_qubits(_num_primary - _num_local); // the size should be fixed
+//    reg_t logical_global_qubits; // the size should be fixed
+//    get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
+//    const auto inds = indexes(logical_global_qubits, _chunk.chunk_idx);
+//    // TODO: check inds size equals to num_local_sub_chunks
+//    for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
+//        const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
+//        //_chunk.save_to_secondary(inds[isub], 1ULL<<_num_local, fn);
+//        _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
+//    }
+//}
+
 void StateVector::load(const std::vector<uint_t> &org_qubits) {
-    reg_t logical_global_qubits;
+    reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
-    const auto inds = indexes(logical_global_qubits, _chunk.chunk_idx);
-    // TODO: check inds size equals to num_local_sub_chunks
-    for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
-        const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
-        //_chunk.save_to_secondary(inds[isub], 1ULL<<_num_local, fn);
-        _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
+    const uint_t LGDIM = logical_global_qubits.size();
+    uint_t isub = 0;
+    uint_t num_prim_grps = num_primary_groups(LGDIM, _num_primary, _num_local);
+    uint_t start_group_id = get_start_group_id(num_prim_grps, _chunk.chunk_idx); 
+    uint_t end_group_id = start_group_id + num_prim_grps;
+
+    for (uint_t gid = start_group_id; gid < end_group_id; gid++) {
+        const auto inds = indexes(logical_global_qubits, gid);
+        for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
+            const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
+            _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
+            isub++;
+        }
     }
 }
 
+//void StateVector::store(const std::vector<uint_t> &org_qubits) {
+//    //reg_t logical_global_qubits(_num_primary - _num_local); // the size should be fixed
+//    reg_t logical_global_qubits; // the size should be fixed
+//    get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
+//    const auto inds = indexes(logical_global_qubits, _chunk.chunk_idx);
+//    // TODO: check inds size equals to num_local_sub_chunks
+//    for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
+//        const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
+//        _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
+//    }
+//}
+
 void StateVector::store(const std::vector<uint_t> &org_qubits) {
-    reg_t logical_global_qubits;
+    reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
-    const auto inds = indexes(logical_global_qubits, _chunk.chunk_idx);
-    // TODO: check inds size equals to num_local_sub_chunks
-    for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
-        const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
-        _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
+    const uint_t LGDIM = logical_global_qubits.size();
+    uint_t isub = 0;
+    uint_t num_prim_grps = num_primary_groups(LGDIM, _num_primary, _num_local);
+    uint_t start_group_id = get_start_group_id(num_prim_grps, _chunk.chunk_idx); 
+    uint_t end_group_id = start_group_id + num_prim_grps;
+    //TODO: check isub not exceed group_num * inds.size()
+    for (uint_t gid = start_group_id; gid < end_group_id; gid++) {
+        const auto inds = indexes(logical_global_qubits, gid);
+        for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
+            const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
+            _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
+            isub++;
+        }
     }
 }
 
