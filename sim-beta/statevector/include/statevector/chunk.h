@@ -1,6 +1,7 @@
 #ifndef __SV_CHUNK_H__
 #define __SV_CHUNK_H__
 
+#include <omp.h>
 #include "framework/operation.h"
 
 namespace sv {

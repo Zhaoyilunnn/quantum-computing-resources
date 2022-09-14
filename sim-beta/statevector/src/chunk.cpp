@@ -1,4 +1,3 @@
-#include <omp.h>
 #include <array>
 
 #include "statevector/chunk.h"
