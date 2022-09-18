@@ -201,7 +201,9 @@ void StateVector::apply_cluster(const frame::Circuit &circ,
         _chunk.set_chunk_idx(ichunk);
         // For fist cluster, no need to load before store
         if (icluster > 0) {
-            load(ORG_QUBITS);
+            gather_io_time<const std::vector<uint_t>&>(ORG_QUBITS, 
+                        std::bind(&StateVector::load, this, std::placeholders::_1), 
+                        &_result);
         } else { // for fist cluster, we need to reset chunk
             // The first chunk is already initialized
             // So we only reset 2~n chunks
@@ -212,22 +214,22 @@ void StateVector::apply_cluster(const frame::Circuit &circ,
         }
 
         for (const auto& op : circ.ops) {
-            apply_op(op);
+            gather_comp_time<const frame::Op&>(op, 
+                    std::bind(&StateVector::apply_op, this, std::placeholders::_1), 
+                    &_result);
         }
-
-        store(ORG_QUBITS);
+        
+        gather_io_time<const std::vector<uint_t>&>(ORG_QUBITS, 
+                std::bind(&StateVector::store, this, std::placeholders::_1), 
+                &_result);
     }
 }
 
 void StateVector::apply_op(const frame::Op &operation) {
-    auto start = std::chrono::high_resolution_clock::now();
     switch (operation.type) {
         default:
             apply_gate(operation);
     }
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    _result.time_comp += duration.count();
 }
 
 void StateVector::apply_gate(const frame::Op &op) {

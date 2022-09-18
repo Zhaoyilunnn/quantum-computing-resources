@@ -4,6 +4,7 @@
 #include "framework/types.h"
 #include <array>
 #include <chrono>
+#include <functional>
 
 namespace sv {
 
@@ -95,11 +96,54 @@ uint_t index0(const list_t& qubits, const uint_t k) {
     return retval;
 }
 
+// Results that stores profiling statistics
 struct Result {
     uint_t time_io;
     uint_t time_comp;
     Result() : time_io(0), time_comp(0) {}
 };
+
+
+// A decorator implementation
+// https://stackoverflow.com/questions/30679445/python-like-c-decorators
+// TODO: delete, may not be useful
+template <class> struct Decorator;
+
+template <class R, class... Args>
+struct Decorator<R(Args ...)> {
+    Decorator(std::function<R(Args ...)> f) : f_(f) {}
+    R operator()(Args ... args) {
+        return f_(args...);
+    }
+    std::function<R(Args ...)> f_;
+};
+
+template<class R, class... Args>
+Decorator<R(Args...)> makeDecorator(R (*f)(Args ...)) {
+	return Decorator<R(Args...)>(std::function<R(Args...)>(f));
+}
+
+template <class... Args>
+void gather_io_time(Args ... args, 
+            std::function<void(Args ...)> func, 
+            Result* res) {
+    auto start = std::chrono::high_resolution_clock::now();
+    func(args ...);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    res->time_io += duration.count();
+}
+
+template <class... Args>
+void gather_comp_time(Args ... args, 
+            std::function<void(Args ...)> func, 
+            Result* res) {
+    auto start = std::chrono::high_resolution_clock::now();
+    func(args ...);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    res->time_comp += duration.count();
+}
 
 } // namespace sv
 

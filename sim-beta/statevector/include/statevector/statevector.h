@@ -82,6 +82,8 @@ public:
     void apply_mcu(const reg_t& qubits, 
                 double theta, double phi,
                 double lambda, double gamma);
+
+
 private:
     Chunk _chunk; 
 
