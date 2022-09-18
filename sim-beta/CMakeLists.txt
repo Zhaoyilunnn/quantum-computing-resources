@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.5)
 project(sim-beta)
 
 set(CMAKE_BUILD_TYPE Debug)
+set(GFLAGS_USE_TARGET_NAMESPACE ON)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -22,6 +23,8 @@ FetchContent_MakeAvailable(googletest)
 #add_executable(example example.cpp)
 #target_link_libraries(example gtest_main)
 #add_test(NAME example_test COMMAND example)
+
+find_package(gflags REQUIRED)
 
 # Add sub directories
 add_subdirectory(framework)
