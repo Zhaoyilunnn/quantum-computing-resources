@@ -39,8 +39,8 @@ int main(int argc, char *argv[]) {
     //svec.initialize(10, 8, 6);
     //svec.apply_cluster(circ, 0);
     auto qobj = qobj_data.get<frame::Qobj>();
-    qobj.initialize(6);
-    svec.initialize(10, 8, 6);
+    qobj.initialize(16);
+    svec.initialize(20, 18, 16);
     svec.run(qobj);
 
     return 0;

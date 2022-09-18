@@ -55,7 +55,8 @@ void StateVector::initialize(
     _chunk.set_element(0, 1, 0); // TODO: optimize this
     //TODO: init omp
     auto num_threads = omp_get_max_threads();
-    _chunk.set_omp_threads(num_threads);
+    //_chunk.set_omp_threads(num_threads);
+    _chunk.set_omp_threads(1);
 }
 
 void StateVector::reset_primary() {
