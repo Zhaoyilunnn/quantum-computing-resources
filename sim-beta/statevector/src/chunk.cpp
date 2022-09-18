@@ -1,7 +1,6 @@
 #include <array>
 
 #include "statevector/chunk.h"
-#include "statevector/util.h"
 
 namespace sv {
 

@@ -3,6 +3,7 @@
 
 #include <omp.h>
 #include "framework/operation.h"
+#include "statevector/util.h"
 
 namespace sv {
 

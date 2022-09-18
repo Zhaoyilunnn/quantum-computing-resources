@@ -243,6 +243,7 @@ def gen_unitary_large():
     #print(outputstate.data.tolist())
     for d in outputstate.data.tolist():
         print(numpy.real(d))
+    print(qc.draw(output='text'))
     reo = Reorder.get_reorder('static-new')
     reo.local_qubits = 8
     op_list = get_op_list_without_measure(get_op_lists(qobj.to_dict())[0]) 

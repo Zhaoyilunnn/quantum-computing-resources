@@ -90,6 +90,8 @@ private:
     uint_t _num_primary;        // Number of qubits in primary storage (memory)
     
     uint_t _num_local;          // Number of qubits per micro-chunk in storage (both primary and secondary)
+
+    Result _result;             // Result of simulation
 };
 
 } // namespace sv

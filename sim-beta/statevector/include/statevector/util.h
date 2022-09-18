@@ -3,6 +3,7 @@
 
 #include "framework/types.h"
 #include <array>
+#include <chrono>
 
 namespace sv {
 
@@ -93,6 +94,12 @@ uint_t index0(const list_t& qubits, const uint_t k) {
     }
     return retval;
 }
+
+struct Result {
+    uint_t time_io;
+    uint_t time_comp;
+    Result() : time_io(0), time_comp(0) {}
+};
 
 } // namespace sv
 

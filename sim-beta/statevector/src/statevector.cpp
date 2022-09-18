@@ -19,7 +19,8 @@ StateVector::StateVector() :
 }
 
 StateVector::~StateVector() {
-
+    std::cout << "Compuation: " << _result.time_comp << std::endl;
+    std::cout << "IO: " << _result.time_io << std::endl;
 }
 
 uint_t StateVector::num_chunks() const {
@@ -132,7 +133,9 @@ inline uint_t get_start_group_id(const uint_t num_primary_groups,
 //    }
 //}
 
+// TODO: make the time statistics decorator
 void StateVector::load(const std::vector<uint_t> &org_qubits) {
+    auto start = std::chrono::high_resolution_clock::now();
     reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
     const uint_t LGDIM = logical_global_qubits.size();
@@ -149,6 +152,9 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
             isub++;
         }
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    _result.time_io += duration.count();
 }
 
 //void StateVector::store(const std::vector<uint_t> &org_qubits) {
@@ -164,6 +170,7 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
 //}
 
 void StateVector::store(const std::vector<uint_t> &org_qubits) {
+    auto start = std::chrono::high_resolution_clock::now();
     reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
     const uint_t LGDIM = logical_global_qubits.size();
@@ -180,6 +187,9 @@ void StateVector::store(const std::vector<uint_t> &org_qubits) {
             isub++;
         }
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    _result.time_io += duration.count();
 }
 
 void StateVector::apply_cluster(const frame::Circuit &circ, 
@@ -209,10 +219,14 @@ void StateVector::apply_cluster(const frame::Circuit &circ,
 }
 
 void StateVector::apply_op(const frame::Op &operation) {
+    auto start = std::chrono::high_resolution_clock::now();
     switch (operation.type) {
         default:
             apply_gate(operation);
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    _result.time_comp += duration.count();
 }
 
 void StateVector::apply_gate(const frame::Op &op) {

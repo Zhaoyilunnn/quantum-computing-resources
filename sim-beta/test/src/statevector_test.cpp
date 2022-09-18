@@ -484,6 +484,7 @@ TEST_F(StateVectorTest, run_4) {
     auto* vec = state().get_primary_vec();
 
     EXPECT_FLOAT_EQ(0.03125000000000001  , (*vec).real());
+    EXPECT_FLOAT_EQ(0.014641145978136786  , (*(vec+31)).real());
 }
 
 }
