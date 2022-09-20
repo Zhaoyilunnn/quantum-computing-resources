@@ -14,6 +14,7 @@ const std::string T_UNITARY_U3_TEST_PATH = "data/unitary_u3_test_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_PATH = "data/unitary_complete_new_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_1_PATH = "data/unitary_complete_new_1_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_2_PATH = "data/unitary_complete_new_2_inst.json";
+const std::string T_UNITARY_COMPLETE_NEW_3_PATH = "data/unitary_complete_new_3_inst.json";
 const std::string T_UNITARY_LARGE_PATH = "data/unitary_large_inst.json";
 
 class StateVectorTest : public ::testing::Test {
@@ -208,6 +209,46 @@ TEST_F(StateVectorTest, apply_cluster_2) {
 //    state().set_primary_idx(3);
 //    state().load({0,1,2,3});
 //}
+
+
+TEST_F(StateVectorTest, run) {
+    auto t_unitary_complete_file = std::fstream(T_UNITARY_COMPLETE_NEW_3_PATH);
+    auto t_unitary_complete_data = json::parse(t_unitary_complete_file);
+    auto t_qobj = t_unitary_complete_data.get<frame::Qobj>();
+    t_qobj.initialize(2);
+
+    state().initialize(6, 4, 2);
+    state().run(t_qobj);
+
+    state().set_primary_idx(0);
+    state().load({0,1,2,3});
+    auto* vec = state().get_primary_vec();
+    EXPECT_FLOAT_EQ(0.17701835456839288  , (*vec).real());
+    EXPECT_FLOAT_EQ(0.15534822110374852  , (*(vec+1)).real());
+    EXPECT_FLOAT_EQ(0.17348977297693227  , (*(vec+2)).real());
+    EXPECT_FLOAT_EQ(0.13539110549759065  ,(*(vec+3)).real());
+    EXPECT_FLOAT_EQ(-0.11337745307382312 , (*(vec+4)).real());
+    EXPECT_FLOAT_EQ(-0.10335272630397577 , (*(vec+5)).real());
+    EXPECT_FLOAT_EQ(-0.11271478255225093 , (*(vec+6)).real());
+    EXPECT_FLOAT_EQ(-0.09189546244887135 , (*(vec+7)).real());
+    EXPECT_FLOAT_EQ(0.012521783045989342 , (*(vec+8)).real());
+    EXPECT_FLOAT_EQ(-0.07366562826441705 , (*(vec+9)).real());
+    EXPECT_FLOAT_EQ(-0.022807840375390454, (*(vec+10)).real());
+    EXPECT_FLOAT_EQ(-0.10417549943820206 , (*(vec+11)).real());
+    EXPECT_FLOAT_EQ(-0.016040007525307102, (*(vec+12)).real());
+    EXPECT_FLOAT_EQ(0.03987078578897232  , (*(vec+13)).real());
+    EXPECT_FLOAT_EQ(0.0066349323014814575, (*(vec+14)).real());
+    EXPECT_FLOAT_EQ(0.060222329945917766 , (*(vec+15)).real());
+
+    state().set_primary_idx(1);
+    state().load({0,1,2,3});
+
+    state().set_primary_idx(2);
+    state().load({0,1,2,3});
+
+    state().set_primary_idx(3);
+    state().load({0,1,2,3});
+}
 
 TEST_F(StateVectorTest, run_u3_test) {
     auto t_unitary_complete_file = std::fstream(T_UNITARY_U3_TEST_PATH);

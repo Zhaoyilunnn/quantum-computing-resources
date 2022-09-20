@@ -233,6 +233,18 @@ def gen_unitary_complete_new_2():
     #    f.write(json.dumps(outputstate.data.tolist()))
 
 
+def gen_unitary_complete_new_3():
+    q = QuantumRegister(6)
+    qc = QuantumCircuit(q)
+    qc.u(pi/2, 0.5, 0.5, q[0])
+    qc.u(pi/2, 0.2, 0.3, q[1])
+    qc.u(1.1415926535897933, 3.0707963267948966, 2.0707963267948966, q[2])
+    qc.u(pi/2, 1.5, 0.5, q[3])
+    qc.u(1.1415926535897933, 3.0707963267948966, 2.0707963267948966, q[4])
+    qc.u(pi/2, 1.5, 0.5, q[5])
+    gen_qobj_file(qc, "../data/unitary_complete_new_3.json", "../data/unitary_complete_new_3_inst.json")
+
+
 def gen_unitary_large():
     q = QuantumRegister(10)
     qc = QuantumCircuit(q)
@@ -318,10 +330,11 @@ def main():
     #gen_unitary_irregular_tiny_2()
     #gen_unitary_irregular_tiny_3()
     #gen_unitary_complete()
-    gen_unitary_u3_test()
+    #gen_unitary_u3_test()
     #gen_unitary_complete_new()
     #gen_unitary_complete_new_1()
     #gen_unitary_complete_new_2()
+    gen_unitary_complete_new_3()
     #gen_unitary_large()
     #gen_unitary_large_2()
 
