@@ -10,6 +10,7 @@ const std::string T_UNITARY_SECOND_PATH = "data/unitary_second_cluster.json";
 const std::string T_UNITARY_TINY_2_PATH = "data/unitary_irregular_tiny_2_inst.json";
 const std::string T_UNITARY_TINY_3_PATH = "data/unitary_irregular_tiny_3_inst.json";
 const std::string T_UNITARY_COMPLETE_PATH = "data/unitary_complete_inst.json";
+const std::string T_UNITARY_U3_TEST_PATH = "data/unitary_u3_test_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_PATH = "data/unitary_complete_new_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_1_PATH = "data/unitary_complete_new_1_inst.json";
 const std::string T_UNITARY_COMPLETE_NEW_2_PATH = "data/unitary_complete_new_2_inst.json";
@@ -207,6 +208,22 @@ TEST_F(StateVectorTest, apply_cluster_2) {
 //    state().set_primary_idx(3);
 //    state().load({0,1,2,3});
 //}
+
+TEST_F(StateVectorTest, run_u3_test) {
+    auto t_unitary_complete_file = std::fstream(T_UNITARY_U3_TEST_PATH);
+    auto t_unitary_complete_data = json::parse(t_unitary_complete_file);
+    auto t_qobj = t_unitary_complete_data.get<frame::Qobj>();
+    t_qobj.initialize(2);
+
+    state().initialize(6, 4, 2);
+    state().run(t_qobj);
+
+    state().set_primary_idx(0);
+    state().load({0,1,2,3});
+    auto* vec = state().get_primary_vec();
+    EXPECT_FLOAT_EQ(0.8414709848078965, (*vec).real());
+    EXPECT_FLOAT_EQ(-0.5389488413540798, (*(vec+1)).real());
+}
 
 
 TEST_F(StateVectorTest, run_1) {

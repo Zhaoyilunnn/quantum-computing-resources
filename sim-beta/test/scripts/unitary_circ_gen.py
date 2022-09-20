@@ -12,6 +12,26 @@ from reorder import Reorder
 from bench import get_op_lists, get_op_list_without_measure
 
 
+def gen_qobj_file(qc, qobj_name, qobj_inst_name):
+    backend = Aer.get_backend("statevector_simulator")
+    test = transpile(qc, backend)
+    qobj = assemble(test)
+    job = backend.run(qobj)
+    outputstate = job.result().get_statevector(qc)
+    with open(qobj_name, 'w') as f:
+        f.write(json.dumps(qobj.to_dict(), sort_keys=True, indent=4, separators=(',', ':')))
+    #print(outputstate.data.tolist())
+    for d in outputstate.data.tolist():
+        print(numpy.real(d))
+    reo = Reorder.get_reorder('static-new')
+    reo.local_qubits = 4
+    op_list = get_op_list_without_measure(get_op_lists(qobj.to_dict())[0]) 
+    reo.run(op_list)
+    with open(qobj_inst_name, "w") as f:
+        f.write(json.dumps(reo.result, sort_keys=True, indent=4, separators=(',', ':')))
+
+
+
 def gen_unitary():
     q = QuantumRegister(6)
     qc = QuantumCircuit(q)
@@ -117,22 +137,15 @@ def gen_unitary_complete():
     qc.u(pi/2, 1.5, 0.5, q[5])
     qc.u(pi/2, 1.5, 0.5, q[4])
     qc.u(pi/2, 1.5, 0.5, q[2])
-    backend = Aer.get_backend("statevector_simulator")
-    test = transpile(qc, backend)
-    qobj = assemble(test)
-    job = backend.run(qobj)
-    outputstate = job.result().get_statevector(qc)
-    with open("../data/unitary_complete.json", 'w') as f:
-        f.write(json.dumps(qobj.to_dict(), sort_keys=True, indent=4, separators=(',', ':')))
-    print(outputstate.data.tolist())
-    reo = Reorder.get_reorder('static-new')
-    reo.local_qubits = 4
-    op_list = get_op_list_without_measure(get_op_lists(qobj.to_dict())[0]) 
-    reo.run(op_list)
-    with open("../data/unitary_complete_inst.json", "w") as f:
-        f.write(json.dumps(reo.result, sort_keys=True, indent=4, separators=(',', ':')))
-    #with open("../data/unitary_res.json", "w") as f:
-    #    f.write(json.dumps(outputstate.data.tolist()))
+    gen_qobj_file(qc, "../data/unitary_complete.json", "../data/unitary_complete_inst.json")
+
+
+def gen_unitary_u3_test():
+    q = QuantumRegister(6)
+    qc = QuantumCircuit(q)
+    qc.u(1.1415926535897933, 3.0707963267948966, 2.0707963267948966, q[0])
+    gen_qobj_file(qc, "../data/unitary_u3_test.json", "../data/unitary_u3_test_inst.json")
+
     
 
 def gen_unitary_complete_new():
@@ -305,11 +318,12 @@ def main():
     #gen_unitary_irregular_tiny_2()
     #gen_unitary_irregular_tiny_3()
     #gen_unitary_complete()
+    gen_unitary_u3_test()
     #gen_unitary_complete_new()
     #gen_unitary_complete_new_1()
     #gen_unitary_complete_new_2()
     #gen_unitary_large()
-    gen_unitary_large_2()
+    #gen_unitary_large_2()
 
 
 if __name__ == '__main__':
