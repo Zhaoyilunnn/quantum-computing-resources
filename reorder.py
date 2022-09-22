@@ -1,4 +1,5 @@
 import sys
+from util import print_op_list
 
 class ReorderMethod:
     _n_primary = 5
@@ -37,6 +38,9 @@ class ReorderMethod:
     def run(self, op_list):
         pass
 
+    def print_res(self):
+        pass
+
 class StaticReorder(ReorderMethod):
     """ 
     Simply traverse op list 
@@ -65,6 +69,13 @@ class StaticReorder(ReorderMethod):
                 local_qubit_set.add(q)     
         self._result["clustered_insts"].append(local_inst_list)
         self._result["n_cluster"] = len(self._result["clustered_insts"]) 
+    
+    def print_res(self):
+        for cluster in self._result["clustered_insts"]:
+            print('-------------------------')
+            print_op_list(cluster)
+        print("Num ops after: {}".format(self._result["n_cluster"]))
+        
     
 
 class StaticReorderNew(ReorderMethod):
@@ -109,6 +120,12 @@ class StaticReorderNew(ReorderMethod):
             for q in q_list:
                 cluster_qubit_set.add(q)     
         self._result.append(cluster_inst_list)
+
+    def print_res(self):
+        for cluster in self._result:
+            print('-------------------------')
+            print_op_list(cluster["instructions"])
+        print("Num ops after: {}".format(len(self._result))) 
 
 
 class StaticReorderNewWithLocal(StaticReorderNew):

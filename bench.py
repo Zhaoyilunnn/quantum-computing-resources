@@ -5,7 +5,7 @@ from qiskit.circuit.random import random_circuit
 import argparse
 import json
 
-from sympy import arg
+from sympy import arg, re
 from util import *
 from reorder import Reorder
 
@@ -23,12 +23,16 @@ def parse_args():
     parser.add_argument('--qobj-file', type=str, default='qobj', help='qobj file path(analysis==1 && save_qobj==1)')
     parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (analysis==1)')
     parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (analysis==1)')
+    parser.add_argument('--reorder-method', type=str, default="static-new-local", help="Method for reordering (clustering)")
+    parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local)")
     return parser.parse_args()
 
 def do_analysis(qobj_dict,
         local_qubits=10,
         save_qobj=False,
-        qobj_file=None):
+        qobj_file=None,
+        reorder_method="static-new-local",
+        nl=2):
     if save_qobj:
         if qobj_file is None:
             raise ValueError("Set qobj file name when save_qobj is True!")
@@ -36,8 +40,10 @@ def do_analysis(qobj_dict,
             f.write(json.dumps(qobj_dict))
     op_lists = get_op_lists(qobj_dict) 
     n_qubits = get_n_qubits(qobj_dict)
-    reorder = Reorder.get_reorder('static')
+    reorder = Reorder.get_reorder(reorder_method)
     reorder.local_qubits = local_qubits
+    if reorder_method == "static-new-local":
+        reorder.custom_local_qubits = nl
     for op_list in op_lists:
         #print(json.dumps(op_list))
         #print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
@@ -47,23 +53,22 @@ def do_analysis(qobj_dict,
         #print(json.dumps(op_list))
         print("Num ops before: {}".format(len(op_list)))
         reorder.run(op_list)
-        result = reorder.result
-        #print(json.dumps(result["clustered_insts"], sort_keys=True, indent=4, separators=(',', ':')))
-        for cluster in result["clustered_insts"]:
-            print('-------------------------')
-            print_op_list(cluster)
-        print("Num ops after: {}".format(result["n_cluster"]))
+        reorder.print_res()
 
 
 def analysis(qobj, 
         local_qubits=10, 
         save_qobj=False, 
-        qobj_file=None):
+        qobj_file=None,
+        reorder_method='static-new-local',
+        nl=2):
     qobj_dict = qobj.to_dict()
     do_analysis(qobj_dict, 
             local_qubits=local_qubits,
             save_qobj=save_qobj,
-            qobj_file=qobj_file)
+            qobj_file=qobj_file,
+            reorder_method=reorder_method,
+            nl=2)
 
 
 def construct_circuit(args):
@@ -91,7 +96,9 @@ def run_circ(args, circ):
         analysis(qobj, 
                 local_qubits=args.local_qubits,
                 save_qobj=(False if args.save_qobj == 0 else True),
-                qobj_file=args.qobj_file)
+                qobj_file=args.qobj_file,
+                reorder_method=args.reorder_method,
+                nl=args.nl)
     if args.run == 1:
         run(qobj, backend) 
 
