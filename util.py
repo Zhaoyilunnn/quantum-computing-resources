@@ -2,6 +2,8 @@ import sys, os, psutil
 import subprocess
 import time
 
+from qiskit.visualization.qcstyle import json
+
 def profile(func):
     def wrapper(*args, **kwargs):
         pid = os.getpid()
@@ -59,3 +61,9 @@ def print_qobj(qobj):
     qobj_dict = qobj.to_dict()
     qobj_json = json.dumps(qobj_dict, sort_keys=True, indent=4, separators=(',', ':'))
     print(qobj_json)
+
+def load_qobj_from_path(qobj_path):
+    qobj_dict = None
+    with open(qobj_path, 'r') as fr:
+        qobj_dict = json.load(fr)
+    return qobj_dict 

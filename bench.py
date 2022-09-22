@@ -4,6 +4,8 @@ from qiskit import *
 from qiskit.circuit.random import random_circuit
 import argparse
 import json
+
+from sympy import arg
 from util import *
 from reorder import Reorder
 
@@ -12,22 +14,21 @@ def parse_args():
     parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion')
     parser.add_argument('--num-qubits', type=int, default=10, help='number of qubits')
     parser.add_argument('--backend', type=str, default='aer_simulator', help='simulation method')
-    parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit')
+    parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit, qasm | random | analysis')
     parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path')
     parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit')
     parser.add_argument('--run', type=int, default=1, help='Whether run experiments')
     parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis')
-    parser.add_argument('--save-qobj', type=int, default=0, help='Whether save qobj file')
-    parser.add_argument('--qobj-file', type=str, default='qobj', help='qobj file path')
-    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (Only for analysis==1)')
-    parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (Only for analysis==1)')
+    parser.add_argument('--save-qobj', type=int, default=0, help='Whether save qobj file(analysis==1)')
+    parser.add_argument('--qobj-file', type=str, default='qobj', help='qobj file path(analysis==1 && save_qobj==1)')
+    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (analysis==1)')
+    parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (analysis==1)')
     return parser.parse_args()
 
-def analysis(qobj, 
-        local_qubits=10, 
-        save_qobj=False, 
+def do_analysis(qobj_dict,
+        local_qubits=10,
+        save_qobj=False,
         qobj_file=None):
-    qobj_dict = qobj.to_dict()
     if save_qobj:
         if qobj_file is None:
             raise ValueError("Set qobj file name when save_qobj is True!")
@@ -52,14 +53,20 @@ def analysis(qobj,
             print('-------------------------')
             print_op_list(cluster)
         print("Num ops after: {}".format(result["n_cluster"]))
-        
-#@profile
-def run(qobj, backend):
-    backend.run(qobj)
 
-def main():
-    args = parse_args()
-    
+
+def analysis(qobj, 
+        local_qubits=10, 
+        save_qobj=False, 
+        qobj_file=None):
+    qobj_dict = qobj.to_dict()
+    do_analysis(qobj_dict, 
+            local_qubits=local_qubits,
+            save_qobj=save_qobj,
+            qobj_file=qobj_file)
+
+
+def construct_circuit(args):
     circ = None
     if args.mode == 'qasm':
         if not args.qasm_file:
@@ -69,9 +76,10 @@ def main():
         num_qubits = int(args.num_qubits)
         depth = int(args.depth)
         circ = random_circuit(num_qubits, depth, measure=True)
-    else:
-        raise NotImplementedError("Unsupported circuit constructing mode!")
-        
+    return circ
+
+
+def run_circ(args, circ):
     backend = Aer.get_backend(args.backend)
     backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
     test = transpile(circ, backend)
@@ -86,6 +94,28 @@ def main():
                 qobj_file=args.qobj_file)
     if args.run == 1:
         run(qobj, backend) 
+
+def run_analysis_only(args):
+    if args.qobj_file == "":
+        raise ValueError("Please provide qobj_file")
+    qobj_dict = load_qobj_from_path(args.qobj_file)
+    do_analysis(qobj_dict)
+        
+#@profile
+def run(qobj, backend):
+    backend.run(qobj)
+
+def main():
+    args = parse_args()
+    
+    if args.mode in ('qasm', 'random'):
+        circ = construct_circuit(args)
+        run_circ(args, circ)
+    elif args.mode == 'analysis':
+        run_analysis_only(args)
+    else:
+        raise NotImplementedError("Unsupported mode")
+        
 
 if __name__ == '__main__':
     main()
