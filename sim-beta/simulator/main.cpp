@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     sv::StateVector svec;
     std::ifstream qobj_file(FLAGS_qobj_file);
     json qobj_data = json::parse(qobj_file);
-    std::cout << qobj_data.dump() << std::endl;
+    //std::cout << qobj_data.dump() << std::endl;
     
     auto qobj = qobj_data.get<frame::Qobj>();
     qobj.initialize(FLAGS_nl);
