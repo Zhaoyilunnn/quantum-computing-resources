@@ -20,7 +20,8 @@ def parse_args():
     parser.add_argument('--d', type=int, default=5, help='Depth')
     parser.add_argument('--rm', type=str, default="static-new-local", help="Reorder method")
     parser.add_argument('--np', type=int, default=4, help="Number of primary_qubits ")
-    parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local)")
+    parser.add_argument('--nl', type=str, default="2", help="Number of local qubits, can be a list "\
+            " and will generate qobj for each (reorder_method=static-new-local)")
     parser.add_argument('--tp', type=int, default=0, help="Whether to transpile")
     parser.add_argument('--pr', type=int, default=0, help="Whether to print sv real part")
     return parser.parse_args()
@@ -29,7 +30,7 @@ def parse_args():
 def gen_qobj_file(qc, qobj_name, qobj_inst_name, 
             reorder_method="static-new", 
             primary_qubits=4, local_qubits=2, 
-            is_transpile=False, is_print=False):
+            is_transpile=False, is_print=False, save_org_qobj_file=False):
     backend = Aer.get_backend("statevector_simulator")
     test = qc
     if is_transpile:
@@ -37,8 +38,9 @@ def gen_qobj_file(qc, qobj_name, qobj_inst_name,
     qobj = assemble(test)
     job = backend.run(qobj)
     outputstate = job.result().get_statevector(qc)
-    with open(qobj_name, 'w') as f:
-        f.write(json.dumps(qobj.to_dict(), sort_keys=True, indent=4, separators=(',', ':')))
+    if save_org_qobj_file:
+        with open(qobj_name, 'w') as f:
+            f.write(json.dumps(qobj.to_dict(), sort_keys=True, indent=4, separators=(',', ':')))
 
     if is_print:
         for d in outputstate.data.tolist():
@@ -364,7 +366,8 @@ def gen_random_unitary(num_qubits, depth=5,
 
     gen_qobj_file(qc, 
             "../data/unitary_random_{}.json".format(num_qubits),
-            "../data/unitary_random_{}_inst.json".format(num_qubits),
+            "../data/unitary_random_{}_{}_{}_inst.json".format(
+                            num_qubits, primary_qubits, local_qubits),
             reorder_method=reorder_method,
             primary_qubits=primary_qubits,
             local_qubits=local_qubits)
@@ -395,11 +398,13 @@ def main():
     depth = args.d
     reorder_method = args.rm
     num_primary = args.np
-    num_local = args.nl
-    gen_random_unitary(num_qubits, depth=depth, 
-            reorder_method=reorder_method, 
-            primary_qubits=num_primary,
-            local_qubits=num_local)
+
+    num_local_list = [int(nlocal) for nlocal in args.nl.split(",")]
+    for num_local in num_local_list:
+        gen_random_unitary(num_qubits, depth=depth, 
+                reorder_method=reorder_method, 
+                primary_qubits=num_primary,
+                local_qubits=num_local)
 
 
 if __name__ == '__main__':
