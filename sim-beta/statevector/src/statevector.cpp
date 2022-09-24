@@ -71,6 +71,15 @@ void StateVector::run(const frame::Qobj &qobj) {
     }
 }
 
+
+// For fist cluster, no need to load before store
+void StateVector::run_without_computation(const frame::Qobj &qobj) {
+    for (size_t ic = 0; ic < qobj.circuits.size(); ic++) {
+        const auto& CIRC = qobj.circuits[ic];
+        apply_cluster_without_computation(CIRC, ic);
+    }
+}
+
 // Get the `relative` global qubits
 // E.g.
 //  primary storage is: (num_primary = 4, num_local = 2)
@@ -209,6 +218,19 @@ void StateVector::apply_cluster(const frame::Circuit &circ,
         apply_chunk_before(ORG_QUBITS, icluster, ichunk);
         // Then apply operations on current chunk
         apply_chunk(circ);
+        // Finally save data
+        apply_chunk_after(ORG_QUBITS);
+    }     
+}
+
+void StateVector::apply_cluster_without_computation(const frame::Circuit &circ, 
+                            uint_t icluster) {
+    const auto& ORG_QUBITS = circ.org_qubits; 
+    
+    for (uint_t ichunk = 0; ichunk < num_chunks(); ichunk++) {
+        _chunk.set_chunk_idx(ichunk);
+        // First prepare chunk data
+        apply_chunk_before(ORG_QUBITS, icluster, ichunk);
         // Finally save data
         apply_chunk_after(ORG_QUBITS);
     }     

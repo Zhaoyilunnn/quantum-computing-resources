@@ -70,6 +70,13 @@ public:
     void apply_chunk(const frame::Circuit &circ);
     void apply_chunk_after(const reg_t& org_qubits);
 
+    // ============= TEST ==========
+    // Apply a cluster of operations
+    void apply_cluster_without_computation(const frame::Circuit& circ, 
+                    uint_t icirc);
+    void run_without_computation(const frame::Qobj& qobj);
+    // ============= TEST ==========
+
     // Apply a cluster of operations
     void apply_cluster(const frame::Circuit& circ, 
                     uint_t icirc);

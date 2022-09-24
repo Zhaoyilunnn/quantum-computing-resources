@@ -6,6 +6,7 @@ DEFINE_uint64(nq, 10, "Number of qubits");
 DEFINE_uint64(np, 8, "Number of primary qubits");
 DEFINE_uint64(nl, 6, "Number of local qubits");
 DEFINE_string(qobj_file, "", "Input quantum object to run");
+DEFINE_bool(io_only, false, "Only load/store");
 
 void usage(const std::string& cmd) {
     std::cerr << "\n\n";
@@ -27,7 +28,12 @@ int main(int argc, char *argv[]) {
     auto qobj = qobj_data.get<frame::Qobj>();
     qobj.initialize(FLAGS_nl);
     svec.initialize(FLAGS_nq, FLAGS_np, FLAGS_nl);
-    svec.run(qobj);
+
+    if (FLAGS_io_only) {
+        svec.run_without_computation(qobj);
+    } else {
+        svec.run(qobj);
+    }
 
     return 0;
 }
