@@ -80,6 +80,7 @@ void Chunk::read_from_secondary(
                     const size_t count) {
     std::FILE* f = std::fopen(file_name.c_str(), "r");
     std::fread(_data + start, sizeof(complex_t), count, f);
+    std::fclose(f);
 }
 
 // void Chunk::save_to_secondary(const uint_t local_qubits) {
