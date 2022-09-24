@@ -73,7 +73,7 @@ void StateVector::run(const frame::Qobj &qobj) {
 
 // Get the `relative` global qubits
 // E.g.
-//  primary storage is: (num_primary = 4)
+//  primary storage is: (num_primary = 4, num_local = 2)
 //          00000 ~ 00011
 //          01000 ~ 01011
 //  Then the result `relative` global qubit is 1
@@ -121,22 +121,8 @@ inline uint_t get_start_group_id(const uint_t num_primary_groups,
     return chunk_idx * num_primary_groups;
 }
 
-//void StateVector::load(const std::vector<uint_t> &org_qubits) {
-//    //reg_t logical_global_qubits(_num_primary - _num_local); // the size should be fixed
-//    reg_t logical_global_qubits; // the size should be fixed
-//    get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
-//    const auto inds = indexes(logical_global_qubits, _chunk.chunk_idx);
-//    // TODO: check inds size equals to num_local_sub_chunks
-//    for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
-//        const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
-//        //_chunk.save_to_secondary(inds[isub], 1ULL<<_num_local, fn);
-//        _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
-//    }
-//}
-
 // TODO: make the time statistics decorator
 void StateVector::load(const std::vector<uint_t> &org_qubits) {
-    auto start = std::chrono::high_resolution_clock::now();
     reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
     const uint_t LGDIM = logical_global_qubits.size();
@@ -147,31 +133,16 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
 
     for (uint_t gid = start_group_id; gid < end_group_id; gid++) {
         const auto inds = indexes(logical_global_qubits, gid);
+        #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
             isub++;
         }
     }
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    _result.time_io += duration.count();
 }
 
-//void StateVector::store(const std::vector<uint_t> &org_qubits) {
-//    //reg_t logical_global_qubits(_num_primary - _num_local); // the size should be fixed
-//    reg_t logical_global_qubits; // the size should be fixed
-//    get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
-//    const auto inds = indexes(logical_global_qubits, _chunk.chunk_idx);
-//    // TODO: check inds size equals to num_local_sub_chunks
-//    for (size_t isub = 0; isub < num_local_sub_chunks(); isub++) {
-//        const auto& fn = generate_secondary_file_name(std::to_string(inds[isub]));
-//        _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
-//    }
-//}
-
 void StateVector::store(const std::vector<uint_t> &org_qubits) {
-    auto start = std::chrono::high_resolution_clock::now();
     reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
     const uint_t LGDIM = logical_global_qubits.size();
@@ -182,15 +153,13 @@ void StateVector::store(const std::vector<uint_t> &org_qubits) {
     //TODO: check isub not exceed group_num * inds.size()
     for (uint_t gid = start_group_id; gid < end_group_id; gid++) {
         const auto inds = indexes(logical_global_qubits, gid);
+        #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
             isub++;
         }
     }
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    _result.time_io += duration.count();
 }
 
 void StateVector::apply_cluster(const frame::Circuit &circ, 
