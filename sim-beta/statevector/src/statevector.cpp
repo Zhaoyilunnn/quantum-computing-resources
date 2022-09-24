@@ -135,10 +135,10 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
         const auto inds = indexes(logical_global_qubits, gid);
         #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
+            // TODO: Add explanations for this
             auto isub = (1ULL<<LGDIM) * (gid-start_group_id) + idx;
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
-            //isub++;
         }
     }
 }
@@ -159,7 +159,6 @@ void StateVector::store(const std::vector<uint_t> &org_qubits) {
             auto isub = (1ULL<<LGDIM) * (gid-start_group_id) + idx;
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
-            //isub++;
         }
     }
 }
