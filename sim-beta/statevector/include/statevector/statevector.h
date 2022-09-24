@@ -64,15 +64,17 @@ public:
     void load(const std::vector<uint_t>& org_qubits);
     void store(const std::vector<uint_t>& org_qubits);
 
-    // TODO: 
-    // 1. At cluster level we perform logical qubit <-> hyper logical qubit conversion
-    // 2. Maintain a map from logical to hyperlogical
+    void apply_chunk_before(
+            const reg_t& org_qubits, 
+            uint_t icluster, uint_t ichunk);
+    void apply_chunk(const frame::Circuit &circ);
+    void apply_chunk_after(const reg_t& org_qubits);
+
+    // Apply a cluster of operations
     void apply_cluster(const frame::Circuit& circ, 
                     uint_t icirc);
 
-    // TODO:
-    // 1. Only see the chunk in primary storage
-    // 2. 
+    // Apply an operation
     void apply_op(const frame::Op& operation);
     
     // Apply a multi-controlled single-qubit unitary gate

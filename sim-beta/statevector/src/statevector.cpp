@@ -125,7 +125,7 @@ inline uint_t get_start_group_id(const uint_t num_primary_groups,
 void StateVector::load(const std::vector<uint_t> &org_qubits) {
     reg_t logical_global_qubits; // the size should be fixed
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
-    const uint_t LGDIM = logical_global_qubits.size();
+    const uint_t LGDIM = logical_global_qubits.size(); // Logical global qubits' size
     uint_t isub = 0;
     uint_t num_prim_grps = num_primary_groups(LGDIM, _num_primary, _num_local);
     uint_t start_group_id = get_start_group_id(num_prim_grps, _chunk.chunk_idx); 
@@ -135,9 +135,10 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
         const auto inds = indexes(logical_global_qubits, gid);
         #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
+            auto isub = (1ULL<<LGDIM) * (gid-start_group_id) + idx;
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);
-            isub++;
+            //isub++;
         }
     }
 }
@@ -155,11 +156,48 @@ void StateVector::store(const std::vector<uint_t> &org_qubits) {
         const auto inds = indexes(logical_global_qubits, gid);
         #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
+            auto isub = (1ULL<<LGDIM) * (gid-start_group_id) + idx;
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.save_to_secondary(isub<<_num_local, 1ULL<<_num_local, fn);
-            isub++;
+            //isub++;
         }
     }
+}
+
+void StateVector::apply_chunk_before(
+        const reg_t &org_qubits, 
+        uint_t icluster, uint_t ichunk) {
+    // For fist cluster, no need to load before store
+    if (icluster > 0) {
+        gather_io_time<const std::vector<uint_t>&>(org_qubits, 
+                    std::bind(&StateVector::load, this, std::placeholders::_1), 
+                    &_result);
+    } else { // for fist cluster, we need to reset chunk
+        // The first chunk is already initialized
+        // So we only reset 2~n chunks
+        if (ichunk > 0) {
+            // reset
+            reset_primary();
+        }
+    }
+    
+}
+
+void StateVector::apply_chunk(const frame::Circuit &circ) {
+    for (const auto& op : circ.ops) {
+        gather_comp_time<const frame::Op&>(op, 
+                std::bind(&StateVector::apply_op, this, std::placeholders::_1), 
+                &_result);
+    }
+
+}
+
+void StateVector::apply_chunk_after(
+        const reg_t &org_qubits) {
+    gather_io_time<const std::vector<uint_t>&>(org_qubits, 
+            std::bind(&StateVector::store, this, std::placeholders::_1), 
+            &_result);
+    
 }
 
 void StateVector::apply_cluster(const frame::Circuit &circ, 
@@ -168,30 +206,13 @@ void StateVector::apply_cluster(const frame::Circuit &circ,
     
     for (uint_t ichunk = 0; ichunk < num_chunks(); ichunk++) {
         _chunk.set_chunk_idx(ichunk);
-        // For fist cluster, no need to load before store
-        if (icluster > 0) {
-            gather_io_time<const std::vector<uint_t>&>(ORG_QUBITS, 
-                        std::bind(&StateVector::load, this, std::placeholders::_1), 
-                        &_result);
-        } else { // for fist cluster, we need to reset chunk
-            // The first chunk is already initialized
-            // So we only reset 2~n chunks
-            if (ichunk > 0) {
-                // reset
-                reset_primary();
-            }
-        }
-
-        for (const auto& op : circ.ops) {
-            gather_comp_time<const frame::Op&>(op, 
-                    std::bind(&StateVector::apply_op, this, std::placeholders::_1), 
-                    &_result);
-        }
-        
-        gather_io_time<const std::vector<uint_t>&>(ORG_QUBITS, 
-                std::bind(&StateVector::store, this, std::placeholders::_1), 
-                &_result);
-    }
+        // First prepare chunk data
+        apply_chunk_before(ORG_QUBITS, icluster, ichunk);
+        // Then apply operations on current chunk
+        apply_chunk(circ);
+        // Finally save data
+        apply_chunk_after(ORG_QUBITS);
+    }     
 }
 
 void StateVector::apply_op(const frame::Op &operation) {
