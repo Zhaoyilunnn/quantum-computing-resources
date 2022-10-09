@@ -30,21 +30,25 @@ def parse_args():
 def gen_qobj_file(qc, qobj_name, qobj_inst_name, 
             reorder_method="static-new", 
             primary_qubits=4, local_qubits=2, 
-            is_transpile=False, is_print=False, save_org_qobj_file=False):
+            is_transpile=False, 
+            is_print=False, 
+            save_org_qobj_file=False,
+            is_run=False):
     backend = Aer.get_backend("statevector_simulator")
     test = qc
     if is_transpile:
         test = transpile(qc, backend)
     qobj = assemble(test)
-    job = backend.run(qobj)
-    outputstate = job.result().get_statevector(qc)
     if save_org_qobj_file:
         with open(qobj_name, 'w') as f:
             f.write(json.dumps(qobj.to_dict(), sort_keys=True, indent=4, separators=(',', ':')))
-
-    if is_print:
-        for d in outputstate.data.tolist():
-            print(numpy.real(d))
+    
+    if is_run:
+        job = backend.run(qobj)
+        outputstate = job.result().get_statevector(qc)
+        if is_print:
+            for d in outputstate.data.tolist():
+                print(numpy.real(d))
 
     reo = Reorder.get_reorder(reorder_method)
     reo.local_qubits = primary_qubits
