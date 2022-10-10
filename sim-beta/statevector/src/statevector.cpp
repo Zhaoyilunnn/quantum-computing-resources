@@ -144,7 +144,17 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
         const auto inds = indexes(logical_global_qubits, gid);
         #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
-            // TODO: Add explanations for this
+            // Consider we have, nq=6, np=4, nl=2
+            // Case 0: LGDIM=2, Acting q=2, then we have 2 groups (gid=[0,1])
+            //  000000 ~ 000011 ---- gid=0
+            //  000100 ~ 000111 ---- gid=0
+            //  001000 ~ 001011 ---- gid=1
+            //  001100 ~ 001111 ---- gid=1
+            // Case 1: LGDIM=2, Acting q=2,3, then we have 1 group (gid=[0])
+            //  000000 ~ 000011 ---- gid=0
+            //  000100 ~ 000111 ---- gid=0
+            //  001000 ~ 001011 ---- gid=0
+            //  001100 ~ 001111 ---- gid=0
             auto isub = (1ULL<<LGDIM) * (gid-start_group_id) + idx;
             const auto& fn = generate_secondary_file_name(std::to_string(inds[idx]));
             _chunk.read_from_secondary(fn, isub<<_num_local, 1ULL<<_num_local);

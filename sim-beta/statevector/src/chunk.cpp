@@ -1,6 +1,7 @@
 #include <array>
 
 #include "statevector/chunk.h"
+#include <cerrno>
 
 namespace sv {
 
@@ -78,14 +79,14 @@ void Chunk::read_from_secondary(
                     const std::string &file_name, 
                     const size_t start, 
                     const size_t count) {
-    std::FILE* f = std::fopen(file_name.c_str(), "r");
-    std::fread(_data + start, sizeof(complex_t), count, f);
-    std::fclose(f);
+    if (std::FILE* f = std::fopen(file_name.c_str(), "r")) {
+        std::fread(_data + start, sizeof(complex_t), count, f);
+        std::fclose(f);
+    } else {
+        std::cout << "Failed to read: " << file_name 
+            << "; errno: " << errno << std::endl;
+    }
 }
-
-// void Chunk::save_to_secondary(const uint_t local_qubits) {
-//     
-// }
 
 void Chunk::save_to_secondary(const size_t start,
                     const size_t count, 
@@ -93,8 +94,10 @@ void Chunk::save_to_secondary(const size_t start,
     if (std::FILE* f = std::fopen(file_name.c_str(), "wb")) {
         std::fwrite(_data + start, sizeof(complex_t), count, f);
         std::fclose(f); 
+    } else {
+        std::cout << "Failed to write: " << file_name 
+            << "; errno: " << errno << std::endl;
     }
-    // TODO: log warning
 }
 
 template<size_t N>
