@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument('--nq', type=int, default=10, help='Number of qubits')
     parser.add_argument('--d', type=int, default=5, help='Depth')
     parser.add_argument('--rm', type=str, default="static-new-local", help="Reorder method")
-    parser.add_argument('--np', type=int, default=4, help="Number of primary_qubits ")
+    parser.add_argument('--np', type=str, default="4", help="Number of primary_qubits ")
     parser.add_argument('--nl', type=str, default="2", help="Number of local qubits, can be a list "\
             " and will generate qobj for each (reorder_method=static-new-local)")
     parser.add_argument('--tp', type=int, default=0, help="Whether to transpile")
@@ -354,8 +354,8 @@ def gen_unitary_large_2():
 
 def gen_random_unitary(num_qubits, depth=5, 
                     reorder_method="static-new-local", 
-                    primary_qubits=4,
-                    local_qubits=2):
+                    primary_qubits_list=[4],
+                    local_qubits_list=[2]):
     """
     Generate a random circuit which contain only unitary single qubit gates
     """
@@ -368,13 +368,15 @@ def gen_random_unitary(num_qubits, depth=5,
             lAmbda = random.random()
             qc.u(pi/2, phi, lAmbda, q[qid])
 
-    gen_qobj_file(qc, 
-            "../data/unitary_random_{}.json".format(num_qubits),
-            "../data/unitary_random_{}_{}_{}_inst.json".format(
-                            num_qubits, primary_qubits, local_qubits),
-            reorder_method=reorder_method,
-            primary_qubits=primary_qubits,
-            local_qubits=local_qubits)
+    for np in primary_qubits_list:
+        for nl in local_qubits_list:
+            gen_qobj_file(qc, 
+                    "../data/unitary_random_{}.json".format(num_qubits),
+                    "../data/unitary_random_{}_{}_{}_inst.json".format(
+                                    num_qubits, np, nl),
+                    reorder_method=reorder_method,
+                    primary_qubits=np,
+                    local_qubits=nl)
 
 
 # ================= TODO: Legacy code to delete =================
@@ -401,14 +403,13 @@ def main():
     num_qubits = args.nq
     depth = args.d
     reorder_method = args.rm
-    num_primary = args.np
 
     num_local_list = [int(nlocal) for nlocal in args.nl.split(",")]
-    for num_local in num_local_list:
-        gen_random_unitary(num_qubits, depth=depth, 
-                reorder_method=reorder_method, 
-                primary_qubits=num_primary,
-                local_qubits=num_local)
+    num_primary_list = [int(nprimary) for nprimary in args.np.split(",")]
+    gen_random_unitary(num_qubits, depth=depth, 
+            reorder_method=reorder_method, 
+            primary_qubits_list=num_primary_list,
+            local_qubits_list=num_local_list)
 
 
 if __name__ == '__main__':

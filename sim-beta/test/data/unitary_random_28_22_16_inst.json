@@ -165,7 +165,11 @@
                 "qubits":[
                     14
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
@@ -484,7 +488,11 @@
                 "qubits":[
                     1
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
@@ -638,7 +646,11 @@
                 "qubits":[
                     27
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
@@ -825,11 +837,7 @@
                 "qubits":[
                     4
                 ]
-            }
-        ]
-    },
-    {
-        "instructions":[
+            },
             {
                 "name":"u",
                 "params":[
@@ -862,7 +870,11 @@
                 "qubits":[
                     18
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
@@ -1038,7 +1050,11 @@
                 "qubits":[
                     22
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
@@ -1324,7 +1340,11 @@
                 "qubits":[
                     11
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
@@ -1445,11 +1465,7 @@
                 "qubits":[
                     20
                 ]
-            }
-        ]
-    },
-    {
-        "instructions":[
+            },
             {
                 "name":"u",
                 "params":[
@@ -1471,7 +1487,11 @@
                 "qubits":[
                     19
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "instructions":[
             {
                 "name":"u",
                 "params":[
