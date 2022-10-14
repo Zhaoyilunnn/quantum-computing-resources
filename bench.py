@@ -9,6 +9,11 @@ from sympy import arg, re
 from util import *
 from reorder import Reorder
 
+#### For json format
+# sort_keys=True, indent=4, separators=(',', ':')
+#### For json format
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion')
@@ -27,30 +32,32 @@ def parse_args():
     parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local)")
     return parser.parse_args()
 
+
+# TODO: Make is_complete_prog optional from command line
 def do_analysis(qobj_dict,
         local_qubits=10,
         save_qobj=False,
         qobj_file=None,
         reorder_method="static-new-local",
-        nl=2):
+        nl=2, is_complete_prog=True):
+
     if save_qobj:
         if qobj_file is None:
             raise ValueError("Set qobj file name when save_qobj is True!")
         with open(qobj_file, 'w') as f:
-            f.write(json.dumps(qobj_dict))
+            f.write(json.dumps(qobj_dict, sort_keys=True, indent=4, separators=(',', ':')))
+
     op_lists = get_op_lists(qobj_dict) 
-    n_qubits = get_n_qubits(qobj_dict)
     reorder = Reorder.get_reorder(reorder_method)
     reorder.local_qubits = local_qubits
+
     if reorder_method == "static-new-local":
         reorder.custom_local_qubits = nl
+
     for op_list in op_lists:
-        #print(json.dumps(op_list))
-        #print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
         print_op_list(op_list)
-        op_list = get_op_list_without_measure(op_list) 
-        #print(json.dumps(op_list, sort_keys=True, indent=4, separators=(',', ':')))
-        #print(json.dumps(op_list))
+        if not is_complete_prog:
+            op_list = get_op_list_without_measure(op_list) 
         print("Num ops before: {}".format(len(op_list)))
         reorder.run(op_list)
         reorder.print_res()

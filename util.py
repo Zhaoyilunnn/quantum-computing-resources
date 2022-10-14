@@ -4,6 +4,13 @@ import time
 
 from qiskit.visualization.qcstyle import json
 
+BARRIER_OP_LIST = [
+    "measure", 
+    "reset",
+    "barrier",
+    "bfunc"
+]
+
 def profile(func):
     def wrapper(*args, **kwargs):
         pid = os.getpid()
@@ -32,6 +39,17 @@ def get_op_lists(qobj_dict):
         sys.exit(1)
     return op_lists
 
+def get_op_list(op_list, without_measure=False):
+    new_op_list = []
+    for op in op_list:
+        if without_measure:
+            if op["name"] == "measure":
+                continue
+            if "qubits" not in op:
+                continue
+        new_op_list.append(op)
+    return new_op_list
+
 def get_op_list_without_measure(op_list):
     op_list_wo_meas = []
     for op in op_list:
@@ -54,6 +72,9 @@ def get_n_qubits(qobj_dict):
 def print_op_list(op_list):
     for op in op_list:
         name = op["name"]
+        if name in BARRIER_OP_LIST:
+            print("{}".format(name))
+            continue
         qubits = op["qubits"]
         print("{}:{}".format(name, ','.join([str(q) for q in qubits])))
 

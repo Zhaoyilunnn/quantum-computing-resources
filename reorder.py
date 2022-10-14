@@ -1,5 +1,5 @@
 import sys
-from util import print_op_list
+from util import print_op_list, BARRIER_OP_LIST
 
 class ReorderMethod:
     _n_primary = 5
@@ -154,19 +154,63 @@ class StaticReorderNewWithLocal(StaticReorderNew):
         Qubits within `local` won't be considered when clustering
         """
         op_q_list = []
-        for q in op["qubits"]:
-            if q >= self._n_local:
-                op_q_list.append(q)
+        try:
+            for q in op["qubits"]:
+                if q >= self._n_local:
+                    op_q_list.append(q)
+        except KeyError:
+            print(op)
+            exit(1)
         return op_q_list
 
     def num_cluster(self):
+        """
+        Number of qubits within a cluster
+        Different from StaticReorderNew because we don't consider _n_local
+        """
         return self._n_primary - self._n_local
+
+class StaticReorderNewWithLocalAndBarrier(StaticReorderNewWithLocal):
+
+    """
+    We cannot form a cluster if we met barrier operations
+    """
+
+    def run(self, op_list):
+        cluster_qubit_set = set()
+        cluster_inst_list = {"instructions": []}
+        for op in op_list:
+            # If met barrier, form a new cluster and continue
+            # The barrier operation form a standalone cluster
+            if op["name"] in BARRIER_OP_LIST:
+                cluster_qubit_set.clear()
+                if cluster_inst_list["instructions"]:
+                    self._result.append(cluster_inst_list)
+                cluster_inst_list = {"instructions": [op]} # Create a new list to store new cluster
+                self._result.append(cluster_inst_list)
+                cluster_inst_list = {"instructions": []} # Create a new list to store new cluster
+                continue
+
+            q_list = self.get_op_qubits(op)
+            n_new = self.get_num_new_qubits(q_list, cluster_qubit_set)
+            if self.is_cluster_limit_reached(n_new, cluster_qubit_set):
+                # Form a cluster
+                cluster_qubit_set.clear()
+                self._result.append(cluster_inst_list)
+                cluster_inst_list = {"instructions": []} # Create a new list to store new cluster
+            cluster_inst_list["instructions"].append(op)
+            for q in q_list:
+                cluster_qubit_set.add(q)     
+        if cluster_inst_list["instructions"]:
+            self._result.append(cluster_inst_list)
+     
 
 class ReorderProvidor:
     _REORDERS = {
         'static': StaticReorder,
         'static-new': StaticReorderNew,
-        'static-new-local': StaticReorderNewWithLocal
+        'static-new-local': StaticReorderNewWithLocal,
+        'static-new-local-barrier': StaticReorderNewWithLocalAndBarrier
     }
     
     def get_reorder(self, method_name):
