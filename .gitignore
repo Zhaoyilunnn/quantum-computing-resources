@@ -12,3 +12,4 @@ sim-beta/compile_commands.json
 *.bak*
 *tmp
 *core*
+*.png
