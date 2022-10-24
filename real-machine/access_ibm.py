@@ -21,9 +21,11 @@ provider = IBMQ.load_account()
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--sys-name', type=str, default='ibmq_lima', help="Quantum Processor Name")
-    parser.add_argument('--sim', type=str, default=1, help="Whether run simulator")
-    parser.add_argument('--real', type=str, default=0, help="Whether run on real machine")
+    parser.add_argument('--sim', type=int, default=1, help="Whether run simulator")
+    parser.add_argument('--real', type=int, default=0, help="Whether run on real machine")
     parser.add_argument('--job-id', type=str, default="", help="Job id to retrieve")
+    parser.add_argument('--save-fig', type=int, default=0, help="Whether save prob distribution to figures")
+    parser.add_argument('--is-noisy', type=int, default=1, help="Whether to run noisy simulation (Only for simulator, not for ibmq)")
     return parser.parse_args()
 
 
@@ -37,7 +39,9 @@ def build_circ():
     return circ
 
 
-def run_sim(backend, circ, is_run=True):
+def run_sim(backend, circ,
+        is_run=True, save_fig=False,
+        is_noisy=True):
     noise_model = NoiseModel.from_backend(backend)
     # Get coupling map from backend
     coupling_map = backend.configuration().coupling_map
@@ -47,20 +51,28 @@ def run_sim(backend, circ, is_run=True):
     
     if is_run:
         # Perform a noise simulation
-        result = execute(circ, Aer.get_backend('qasm_simulator'),
-                         coupling_map=coupling_map,
-                         basis_gates=basis_gates,
-                         noise_model=noise_model).result()
-        #counts = result.get_counts(0)
-        #counts = result.get_counts(circ)
+        result = None
+        if is_noisy:
+            result = execute(circ, Aer.get_backend('qasm_simulator'),
+                             coupling_map=coupling_map,
+                             basis_gates=basis_gates,
+                             noise_model=noise_model,
+                             shots=1024).result()
+        else:
+            #result = execute(circ, Aer.get_backend('qasm_simulator')).result()
+            result = execute(circ, Aer.get_backend('aer_simulator')).result()
         counts = result.get_counts()
         print(counts)
         #plot_histogram(counts)
-        plot_distribution(counts)
-        plt.savefig("simulation_res.png", dpi=1024)
+        if save_fig:
+            plot_distribution(counts)
+            plt.savefig("simulation_res.png", dpi=1024)
 
 
-def run_real(backend, circ, is_run=False, job_id=None):
+def run_real(backend, circ,
+        is_run=False,
+        job_id=None,
+        save_fig=None):
     transpiled = transpile(circ, backend=backend)
     status = backend.status()
     is_operational = status.operational
@@ -73,8 +85,10 @@ def run_real(backend, circ, is_run=False, job_id=None):
         #print(retrieve_job.result().get_counts(circ))
         counts = retrieve_job.result().get_counts()
         print(counts)
-        plot_distribution(counts)
-        plt.savefig("real_result.png", dpi=1024)
+
+        if save_fig:
+            plot_distribution(counts)
+            plt.savefig("real_result.png", dpi=1024)
 
     if is_run:
         job = backend.run(transpiled)
@@ -89,9 +103,12 @@ def main():
     backend = provider.get_backend(args.sys_name)
     #backend = provider.backend.ibmq_lima
     circ = build_circ()
-    run_sim(backend, circ, is_run=(True if args.sim == 1 else False))
+    run_sim(backend, circ,
+            is_run=(True if args.sim else False),
+            save_fig=(True if args.save_fig else False),
+            is_noisy=(True if args.is_noisy else False))
     run_real(backend, circ, 
-            is_run=(True if args.real == 1 else False),
+            is_run=(True if args.real else False),
             job_id=args.job_id)
 
 
