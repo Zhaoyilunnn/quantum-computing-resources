@@ -1,0 +1,1 @@
+ll ../QASMBench/large/*/*.qasm | awk '{print $NF}' | while read qasm; do bench=$(echo $qasm | awk -F'/' '{print $NF}'); echo $bench; python bench.py --qasm-file ${qasm} | tee test_data/depolarizing.${bench}.log; python bench.py --qasm-file ${qasm} --noise ideal | tee test_data/ideal.${bench}.log; done

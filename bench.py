@@ -4,10 +4,13 @@ from qiskit import *
 from qiskit.circuit.random import random_circuit
 import argparse
 import json
+from qiskit_aer import noise
+from qiskit_aer.noise import noise_model
 
 from sympy import arg, re
 from util import *
 from reorder import Reorder
+from noise import Noise
 
 #### For json format
 # sort_keys=True, indent=4, separators=(',', ':')
@@ -16,20 +19,21 @@ from reorder import Reorder
 
 def parse_args():
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion')
-    parser.add_argument('--num-qubits', type=int, default=10, help='number of qubits')
-    parser.add_argument('--backend', type=str, default='aer_simulator', help='simulation method')
-    parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit, qasm | random | analysis')
-    parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path')
-    parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit')
-    parser.add_argument('--run', type=int, default=1, help='Whether run experiments')
-    parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis')
-    parser.add_argument('--save-qobj', type=int, default=0, help='Whether save qobj file(analysis==1)')
-    parser.add_argument('--qobj-file', type=str, default='qobj', help='qobj file path(analysis==1 && save_qobj==1)')
-    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (analysis==1)')
-    parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (analysis==1)')
-    parser.add_argument('--reorder-method', type=str, default="static-new-local", help="Method for reordering (clustering)")
-    parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local)")
+    parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion (Default: 0)')
+    parser.add_argument('--num-qubits', type=int, default=10, help='Number of qubits (Default: 10)')
+    parser.add_argument('--backend', type=str, default='aer_simulator', help='Simulation method (Default: aer_simulator)')
+    parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit, qasm | random | analysis (Default: qasm)')
+    parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path Default: empty')
+    parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit (Default: 10)')
+    parser.add_argument('--run', type=int, default=1, help='Whether run experiments (Default: 1)')
+    parser.add_argument('--analysis', type=int, default=0, help='Whether perform static circuit analysis, (Default: 0)')
+    parser.add_argument('--save-qobj', type=int, default=0, help='Whether save qobj file(analysis==1), (Default: 0)')
+    parser.add_argument('--qobj-file', type=str, default='qobj', help='qobj file path(analysis==1 && save_qobj==1), (Default: qobj)')
+    parser.add_argument('--local-qubits', type=int, default=10, help='Max qubits within a cluster. (analysis==1), (Default: 10)')
+    parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (analysis==1), (Default: 0)')
+    parser.add_argument('--reorder-method', type=str, default="static-new-local", help="Method for reordering (clustering), (Default: static-new-local)")
+    parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local), (Default: 2)")
+    parser.add_argument('--noise', type=str, default='depolarizing', help="Noise model name, (Default: depolarizing)")
     return parser.parse_args()
 
 
@@ -106,8 +110,11 @@ def run_circ(args, circ):
                 qobj_file=args.qobj_file,
                 reorder_method=args.reorder_method,
                 nl=args.nl)
+    
+    noise_model = Noise.get_noise_model(args.noise) 
     if args.run == 1:
-        run(qobj, backend) 
+        run(qobj, backend, noise_model=noise_model) 
+
 
 def run_analysis_only(args):
     if args.qobj_file == "":
@@ -115,9 +122,12 @@ def run_analysis_only(args):
     qobj_dict = load_qobj_from_path(args.qobj_file)
     do_analysis(qobj_dict)
         
-#@profile
-def run(qobj, backend):
-    backend.run(qobj)
+
+@profile
+def run(qobj, backend,
+        noise_model=None):
+    backend.run(qobj, noise_model=noise_model)
+
 
 def main():
     args = parse_args()
