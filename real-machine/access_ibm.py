@@ -92,7 +92,6 @@ def run_real(backend, circ,
 
     if is_run:
         job = backend.run(transpiled)
-        counts = job.result()
 
     print("is_operational:{} jobs_in_queue:{} job_limit:{}".format(is_operational, jobs_in_queue, job_limit))
 
