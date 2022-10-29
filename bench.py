@@ -12,6 +12,10 @@ from util import *
 from reorder import Reorder
 from noise import Noise
 
+#IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
+DEVICE_LIST = []
+provider = IBMQ.load_account()
+
 #### For json format
 # sort_keys=True, indent=4, separators=(',', ':')
 #### For json format
@@ -33,7 +37,8 @@ def parse_args():
     parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (analysis==1), (Default: 0)')
     parser.add_argument('--reorder-method', type=str, default="static-new-local", help="Method for reordering (clustering), (Default: static-new-local)")
     parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local), (Default: 2)")
-    parser.add_argument('--noise', type=str, default='depolarizing', help="Noise model name, (Default: depolarizing)")
+    parser.add_argument('--noise', type=str, default='depolarizing', help="Noise model name, if this is set to IBM device name,"\
+            " use noise model from the deivice, (Default: depolarizing)")
     return parser.parse_args()
 
 
