@@ -1,19 +1,24 @@
-import sys
-import numpy as np
-from qiskit import *
-from qiskit.circuit.random import random_circuit
 import argparse
 import json
-from qiskit_aer import noise
-from qiskit_aer.noise import noise_model
+import logging
 
-from sympy import arg, re
+from qiskit_aer.noise import NoiseModel
+
 from util import *
 from reorder import Reorder
 from noise import Noise
+from qiskit import *
+from qiskit.circuit.random import random_circuit
+from qiskit.providers import provider
+
+
+# Logging configuration
+logging.basicConfig(filename='bench.log', encoding='utf-8', level=logging.DEBUG,
+                format='%(asctime)s %(message)s')
+
 
 #IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
-DEVICE_LIST = []
+DEVICE_LIST = ['ibm_oslo', 'ibmq_manila', 'ibm_nairobi', 'ibmq_quito', 'ibmq_belem', 'ibmq_lima']
 provider = IBMQ.load_account()
 
 #### For json format
@@ -25,7 +30,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--fusion', type=int, default=0, help='Whether enable fusion (Default: 0)')
     parser.add_argument('--num-qubits', type=int, default=10, help='Number of qubits (Default: 10)')
-    parser.add_argument('--backend', type=str, default='aer_simulator', help='Simulation method (Default: aer_simulator)')
+    parser.add_argument('--backend', type=str, default='aer_simulator', help='Execution environment," \
+            " if set to IBM device name, [ibm_oslo, ibmq_manila, ibm_nairobi, ibmq_quito, ibmq_belem, ibmq_lima]" \
+            " use real device (Default: aer_simulator)')
     parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit, qasm | random | analysis (Default: qasm)')
     parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path Default: empty')
     parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit (Default: 10)')
@@ -101,9 +108,29 @@ def construct_circuit(args):
 
 
 def run_circ(args, circ):
-    backend = Aer.get_backend(args.backend)
-    backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
-    test = transpile(circ, backend)
+    logging.info('Running!!NoiseModel:%s, Backend:%s', args.noise, args.backend)
+    noise_model = None
+    coupling_map = None
+    basis_gates = None
+    backend = None # The execution engine
+    if args.noise in DEVICE_LIST:
+        # The noise name is the same as the device name
+        # Now use noise model from real-device
+        device = provider.get_backend(args.noise)
+        noise_model = NoiseModel.from_backend(device)
+        coupling_map = device.configuration().coupling_map
+        basis_gates = noise_model.basis_gates
+    else:
+        noise_model = Noise.get_noise_model(args.noise) 
+    print(noise_model, coupling_map, basis_gates)
+
+    if args.backend in DEVICE_LIST:
+        backend = provider.get_backend(args.backend)
+    else:
+        backend = Aer.get_backend(args.backend)
+        backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
+    test = transpile(circ, backend, coupling_map=coupling_map,
+            basis_gates=basis_gates)
     qobj = assemble(test)
 
     if args.analysis == 1:
@@ -116,7 +143,6 @@ def run_circ(args, circ):
                 reorder_method=args.reorder_method,
                 nl=args.nl)
     
-    noise_model = Noise.get_noise_model(args.noise) 
     if args.run == 1:
         run(qobj, backend, noise_model=noise_model) 
 
