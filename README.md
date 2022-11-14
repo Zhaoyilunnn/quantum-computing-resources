@@ -18,6 +18,14 @@ gflags: 2.2.2
 conan: 1.52.0
 ```
 
+### Install cmake
+```
+$ curl -L https://github.com/Kitware/CMake/releases/download/v3.24.3/cmake-3.24.3-linux-x86_64.tar.gz --output cmake-3.24.3-linux-x86_64.tar.gz
+$ tar -zxf cmake-3.24.3-linux-x86_64.tar.gz
+$ cd cmake-3.24.3-linux-x86_64
+# Then add bin to $PATH or copy cmake to path
+```
+
 ### Install gflags
 Follow the [guide](https://github.com/gflags/gflags/blob/master/INSTALL.md)
 
@@ -35,4 +43,19 @@ $ ccmake ..
 $ make
 $ make test    (optional)
 $ make install (optional)
+```
+
+### Install conan
+```
+pip install conan=1.52.0
+```
+
+### Build
+
+```
+$ mkdir build
+$ cd build
+$ conan install ..
+$ cmake ..
+$ make -j 8
 ```
