@@ -61,7 +61,6 @@ def gen_qobj_file(qc, qobj_name, qobj_inst_name,
         f.write(json.dumps(reo.result, sort_keys=True, indent=4, separators=(',', ':')))
 
 
-
 def gen_unitary():
     q = QuantumRegister(6)
     qc = QuantumCircuit(q)

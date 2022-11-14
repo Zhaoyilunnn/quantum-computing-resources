@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import pickle
 
 from qiskit_aer.noise import NoiseModel
 
@@ -47,6 +48,7 @@ def parse_args():
     parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local), (Default: 2)")
     parser.add_argument('--noise', type=str, default='depolarizing', help="Noise model name, if this is set to IBM device name,"\
             " use noise model from the deivice, (Default: depolarizing)")
+    parser.add_argument('--save-sv', dest='save_sv', type=int, default=0, help="Whether to save statevector, (Default 0)")
     return parser.parse_args()
 
 
@@ -158,7 +160,7 @@ def run_circ(args, circ):
                     nl=args.nl)
         
         if args.run == 1:
-            run(qobj, backend, noise_model=noise_model) 
+            run(qobj, backend, noise_model=noise_model, save_sv=args.save_sv) 
 
 
 def run_analysis_only(args):
@@ -170,7 +172,8 @@ def run_analysis_only(args):
 
 @profile
 def run(qobj, backend,
-        noise_model=None):
+        noise_model=None,
+        save_sv=False):
     # TODO: `noise_model` is not an option for IBMQ and will be ignored
     #       Be careful if version changed
     job = backend.run(qobj, noise_model=noise_model)
@@ -179,7 +182,12 @@ def run(qobj, backend,
     #if job.status() is not JobStatus.DONE:
     #    print("Job is running")
     counts = job.result().get_counts()
-    print(counts)
+    #print(counts)
+
+    if save_sv:
+        sv = job.result().get_statevector(0)
+        with open('temp.txt', 'wb') as fw:
+            pickle.dump(sv.data.tolist()[1:2], fw)
 
 
 def main():
