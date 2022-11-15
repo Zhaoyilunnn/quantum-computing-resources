@@ -1,24 +1,23 @@
-from qiskit import *
-from qiskit.quantum_info import Statevector
+from typing_extensions import assert_never
+from qdao.util import indexes
 
-circ = QuantumCircuit(3)
-# Add a H gate on qubit 0, putting this qubit in superposition.
-circ.h(0)
-# Add a CX (CNOT) gate on control qubit 0 and target qubit 1, putting
-# the qubits in a Bell state.
-circ.cx(0, 1)
-# Add a CX (CNOT) gate on control qubit 0 and target qubit 2, putting
-# the qubits in a GHZ state.
-circ.cx(0, 2)
+# 00000010
+# 00001010
+# 00100010
+# 00101010
+# 10000010
+# 10001010
+# 10100010
+# 10101010
+test_cases = [
+    ([1, 2], 0, [0,2,4,6]),
+    ([3], 3, [3, 11]),
+    ([3,5,7], 2, [2, 10, 34, 42, 130, 138, 162, 170])
+]
 
-print(circ.draw(output='text'))
+class TestQdaoUtil:
 
+    def test_indexes(self):
+        for case in test_cases:
+            assert indexes(case[0], case[1]) == case[2]
 
-# Set the intial state of the simulator to the ground state using from_int
-state = Statevector.from_int(0, 2**3)
-
-# Evolve the state by the quantum circuit
-state = state.evolve(circ)
-
-#draw using latex
-print(state.draw('text'))
