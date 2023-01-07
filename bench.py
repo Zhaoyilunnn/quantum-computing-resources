@@ -148,9 +148,7 @@ def run_circ(args, circ):
 
     for backend in backend_list:
         #print(backend.name())
-        transpiled = transpile(circ, backend, coupling_map=coupling_map,
-                basis_gates=basis_gates)
-        qobj = assemble(transpiled)
+        qobj = compile_circ(circ, backend, coupling_map, basis_gates)
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
@@ -161,6 +159,16 @@ def run_circ(args, circ):
         
         if args.run == 1:
             run(qobj, backend, noise_model=noise_model, save_sv=args.save_sv) 
+
+@profile
+def compile_circ(circ, backend, coupling_map=None, basis_gates=None):
+    transpiled = transpile(circ, backend, coupling_map=coupling_map,
+            basis_gates=basis_gates)
+    scheduled = schedule(transpiled, backend)
+    qobj = assemble(transpiled)
+    print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
+    return qobj
+
 
 
 def run_analysis_only(args):
