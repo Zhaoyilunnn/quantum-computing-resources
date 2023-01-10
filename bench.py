@@ -10,8 +10,9 @@ from reorder import Reorder
 from noise import Noise
 from qiskit import *
 from qiskit.circuit.random import random_circuit
-from qiskit.providers import provider
+from qiskit.providers import provider, fake_provider
 from qiskit.providers.jobstatus import JobStatus
+from qiskit.providers.fake_provider import *
 
 
 # Logging configuration
@@ -27,6 +28,8 @@ provider = IBMQ.load_account()
 # sort_keys=True, indent=4, separators=(',', ':')
 #### For json format
 
+FAKE_BACKEND_FLAG = "fake"
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='')
@@ -34,7 +37,8 @@ def parse_args():
     parser.add_argument('--num-qubits', type=int, default=10, help='Number of qubits (Default: 10)')
     parser.add_argument('--backend', type=str, default='aer_simulator', help="Execution environment," \
             " if set to IBM device name, [ibm_oslo, ibmq_manila, ibm_nairobi, ibmq_quito, ibmq_belem, ibmq_lima]" \
-            " use real device. Can be a list (',' seperated), will execute the same circuit on each backend (Default: aer_simulator)")
+            " use real device. Can be a list (',' seperated), will execute the same circuit on each backend, " \
+            " if set to fake, use fake backend (Default: aer_simulator)")
     parser.add_argument('--mode', type=str, default='qasm', help='How to construct a circuit, qasm | random | analysis (Default: qasm)')
     parser.add_argument('--qasm-file', type=str, default='', help='The qasm file path Default: empty')
     parser.add_argument('--depth', type=int, default=10, help='Depth of a circuit (Default: 10)')
@@ -116,6 +120,9 @@ def get_backend_list(args):
     for backend_name in backend_name_list:
         if backend_name in DEVICE_LIST:
             backend = provider.get_backend(backend_name)
+        elif backend_name == FAKE_BACKEND_FLAG:
+            #backend = FakeWashingtonV2()
+            backend = FakeWashington()
         else:
             backend = Aer.get_backend(backend_name)
             backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
@@ -148,7 +155,11 @@ def run_circ(args, circ):
 
     for backend in backend_list:
         #print(backend.name())
-        qobj = compile_circ(circ, backend, coupling_map, basis_gates)
+        #qobj = compile_circ(circ, backend, coupling_map, basis_gates)
+        transpiled = gate_compile(circ, backend, coupling_map, basis_gates)
+        scheduled = pulse_compile(transpiled, backend)
+        qobj = assemble(transpiled)
+        print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
@@ -169,6 +180,16 @@ def compile_circ(circ, backend, coupling_map=None, basis_gates=None):
     print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
     return qobj
 
+@profile
+def gate_compile(circ, backend, coupling_map=None, basis_gates=None):
+    transpiled = transpile(circ, backend, coupling_map=coupling_map,
+            basis_gates=basis_gates)
+    return transpiled
+
+@profile
+def pulse_compile(circ, backend):
+    scheduled = schedule(circ, backend)
+    return scheduled
 
 
 def run_analysis_only(args):
