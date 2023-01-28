@@ -2,8 +2,10 @@ import argparse
 import json
 import logging
 import pickle
+from typing import Union
 
 from qiskit_aer.noise import NoiseModel
+from sympy import arg
 
 from util import *
 from reorder import Reorder
@@ -28,7 +30,8 @@ provider = IBMQ.load_account()
 # sort_keys=True, indent=4, separators=(',', ':')
 #### For json format
 
-FAKE_BACKEND_FLAG = "fake"
+FAKE_BACKEND = "fake"
+USE_BACKEND_NOISE = "backend"
 
 
 def parse_args():
@@ -50,8 +53,8 @@ def parse_args():
     parser.add_argument('--draw-circ', type=int, default=0, help='Whether print circuit diagram. (Default: 0)')
     parser.add_argument('--reorder-method', type=str, default="static-new-local", help="Method for reordering (clustering), (Default: static-new-local)")
     parser.add_argument('--nl', type=int, default=2, help="Number of local qubits (reorder_method=static-new-local), (Default: 2)")
-    parser.add_argument('--noise', type=str, default='depolarizing', help="Noise model name, if this is set to IBM device name,"\
-            " use noise model from the deivice, (Default: depolarizing)")
+    parser.add_argument('--noise', type=str, default='backend', help="Noise model name: device_name | backend | <customized>, "\
+            "if this is set to IBM device name, use noise model from the deivice, (Default: backend)")
     parser.add_argument('--save-sv', dest='save_sv', type=int, default=0, help="Whether to save statevector, (Default 0)")
     return parser.parse_args()
 
@@ -120,7 +123,7 @@ def get_backend_list(args):
     for backend_name in backend_name_list:
         if backend_name in DEVICE_LIST:
             backend = provider.get_backend(backend_name)
-        elif backend_name == FAKE_BACKEND_FLAG:
+        elif backend_name == FAKE_BACKEND:
             #backend = FakeWashingtonV2()
             backend = FakeWashington()
         else:
@@ -135,26 +138,28 @@ def run_all_backends():
 
 
 def run_circ(args, circ):
-    logging.info('Running!!NoiseModel:%s, Backend:%s', args.noise, args.backend)
-    noise_model = None
-    coupling_map = None
-    basis_gates = None
-    backend = None # The execution engine
-    if args.noise in DEVICE_LIST:
-        # The noise name is the same as the device name
-        # Now use noise model from real-device
-        device = provider.get_backend(args.noise)
-        noise_model = NoiseModel.from_backend(device)
-        coupling_map = device.configuration().coupling_map
-        basis_gates = noise_model.basis_gates
-    else:
-        noise_model = Noise.get_noise_model(args.noise) 
-    print(noise_model, coupling_map, basis_gates)
 
     backend_list = get_backend_list(args)
 
     for backend in backend_list:
-        #print(backend.name())
+        coupling_map = None
+        basis_gates = None
+        if args.noise == USE_BACKEND_NOISE:
+            # Use noise model from backend 
+            noise_model = NoiseModel.from_backend(backend)
+            coupling_map = backend.configuration().coupling_map
+            basis_gates = noise_model.basis_gates
+        elif args.noise in DEVICE_LIST:
+            # Use noise model from a specific IBM device
+            # Note that:
+            #  If use specific device, this will override actual backend's configuration!
+            noise_device = provider.get_backend(args.noise)
+            noise_model = NoiseModel.from_backend(noise_device)
+            coupling_map = noise_device.configuration().coupling_map
+            basis_gates = noise_model.basis_gates
+        else:
+            noise_model = Noise.get_noise_model(args.noise) 
+        #logging.info('zyl-qcs-running::NoiseModel:%s, Backend:%s, CouplingMap:%s', noise_model, backend, coupling_map)
         #qobj = compile_circ(circ, backend, coupling_map, basis_gates)
         transpiled = gate_compile(circ, backend, coupling_map, basis_gates)
         scheduled = pulse_compile(transpiled, backend)
