@@ -162,7 +162,9 @@ def run_circ(args, circ):
         #logging.info('zyl-qcs-running::NoiseModel:%s, Backend:%s, CouplingMap:%s', noise_model, backend, coupling_map)
         #qobj = compile_circ(circ, backend, coupling_map, basis_gates)
         transpiled = gate_compile(circ, backend, coupling_map, basis_gates)
+        print("#Inst at gate level: {}".format(len(transpiled)))
         scheduled = pulse_compile(transpiled, backend)
+        print("#Inst at pulse level: {}".format(len(scheduled.instructions)))
         qobj = assemble(transpiled)
         print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
 
