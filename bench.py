@@ -12,7 +12,7 @@ from reorder import Reorder
 from noise import Noise
 from qiskit import *
 from qiskit.circuit.random import random_circuit
-from qiskit.providers import provider, fake_provider
+from qiskit.providers import backend, provider, fake_provider
 from qiskit.providers.jobstatus import JobStatus
 from qiskit.providers.fake_provider import *
 
@@ -168,7 +168,8 @@ def run_circ(args, circ):
         print("#Inst at pulse level: {}".format(len(scheduled.instructions)))
         qobj = assemble(transpiled)
         print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
-        plot_topology(backend, savefig=True, figname="test.png")
+        plot_topology(backend, figname="test.png")
+        plot_error(backend, figname="error.png")
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
