@@ -2,7 +2,10 @@ import sys, os, psutil
 import subprocess
 import time
 
+import matplotlib.pyplot as plt
+
 from qiskit.visualization.qcstyle import json
+from qiskit.visualization import plot_coupling_map, plot_gate_map
 
 BARRIER_OP_LIST = [
     "measure", 
@@ -88,3 +91,12 @@ def load_qobj_from_path(qobj_path):
     with open(qobj_path, 'r') as fr:
         qobj_dict = json.load(fr)
     return qobj_dict 
+
+def plot_topology(backend, savefig=False, figname=None):
+    """ Plot backend topology """
+    fig = plot_gate_map(backend)
+    if savefig:
+        if figname is None:
+            raise ValueError("Please specify the figure name")
+        fig.savefig(figname)
+

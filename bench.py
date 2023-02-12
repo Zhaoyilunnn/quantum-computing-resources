@@ -24,7 +24,8 @@ logging.basicConfig(filename='bench.log', encoding='utf-8', level=logging.DEBUG,
 
 #IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
 DEVICE_LIST = ['ibm_oslo', 'ibmq_manila', 'ibm_nairobi', 'ibmq_quito', 'ibmq_belem', 'ibmq_lima']
-provider = IBMQ.load_account()
+#provider = IBMQ.load_account()
+provider = None
 
 #### For json format
 # sort_keys=True, indent=4, separators=(',', ':')
@@ -167,6 +168,7 @@ def run_circ(args, circ):
         print("#Inst at pulse level: {}".format(len(scheduled.instructions)))
         qobj = assemble(transpiled)
         print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
+        plot_topology(backend, savefig=True, figname="test.png")
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
