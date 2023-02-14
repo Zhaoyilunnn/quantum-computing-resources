@@ -126,7 +126,8 @@ def get_backend_list(args):
             backend = provider.get_backend(backend_name)
         elif backend_name == FAKE_BACKEND:
             #backend = FakeWashingtonV2()
-            backend = FakeWashington()
+            #backend = FakeWashington()
+            backend = FakeCairo()
         else:
             backend = Aer.get_backend(backend_name)
             backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
@@ -166,7 +167,9 @@ def run_circ(args, circ):
         print("#Inst at gate level: {}".format(len(transpiled)))
         scheduled = pulse_compile(transpiled, backend)
         print("#Inst at pulse level: {}".format(len(scheduled.instructions)))
-        qobj = assemble(transpiled)
+        #qobj = assemble(transpiled)
+        #qobj = scheduled
+        qobj = circ
         print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
         plot_topology(backend, figname="test.png")
         plot_error(backend, figname="error.png")
