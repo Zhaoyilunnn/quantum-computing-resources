@@ -2,6 +2,7 @@ from typing import List
 from qiskit.providers.backend import BackendV2
 from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Schedule
+from util import *
 
 class BackendManager:
     """ A simple qubit device manager

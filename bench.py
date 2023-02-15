@@ -171,8 +171,12 @@ def run_circ(args, circ):
         #qobj = scheduled
         qobj = circ
         print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
-        plot_topology(backend, figname="test.png")
-        plot_error(backend, figname="error.png")
+        #plot_topology(backend, figname="test.png")
+        #plot_error(backend, figname="error.png")
+        #print(coupling_map)
+        #print(backend.configuration().to_dict())
+        #pretty(backend.configuration().to_dict())
+        print(couple_map_to_graph(coupling_map))
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,

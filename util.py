@@ -1,4 +1,5 @@
 import sys, os, psutil
+from typing import Dict, List
 import subprocess
 import time
 
@@ -102,3 +103,35 @@ def plot_error(backend, figname=None):
     fig = plot_error_map(backend)
     if figname:
         fig.savefig(figname)
+
+def pretty(d: Dict, indent=0) -> None:
+    """ 
+    Pretty print dictionary
+
+    Ref: https://stackoverflow.com/questions/3229419/how-to-pretty-print-nested-dictionaries
+    """
+    for key, value in d.items():
+        print('\t' * indent + str(key))
+        if isinstance(value, dict):
+            pretty(value, indent+1)
+        else:
+            print('\t' * (indent+1) + str(value))
+
+def couple_map_to_graph(coupling_map: List[List]):
+    """
+    Transform coupling map to dictionary for convenience
+    """
+    graph = {}
+    
+    for edge in coupling_map:
+        if len(edge) != 2:
+            raise ValueError("Each edge should be a List with length 2!")
+        node = edge[0]
+        neighbor = edge[1]
+        graph.setdefault(node, [])
+        graph[node].append(neighbor)
+
+    return graph
+
+#TODO(zhaoyilun): graph partition
+# 1. DFS and Fix sub-graph size
