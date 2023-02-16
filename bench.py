@@ -6,6 +6,7 @@ from typing import Union
 
 from qiskit_aer.noise import NoiseModel
 from sympy import arg
+from sympy.series.formal import compute_fps
 
 from util import *
 from reorder import Reorder
@@ -15,6 +16,9 @@ from qiskit.circuit.random import random_circuit
 from qiskit.providers import backend, provider, fake_provider
 from qiskit.providers.jobstatus import JobStatus
 from qiskit.providers.fake_provider import *
+
+from qvm.util import *
+from qvm.backend_manager import *
 
 
 # Logging configuration
@@ -176,7 +180,12 @@ def run_circ(args, circ):
         #print(coupling_map)
         #print(backend.configuration().to_dict())
         #pretty(backend.configuration().to_dict())
-        print(couple_map_to_graph(coupling_map))
+        graph = couple_map_to_graph(coupling_map)
+        partitions = naive_graph_partition(graph, 4) 
+        backend_manager = BackendManager(backend)
+
+        compute_unit = backend_manager.extract_single_compute_unit(backend, partitions[0])
+        pretty(compute_unit.configuration().to_dict())
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
