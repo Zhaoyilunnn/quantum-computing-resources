@@ -2,7 +2,7 @@ import copy
 
 from typing import Dict, List
 
-def couple_map_to_graph(coupling_map: List[List]):
+def coupling_map_to_graph(coupling_map: List[List]):
     """
     Transform coupling map to dictionary for convenience
     """
@@ -17,6 +17,44 @@ def couple_map_to_graph(coupling_map: List[List]):
         graph[node].append(neighbor)
 
     return graph
+
+def coupling_map_to_nodes(coupling_map: List[List[int]]) -> List[int]:
+    """
+    Transform coupling map to graph node set
+    """
+
+    nodes = set()
+
+    for edge in coupling_map:
+        for node in edge:
+            nodes.add(node)
+
+    return list(nodes)
+
+def virtualize_coupling_map(
+        coupling_map: List[List[int]],
+        real_to_virtual: Dict[int, int]
+    ):
+    """ Virtualize the coupling map based on real to virtual mapping 
+    It simply replace the qubit id to virtualized qubit id
+    """
+    virt_coupling_map = []
+    for edge in coupling_map:
+        virt_coupling_map.append([real_to_virtual[real] for real in edge])
+    return virt_coupling_map
+
+def merge_sub_graphs_nodes(sub_graph_nodes: List[List[int]]) -> List[int]:
+    """
+    Merge multiple subgraphs' nodes to a single node list
+    """
+
+    merged_graph_nodes = []
+
+    # TODO(zhaoyilun): check there's no overlap between different subgraph
+    for subgraph in sub_graph_nodes:
+        merged_graph_nodes += subgraph
+
+    return merged_graph_nodes
 
 #TODO(zhaoyilun): graph partition
 # 1. DFS and Fix sub-graph size
