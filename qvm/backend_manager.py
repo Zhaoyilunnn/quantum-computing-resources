@@ -17,13 +17,33 @@ class BackendManager:
     def __init__(self, backend: BackendV1) -> None:
         _compute_units = self.init_compute_units(backend)
 
+    def extract_compute_unit_props(self, properties: BackendProperties, sub_coupling_graph: List[int]):
+        """
+        Extract new properties for compute unit given a subgraph of original coupling graph
+        """
+        sub_props = copy.deepcopy(properties)
+        
+        # Extract qubits
+        sub_props.qubits = []
+        for i, qubit in enumerate(properties.qubits):
+            if i in sub_coupling_graph:
+                sub_props.qubits.append(qubit)
+
+        # Extract gates
+        sub_props.gates = []
+        for gate in properties.gates:
+            if set(gate.qubits).issubset(sub_coupling_graph):
+                sub_props.gates.append(gate)
+
+        return BackendProperties.from_dict(sub_props.to_dict())
+
     def extract_compute_unit_conf(self, configuration: BackendConfiguration, sub_coupling_graph: List[int]):
         """
         Extract a new configuration for compute unit given a subgraph of original coupling graph
         """
-        compute_unit_conf = copy.deepcopy(configuration)
-        compute_unit_conf.n_qubits = len(sub_coupling_graph)
-        compute_unit_conf.coupling_map = extract_coupling_map(configuration.coupling_map, sub_coupling_graph)
+        sub_conf = copy.deepcopy(configuration)
+        sub_conf.n_qubits = len(sub_coupling_graph)
+        sub_conf.coupling_map = extract_coupling_map(configuration.coupling_map, sub_coupling_graph)
 
         # Extract gate configurations from sub_coupling_graph
         compute_unit_gates = [] 
@@ -34,9 +54,9 @@ class BackendManager:
                 gate_dict['coupling_map'] = extract_coupling_map(gate_dict['coupling_map'], sub_coupling_graph)
             compute_unit_gates.append(GateConfig.from_dict(gate_dict))
 
-        compute_unit_conf.gates = compute_unit_gates
+        sub_conf.gates = compute_unit_gates
         
-        return compute_unit_conf
+        return sub_conf
 
 
     def extract_single_compute_unit(self, backend: BackendV1, sub_coupling_graph: List[int]):
@@ -45,9 +65,13 @@ class BackendManager:
         """
 
         compute_unit_conf = self.extract_compute_unit_conf(backend.configuration(), sub_coupling_graph)
-        print(compute_unit_conf)
+        compute_unit_props = self.extract_compute_unit_props(backend.properties(), sub_coupling_graph)
+
         compute_unit = copy.deepcopy(backend)
         compute_unit._configuration = compute_unit_conf
+
+        # TODO(zhaoyilun): some backends may not support properties
+        compute_unit._properties = compute_unit_props
         return compute_unit
         
 

@@ -185,7 +185,13 @@ def run_circ(args, circ):
         backend_manager = BackendManager(backend)
 
         compute_unit = backend_manager.extract_single_compute_unit(backend, partitions[0])
-        pretty(compute_unit.configuration().to_dict())
+        compute_unit_transpiled = transpile(circ, compute_unit)
+        print("#Inst at gate level: {}".format(len(compute_unit_transpiled)))
+        compute_unit_scheduled = pulse_compile(transpiled, compute_unit)
+        print("#Inst at pulse level: {}".format(len(compute_unit_scheduled.instructions)))
+        #plot_topology(compute_unit, figname="test.png")
+        #plot_error(compute_unit, figname="error.png")
+        #pretty(compute_unit.configuration().to_dict())
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
