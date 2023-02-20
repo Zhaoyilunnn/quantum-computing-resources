@@ -174,6 +174,9 @@ class BackendManager:
         """
         Transform virtual circuit to real circuit.
         i.e., map the QuantunCircuitInstruction's virtual qubit id to real qubit id
+
+        This method should be called after circuit level compilation and before pulse
+        level compilation
         """
         if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
             raise ValueError("Currently only support qreg size 1")
