@@ -1,8 +1,11 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit import transpile, schedule
+from qiskit.providers import backend
 
 from qiskit.providers.fake_provider import *
 from qvm.backend_manager import * 
+
+from util import *
 
 
 class TestBackendManager:
@@ -11,6 +14,7 @@ class TestBackendManager:
     _manager = BackendManager(_backend)
     _conf = _backend.configuration()
     _props = _backend.properties() 
+    pretty(_conf.to_dict())
 
     def test_extract_compute_unit(self):
 
@@ -48,10 +52,34 @@ class TestBackendManager:
 
         compute_unit = self._manager.extract_single_compute_unit(sub_graph) 
 
+        plot_error(self._backend, figname="backend.png")
+        plot_error(compute_unit.backend, figname="compute_unit.png")
+
         dummy_circ = QuantumCircuit(2, 2)
         dummy_circ.h(0)
         dummy_circ.cx(0, 1)
         dummy_circ.measure([0, 1], [0, 1])
 
-        transpiled = transpile(dummy_circ, compute_unit.backend)
-        scheduled = schedule(transpiled, compute_unit.backend)
+        pretty(self._backend.configuration().channels)
+        print(self._backend.configuration().coupling_map)
+        pretty(self._backend.defaults().to_dict())
+
+        print(dummy_circ.qregs)
+
+        transpiled = transpile(dummy_circ, coupling_map=[[0,1],[1,0],[0,2],[2,0]])
+        print(transpiled.qregs)
+        print(transpiled._data) 
+        for inst in transpiled._data:
+            for q in inst.qubits:
+                print(q.index)
+        #real_transpiled = self._manager.circuit_virtual_to_real(transpiled, compute_unit)
+        #print(real_transpiled._data)
+        #scheduled = schedule(real_transpiled, self._backend)
+        #for inst in scheduled.instructions:
+        #    print(inst)
+
+        print("================== Original ========================")
+        transpiled = transpile(dummy_circ, self._backend)
+        scheduled = schedule(transpiled, self._backend)
+        for inst in scheduled.instructions:
+            print(inst)
