@@ -11,10 +11,22 @@ from util import *
 class ComputeUnit:
     """ The minimum resource unit for compilation """
     
-    def __init__(self, backend: BackendV1, sub_coupling_graph: List[int]) -> None:
+    def __init__(self, 
+            backend: BackendV1, 
+            sub_coupling_graph: List[int],
+            real_to_virtual=None) -> None:
+        """
+        `backend`: The real hardware model under the compute unit
+        `sub_coupling_graph`: The real qubit list of this compute unit
+        `real_to_virtual`: Each real qubit binds to a virtual qubit id
+        """
         self._backend = copy.deepcopy(backend) 
         self._real_qubits = sub_coupling_graph
-        self._real_to_virtual = {real: virtual for virtual, real in enumerate(self._real_qubits)}
+
+        if real_to_virtual:
+            self._real_to_virtual = real_to_virtual
+        else:
+            self._real_to_virtual = {real: virtual for virtual, real in enumerate(self._real_qubits)}
 
     @property
     def backend(self):
@@ -26,20 +38,11 @@ class ComputeUnit:
         """
         return self._real_qubits
 
-    #def virtualize_backend(self, backend: BackendV1) -> None:
-    #    """
-    #    Transform qubit ids in configuration/properties to virtualized ids
-    #    """
-    #    self._backend = backend 
-
-    #def virtualize_conf(self) -> None:
-    #    for i, edge in enumerate(self._backend.configuration().coupling_map):
-    #        for j, node in enumerate(edge):
-    #            self._backend.configuration().coupling_map[i][j] = self._real_to_virtual[node]
-
-
-    #def virtualize_props(self) -> None:
-    #    pass
+    @property
+    def real_to_virtual(self):
+        """ The mapping from real qubit id to vircutal qubit id
+        """
+        return self._real_to_virtual
 
     
 class BackendManager:
@@ -56,34 +59,28 @@ class BackendManager:
         self._backend = copy.deepcopy(backend) 
         self._compute_units = self.init_compute_units()
 
-    def init_compute_units(self) -> List[BackendV1]:
+    def init_compute_units(self) -> List[ComputeUnit]:
         """ Transform backend into a list of compute units based on some strategy """
-        compute_units = []
-        # TODO(zhaoyilun): compute unit extraction method
-        # Input: backend, output: backend_list
+        compute_units = [] 
         return compute_units
 
-    def extract_compute_unit_props(
-            self, 
-            properties: BackendProperties, 
+    def extract_compute_unit_props(self, 
             sub_coupling_graph: List[int],
-            real_to_virtual: Dict[int, int]
-        ):
+            real_to_virtual: Dict[int, int]):
         """
         Extract new properties for compute unit given a subgraph of original coupling graph
         """
-        sub_props = copy.deepcopy(properties)
-        print(real_to_virtual)
+        sub_props = copy.deepcopy(self._backend.properties())
         
         # Extract qubits
         sub_props.qubits = []
-        for i, qubit in enumerate(properties.qubits):
+        for i, qubit in enumerate(self._backend.properties().qubits):
             if i in sub_coupling_graph:
                 sub_props.qubits.append(qubit)
 
         # Extract gates
         sub_props.gates = []
-        for gate in properties.gates:
+        for gate in self._backend.properties().gates:
             if set(gate.qubits).issubset(sub_coupling_graph):
                 virt_qubits = [real_to_virtual[real] for real in gate.qubits]
                 # TODO(zhaoyilun): Ugly!!
@@ -93,25 +90,23 @@ class BackendManager:
 
         return BackendProperties.from_dict(sub_props.to_dict())
 
-    def extract_compute_unit_conf(
-            self, 
-            configuration: BackendConfiguration, 
+    def extract_compute_unit_conf(self, 
             sub_coupling_graph: List[int],
-            real_to_virtual: Dict[int, int]
-        ):
+            real_to_virtual: Dict[int, int]):
         """
         Extract a new configuration for compute unit given a subgraph of original coupling graph
         """
-        sub_conf = copy.deepcopy(configuration)
+        sub_conf = copy.deepcopy(self._backend.configuration())
         sub_conf.n_qubits = len(sub_coupling_graph)
         
-        real_coupling_map = extract_coupling_map(configuration.coupling_map, sub_coupling_graph)
+        coupling_map = self._backend.configuration().coupling_map
+        real_coupling_map = extract_coupling_map(coupling_map, sub_coupling_graph)
         sub_conf.coupling_map = virtualize_coupling_map(real_coupling_map, real_to_virtual)
         
         # Extract gate configurations from sub_coupling_graph
         compute_unit_gates = [] 
 
-        for gate in configuration.gates:
+        for gate in self._backend.configuration().gates:
             gate_dict = gate.to_dict() 
             if 'coupling_map' in gate_dict:
                 real_coupling_map = extract_coupling_map(gate_dict['coupling_map'], sub_coupling_graph)
@@ -133,10 +128,8 @@ class BackendManager:
         # The real to virtual mapping
         real_to_virtual = {real: virtual for virtual, real in enumerate(sub_coupling_graph)}     
 
-        compute_unit_conf = self.extract_compute_unit_conf(
-                self._backend.configuration(), sub_coupling_graph, real_to_virtual)
-        compute_unit_props = self.extract_compute_unit_props(
-                self._backend.properties(), sub_coupling_graph, real_to_virtual)
+        compute_unit_conf = self.extract_compute_unit_conf(sub_coupling_graph, real_to_virtual)
+        compute_unit_props = self.extract_compute_unit_props(sub_coupling_graph, real_to_virtual)
 
         compute_unit = copy.deepcopy(self._backend)
         compute_unit._configuration = compute_unit_conf

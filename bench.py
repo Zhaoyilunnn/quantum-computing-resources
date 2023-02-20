@@ -193,7 +193,6 @@ def run_circ(args, circ):
             #plot_error(compute_unit.backend, figname="error_part_{}.png".format(i))
 
         compute_unit = backend_manager.merge_compute_units(compute_units[0:2]).backend
-        pretty(compute_unit.properties().to_dict())
         plot_error(compute_unit, figname="error_merged.png")
         #coupling_map_for_transpiler = CouplingMap(compute_unit.configuration().coupling_map)
         #coupling_map_for_transpiler.is_connected()
