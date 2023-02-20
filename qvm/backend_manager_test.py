@@ -1,11 +1,14 @@
+from qiskit.circuit import QuantumCircuit
+from qiskit import transpile, schedule
+
 from qiskit.providers.fake_provider import *
 from qvm.backend_manager import * 
 
 
 class TestBackendManager:
     
-    _backend = FakeLondon()
-    _manager = BackendManager(FakeLondon())
+    _backend = FakeLagos() 
+    _manager = BackendManager(_backend)
     _conf = _backend.configuration()
     _props = _backend.properties() 
 
@@ -37,3 +40,18 @@ class TestBackendManager:
 
             # Then the test gate should be the same as the original one
             assert test_gate in self._props.gates
+
+    
+    def test_compilation_on_compute_unit(self):
+
+        sub_graph = [1, 2, 3]
+
+        compute_unit = self._manager.extract_single_compute_unit(sub_graph) 
+
+        dummy_circ = QuantumCircuit(2, 2)
+        dummy_circ.h(0)
+        dummy_circ.cx(0, 1)
+        dummy_circ.measure([0, 1], [0, 1])
+
+        transpiled = transpile(dummy_circ, compute_unit.backend)
+        scheduled = schedule(transpiled, compute_unit.backend)

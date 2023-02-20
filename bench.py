@@ -168,47 +168,16 @@ def run_circ(args, circ):
         else:
             noise_model = Noise.get_noise_model(args.noise) 
         
-        ###### Original ###############
-        ##logging.info('zyl-qcs-running::NoiseModel:%s, Backend:%s, CouplingMap:%s', noise_model, backend, coupling_map)
-        ##qobj = compile_circ(circ, backend, coupling_map, basis_gates)
-        #transpiled = gate_compile(circ, backend, coupling_map, basis_gates)
-        #print("#Inst at gate level: {}".format(len(transpiled)))
-        #scheduled = pulse_compile(transpiled, backend)
-        #print("#Inst at pulse level: {}".format(len(scheduled.instructions)))
-        ##qobj = assemble(transpiled)
-        ##qobj = scheduled
+        #logging.info('zyl-qcs-running::NoiseModel:%s, Backend:%s, CouplingMap:%s', noise_model, backend, coupling_map)
+        #qobj = compile_circ(circ, backend, coupling_map, basis_gates)
+        transpiled = gate_compile(circ, backend, coupling_map, basis_gates)
+        print("#Inst at gate level: {}".format(len(transpiled)))
+        scheduled = pulse_compile(transpiled, backend)
+        print("#Inst at pulse level: {}".format(len(scheduled.instructions)))
+        qobj = assemble(transpiled)
+        #qobj = scheduled
         #qobj = circ
-        #print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
-        ###### Original ###############
-
-        ############ Backend manager testing ###########
-        graph = coupling_map_to_graph(coupling_map)
-        partitions = naive_graph_partition(graph, 4) 
-        backend_manager = BackendManager(backend)
-
-        compute_units = []
-        for i, partition in enumerate(partitions):
-            compute_unit = backend_manager.extract_single_compute_unit(partition)
-            compute_units.append(compute_unit)
-            #plot_error(compute_unit.backend, figname="error_part_{}.png".format(i))
-
-        compute_unit = backend_manager.merge_compute_units(compute_units[0:2]).backend
-        plot_error(compute_unit, figname="error_merged.png")
-        #coupling_map_for_transpiler = CouplingMap(compute_unit.configuration().coupling_map)
-        #coupling_map_for_transpiler.is_connected()
-        #print(coupling_map_for_transpiler.is_connected())
-        #print(compute_unit.configuration().coupling_map)
-        #pretty(compute_unit.configuration().to_dict())
-        #pretty(compute_unit.properties().to_dict())
-        
-
-        compute_unit_transpiled = transpile(circ, compute_unit)
-        print("#Inst at gate level: {}".format(len(compute_unit_transpiled)))
-        compute_unit_scheduled = pulse_compile(compute_unit_transpiled, compute_unit)
-        print("#Inst at pulse level: {}".format(len(compute_unit_scheduled.instructions)))
-        #plot_topology(compute_unit, figname="test.png")
-        #plot_error(compute_unit, figname="error.png")
-        #pretty(compute_unit.configuration().to_dict())
+        print("dt: {}, duration: {}".format(backend.configuration().dt, scheduled.duration))
 
         if args.analysis == 1:
             analysis(qobj, local_qubits=args.local_qubits,
