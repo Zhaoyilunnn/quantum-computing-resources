@@ -14,7 +14,7 @@ class TestBackendManager:
     _manager = BackendManager(_backend)
     _conf = _backend.configuration()
     _props = _backend.properties() 
-    pretty(_conf.to_dict())
+    #pretty(_conf.to_dict())
 
     def test_extract_compute_unit(self):
 
@@ -60,23 +60,24 @@ class TestBackendManager:
         dummy_circ.cx(0, 1)
         dummy_circ.measure([0, 1], [0, 1])
 
-        pretty(self._backend.configuration().channels)
+        #pretty(self._backend.configuration().channels)
         print(self._backend.configuration().coupling_map)
-        pretty(self._backend.defaults().to_dict())
+        #pretty(self._backend.defaults().to_dict())
 
         print(dummy_circ.qregs)
+        print(dummy_circ.qubits)
 
-        transpiled = transpile(dummy_circ, coupling_map=[[0,1],[1,0],[0,2],[2,0]])
+        transpiled = transpile(dummy_circ, compute_unit.backend)
         print(transpiled.qregs)
         print(transpiled._data) 
         for inst in transpiled._data:
             for q in inst.qubits:
                 print(q.index)
-        #real_transpiled = self._manager.circuit_virtual_to_real(transpiled, compute_unit)
-        #print(real_transpiled._data)
-        #scheduled = schedule(real_transpiled, self._backend)
-        #for inst in scheduled.instructions:
-        #    print(inst)
+        real_transpiled = self._manager.circuit_virtual_to_real(transpiled, compute_unit)
+        print(real_transpiled._data)
+        scheduled = schedule(real_transpiled, self._backend)
+        for inst in scheduled.instructions:
+            print(inst)
 
         print("================== Original ========================")
         transpiled = transpile(dummy_circ, self._backend)

@@ -168,7 +168,6 @@ class BackendManager:
 
         return merge_sub_graphs_nodes(list_subgraph_nodes)
 
-    #TODO: Implement a transpiler to transform virtual circuit to real circuit
     def circuit_virtual_to_real(self, 
             circuit: QuantumCircuit,
             compute_unit: ComputeUnit) -> QuantumCircuit:
@@ -176,6 +175,9 @@ class BackendManager:
         Transform virtual circuit to real circuit.
         i.e., map the QuantunCircuitInstruction's virtual qubit id to real qubit id
         """
+        if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
+            raise ValueError("Currently only support qreg size 1")
+
         real_circ = copy.deepcopy(circuit)
         real_q = compute_unit.real_qubits
         real_n_qubits = compute_unit.real_n_qubits
@@ -184,15 +186,28 @@ class BackendManager:
         r_qregister = QuantumRegister(real_n_qubits, 'q')
         r_cregister = ClassicalRegister(real_n_qubits, 'c')
 
+        # Reset qregs and cregs
+        real_circ.qregs = [r_qregister]
+        real_circ.cregs = [r_cregister]
+
+        # Reset qubits and clbits
+        real_circ._qubits = []
+        for iq in range(real_n_qubits):
+            real_circ._qubits.append(Qubit(r_qregister, iq))
+
+        real_circ._clbits = []
+        for ic in range(real_n_qubits):
+            real_circ._clbits.append(Clbit(r_cregister, ic))
+
         for ii, inst in enumerate(real_circ._data):
             r_qubits = [] # Create new real qubits and then transform to tuple
             for iq, q in enumerate(inst.qubits):
-                r_qubits.append(Qubit(r_qregister, real_q[q.index]))
+                r_qubits.append(real_circ.qubits[real_q[q.index]])
             real_circ._data[ii].qubits = tuple(r_qubits)
 
             r_clbits = [] # Create new real clbits and then transform to tuple
             for ic, c in enumerate(inst.clbits):
-                r_clbits.append(Clbit(r_cregister, real_q[c.index]))
+                r_clbits.append(real_circ.clbits[real_q[c.index]])
             real_circ._data[ii].clbits = tuple(r_clbits)
 
         return real_circ
