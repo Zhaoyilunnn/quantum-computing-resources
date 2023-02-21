@@ -148,24 +148,26 @@ class BackendManager:
         return ComputeUnit(compute_unit, 
                 self._backend.configuration().n_qubits, 
                 sub_coupling_graph) 
+
+    def select_compute_units(self, circuit: QuantumCircuit):
+        """ Select compute units for given quantum circuit """
+        #TODO(zhaoyilun): implementation
+        pass
         
     def merge_compute_units(self, compute_units: List[ComputeUnit]) -> ComputeUnit:
         """ Merge allocated compute units to a single backend for compilation """
 
         # First get merged list of qubits
-        merged_qubits = self.get_graph_nodes_from_cus(compute_units)
+        merged_qubits = self.merge_graph_nodes_from_cus(compute_units)
 
         return self.extract_single_compute_unit(merged_qubits)
 
-    def get_graph_nodes_from_cus(self, compute_units: List[ComputeUnit]) -> List[int]:
+    def merge_graph_nodes_from_cus(self, compute_units: List[ComputeUnit]) -> List[int]:
         """
         Get coupling maps from each compute unit and merge them into a single list of 
         coupling map nodes, i.e., the merged backend's qubit list
         """
-        list_subgraph_nodes = []
-        for cu in compute_units:
-            list_subgraph_nodes.append(cu.real_qubits)
-
+        list_subgraph_nodes = [cu.real_qubits for cu in compute_units]
         return merge_sub_graphs_nodes(list_subgraph_nodes)
 
     def circuit_virtual_to_real(self, 
@@ -194,13 +196,8 @@ class BackendManager:
         real_circ.cregs = [r_cregister]
 
         # Reset qubits and clbits
-        real_circ._qubits = []
-        for iq in range(real_n_qubits):
-            real_circ._qubits.append(Qubit(r_qregister, iq))
-
-        real_circ._clbits = []
-        for ic in range(real_n_qubits):
-            real_circ._clbits.append(Clbit(r_cregister, ic))
+        real_circ._qubits = [Qubit(r_qregister, iq) for iq in range(real_n_qubits)]
+        real_circ._clbits = [Clbit(r_cregister, ic) for ic in range(real_n_qubits)]
 
         for ii, inst in enumerate(real_circ._data):
             r_qubits = [] # Create new real qubits and then transform to tuple

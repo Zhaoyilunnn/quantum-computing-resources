@@ -48,7 +48,7 @@ class TestBackendManager:
     
     def test_compilation_on_compute_unit(self):
 
-        sub_graph = [1, 2, 3]
+        sub_graph = [1,2,3]
 
         compute_unit = self._manager.extract_single_compute_unit(sub_graph) 
 
@@ -60,27 +60,25 @@ class TestBackendManager:
         dummy_circ.cx(0, 1)
         dummy_circ.measure([0, 1], [0, 1])
 
-        #pretty(self._backend.configuration().channels)
-        print(self._backend.configuration().coupling_map)
-        #pretty(self._backend.defaults().to_dict())
-
-        print(dummy_circ.qregs)
-        print(dummy_circ.qubits)
-
         transpiled = transpile(dummy_circ, compute_unit.backend)
-        print(transpiled.qregs)
         print(transpiled._data) 
-        for inst in transpiled._data:
-            for q in inst.qubits:
-                print(q.index)
         real_transpiled = self._manager.circuit_virtual_to_real(transpiled, compute_unit)
         print(real_transpiled._data)
         scheduled = schedule(real_transpiled, self._backend)
         for inst in scheduled.instructions:
             print(inst)
+        counts = self._backend.run(scheduled).result().get_counts()
+        print(counts)
 
         print("================== Original ========================")
+        dummy_circ = QuantumCircuit(3, 3)
+        dummy_circ.h(1)
+        dummy_circ.cx(1, 2)
+        dummy_circ.measure([1, 2], [1, 2])
         transpiled = transpile(dummy_circ, self._backend)
         scheduled = schedule(transpiled, self._backend)
         for inst in scheduled.instructions:
             print(inst)
+        
+        counts = self._backend.run(scheduled).result().get_counts()
+        print(counts)
