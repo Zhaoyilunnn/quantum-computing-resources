@@ -3,6 +3,7 @@ from qiskit import transpile, schedule
 from qiskit.providers import backend
 
 from qiskit.providers.fake_provider import *
+from qiskit.providers.fake_provider.fake_backend import decode_pulse_defaults
 from qvm.backend_manager import * 
 
 from util import *
@@ -46,10 +47,26 @@ class TestBackendManager:
             assert test_gate in self._props.gates
 
     
-    def test_compilation_on_compute_unit(self):
+    def test_compilation_on_compute_unit(self, verify):
 
+        def run_experiments(transpiled, scheduled, verify):
+            counts = {}
+            if verify == 'pulse':
+                counts = self._backend.run(scheduled).result().get_counts()
+            elif verify == 'qasm':
+                counts = self._backend.run(transpiled).result().get_counts()
+            else:
+                raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
+            print(counts)
+        
+        def show_scheduled_debug_info(scheduled: Schedule) -> None:
+            for inst in scheduled.instructions:
+                print(inst)
+
+        # Defined the qubits in compute unit
         sub_graph = [1,2,3]
-
+        
+        # Extract a compute unit from backend
         compute_unit = self._manager.extract_single_compute_unit(sub_graph) 
 
         plot_error(self._backend, figname="backend.png")
@@ -60,15 +77,18 @@ class TestBackendManager:
         dummy_circ.cx(0, 1)
         dummy_circ.measure([0, 1], [0, 1])
 
+        fig = dummy_circ.draw(output='mpl')
+        fig.savefig("bell_state.png")
+
         transpiled = transpile(dummy_circ, compute_unit.backend)
         print(transpiled._data) 
         real_transpiled = self._manager.circuit_virtual_to_real(transpiled, compute_unit)
         print(real_transpiled._data)
         scheduled = schedule(real_transpiled, self._backend)
-        for inst in scheduled.instructions:
-            print(inst)
-        counts = self._backend.run(scheduled).result().get_counts()
-        print(counts)
+        show_scheduled_debug_info(scheduled)
+
+        #FIXME: uncomment this if you want to verify the execution results
+        run_experiments(transpiled, scheduled, verify)
 
         print("================== Original ========================")
         dummy_circ = QuantumCircuit(3, 3)
@@ -77,8 +97,5 @@ class TestBackendManager:
         dummy_circ.measure([1, 2], [1, 2])
         transpiled = transpile(dummy_circ, self._backend)
         scheduled = schedule(transpiled, self._backend)
-        for inst in scheduled.instructions:
-            print(inst)
         
-        counts = self._backend.run(scheduled).result().get_counts()
-        print(counts)
+        run_experiments(transpiled, scheduled, verify)
