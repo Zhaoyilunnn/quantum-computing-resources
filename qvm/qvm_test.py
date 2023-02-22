@@ -1,12 +1,18 @@
 from qiskit.circuit import QuantumCircuit
-from qiskit import transpile, schedule
+from qiskit.compiler import transpile, schedule
 from qiskit.providers import backend
 
 from qiskit.providers.fake_provider import *
 from qiskit.providers.fake_provider.fake_backend import decode_pulse_defaults
 from qvm.backend_manager import * 
+from qvm.process_manager import *
 
 from util import *
+
+
+def show_scheduled_debug_info(scheduled: Schedule) -> None:
+    for inst in scheduled.instructions:
+        print(inst)
 
 
 class TestBackendManager:
@@ -59,9 +65,6 @@ class TestBackendManager:
                 raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
             print(counts)
         
-        def show_scheduled_debug_info(scheduled: Schedule) -> None:
-            for inst in scheduled.instructions:
-                print(inst)
 
         # Defined the qubits in compute unit
         sub_graph = [1,2,3]
@@ -99,3 +102,31 @@ class TestBackendManager:
         scheduled = schedule(transpiled, self._backend)
         
         run_experiments(transpiled, scheduled, verify)
+
+
+class TestProcessManager:
+
+    _manager = ProcessManager(FakeLagos())
+
+    def test_merge_schedules(self):
+        dummy_circ = QuantumCircuit(2, 2)
+        dummy_circ.h(0)
+        dummy_circ.cx(0, 1)
+        dummy_circ.measure([0, 1], [0, 1])
+        transpiled = transpile(dummy_circ, self._manager._backend)
+        scheduled_0 = schedule(transpiled, self._manager._backend)
+        print("===================== Schedule 0 ===========================")
+        show_scheduled_debug_info(scheduled_0)
+
+        dummy_circ = QuantumCircuit(6, 6)
+        dummy_circ.h(3)
+        dummy_circ.cx(3, 5)
+        dummy_circ.measure([3, 5], [3, 5])
+        transpiled = transpile(dummy_circ, self._manager._backend)
+        scheduled_1 = schedule(transpiled, self._manager._backend)
+        print("===================== Schedule 1 ===========================")
+        show_scheduled_debug_info(scheduled_1) 
+
+        merged_sch = self._manager._merge_schedules([scheduled_0, scheduled_1])
+        print("===================== Schedule ===========================")
+        show_scheduled_debug_info(merged_sch)
