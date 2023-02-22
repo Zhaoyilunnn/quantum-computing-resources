@@ -1,4 +1,4 @@
-from qiskit.pulse import Schedule
+from qiskit.pulse import Schedule, Acquire
 from qiskit.providers import BackendV1
 
 from typing import List
@@ -17,13 +17,28 @@ class BaseProcessManager:
         """
         Combine a list of schedules to a single schedule
         """
-        schedule = Schedule()
+        sch = Schedule()
+        
+        acquire_time = 0
+        for s in schedules:
+            for [time, inst] in s.instructions:
+                if isinstance(inst, Acquire):
+                    acquire_time = max(time, acquire_time)
+                    print("============ Acquire ===============")
+        print(acquire_time)
 
-        for sch in schedules:
-            for inst in sch.instructions:
-                schedule.insert(inst[0], inst[1], inplace=True)
+        for s in schedules:
+            for time, inst in s.instructions:
+                if isinstance(inst, Acquire):
+                    time = acquire_time
+                sch.insert(time, inst, inplace=True)
 
-        return schedule
+        #sch = schedules[0]
+
+        #for i in range(1, len(schedules)):
+        #    sch = sch | schedules[i]
+
+        return sch
 
 
 class SimpleProcessManager(BaseProcessManager):
