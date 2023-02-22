@@ -106,7 +106,8 @@ class TestBackendManager:
 
 class TestProcessManager:
 
-    _manager = ProcessManager(FakeLagos())
+    #_manager = BaseProcessManager(FakeLagos())
+    _manager = SimpleProcessManager(FakeLagos())
 
     def test_merge_schedules(self):
         dummy_circ = QuantumCircuit(2, 2)

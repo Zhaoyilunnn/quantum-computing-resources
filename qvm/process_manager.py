@@ -3,10 +3,8 @@ from qiskit.providers import BackendV1
 
 from typing import List
 
-from sympy import true
 
-
-class ProcessManager:
+class BaseProcessManager:
 
     def __init__(self, backend: BackendV1) -> None:
         self._backend = backend 
@@ -25,4 +23,19 @@ class ProcessManager:
             for inst in sch.instructions:
                 schedule.insert(inst[0], inst[1], inplace=True)
 
+        return schedule
+
+
+class SimpleProcessManager(BaseProcessManager):
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
+
+        schedule = Schedule()
+
+        for sch in schedules:
+            schedule.insert(sch.start_time, sch, inplace=True)
+        
         return schedule
