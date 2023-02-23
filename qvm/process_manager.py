@@ -1,4 +1,4 @@
-from qiskit.pulse import Schedule, Acquire
+from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
 
 from typing import List
@@ -54,3 +54,50 @@ class SimpleProcessManager(BaseProcessManager):
             schedule.insert(sch.start_time, sch, inplace=True)
         
         return schedule
+
+
+class CorrectProcessManager(BaseProcessManager):
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def _get_measure_times(self, schedules: List[Schedule]):
+        """
+        After acquire instruction, there will be two instructions on measurement channel
+        1. Play on measurement channel to generete measurement pulse
+        2. Delay on measurement channel
+        We need to reset all these instructions' start times to the latest one
+        """
+        acquire_time, play_time, delay_time = 0, 0, 0 
+        for s in schedules:
+            for [time, inst] in s.instructions:
+                if isinstance(inst, Acquire):
+                    acquire_time = max(time, acquire_time)
+                if isinstance(inst, Play) and isinstance(inst.channel, MeasureChannel):
+                    play_time = max(time, play_time)
+                if isinstance(inst, Delay) and isinstance(inst.channel, MeasureChannel):
+                    delay_time = max(time, delay_time)
+
+        return acquire_time, play_time, delay_time 
+
+    def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
+        """
+        Combine a list of schedules to a single schedule
+        """
+        sch = Schedule()
+        
+        acquire_time, play_time, delay_time = self._get_measure_times(schedules)
+
+        for s in schedules:
+            for time, inst in s.instructions:
+                if isinstance(inst, Acquire):
+                    time = acquire_time
+                if isinstance(inst, Play) and isinstance(inst.channel, MeasureChannel):
+                    time = play_time
+                if isinstance(inst, Delay) and isinstance(inst.channel, MeasureChannel):
+                    time = delay_time
+                sch.insert(time, inst, inplace=True)
+
+        return sch
+
+

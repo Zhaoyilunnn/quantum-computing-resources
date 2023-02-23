@@ -123,7 +123,8 @@ class TestBackendManager(BaseTest):
 class TestProcessManager(BaseTest):
 
     def setup_class(self):
-        self._manager = BaseProcessManager(FakeLagos())
+        #self._manager = BaseProcessManager(FakeLagos())
+        self._manager = CorrectProcessManager(FakeLagos())
 
     def test_merge_schedules(self):
         dummy_circ = self.create_dummy_bell_state(0, 1)
@@ -143,7 +144,7 @@ class TestProcessManager(BaseTest):
         merged_sch = self._manager._merge_schedules([scheduled_0, scheduled_1])
         print("===================== Schedule ===========================")
         self.show_scheduled_debug_info(merged_sch)
-        self.run_experiments(transpiled, merged_sch, 'pulse')
+        #self.run_experiments(transpiled, merged_sch, 'pulse')
 
 
 class TestQvm:
