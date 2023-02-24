@@ -1,3 +1,4 @@
+from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
 
@@ -42,6 +43,7 @@ class BaseProcessManager:
 
 
 class SimpleProcessManager(BaseProcessManager):
+    """ This is just a dummy process manager for testing purpose """
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
@@ -56,7 +58,8 @@ class SimpleProcessManager(BaseProcessManager):
         return schedule
 
 
-class CorrectProcessManager(BaseProcessManager):
+class QvmProcessManager(BaseProcessManager):
+    """ This is the naive version of QVM process manager """
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
@@ -99,5 +102,40 @@ class CorrectProcessManager(BaseProcessManager):
                 sch.insert(time, inst, inplace=True)
 
         return sch
+
+
+class BaselineProcessManager(BaseProcessManager):
+
+    """
+    Runtime compilation
+    """
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def merge_circuits(self, 
+            circuits: List[QuantumCircuit]) -> QuantumCircuit:
+
+        circ_merged = QuantumCircuit()
+
+        return circ_merged
+
+
+PROCESS_MANAGERS = {
+    "baseline": BaseProcessManager,
+    "qvm": QvmProcessManager
+}
+
+class ProcessManagerFactory:
+    _managers = PROCESS_MANAGERS
+
+    @classmethod
+    def get_manager(cls, name: str, backend: BackendV1) -> BaseProcessManager:
+        try:
+            manager = cls._managers[name](backend)
+        except KeyError:
+            raise NotImplementedError("Please input the correct manager type")
+
+        return manager 
 
 

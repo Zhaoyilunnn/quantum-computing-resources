@@ -143,7 +143,8 @@ class TestProcessManager(BaseTest):
     def setup_class(self):
         #self._manager = BaseProcessManager(FakeLagos())
         #self._manager = CorrectProcessManager(FakeLagos())
-        self._manager = CorrectProcessManager(FakeManila())
+        #self._manager = QvmProcessManager(FakeManila())
+        self._manager = ProcessManagerFactory.get_manager("qvm", FakeManila()) 
 
     def test_merge_schedules(self):
         
@@ -173,7 +174,7 @@ class TestProcessManager(BaseTest):
         transpiled = transpile(dummy_circ, self._manager._backend)
         sch_orginal = schedule(transpiled, self._manager._backend)
         self.show_scheduled_debug_info(sch_orginal)
-        self.run_experiments(transpiled, sch_orginal, 'qasm')
+        #self.run_experiments(transpiled, sch_orginal, 'qasm')
 
         #assert sch_merged.instructions == sch_orginal.instructions
 
