@@ -1,9 +1,7 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile, schedule
-from qiskit.providers import backend
 
 from qiskit.providers.fake_provider import *
-from qiskit.providers.fake_provider.fake_backend import decode_pulse_defaults
 from qvm.backend_manager import * 
 from qvm.process_manager import *
 
@@ -12,7 +10,8 @@ from util import *
 
 class BaseTest:
 
-    _backend = FakeLagos()
+    #_backend = FakeLagos()
+    _backend = FakeManila()
         
     def show_scheduled_debug_info(self, scheduled: Schedule) -> None:
         for inst in scheduled.instructions:
@@ -28,7 +27,9 @@ class BaseTest:
             raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
         print(counts)
 
-    def create_dummy_bell_state(self, q0: int, q1: int) -> QuantumCircuit:
+    def create_dummy_bell_state(self, 
+            qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
+            num_qubits=None) -> QuantumCircuit:
         """
         Create a bell state circuit for test
         q0: the first qubit id to operate on
@@ -37,13 +38,30 @@ class BaseTest:
         The circuit size will be q1+1, which is 
         useful to emulate virtualization
         """
-        if q0 >= q1:
-            raise ValueError("q0 should be smaller than q1")
+        def do_bell_state(dummy_circ, q0, q1):
+            dummy_circ.h(q0)
+            dummy_circ.cx(q0, q1)
+            dummy_circ.measure([q0, q1], [q0, q1])
 
-        dummy_circ = QuantumCircuit(q1+1, q1+1)
-        dummy_circ.h(q0)
-        dummy_circ.cx(q0, q1)
-        dummy_circ.measure([q0, q1], [q0, q1])
+
+        dummy_circ = None
+        if isinstance(qubits, tuple):
+            q0, q1 = qubits
+            if q0 >= q1:
+                raise ValueError("q0 should be smaller than q1")
+
+            dummy_circ = QuantumCircuit(q1+1, q1+1)
+            do_bell_state(dummy_circ, q0, q1)
+        else:
+            if not num_qubits:
+                raise ValueError("Please specify the number of qubits if input is a set of qubit pairs")
+
+            dummy_circ = QuantumCircuit(num_qubits, num_qubits)
+            for (q0, q1) in qubits:
+                if q0 >= num_qubits or q1 >= num_qubits:
+                    raise ValueError("num_qubits must be larger than all involved qubits")
+                do_bell_state(dummy_circ, q0, q1)
+
         return dummy_circ
 
 
@@ -97,7 +115,7 @@ class TestBackendManager(BaseTest):
         plot_error(self._backend, figname="backend.png")
         plot_error(compute_unit.backend, figname="compute_unit.png")
 
-        dummy_circ = self.create_dummy_bell_state(0, 1)
+        dummy_circ = self.create_dummy_bell_state((0, 1))
 
         fig = dummy_circ.draw(output='mpl')
         fig.savefig("bell_state.png")
@@ -113,7 +131,7 @@ class TestBackendManager(BaseTest):
         self.run_experiments(transpiled, scheduled, verify)
 
         print("================== Original ========================")
-        dummy_circ = self.create_dummy_bell_state(1, 2)
+        dummy_circ = self.create_dummy_bell_state((1, 2))
         transpiled = transpile(dummy_circ, self._backend)
         scheduled = schedule(transpiled, self._backend)
         
@@ -124,27 +142,40 @@ class TestProcessManager(BaseTest):
 
     def setup_class(self):
         #self._manager = BaseProcessManager(FakeLagos())
-        self._manager = CorrectProcessManager(FakeLagos())
+        #self._manager = CorrectProcessManager(FakeLagos())
+        self._manager = CorrectProcessManager(FakeManila())
 
     def test_merge_schedules(self):
-        dummy_circ = self.create_dummy_bell_state(0, 1)
+        
+        test_eprs = [(0,1), (2,3)]
+
+        dummy_circ = self.create_dummy_bell_state(test_eprs[0])
         transpiled = transpile(dummy_circ, self._manager._backend)
-        scheduled_0 = schedule(transpiled, self._manager._backend)
+        sch_first = schedule(transpiled, self._manager._backend)
         print("===================== Schedule 0 ===========================")
-        self.show_scheduled_debug_info(scheduled_0)
-        self.run_experiments(transpiled, scheduled_0, 'pulse')
+        self.show_scheduled_debug_info(sch_first)
+        #self.run_experiments(transpiled, sch_first, 'pulse')
 
-        dummy_circ = self.create_dummy_bell_state(3, 5)
+        dummy_circ = self.create_dummy_bell_state(test_eprs[1])
         transpiled = transpile(dummy_circ, self._manager._backend)
-        scheduled_1 = schedule(transpiled, self._manager._backend)
+        sch_second = schedule(transpiled, self._manager._backend)
         print("===================== Schedule 1 ===========================")
-        self.show_scheduled_debug_info(scheduled_1) 
-        self.run_experiments(transpiled, scheduled_1, 'pulse')
+        self.show_scheduled_debug_info(sch_second) 
+        #self.run_experiments(transpiled, sch_second, 'pulse')
 
-        merged_sch = self._manager._merge_schedules([scheduled_0, scheduled_1])
-        print("===================== Schedule ===========================")
-        self.show_scheduled_debug_info(merged_sch)
-        self.run_experiments(transpiled, merged_sch, 'pulse')
+        sch_merged = self._manager._merge_schedules([sch_first, sch_second])
+        print("===================== Merged Schedule ===========================")
+        self.show_scheduled_debug_info(sch_merged)
+        #self.run_experiments(transpiled, sch_merged, 'pulse')
+
+        dummy_circ = self.create_dummy_bell_state(test_eprs, num_qubits=4)
+        print("===================== Original Schedule ===========================")
+        transpiled = transpile(dummy_circ, self._manager._backend)
+        sch_orginal = schedule(transpiled, self._manager._backend)
+        self.show_scheduled_debug_info(sch_orginal)
+        self.run_experiments(transpiled, sch_orginal, 'qasm')
+
+        #assert sch_merged.instructions == sch_orginal.instructions
 
 
 class TestQvm:
