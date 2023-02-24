@@ -1,6 +1,7 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
+from qvm.util.circuit import relocate_circuit
 
 from typing import List
 
@@ -116,13 +117,28 @@ class BaselineProcessManager(BaseProcessManager):
     def merge_circuits(self, 
             circuits: List[QuantumCircuit]) -> QuantumCircuit:
 
-        circ_merged = QuantumCircuit()
+        if len(circuits) <= 1:
+            raise ValueError("Please merge at least two circuits")
+
+        circ_merged = None
+        sum_qubits = sum([circ.num_qubits for circ in circuits])
+        base = 0
+
+        for i, circ in enumerate(circuits):
+            nq = circ.num_qubits
+            locations = [i+base for i in range(nq)]
+            r_circ = relocate_circuit(circuits[i], locations, sum_qubits) 
+            if i == 0:
+                circ_merged = r_circ
+            else:
+                circ_merged = circ_merged + r_circ
+            base += nq
 
         return circ_merged
 
 
 PROCESS_MANAGERS = {
-    "baseline": BaseProcessManager,
+    "baseline": BaselineProcessManager,
     "qvm": QvmProcessManager
 }
 

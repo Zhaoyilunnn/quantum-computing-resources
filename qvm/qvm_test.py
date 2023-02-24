@@ -124,59 +124,74 @@ class TestBackendManager(BaseTest):
         print(transpiled._data) 
         real_transpiled = self._manager.circuit_virtual_to_real(transpiled, compute_unit)
         print(real_transpiled._data)
-        scheduled = schedule(real_transpiled, self._backend)
-        self.show_scheduled_debug_info(scheduled)
-
-        #FIXME: uncomment this if you want to verify the execution results
-        self.run_experiments(transpiled, scheduled, verify)
+        sch_cu = schedule(real_transpiled, self._backend)
+        self.show_scheduled_debug_info(sch_cu)
+        self.run_experiments(transpiled, sch_cu, verify)
 
         print("================== Original ========================")
         dummy_circ = self.create_dummy_bell_state((1, 2))
         transpiled = transpile(dummy_circ, self._backend)
-        scheduled = schedule(transpiled, self._backend)
-        
-        self.run_experiments(transpiled, scheduled, verify)
+        sch_original = schedule(transpiled, self._backend)
+        self.show_scheduled_debug_info(sch_original)
+        self.run_experiments(transpiled, sch_original, verify)
+
+        assert sch_cu.instructions == sch_original.instructions 
 
 
 class TestProcessManager(BaseTest):
 
-    def setup_class(self):
-        #self._manager = BaseProcessManager(FakeLagos())
-        #self._manager = CorrectProcessManager(FakeLagos())
-        #self._manager = QvmProcessManager(FakeManila())
-        self._manager = ProcessManagerFactory.get_manager("qvm", FakeManila()) 
+    def test_qvm_manager(self):
 
-    def test_merge_schedules(self):
+        manager = ProcessManagerFactory.get_manager("qvm", FakeManila()) 
         
         test_eprs = [(0,1), (2,3)]
 
         dummy_circ = self.create_dummy_bell_state(test_eprs[0])
-        transpiled = transpile(dummy_circ, self._manager._backend)
-        sch_first = schedule(transpiled, self._manager._backend)
+        transpiled = transpile(dummy_circ, manager._backend)
+        sch_first = schedule(transpiled, manager._backend)
         print("===================== Schedule 0 ===========================")
         self.show_scheduled_debug_info(sch_first)
         #self.run_experiments(transpiled, sch_first, 'pulse')
 
         dummy_circ = self.create_dummy_bell_state(test_eprs[1])
-        transpiled = transpile(dummy_circ, self._manager._backend)
-        sch_second = schedule(transpiled, self._manager._backend)
+        transpiled = transpile(dummy_circ, manager._backend)
+        sch_second = schedule(transpiled, manager._backend)
         print("===================== Schedule 1 ===========================")
         self.show_scheduled_debug_info(sch_second) 
         #self.run_experiments(transpiled, sch_second, 'pulse')
 
-        sch_merged = self._manager._merge_schedules([sch_first, sch_second])
+        sch_merged = manager._merge_schedules([sch_first, sch_second])
         print("===================== Merged Schedule ===========================")
         self.show_scheduled_debug_info(sch_merged)
         #self.run_experiments(transpiled, sch_merged, 'pulse')
 
         dummy_circ = self.create_dummy_bell_state(test_eprs, num_qubits=4)
         print("===================== Original Schedule ===========================")
-        transpiled = transpile(dummy_circ, self._manager._backend)
-        sch_orginal = schedule(transpiled, self._manager._backend)
-        self.show_scheduled_debug_info(sch_orginal)
-        #self.run_experiments(transpiled, sch_orginal, 'qasm')
+        transpiled = transpile(dummy_circ, manager._backend)
+        sch_original = schedule(transpiled, manager._backend)
+        self.show_scheduled_debug_info(sch_original)
+        #self.run_experiments(transpiled, sch_original, 'qasm')
 
-        #assert sch_merged.instructions == sch_orginal.instructions
+        #assert sch_merged.instructions == sch_original.instructions
+
+    def test_baseline_manager(self):
+        
+        manager = ProcessManagerFactory.get_manager("baseline", FakeManila())
+
+        test_eprs = [(0,1), (2,3)]
+        dummy_circ_first = self.create_dummy_bell_state(test_eprs[0])
+        dummy_circ_second = self.create_dummy_bell_state(test_eprs[1])
+        
+        dummy_circ_original = self.create_dummy_bell_state(test_eprs, num_qubits=4)
+        transpiled = transpile(dummy_circ_original, manager._backend)
+        sch_original = schedule(transpiled, manager._backend)
+
+        dummy_circ_merged = manager.merge_circuits([dummy_circ_first, dummy_circ_second])
+        transpiled = transpile(dummy_circ_original, manager._backend)
+        sch_merged = schedule(transpiled, manager._backend)
+
+        assert sch_original.instructions == sch_merged.instructions
+
 
 
 class TestQvm:

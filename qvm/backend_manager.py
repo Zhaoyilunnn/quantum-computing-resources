@@ -7,7 +7,8 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.circuit.quantumregister import Qubit, QuantumRegister
 from qiskit.circuit.classicalregister import Clbit, ClassicalRegister
 from qiskit.pulse import Schedule
-from qvm.util import * 
+from qvm.util.graph import * 
+from qvm.util.circuit import *
 from util import *
 
 class ComputeUnit:
@@ -183,34 +184,38 @@ class BackendManager:
         if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
             raise ValueError("Currently only support qreg size 1")
 
-        real_circ = copy.deepcopy(circuit)
-        real_q = compute_unit.real_qubits
-        real_n_qubits = compute_unit.real_n_qubits
+        #real_circ = copy.deepcopy(circuit)
+        #real_q = compute_unit.real_qubits
+        #real_n_qubits = compute_unit.real_n_qubits
+        #
+
+        #r_qregister = QuantumRegister(real_n_qubits, 'q')
+        #r_cregister = ClassicalRegister(real_n_qubits, 'c')
+
+        ## Reset qregs and cregs
+        #real_circ.qregs = [r_qregister]
+        #real_circ.cregs = [r_cregister]
+
+        ## Reset qubits and clbits
+        #real_circ._qubits = [Qubit(r_qregister, iq) for iq in range(real_n_qubits)]
+        #real_circ._clbits = [Clbit(r_cregister, ic) for ic in range(real_n_qubits)]
+
+        #for ii, inst in enumerate(real_circ._data):
+        #    r_qubits = [] # Create new real qubits and then transform to tuple
+        #    for iq, q in enumerate(inst.qubits):
+        #        r_qubits.append(real_circ.qubits[real_q[q.index]])
+        #    real_circ._data[ii].qubits = tuple(r_qubits)
+
+        #    r_clbits = [] # Create new real clbits and then transform to tuple
+        #    for ic, c in enumerate(inst.clbits):
+        #        r_clbits.append(real_circ.clbits[real_q[c.index]])
+        #    real_circ._data[ii].clbits = tuple(r_clbits)
+
+        #return real_circ
+        return relocate_circuit(circuit,
+                compute_unit.real_qubits,
+                compute_unit.real_n_qubits)
         
-
-        r_qregister = QuantumRegister(real_n_qubits, 'q')
-        r_cregister = ClassicalRegister(real_n_qubits, 'c')
-
-        # Reset qregs and cregs
-        real_circ.qregs = [r_qregister]
-        real_circ.cregs = [r_cregister]
-
-        # Reset qubits and clbits
-        real_circ._qubits = [Qubit(r_qregister, iq) for iq in range(real_n_qubits)]
-        real_circ._clbits = [Clbit(r_cregister, ic) for ic in range(real_n_qubits)]
-
-        for ii, inst in enumerate(real_circ._data):
-            r_qubits = [] # Create new real qubits and then transform to tuple
-            for iq, q in enumerate(inst.qubits):
-                r_qubits.append(real_circ.qubits[real_q[q.index]])
-            real_circ._data[ii].qubits = tuple(r_qubits)
-
-            r_clbits = [] # Create new real clbits and then transform to tuple
-            for ic, c in enumerate(inst.clbits):
-                r_clbits.append(real_circ.clbits[real_q[c.index]])
-            real_circ._data[ii].clbits = tuple(r_clbits)
-
-        return real_circ
          
     def allocate(self, circuit: QuantumCircuit):
         """ Allocate compute units for a quantum circuit """
