@@ -1,7 +1,9 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile, schedule
-
 from qiskit.providers.fake_provider import *
+from qiskit.quantum_info import state_fidelity
+
+from qiskit_aer import Aer
 from qvm.backend_manager import * 
 from qvm.process_manager import *
 
@@ -12,20 +14,37 @@ class BaseTest:
 
     #_backend = FakeLagos()
     _backend = FakeManila()
+    _sv_sim = Aer.get_backend("statevector_simulator")
         
     def show_scheduled_debug_info(self, scheduled: Schedule) -> None:
         for inst in scheduled.instructions:
             print(inst)
     
     def run_experiments(self, transpiled, scheduled, verify):
-        counts = {}
+        # Fisrt run ideal simulation on simulator
+        res_ideal = self._sv_sim.run(transpiled).result()
+
+        res_noise = None
         if verify == 'pulse':
-            counts = self._backend.run(scheduled).result().get_counts()
+            #counts = self._backend.run(scheduled).result().get_counts()
+            res_noise = self._backend.run(scheduled).result()
         elif verify == 'qasm':
-            counts = self._backend.run(transpiled).result().get_counts()
+            res_noise = self._backend.run(transpiled).result()
         else:
             raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
-        print(counts)
+
+        print("==================== COUNTS::qasm ==================")
+        print(res_noise.get_counts())
+
+        if verify == "pulse":
+            print("==================== SV::noise ==================")
+            sv_noise = res_noise.get_statevector()
+            print(sv_noise)
+            print("==================== SV::ideal ==================")
+            sv_ideal = res_ideal.get_statevector()
+            print(sv_ideal)
+            print("==================== SV::fidelity ==================")
+            print(state_fidelity(sv_noise, sv_ideal))
 
     def create_dummy_bell_state(self, 
             qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
@@ -158,7 +177,7 @@ class TestProcessManager(BaseTest):
         sch_second = schedule(transpiled, manager._backend)
         print("===================== Schedule 1 ===========================")
         self.show_scheduled_debug_info(sch_second) 
-        #self.run_experiments(transpiled, sch_second, 'pulse')
+        self.run_experiments(transpiled, sch_second, 'pulse')
 
         sch_merged = manager._merge_schedules([sch_first, sch_second])
         print("===================== Merged Schedule ===========================")

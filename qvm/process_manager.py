@@ -131,7 +131,6 @@ class BaselineProcessManager(BaseProcessManager):
             if i == 0:
                 circ_merged = r_circ
             else:
-                #circ_merged = circ_merged + r_circ
                 circ_merged.compose(r_circ)
             base += nq
 
