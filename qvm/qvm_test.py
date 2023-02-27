@@ -3,7 +3,11 @@ from qiskit.compiler import transpile, schedule
 from qiskit.providers.fake_provider import *
 from qiskit.quantum_info import state_fidelity
 
-from qiskit_aer import Aer
+from qiskit_aer import Aer 
+from qiskit_aer.noise import NoiseModel
+#from qiskit import Aer
+#from qiskit.providers.aer.noise import NoiseModel
+
 from qvm.backend_manager import * 
 from qvm.process_manager import *
 
@@ -15,16 +19,37 @@ class BaseTest:
     #_backend = FakeLagos()
     _backend = FakeManila()
     _sv_sim = Aer.get_backend("statevector_simulator")
+    #_sv_sim = Aer.get_backend("aer_simulator")
         
     def show_scheduled_debug_info(self, scheduled: Schedule) -> None:
         for inst in scheduled.instructions:
             print(inst)
     
     def run_experiments(self, transpiled, scheduled, verify):
+        print(transpiled)
         # Fisrt run ideal simulation on simulator
-        res_ideal = self._sv_sim.run(transpiled).result()
+        dummy_circ = QuantumCircuit(1,1)
+        dummy_circ.h(0)
+        #dummy_circ.cx(0, 1)
+        #dummy_circ.measure([0,1], [0,1])
+        dummy_circ.measure(0, 0)
+        res_ideal = self._sv_sim.run(dummy_circ, shots=1024).result()
+        sv_ideal = res_ideal.get_statevector(dummy_circ)
 
-        res_noise = None
+        # Then run noisy simulation on simulator 
+        # The noise model is extracted from backend
+        noise_model = NoiseModel.from_backend(self._backend)
+        res_noise = self._sv_sim.run(dummy_circ, noise_model=noise_model, shots=1024).result()
+        sv_noise = res_noise.get_statevector(dummy_circ)
+        print("==================== SV::noise ==================")
+        print(sv_noise)
+        print(res_noise.get_counts())
+        print("==================== SV::ideal ==================")
+        print(sv_ideal)
+        print(res_ideal.get_counts())
+        print("==================== SV::fidelity ==================")
+        print(state_fidelity(sv_noise, sv_ideal))
+
         if verify == 'pulse':
             #counts = self._backend.run(scheduled).result().get_counts()
             res_noise = self._backend.run(scheduled).result()
@@ -33,18 +58,21 @@ class BaseTest:
         else:
             raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
 
-        print("==================== COUNTS::qasm ==================")
-        print(res_noise.get_counts())
-
         if verify == "pulse":
-            print("==================== SV::noise ==================")
-            sv_noise = res_noise.get_statevector()
-            print(sv_noise)
-            print("==================== SV::ideal ==================")
-            sv_ideal = res_ideal.get_statevector()
-            print(sv_ideal)
-            print("==================== SV::fidelity ==================")
-            print(state_fidelity(sv_noise, sv_ideal))
+            print("==================== COUNTS::pulse ==================")
+            print(res_noise.get_counts())
+            #print("==================== SV::noise ==================")
+            #sv_noise = res_noise.get_statevector()
+            #print(sv_noise)
+            #print("==================== SV::ideal ==================")
+            #sv_ideal = res_ideal.get_statevector()
+            #print(sv_ideal)
+            #print("==================== SV::fidelity ==================")
+            #print(state_fidelity(sv_noise, sv_ideal))
+        else:
+            print("==================== COUNTS::qasm ==================")
+            print(res_noise.get_counts())
+
 
     def create_dummy_bell_state(self, 
             qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
@@ -170,14 +198,14 @@ class TestProcessManager(BaseTest):
         sch_first = schedule(transpiled, manager._backend)
         print("===================== Schedule 0 ===========================")
         self.show_scheduled_debug_info(sch_first)
-        #self.run_experiments(transpiled, sch_first, 'pulse')
+        self.run_experiments(transpiled, sch_first, 'pulse')
 
         dummy_circ = self.create_dummy_bell_state(test_eprs[1])
         transpiled = transpile(dummy_circ, manager._backend)
         sch_second = schedule(transpiled, manager._backend)
         print("===================== Schedule 1 ===========================")
         self.show_scheduled_debug_info(sch_second) 
-        self.run_experiments(transpiled, sch_second, 'pulse')
+        #self.run_experiments(transpiled, sch_second, 'pulse')
 
         sch_merged = manager._merge_schedules([sch_first, sch_second])
         print("===================== Merged Schedule ===========================")
