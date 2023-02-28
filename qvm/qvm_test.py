@@ -26,21 +26,15 @@ class BaseTest:
             print(inst)
     
     def run_experiments(self, transpiled, scheduled, verify):
-        print(transpiled)
         # Fisrt run ideal simulation on simulator
-        dummy_circ = QuantumCircuit(1,1)
-        dummy_circ.h(0)
-        #dummy_circ.cx(0, 1)
-        #dummy_circ.measure([0,1], [0,1])
-        dummy_circ.measure(0, 0)
-        res_ideal = self._sv_sim.run(dummy_circ, shots=1024).result()
-        sv_ideal = res_ideal.get_statevector(dummy_circ)
+        res_ideal = self._sv_sim.run(transpiled, shots=1024).result()
+        sv_ideal = res_ideal.get_statevector(transpiled)
 
         # Then run noisy simulation on simulator 
         # The noise model is extracted from backend
         noise_model = NoiseModel.from_backend(self._backend)
-        res_noise = self._sv_sim.run(dummy_circ, noise_model=noise_model, shots=1024).result()
-        sv_noise = res_noise.get_statevector(dummy_circ)
+        res_noise = self._sv_sim.run(transpiled, noise_model=noise_model, shots=1024).result()
+        sv_noise = res_noise.get_statevector(transpiled)
         print("==================== SV::noise ==================")
         print(sv_noise)
         print(res_noise.get_counts())
@@ -51,28 +45,15 @@ class BaseTest:
         print(state_fidelity(sv_noise, sv_ideal))
 
         if verify == 'pulse':
-            #counts = self._backend.run(scheduled).result().get_counts()
             res_noise = self._backend.run(scheduled).result()
-        elif verify == 'qasm':
-            res_noise = self._backend.run(transpiled).result()
-        else:
-            raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
-
-        if verify == "pulse":
             print("==================== COUNTS::pulse ==================")
             print(res_noise.get_counts())
-            #print("==================== SV::noise ==================")
-            #sv_noise = res_noise.get_statevector()
-            #print(sv_noise)
-            #print("==================== SV::ideal ==================")
-            #sv_ideal = res_ideal.get_statevector()
-            #print(sv_ideal)
-            #print("==================== SV::fidelity ==================")
-            #print(state_fidelity(sv_noise, sv_ideal))
-        else:
+        elif verify == 'qasm':
+            res_noise = self._backend.run(transpiled).result()
             print("==================== COUNTS::qasm ==================")
             print(res_noise.get_counts())
-
+        else:
+            raise NotImplementedError("Unsupported verfication level, please choose either `pulse` or `qasm`")
 
     def create_dummy_bell_state(self, 
             qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
