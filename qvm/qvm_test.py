@@ -16,8 +16,8 @@ from util import *
 
 class BaseTest:
 
-    #_backend = FakeLagos()
-    _backend = FakeManila()
+    _backend = FakeLagos()
+    #_backend = FakeManila()
     _sv_sim = Aer.get_backend("statevector_simulator")
     #_sv_sim = Aer.get_backend("aer_simulator")
         
@@ -135,13 +135,14 @@ class TestBackendManager(BaseTest):
 
 
         # Defined the qubits in compute unit
-        sub_graph = [1,2,3]
+        #sub_graph = [1,2,3]
+        sub_graph = [0,1,5]
         
         # Extract a compute unit from backend
         compute_unit = self._manager.extract_single_compute_unit(sub_graph) 
 
-        plot_error(self._backend, figname="backend.png")
-        plot_error(compute_unit.backend, figname="compute_unit.png")
+        #plot_error(self._backend, figname="backend.png")
+        #plot_error(compute_unit.backend, figname="compute_unit.png")
 
         dummy_circ = self.create_dummy_bell_state((0, 1))
 
@@ -157,7 +158,7 @@ class TestBackendManager(BaseTest):
         self.run_experiments(transpiled, sch_cu, verify)
 
         print("================== Original ========================")
-        dummy_circ = self.create_dummy_bell_state((1, 2))
+        dummy_circ = self.create_dummy_bell_state((0, 1))
         transpiled = transpile(dummy_circ, self._backend)
         sch_original = schedule(transpiled, self._backend)
         self.show_scheduled_debug_info(sch_original)
@@ -179,7 +180,7 @@ class TestProcessManager(BaseTest):
         sch_first = schedule(transpiled, manager._backend)
         print("===================== Schedule 0 ===========================")
         self.show_scheduled_debug_info(sch_first)
-        self.run_experiments(transpiled, sch_first, 'pulse')
+        #self.run_experiments(transpiled, sch_first, 'pulse')
 
         dummy_circ = self.create_dummy_bell_state(test_eprs[1])
         transpiled = transpile(dummy_circ, manager._backend)
