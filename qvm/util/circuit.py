@@ -8,6 +8,11 @@ from qiskit.circuit import \
         Qubit, \
         Clbit
 
+from qiskit.quantum_info import state_fidelity
+from qiskit.result import Counts
+
+from qiskit_aer import Aer 
+
 def relocate_circuit(circuit: QuantumCircuit,
                      locations: List[int],
                      num_qubits: int) -> QuantumCircuit:
@@ -49,3 +54,33 @@ def relocate_circuit(circuit: QuantumCircuit,
         r_circ._data[ii].clbits = tuple(r_clbits)
 
     return r_circ
+
+
+class BaseFidelityCalculator:
+    """
+    A simple fidelity calulation, use counts as estimated SV
+    """
+
+    _sv_sim = Aer.get_backend("statevector_simulator")
+
+    def __init__(self) -> None:
+        pass
+
+    def _counts_to_sv(self, counts: Counts):
+        """ Trans form counts to state vector """
+        pass
+
+    def calc_fidelity(self, circ: QuantumCircuit, counts: Counts):
+        """ Galculate fidelity based on counts
+        1. Execute on ideal simulator
+        2. Transform ideal counts and noise counts to Statevector 
+        3. Calculate fidelity using state_fidelity
+
+        Args:
+            circ: Quanutm circuit to execute
+            counts: Execution counts result from noise backend (simulator or real device) 
+        Return:
+            fidelity
+        """
+        pass
+
