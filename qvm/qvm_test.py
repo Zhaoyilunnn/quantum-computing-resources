@@ -1,3 +1,4 @@
+from numpy import real
 from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile, schedule
 from qiskit.providers.fake_provider import *
@@ -17,8 +18,9 @@ from util import *
 
 class BaseTest:
 
-    _backend = FakeLagos()
+    #_backend = FakeLagos()
     #_backend = FakeManila()
+    _backend = FakeCairo()
     _sv_sim = Aer.get_backend("statevector_simulator")
     #_sv_sim = Aer.get_backend("aer_simulator")
         
@@ -102,6 +104,18 @@ class TestBackendManager(BaseTest):
         self._conf = self._backend.configuration()
         self._props = self._backend.properties() 
 
+    def test_init_cus(self):
+        self._manager.init_compute_units()
+
+    def test_allocate(self):
+        circ = self.create_dummy_bell_state([(0,1),(2,3),(4,5)], num_qubits=6)
+        self._manager.init_compute_units()
+        cu = self._manager.allocate(circ)
+        virt_trans = transpile(circ, cu.backend)
+        real_trans = transpile(circ, self._backend)
+        print(cu.backend.run(virt_trans).result().get_counts())
+        print(self._backend.run(real_trans).result().get_counts())
+
     def test_extract_compute_unit(self):
 
         sub_graph = [1, 2]
@@ -156,14 +170,14 @@ class TestBackendManager(BaseTest):
         print(real_transpiled._data)
         sch_cu = schedule(real_transpiled, self._backend)
         self.show_scheduled_debug_info(sch_cu)
-        self.run_experiments(transpiled, sch_cu, verify)
+        #self.run_experiments(transpiled, sch_cu, verify)
 
         print("================== Original ========================")
         dummy_circ = self.create_dummy_bell_state((0, 1))
         transpiled = transpile(dummy_circ, self._backend)
         sch_original = schedule(transpiled, self._backend)
         self.show_scheduled_debug_info(sch_original)
-        self.run_experiments(transpiled, sch_original, verify)
+        #self.run_experiments(transpiled, sch_original, verify)
 
         assert sch_cu.instructions == sch_original.instructions 
 

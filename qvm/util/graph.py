@@ -56,44 +56,6 @@ def merge_sub_graphs_nodes(sub_graph_nodes: List[List[int]]) -> List[int]:
 
     return merged_graph_nodes
 
-#TODO(zhaoyilun): graph partition
-# 1. DFS and Fix sub-graph size
-
-def DFS(node: int,
-        graph: Dict[int, List[int]], 
-        visited: set, 
-        cur_part: List[int], 
-        partitions: List[List[int]],
-        k: int) -> None:
-
-    if len(cur_part) == k:
-        partitions.append(copy.deepcopy(cur_part))
-        cur_part.clear()
-
-    cur_part.append(node)
-    visited.add(node)
-    for neighbor in graph[node]:
-        if neighbor not in visited:
-            DFS(neighbor, graph, visited, cur_part, partitions, k)
-
-    return
-
-
-def naive_graph_partition(graph: Dict[int, List[int]], k=4) -> List[List[int]]:
-    """
-    Simple graph partition: 
-    DFS the graph, when visited k nodes, put these nodes to a sub graph 
-    """
-    partitions = []
-    visited = set()
-    cur_part = []
-    
-    DFS(0, graph, visited, cur_part, partitions, k) 
-    if cur_part:
-        partitions.append(copy.deepcopy(cur_part))
-
-    return partitions
-
 
 def extract_coupling_map(
         coupling_map: List[List[int]],
@@ -109,6 +71,75 @@ def extract_coupling_map(
             new_coupling_map.append(edge)
 
     return new_coupling_map
+
+
+class BasePartitioner:
+
+    def __init__(self) -> None:
+        pass
+
+    def partition(self, 
+            graph: Dict[int, List[int]], 
+            k=4) -> List[List[int]]:
+        return [] 
+
+
+class NaivePartitioner(BasePartitioner):
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def _dfs(self, 
+            node: int,
+            graph: Dict[int, List[int]], 
+            visited: set, 
+            cur_part: List[int], 
+            partitions: List[List[int]],
+            k: int) -> None:
+    
+        if len(cur_part) == k:
+            partitions.append(copy.deepcopy(cur_part))
+            cur_part.clear()
+    
+        cur_part.append(node)
+        visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                self._dfs(neighbor, graph, visited, cur_part, partitions, k)
+    
+        return
+    
+    
+    def partition(self, 
+            graph: Dict[int, List[int]], 
+            k=4) -> List[List[int]]:
+        """
+        Simple graph partition: 
+        DFS the graph, when visited k nodes, put these nodes to a sub graph 
+        """
+        partitions = []
+        visited = set()
+        cur_part = []
+        
+        self._dfs(0, graph, visited, cur_part, partitions, k) 
+        if cur_part:
+            partitions.append(copy.deepcopy(cur_part))
+    
+        return partitions
+
+
+PARTITIONERS = {
+    "naive": NaivePartitioner
+}
+
+
+class ParitionProvider:
+
+    _partitions = PARTITIONERS
+    
+    @classmethod
+    def get_partioner(cls, name: str):
+        return cls._partitions[name]()
 
 
 

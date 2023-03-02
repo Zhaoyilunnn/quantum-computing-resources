@@ -1,14 +1,14 @@
 import copy
 
-from typing import Final, List
+from typing import List
 from qiskit.providers.backend import * 
 from qiskit.providers.models import *
 from qiskit.circuit import QuantumCircuit
-from qiskit.circuit.quantumregister import Qubit, QuantumRegister
-from qiskit.circuit.classicalregister import Clbit, ClassicalRegister
 from qiskit.pulse import Schedule
+
 from qvm.util.graph import * 
 from qvm.util.circuit import *
+from qvm.util.misc import *
 from util import *
 
 class ComputeUnit:
@@ -64,15 +64,31 @@ class BackendManager:
 
     _compute_units = []
     _backend = None
+    _partitioner = ParitionProvider.get_partioner("naive") 
 
     def __init__(self, backend: BackendV1) -> None:
         self._backend = copy.deepcopy(backend) 
-        self._compute_units = self.init_compute_units()
+        self._cu_size = 4
+        # FIXME(zhaoyilun): is it ok to always explicitly init compute units?
+        #self._compute_units = self.init_compute_units()
+
+    @property
+    def cu_size(self):
+        return self._cu_size
 
     def init_compute_units(self) -> List[ComputeUnit]:
         """ Transform backend into a list of compute units based on some strategy """
-        compute_units = [] 
-        return compute_units
+        
+        if not self._cu_size:
+            raise ValueError("Please set compute unit size before init compute units")
+
+        self._compute_units = [] 
+        cm_graph = coupling_map_to_graph(self._backend.configuration().coupling_map)
+        parts = self._partitioner.partition(cm_graph, self._cu_size)
+        for part in parts:
+            cu = self.extract_single_compute_unit(part)
+            self._compute_units.append(cu)
+        return self._compute_units
 
     def extract_compute_unit_props(self, 
             sub_coupling_graph: List[int],
@@ -184,46 +200,32 @@ class BackendManager:
         if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
             raise ValueError("Currently only support qreg size 1")
 
-        #real_circ = copy.deepcopy(circuit)
-        #real_q = compute_unit.real_qubits
-        #real_n_qubits = compute_unit.real_n_qubits
-        #
-
-        #r_qregister = QuantumRegister(real_n_qubits, 'q')
-        #r_cregister = ClassicalRegister(real_n_qubits, 'c')
-
-        ## Reset qregs and cregs
-        #real_circ.qregs = [r_qregister]
-        #real_circ.cregs = [r_cregister]
-
-        ## Reset qubits and clbits
-        #real_circ._qubits = [Qubit(r_qregister, iq) for iq in range(real_n_qubits)]
-        #real_circ._clbits = [Clbit(r_cregister, ic) for ic in range(real_n_qubits)]
-
-        #for ii, inst in enumerate(real_circ._data):
-        #    r_qubits = [] # Create new real qubits and then transform to tuple
-        #    for iq, q in enumerate(inst.qubits):
-        #        r_qubits.append(real_circ.qubits[real_q[q.index]])
-        #    real_circ._data[ii].qubits = tuple(r_qubits)
-
-        #    r_clbits = [] # Create new real clbits and then transform to tuple
-        #    for ic, c in enumerate(inst.clbits):
-        #        r_clbits.append(real_circ.clbits[real_q[c.index]])
-        #    real_circ._data[ii].clbits = tuple(r_clbits)
-
-        #return real_circ
         return relocate_circuit(circuit,
                 compute_unit.real_qubits,
                 compute_unit.real_n_qubits)
         
          
     def allocate(self, circuit: QuantumCircuit):
-        """ Allocate compute units for a quantum circuit """
-        # TODO(zhaoyilun):
-        # 1. Get #qubits
-        # 2. Get List[BackendV2]
-        # 3. Merge 2 into a single backend
-        pass
+        """ Allocate compute units for a quantum circuit 
+        This is the naive impl
+        1. Get #qubits and then get #cus
+        2. Randomly select #cus cus
+        3. Merge these cus and return
+        
+        """
+        # Number of qubits
+        nq = circuit.num_qubits
+        # Number of compute units
+        ncu = (nq//self._cu_size+1 if nq % self._cu_size > 0 else nq//self._cu_size) 
+        
+        # Randomly select #ncu compute units
+        num_cus = len(self._compute_units)
+        cu_ids = select_n_integers(ncu, 0, num_cus)
+        cu_list = [self._compute_units[i] for i in cu_ids]
+
+        # Merge allocated cus
+        merged_nodes = self.merge_graph_nodes_from_cus(cu_list)
+        return self.extract_single_compute_unit(merged_nodes)
 
     def batch_execute(self, executables: List[Schedule]) -> None:
         """ Merge multiple quantum executables into a large quantum executable and execute on the backend """
