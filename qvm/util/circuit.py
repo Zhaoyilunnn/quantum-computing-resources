@@ -8,8 +8,9 @@ from qiskit.circuit import \
         Qubit, \
         Clbit
 
-from qiskit.quantum_info import state_fidelity
+from qiskit.quantum_info import Statevector, state_fidelity
 from qiskit.result import Counts
+from qiskit.result.mitigation.utils import counts_to_vector
 
 from qiskit_aer import Aer 
 
@@ -56,22 +57,28 @@ def relocate_circuit(circuit: QuantumCircuit,
     return r_circ
 
 
-class BaseFidelityCalculator:
+class BaseReliabilityCalculator:
     """
     A simple fidelity calulation, use counts as estimated SV
     """
 
-    _sv_sim = Aer.get_backend("statevector_simulator")
+    _sv_sim = Aer.get_backend("aer_simulator")
 
     def __init__(self) -> None:
         pass
 
-    def _counts_to_sv(self, counts: Counts):
-        """ Trans form counts to state vector """
-        pass
+    def _counts_to_sv(self, counts: Counts, num_qubits: int):
+        """ Transform counts to state vector """
+        vec, shots = counts_to_vector(counts, num_qubits) 
+        return Statevector(vec)
+
+    def _run_ideal_sim(self, circ: QuantumCircuit):
+        """ Run ideal simulation on ideal simulator """
+        return self._sv_sim.run(circ).result()
+        
 
     def calc_fidelity(self, circ: QuantumCircuit, counts: Counts):
-        """ Galculate fidelity based on counts
+        """ Galculate reliability based on counts
         1. Execute on ideal simulator
         2. Transform ideal counts and noise counts to Statevector 
         3. Calculate fidelity using state_fidelity
@@ -82,5 +89,16 @@ class BaseFidelityCalculator:
         Return:
             fidelity
         """
-        pass
+        num_qubits = circ.num_qubits
+        pv_noise = self._counts_to_sv(counts, num_qubits)
+        print(pv_noise)
+
+        res_ideal = self._run_ideal_sim(circ)
+        counts_ideal = res_ideal.get_counts(circ)
+        pv_ideal = self._counts_to_sv(counts_ideal, num_qubits)
+        print(pv_ideal)
+
+        # FIXME(zhaoyilun): here sv is actually classical probability vector 
+        return state_fidelity(pv_noise, pv_ideal, validate=False)
+
 

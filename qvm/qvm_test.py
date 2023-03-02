@@ -10,6 +10,7 @@ from qiskit_aer.noise import NoiseModel
 
 from qvm.backend_manager import * 
 from qvm.process_manager import *
+from qvm.util.circuit import BaseReliabilityCalculator
 
 from util import *
 
@@ -221,6 +222,19 @@ class TestProcessManager(BaseTest):
 
         assert sch_original.instructions == sch_merged.instructions
 
+
+class TestCircuitUtil(BaseTest):
+
+    _calculator = BaseReliabilityCalculator()
+
+    def test_calc_fidelity(self):
+
+        print("================ Test fidelity calculation =====================")
+        circ = self.create_dummy_bell_state((0,1))
+        counts_noise = self._backend.run(circ).result().get_counts(circ)
+        print(counts_noise) 
+        fidelity = self._calculator.calc_fidelity(circ, counts_noise)
+        print("Test fidelity: {}".format(fidelity))
 
 
 class TestQvm:
