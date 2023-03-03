@@ -1,3 +1,5 @@
+from qiskit.providers.backend import BackendV1
+
 from typing import List
 
 def coupling_map_to_graph(coupling_map: List[List]):
@@ -25,3 +27,22 @@ def conf_to_graph():
         cx error ratio
     """
 
+
+class BaseBackendGraphExtractor:
+    
+    def __init__(self, backend: BackendV1) -> None:
+        self._backend = backend 
+
+    def extract(self):
+        # Get coupling map from backend
+        cm = self._backend.configuration().coupling_map 
+        return coupling_map_to_graph(cm)
+
+
+class NormalBackendGraphExtractor(BaseBackendGraphExtractor):
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def extract(self):
+        pass  

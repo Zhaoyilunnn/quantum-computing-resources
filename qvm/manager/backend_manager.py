@@ -63,12 +63,11 @@ class BaseBackendManager:
     2. Allocate compute units for quantum circuits
     """
 
-    _compute_units = []
-    _backend = None
 
     def __init__(self, backend: BackendV1) -> None:
         self._backend = copy.deepcopy(backend) 
         self._cu_size = 4
+        self._compute_units = []
         # FIXME(zhaoyilun): is it ok to always explicitly init compute units?
         #self._compute_units = self.init_compute_units()
 
@@ -79,6 +78,7 @@ class BaseBackendManager:
     def init_helpers(self) -> None:
         """ Init helper classes """
         self._partitioner = ParitionProvider.get_partioner("naive") 
+        self._graph_extractor = BaseBackendGraphExtractor(self._backend)
 
     def init_compute_units(self) -> List[ComputeUnit]:
         """ Transform backend into a list of compute units based on some strategy """
@@ -87,7 +87,8 @@ class BaseBackendManager:
             raise ValueError("Please set compute unit size before init compute units")
 
         self._compute_units = [] 
-        cm_graph = coupling_map_to_graph(self._backend.configuration().coupling_map)
+        #cm_graph = coupling_map_to_graph(self._backend.configuration().coupling_map)
+        cm_graph = self._graph_extractor.extract() 
         parts = self._partitioner.partition(cm_graph, self._cu_size)
         for part in parts:
             cu = self.extract_single_compute_unit(part)

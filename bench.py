@@ -2,25 +2,21 @@ import argparse
 import json
 import logging
 import pickle
-from typing import Union
-from matplotlib.pyplot import figaspect
 
 from qiskit_aer.noise import NoiseModel
-from sympy import arg
-from sympy.series.formal import compute_fps
 
 from util import *
 from reorder import Reorder
 from noise import Noise
 from qiskit import *
 from qiskit.circuit.random import random_circuit
-from qiskit.providers import backend, provider, fake_provider
+from qiskit.providers import provider, fake_provider
 from qiskit.providers.jobstatus import JobStatus
 from qiskit.providers.fake_provider import *
 from qiskit.transpiler import CouplingMap
 
 from qvm.util import *
-from qvm.backend_manager import *
+from qvm.manager.backend_manager import *
 
 
 # Logging configuration
