@@ -243,3 +243,13 @@ class BaseBackendManager:
         exe = Schedule()
 
         return exe
+
+
+class NormalBackendManager(BaseBackendManager):
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def init_helpers(self) -> None:
+        self._partitioner = ParitionProvider.get_partioner("naive")
+        self._graph_extractor = NormalBackendGraphExtractor(self._backend)

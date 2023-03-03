@@ -12,6 +12,7 @@ from qiskit_aer.noise import NoiseModel
 from qvm.manager.backend_manager import * 
 from qvm.manager.process_manager import *
 from qvm.util.circuit import BaseReliabilityCalculator
+from qvm.util.backend import *
 
 from util import *
 
@@ -108,7 +109,6 @@ class TestBackendManager(BaseTest):
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state([(0,1),(2,3)], num_qubits=4)
-        self._manager.init_compute_units()
         cu = self._manager.allocate(circ)
         virt_trans = transpile(circ, cu.backend)
         real_trans = transpile(circ, self._backend)
@@ -248,6 +248,20 @@ class TestCircuitUtil(BaseTest):
         print(counts_noise) 
         fidelity = self._calculator.calc_fidelity(circ, counts_noise)
         print("Test fidelity: {}".format(fidelity))
+
+
+class TestBackendUtil(BaseTest):
+
+    def setup_class(self):
+        self._extractor = NormalBackendGraphExtractor(self._backend) 
+
+    def test_graph_extraction(self):
+        print("================ Test graph extraction =====================")
+        graph = self._extractor.extract()
+        print(graph)
+
+        assert graph[6,7] == 0.01431875092381174
+        
 
 
 class TestQvm:

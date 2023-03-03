@@ -1,4 +1,7 @@
+import numpy as np
+
 from qiskit.providers.backend import BackendV1
+from qiskit.providers.models import BackendConfiguration, BackendProperties
 
 from typing import List
 
@@ -18,15 +21,6 @@ def coupling_map_to_graph(coupling_map: List[List]):
 
     return graph
 
-def conf_to_graph():
-    """ Transform backend configuration to error map
-    Args:
-        conf: Backendconfiguration
-    Return:
-        graph: np.array[num_qubits, num_qubits], where graph[i][j] is the 
-        cx error ratio
-    """
-
 
 class BaseBackendGraphExtractor:
     
@@ -45,4 +39,25 @@ class NormalBackendGraphExtractor(BaseBackendGraphExtractor):
         super().__init__(backend)
 
     def extract(self):
-        pass  
+        """ Transform backend configuration to error map
+        Return:
+            graph: np.array[num_qubits, num_qubits], where graph[i][j] is the 
+            cx error ratio
+        """
+        conf = self._backend.configuration()
+        props = self._backend.properties()
+
+        cm = conf.coupling_map # couplng map
+        props_dict = props.to_dict()
+
+        num_qubits = conf.num_qubits
+        graph = np.zeros((num_qubits, num_qubits)) 
+
+        for line in cm:
+            for item in props_dict["gates"]:
+                if item["qubits"] == line:
+                    q0, q1 = line
+                    graph[q0, q1] = item["parameters"][0]["value"]
+                    break
+        
+        return graph
