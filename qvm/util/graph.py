@@ -2,22 +2,6 @@ import copy
 
 from typing import Dict, List
 
-def coupling_map_to_graph(coupling_map: List[List]):
-    """
-    Transform coupling map to dictionary for convenience
-    """
-    graph = {}
-    
-    for edge in coupling_map:
-        if len(edge) != 2:
-            raise ValueError("Each edge should be a List with length 2!")
-        node = edge[0]
-        neighbor = edge[1]
-        graph.setdefault(node, [])
-        graph[node].append(neighbor)
-
-    return graph
-
 def coupling_map_to_nodes(coupling_map: List[List[int]]) -> List[int]:
     """
     Transform coupling map to graph node set

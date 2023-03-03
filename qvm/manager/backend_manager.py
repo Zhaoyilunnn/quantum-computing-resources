@@ -8,6 +8,7 @@ from qiskit.pulse import Schedule
 
 from qvm.util.graph import * 
 from qvm.util.circuit import *
+from qvm.util.backend import *
 from qvm.util.misc import *
 from util import *
 
@@ -55,7 +56,7 @@ class ComputeUnit:
         return self._real_to_virtual
 
     
-class BackendManager:
+class BaseBackendManager:
     """ Backend manager implementation
     Functions
     1. Partition a real backend into virtualized compute units
@@ -64,7 +65,6 @@ class BackendManager:
 
     _compute_units = []
     _backend = None
-    _partitioner = ParitionProvider.get_partioner("naive") 
 
     def __init__(self, backend: BackendV1) -> None:
         self._backend = copy.deepcopy(backend) 
@@ -75,6 +75,10 @@ class BackendManager:
     @property
     def cu_size(self):
         return self._cu_size
+
+    def init_helpers(self) -> None:
+        """ Init helper classes """
+        self._partitioner = ParitionProvider.get_partioner("naive") 
 
     def init_compute_units(self) -> List[ComputeUnit]:
         """ Transform backend into a list of compute units based on some strategy """

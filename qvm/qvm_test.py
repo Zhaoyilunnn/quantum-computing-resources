@@ -9,8 +9,8 @@ from qiskit_aer.noise import NoiseModel
 #from qiskit import Aer
 #from qiskit.providers.aer.noise import NoiseModel
 
-from qvm.backend_manager import * 
-from qvm.process_manager import *
+from qvm.manager.backend_manager import * 
+from qvm.manager.process_manager import *
 from qvm.util.circuit import BaseReliabilityCalculator
 
 from util import *
@@ -100,15 +100,14 @@ class BaseTest:
 class TestBackendManager(BaseTest):
     
     def setup_class(self):
-        self._manager = BackendManager(self._backend)
+        self._manager = BaseBackendManager(self._backend)
+        self._manager.init_helpers()
+        self._manager.init_compute_units()
         self._conf = self._backend.configuration()
         self._props = self._backend.properties() 
 
-    def test_init_cus(self):
-        self._manager.init_compute_units()
-
     def test_allocate(self):
-        circ = self.create_dummy_bell_state([(0,1),(2,3),(4,5)], num_qubits=6)
+        circ = self.create_dummy_bell_state([(0,1),(2,3)], num_qubits=4)
         self._manager.init_compute_units()
         cu = self._manager.allocate(circ)
         virt_trans = transpile(circ, cu.backend)
