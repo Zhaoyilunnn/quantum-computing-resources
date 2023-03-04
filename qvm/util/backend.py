@@ -1,3 +1,4 @@
+import networkx as nx
 import numpy as np
 
 from qiskit.providers.backend import BackendV1
@@ -58,6 +59,32 @@ class NormalBackendGraphExtractor(BaseBackendGraphExtractor):
                 if item["qubits"] == line:
                     q0, q1 = line
                     graph[q0, q1] = item["parameters"][0]["value"]
+                    break
+        
+        return graph
+
+
+class NormalBackendNxGraphExtractor(BaseBackendGraphExtractor):
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def extract(self):
+        """ Transform coupling map to networkx graph """
+        graph = nx.Graph()
+
+        conf = self._backend.configuration()
+        props = self._backend.properties()
+
+        cm = conf.coupling_map # couplng map
+        props_dict = props.to_dict()
+
+        for line in cm:
+            for item in props_dict["gates"]:
+                if item["qubits"] == line:
+                    q0, q1 = line
+                    err = item["parameters"][0]["value"]
+                    graph.add_edge(q0, q1, weight=1-err)
                     break
         
         return graph

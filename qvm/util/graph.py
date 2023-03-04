@@ -1,5 +1,7 @@
 import copy
 
+from networkx.algorithms.community import kernighan_lin_bisection
+
 from typing import Dict, List
 
 def coupling_map_to_nodes(coupling_map: List[List[int]]) -> List[int]:
@@ -112,8 +114,19 @@ class NaivePartitioner(BasePartitioner):
         return partitions
 
 
+class KLPartitioner(BasePartitioner):
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def partition(self, graph) -> List[List[int]]:
+
+        return list(kernighan_lin_bisection(graph)) 
+
+
 PARTITIONERS = {
-    "naive": NaivePartitioner
+    "naive": NaivePartitioner,
+    "kl": KLPartitioner
 }
 
 

@@ -251,5 +251,14 @@ class NormalBackendManager(BaseBackendManager):
         super().__init__(backend)
 
     def init_helpers(self) -> None:
-        self._partitioner = ParitionProvider.get_partioner("naive")
-        self._graph_extractor = NormalBackendGraphExtractor(self._backend)
+        self._partitioner = ParitionProvider.get_partioner("kl")
+        self._graph_extractor = NormalBackendNxGraphExtractor(self._backend)
+
+    def init_compute_units(self) -> List[ComputeUnit]:
+        self._compute_units = []
+        cm_graph = self._graph_extractor.extract()
+        parts = self._partitioner.partition(cm_graph)
+        for part in parts:
+            cu = self.extract_single_compute_unit(part)
+            self._compute_units.append(cu)
+        return self._compute_units
