@@ -196,6 +196,9 @@ class TestNormalBackendManager(BaseTest):
         print(cu.real_qubits, cu.real_to_virtual)
         plot_error(cu.backend, figname="compute_unit_kl.png")
 
+        for i, cu in enumerate(self._manager._compute_units):
+            cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
+
 
 class TestProcessManager(BaseTest):
 

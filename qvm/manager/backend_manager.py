@@ -1,4 +1,5 @@
 import copy
+import matplotlib.pyplot as plt
 
 from typing import List
 from qiskit.providers.backend import * 
@@ -54,6 +55,22 @@ class ComputeUnit:
         """ The mapping from real qubit id to vircutal qubit id
         """
         return self._real_to_virtual
+
+    def draw_nx_cmap(self, figname=None):
+        """ Plot networkx format coupling map graph 
+        """
+        cmap = self._backend.configuration().coupling_map
+        G = nx.Graph()
+
+        for line in cmap:
+            q0, q1 = line
+            G.add_edge(q0, q1)
+
+        plt.figure()
+        nx.draw(G)
+
+        if figname:
+            plt.savefig(figname)
 
     
 class BaseBackendManager:
