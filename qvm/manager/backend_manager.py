@@ -262,7 +262,9 @@ class BaseBackendManager:
         return exe
 
 
-class NormalBackendManager(BaseBackendManager):
+class KlBackendManager(BaseBackendManager):
+
+    """ Manager using KL algorithm to get compute units """
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
@@ -279,3 +281,15 @@ class NormalBackendManager(BaseBackendManager):
             cu = self.extract_single_compute_unit(part)
             self._compute_units.append(cu)
         return self._compute_units
+
+
+class BfsBackendManager(BaseBackendManager):
+    """ Manager using BFS to get connected compute units """
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+
+    def init_helpers(self) -> None:
+        self._partitioner = ParitionProvider.get_partioner("bfs")
+        self._graph_extractor = BaseBackendGraphExtractor(self._backend)
+

@@ -1,4 +1,3 @@
-from numpy import real
 from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile, schedule
 from qiskit.providers.fake_provider import *
@@ -183,18 +182,35 @@ class TestBaseBackendManager(BaseTest):
         assert sch_cu.instructions == sch_original.instructions 
 
 
-class TestNormalBackendManager(BaseTest):
+class TestKlBackendManager(BaseTest):
 
     def setup_class(self):
-        self._manager = NormalBackendManager(self._backend)
+        self._manager = KlBackendManager(self._backend)
         self._manager.init_helpers()
         self._manager.init_compute_units()
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
         cu = self._manager.allocate(circ)
-        print(cu.real_qubits, cu.real_to_virtual)
+        #print(cu.real_qubits, cu.real_to_virtual)
         plot_error(cu.backend, figname="compute_unit_kl.png")
+
+        for i, cu in enumerate(self._manager._compute_units):
+            cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
+
+
+class TestBfsBackendManager(BaseTest):
+
+    def setup_class(self):
+        self._manager = BfsBackendManager(self._backend)
+        self._manager.init_helpers()
+        self._manager.init_compute_units()
+
+    def test_allocate(self):
+        circ = self.create_dummy_bell_state((0,1))
+        cu = self._manager.allocate(circ)
+        #print(cu.real_qubits, cu.real_to_virtual)
+        plot_error(cu.backend, figname="compute_unit_bfs.png")
 
         for i, cu in enumerate(self._manager._compute_units):
             cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
@@ -281,11 +297,24 @@ class TestNormalBackendGraphExtractor(BaseTest):
 
         assert graph[6,7] == 0.01431875092381174
         
-class TestKLPartitioner(BaseTest):
+
+class TestKlPartitioner(BaseTest):
 
     def setup_class(self):
         self._extractor = NormalBackendNxGraphExtractor(self._backend)
         self._partitioner = ParitionProvider.get_partioner("kl")
+
+    def test_graph_partition(self):
+        graph = self._extractor.extract()
+        parts = self._partitioner.partition(graph)
+        print(parts)
+
+
+class TestBfsPartitioner(BaseTest):
+
+    def setup_class(self):
+        self._extractor = BaseBackendGraphExtractor(self._backend)
+        self._partitioner = ParitionProvider.get_partioner("bfs")
 
     def test_graph_partition(self):
         graph = self._extractor.extract()

@@ -1,4 +1,6 @@
 import copy
+import queue
+from networkx import subgraph
 
 from networkx.algorithms.community import kernighan_lin_bisection
 
@@ -114,7 +116,7 @@ class NaivePartitioner(BasePartitioner):
         return partitions
 
 
-class KLPartitioner(BasePartitioner):
+class KlPartitioner(BasePartitioner):
 
     def __init__(self) -> None:
         super().__init__()
@@ -123,10 +125,59 @@ class KLPartitioner(BasePartitioner):
 
         return list(kernighan_lin_bisection(graph)) 
 
+class BfsPartitioner(BasePartitioner):
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def _bfs_part(self,
+            node: int,
+            graph: Dict[int, List[int]],
+            visited: set,
+            partitions: List[List[int]],
+            k: int):
+        que = [] 
+        que.append(node)
+        count = 0
+        part = []
+        
+        while len(que) > 0:
+            layer_size = len(que) 
+            for _ in range(layer_size):
+                front = que[0]
+                part.append(front)
+                visited.add(front)
+                count += 1
+                if count == k:
+                    break
+                for neighbor in graph[front]:
+                    if neighbor not in visited:
+                        que.append(neighbor)
+                que.pop(0)
+            if count == k:
+                break
+
+        partitions.append(part)
+
+    def partition(self, graph: Dict[int, List[int]], k=4) -> List[List[int]]:
+        partitions = []
+        visited = set()
+        has_unvisited = True
+
+        while has_unvisited:
+            has_unvisited = False
+            for node in graph:
+                if node not in visited:
+                    self._bfs_part(node, graph, visited, partitions, k)
+                    has_unvisited = True
+
+        return partitions 
+
 
 PARTITIONERS = {
     "naive": NaivePartitioner,
-    "kl": KLPartitioner
+    "kl": KlPartitioner,
+    "bfs": BfsPartitioner
 }
 
 
