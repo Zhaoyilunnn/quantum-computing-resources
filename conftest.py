@@ -1,6 +1,7 @@
 
 def pytest_addoption(parser):
      parser.addoption("--verify", action="store", default="pulse")
+     parser.addoption("--bench", action="store", default="random")
 
 
 def pytest_generate_tests(metafunc):
@@ -10,3 +11,6 @@ def pytest_generate_tests(metafunc):
     if 'verify' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("verify", [option_value])
 
+    option_value = metafunc.config.option.bench
+    if 'bench' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("bench", [option_value])
