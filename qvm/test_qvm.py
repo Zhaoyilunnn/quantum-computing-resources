@@ -107,7 +107,7 @@ class TestBaseBackendManager(BaseTest):
         
         res = self._manager.compile(circ)
         for e in res:
-            print(e.resource)
+            print(e.resource.real_qubits, e.resource_id)
 
 
 class TestKlBackendManager(BaseTest):

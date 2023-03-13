@@ -1,7 +1,8 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
-from qvm.util.circuit import relocate_circuit
+from qvm.util.circuit import circuit_virtual_to_real
+from qvm.model.executable import BaseExecutable
 
 from typing import List
 
@@ -59,10 +60,6 @@ class BaseProcessManager:
         #    sch = sch | schedules[i]
 
         return sch
-
-
-    def run(self, circ: QuantumCircuit):
-        pass
 
 
 class SimpleProcessManager(BaseProcessManager):
@@ -125,6 +122,13 @@ class QvmProcessManager(BaseProcessManager):
                 sch.insert(time, inst, inplace=True)
 
         return sch
+    
+    def run(self, exe_lists: List[List[BaseExecutable]]):
+        """ Run a list of executables without compilation 
+        1. Randomly select n different compute units with cu_ids = [cu_0, cu_1, ... cu_n]
+        2. For at most n executable_list, select executable_list_0[cu_0], executable_list_1[cu_1], ... to run
+        """
+        pass
 
 
 class BaselineProcessManager(BaseProcessManager):
@@ -136,7 +140,7 @@ class BaselineProcessManager(BaseProcessManager):
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
 
-    def run(self, circ: QuantumCircuit):
+    def run(self, circ_list: List[QuantumCircuit]):
         pass
 
 

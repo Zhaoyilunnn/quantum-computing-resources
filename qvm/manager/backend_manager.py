@@ -12,7 +12,7 @@ from qvm.exceptions import QvmError
 from qvm.model.compute_unit import ComputeUnit
 from qvm.model.executable import BaseExecutable
 from qvm.util.graph import * 
-from qvm.util.circuit import *
+from qvm.util.circuit import circuit_virtual_to_real
 from qvm.util.backend import *
 from qvm.util.misc import *
 from util import *
@@ -164,22 +164,7 @@ class BaseBackendManager:
         This method should be called after circuit level compilation and before pulse
         level compilation
         """
-        #if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
-        #    raise ValueError("Currently only support qreg size 1")
-
-        #return relocate_circuit(circuit,
-        #        compute_unit.real_qubits,
-        #        compute_unit.real_n_qubits)
-
-        num_qubits = compute_unit.real_n_qubits
-
-        vq_indexes = [compute_unit.real_qubits[circuit.qubits[i]._index] for i in range(len(circuit.qubits))]
-        vc_indexes = [compute_unit.real_qubits[circuit.clbits[i]._index] for i in range(len(circuit.clbits))]
-
-        real_circ = QuantumCircuit(num_qubits, num_qubits)
-        real_circ.compose(circuit, qubits=vq_indexes, clbits=vc_indexes, inplace=True)
-        print(real_circ)
-        return real_circ
+        return circuit_virtual_to_real(circuit, compute_unit)
 
          
     def allocate(self, circuit: QuantumCircuit):
@@ -213,9 +198,11 @@ class BaseBackendManager:
             raise QvmError("Compute units should be initialized first")
 
         res = []
-        for cu in self._compute_units:
+        for cu_id, cu in enumerate(self._compute_units):
             try:
-                res.append(self._do_compile(circuit, cu))
+                exe = self._do_compile(circuit, cu)
+                exe.resource_id = cu_id
+                res.append(exe)
             except Exception:
                 warning("Current circuit: {} cannot compile on compute unit: {}".format(circuit, cu))
                 continue
@@ -227,7 +214,7 @@ class BaseBackendManager:
         For exp on real-device, this needs to compile to pulse
         """
         vtrans = transpile(circuit, cu.backend)
-        exe = BaseExecutable(vtrans, cu.real_qubits)
+        exe = BaseExecutable(vtrans, cu)
         return exe
 
     def batch_execute(self, executables: List[Schedule]) -> None:

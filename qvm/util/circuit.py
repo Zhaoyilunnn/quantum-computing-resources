@@ -14,6 +14,10 @@ from qiskit.result.mitigation.utils import counts_to_vector
 
 from qiskit_aer import Aer 
 
+from qvm.model.compute_unit import ComputeUnit
+
+
+#TODO: Deprecate this, using qiskit circuit compose is enough
 def relocate_circuit(circuit: QuantumCircuit,
                      locations: List[int],
                      num_qubits: int) -> QuantumCircuit:
@@ -55,6 +59,25 @@ def relocate_circuit(circuit: QuantumCircuit,
         r_circ._data[ii].clbits = tuple(r_clbits)
 
     return r_circ
+
+
+def circuit_virtual_to_real(circ: QuantumCircuit,
+                            cu: ComputeUnit):
+    """ Transfrom circuit that is compiled on compute unit to circuit on real backend
+    Args:
+        circ: The circuit compiled on compute unit
+        cu: The compute unit
+
+    """
+    num_qubits = cu.real_n_qubits
+
+    vq_indexes = [cu.real_qubits[circ.qubits[i]._index] for i in range(len(circ.qubits))]
+    vc_indexes = [cu.real_qubits[circ.clbits[i]._index] for i in range(len(circ.clbits))]
+
+    real_circ = QuantumCircuit(num_qubits, num_qubits)
+    real_circ.compose(circ, qubits=vq_indexes, clbits=vc_indexes, inplace=True)
+    print(real_circ)
+    return real_circ
 
 
 class BaseReliabilityCalculator:
