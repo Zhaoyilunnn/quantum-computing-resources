@@ -36,3 +36,6 @@ class TestQvm(BaseTest):
         fid_org = self.run_on_backend_and_get_fid(circ, self._backend)
 
         print("Fidelity Comparison\t{}\t{}".format(fid_qvm, fid_org))
+
+    def test_two_bench(self, bench):
+        pass

@@ -15,6 +15,24 @@ class BaseProcessManager:
         schedule = self._merge_schedules(schedules)
         return self._backend.run(schedule)
 
+    def _merge_circuits(self, 
+            circuits: List[QuantumCircuit]) -> QuantumCircuit:
+
+        if len(circuits) <= 1:
+            raise ValueError("Please merge at least two circuits")
+
+        sum_qubits = sum([circ.num_qubits for circ in circuits])
+        circ_merged = QuantumCircuit(sum_qubits, sum_qubits)
+        base = 0
+
+        for circ in circuits:
+            nq = circ.num_qubits
+            locations = [i+base for i in range(nq)]
+            circ_merged.compose(circ, qubits=locations, clbits=locations, inplace=True)
+            base += nq
+
+        return circ_merged
+
     def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
         """
         Combine a list of schedules to a single schedule
@@ -41,6 +59,10 @@ class BaseProcessManager:
         #    sch = sch | schedules[i]
 
         return sch
+
+
+    def run(self, circ: QuantumCircuit):
+        pass
 
 
 class SimpleProcessManager(BaseProcessManager):
@@ -114,27 +136,8 @@ class BaselineProcessManager(BaseProcessManager):
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
 
-    def merge_circuits(self, 
-            circuits: List[QuantumCircuit]) -> QuantumCircuit:
-
-        if len(circuits) <= 1:
-            raise ValueError("Please merge at least two circuits")
-
-        circ_merged = None
-        sum_qubits = sum([circ.num_qubits for circ in circuits])
-        base = 0
-
-        for i, circ in enumerate(circuits):
-            nq = circ.num_qubits
-            locations = [i+base for i in range(nq)]
-            r_circ = relocate_circuit(circuits[i], locations, sum_qubits) 
-            if i == 0:
-                circ_merged = r_circ
-            else:
-                circ_merged.compose(r_circ)
-            base += nq
-
-        return circ_merged
+    def run(self, circ: QuantumCircuit):
+        pass
 
 
 PROCESS_MANAGERS = {

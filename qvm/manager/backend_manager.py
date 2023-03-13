@@ -1,76 +1,21 @@
 import copy
-import matplotlib.pyplot as plt
+from logging import warning
 
 from typing import List
+from qiskit import transpile
 from qiskit.providers.backend import * 
 from qiskit.providers.models import *
 from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Schedule
 
+from qvm.exceptions import QvmError
+from qvm.model.compute_unit import ComputeUnit
+from qvm.model.executable import BaseExecutable
 from qvm.util.graph import * 
 from qvm.util.circuit import *
 from qvm.util.backend import *
 from qvm.util.misc import *
 from util import *
-
-class ComputeUnit:
-    """ The minimum resource unit for compilation """
-    
-    def __init__(self, 
-            backend: BackendV1,
-            real_n_qubits: int,
-            sub_coupling_graph: List[int],
-            real_to_virtual=None) -> None:
-        """
-        `backend`: The real hardware model under the compute unit
-        `real_n_qubits`: The actual number of qubits in the real backend
-        `sub_coupling_graph`: The real qubit list of this compute unit
-        `real_to_virtual`: Each real qubit binds to a virtual qubit id
-        """
-        self._backend = copy.deepcopy(backend) 
-        self._real_qubits = sub_coupling_graph
-        self._real_n_qubits = real_n_qubits
-
-        if real_to_virtual:
-            self._real_to_virtual = real_to_virtual
-        else:
-            self._real_to_virtual = {real: virtual for virtual, real in enumerate(self._real_qubits)}
-
-    @property
-    def backend(self):
-        return self._backend
-
-    @property
-    def real_n_qubits(self):
-        return self._real_n_qubits
-
-    @property
-    def real_qubits(self):
-        """ The real qubit list, i.e., the node list in real backend
-        """
-        return self._real_qubits
-
-    @property
-    def real_to_virtual(self):
-        """ The mapping from real qubit id to vircutal qubit id
-        """
-        return self._real_to_virtual
-
-    def draw_nx_cmap(self, figname=None):
-        """ Plot networkx format coupling map graph 
-        """
-        cmap = self._backend.configuration().coupling_map
-        G = nx.Graph()
-
-        for line in cmap:
-            q0, q1 = line
-            G.add_edge(q0, q1)
-
-        plt.figure()
-        nx.draw(G)
-
-        if figname:
-            plt.savefig(figname)
 
     
 class BaseBackendManager:
@@ -219,13 +164,23 @@ class BaseBackendManager:
         This method should be called after circuit level compilation and before pulse
         level compilation
         """
-        if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
-            raise ValueError("Currently only support qreg size 1")
+        #if len(circuit.qregs) > 1 or len(circuit.cregs) > 1:
+        #    raise ValueError("Currently only support qreg size 1")
 
-        return relocate_circuit(circuit,
-                compute_unit.real_qubits,
-                compute_unit.real_n_qubits)
-        
+        #return relocate_circuit(circuit,
+        #        compute_unit.real_qubits,
+        #        compute_unit.real_n_qubits)
+
+        num_qubits = compute_unit.real_n_qubits
+
+        vq_indexes = [compute_unit.real_qubits[circuit.qubits[i]._index] for i in range(len(circuit.qubits))]
+        vc_indexes = [compute_unit.real_qubits[circuit.clbits[i]._index] for i in range(len(circuit.clbits))]
+
+        real_circ = QuantumCircuit(num_qubits, num_qubits)
+        real_circ.compose(circuit, qubits=vq_indexes, clbits=vc_indexes, inplace=True)
+        print(real_circ)
+        return real_circ
+
          
     def allocate(self, circuit: QuantumCircuit):
         """ Allocate compute units for a quantum circuit 
@@ -248,6 +203,32 @@ class BaseBackendManager:
         # Merge allocated cus
         merged_nodes = self.merge_graph_nodes_from_cus(cu_list)
         return self.extract_single_compute_unit(merged_nodes)
+
+    def compile(self, circuit: QuantumCircuit):
+        """ Implement a simple redundant compilation 
+        In this version, we assume that compute unit size is the same as 
+        circuit size
+        """
+        if not self._compute_units:
+            raise QvmError("Compute units should be initialized first")
+
+        res = []
+        for cu in self._compute_units:
+            try:
+                res.append(self._do_compile(circuit, cu))
+            except Exception:
+                warning("Current circuit: {} cannot compile on compute unit: {}".format(circuit, cu))
+                continue
+        return res
+    
+    def _do_compile(self, circuit: QuantumCircuit, cu: ComputeUnit) -> BaseExecutable:
+        """ Compilation on compute unit 
+        For exp on simulator, this just compile to circuit,
+        For exp on real-device, this needs to compile to pulse
+        """
+        vtrans = transpile(circuit, cu.backend)
+        exe = BaseExecutable(vtrans, cu.real_qubits)
+        return exe
 
     def batch_execute(self, executables: List[Schedule]) -> None:
         """ Merge multiple quantum executables into a large quantum executable and execute on the backend """

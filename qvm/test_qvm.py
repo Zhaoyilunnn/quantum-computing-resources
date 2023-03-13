@@ -68,7 +68,7 @@ class TestBaseBackendManager(BaseTest):
 
 
         # Defined the qubits in compute unit
-        sub_graph = [1,2,3]
+        sub_graph = [1,4,7]
         #sub_graph = [0,1,5]
         vq0, vq1 = 0, 1 # virtual qubit id
         rq0, rq1 = sub_graph[vq0], sub_graph[vq1]
@@ -95,11 +95,19 @@ class TestBaseBackendManager(BaseTest):
         print("================== Original ========================")
         dummy_circ = self.create_dummy_bell_state((rq0, rq1))
         transpiled = transpile(dummy_circ, self._backend)
+        print(transpiled)
         sch_original = schedule(transpiled, self._backend)
         self.show_scheduled_debug_info(sch_original)
         #self.run_experiments(transpiled, sch_original, verify)
 
         assert sch_cu.instructions == sch_original.instructions 
+
+    def test_compile(self):
+        circ = self.create_dummy_bell_state((0,1))
+        
+        res = self._manager.compile(circ)
+        for e in res:
+            print(e.resource)
 
 
 class TestKlBackendManager(BaseTest):
@@ -184,8 +192,11 @@ class TestProcessManager(BaseTest):
         transpiled = transpile(dummy_circ_original, manager._backend)
         sch_original = schedule(transpiled, manager._backend)
 
-        dummy_circ_merged = manager.merge_circuits([dummy_circ_first, dummy_circ_second])
-        transpiled = transpile(dummy_circ_original, manager._backend)
+        dummy_circ_merged = manager._merge_circuits([dummy_circ_first, dummy_circ_first])
+        print(dummy_circ_original)
+        print(dummy_circ_merged)
+
+        transpiled = transpile(dummy_circ_merged, manager._backend)
         sch_merged = schedule(transpiled, manager._backend)
 
         assert sch_original.instructions == sch_merged.instructions
@@ -242,19 +253,3 @@ class TestBfsPartitioner(BaseTest):
         print(parts)
 
 
-#class TestQvm(BaseTest):
-#    """
-#    Integration of backend manager and process manager
-#    """
-#    
-#    def setup_class(self):
-#        self._backend_manager = BfsBackendManager(self._backend)
-#        self._backend_manager.init_helpers()
-#        self._backend_manager.init_compute_units()
-#        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
-#
-#    def test_single_bench(self, bench):
-#        circ = self.create_dummy_bell_state((0,1))  
-#        cu = self._backend_manager.allocate(circ)
-#        self.run_on_backend_and_get_fid(circ, cu.backend)
-#        self.run_on_backend_and_get_fid(circ, self._backend)
