@@ -37,6 +37,10 @@ class BaseBackendManager:
     def cu_size(self):
         return self._cu_size
 
+    @cu_size.setter
+    def cu_size(self, ncu):
+        self._cu_size = ncu
+
     def init_helpers(self) -> None:
         """ Init helper classes """
         self._partitioner = ParitionProvider.get_partioner("naive") 
@@ -214,7 +218,12 @@ class BaseBackendManager:
         For exp on simulator, this just compile to circuit,
         For exp on real-device, this needs to compile to pulse
         """
+        # Transpile on virtual backend
         vtrans = transpile(circuit, cu.backend)
+        # Transform to real circuit
+        #rtrans = circuit_virtual_to_real(vtrans, cu)
+        # Construct executable
+        #exe = BaseExecutable(rtrans, cu)
         exe = BaseExecutable(vtrans, cu)
         return exe
 

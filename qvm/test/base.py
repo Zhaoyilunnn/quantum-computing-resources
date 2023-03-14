@@ -70,7 +70,7 @@ class BaseTest:
     def run_on_backend_and_get_fid(self, 
             circ, 
             backend: BackendV1,
-            shots=4096):
+            **kwargs):
         """ 
         1. Transpile
         2. Run on backend
@@ -78,11 +78,11 @@ class BaseTest:
         4. Calculate fidelity/reliability
         """
         trans = transpile(circ, backend)
-        res = backend.run(trans, shots=shots).result()
+        res = backend.run(trans, **kwargs).result()
         counts = res.get_counts()
         print("================= Counts after running on backend =====================")
         print(counts)
-        fid = self._fid_calculator.calc_fidelity(trans, counts)
+        fid = self._fid_calculator.calc_fidelity(trans, counts, **kwargs)
         print("=================== Reliability =======================")
         print(fid)
         return fid

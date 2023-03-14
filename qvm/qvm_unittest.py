@@ -108,6 +108,7 @@ class TestBaseBackendManager(BaseTest):
         res = self._manager.compile(circ)
         for rid in res:
             print(rid, res[rid].resource.real_qubits, res[rid].resource_id)
+            print(res[rid].circ)
 
 
 class TestKlBackendManager(BaseTest):
@@ -180,6 +181,7 @@ class TestProcessManager(BaseTest):
 
         #assert sch_merged.instructions == sch_original.instructions
 
+
     def test_baseline_manager(self):
         
         manager = ProcessManagerFactory.get_manager("baseline", FakeManila())
@@ -251,5 +253,6 @@ class TestBfsPartitioner(BaseTest):
         graph = self._extractor.extract()
         parts = self._partitioner.partition(graph)
         print(parts)
+
 
 

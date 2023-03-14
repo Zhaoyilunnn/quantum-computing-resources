@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 
 from typing import List
 from qiskit.circuit import \
@@ -8,6 +9,7 @@ from qiskit.circuit import \
         Qubit, \
         Clbit
 
+from qiskit.compiler import transpile
 from qiskit.quantum_info import Statevector, state_fidelity
 from qiskit.result import Counts
 from qiskit.result.mitigation.utils import counts_to_vector
@@ -15,6 +17,11 @@ from qiskit.result.mitigation.utils import counts_to_vector
 from qiskit_aer import Aer 
 
 from qvm.model.compute_unit import ComputeUnit
+
+from scipy.stats import entropy
+
+def kl_divergence(p, q):
+    return np.sum(np.where(p != 0, p * np.log(p / q), 0))
 
 
 #TODO: Deprecate this, using qiskit circuit compose is enough
@@ -76,7 +83,7 @@ def circuit_virtual_to_real(circ: QuantumCircuit,
 
     real_circ = QuantumCircuit(num_qubits, num_qubits)
     real_circ.compose(circ, qubits=vq_indexes, clbits=vc_indexes, inplace=True)
-    print(real_circ)
+    #print(real_circ)
     return real_circ
 
 
@@ -95,12 +102,16 @@ class BaseReliabilityCalculator:
         vec, shots = counts_to_vector(counts, num_qubits) 
         return Statevector(vec)
 
-    def _run_ideal_sim(self, circ: QuantumCircuit):
+    def _run_ideal_sim(self, 
+            circ: QuantumCircuit,
+            **kwargs):
         """ Run ideal simulation on ideal simulator """
-        return self._sv_sim.run(circ).result()
+        return self._sv_sim.run(circ, **kwargs).result()
         
-
-    def calc_fidelity(self, circ: QuantumCircuit, counts: Counts):
+    def calc_fidelity(self, 
+                      circ: QuantumCircuit, 
+                      counts: Counts,
+                      **kwargs):
         """ Galculate reliability based on counts
         1. Execute on ideal simulator
         2. Transform ideal counts and noise counts to Statevector 
@@ -114,14 +125,36 @@ class BaseReliabilityCalculator:
         """
         num_qubits = circ.num_qubits
         pv_noise = self._counts_to_sv(counts, num_qubits)
-        print(pv_noise)
+        #print(pv_noise)
 
-        res_ideal = self._run_ideal_sim(circ)
-        counts_ideal = res_ideal.get_counts(circ)
+        trans = transpile(circ, self._sv_sim) 
+        #print(trans)
+        res_ideal = self._run_ideal_sim(trans, **kwargs)
+        counts_ideal = res_ideal.get_counts(trans)
         pv_ideal = self._counts_to_sv(counts_ideal, num_qubits)
-        print(pv_ideal)
+        #print(pv_ideal)
 
         # FIXME(zhaoyilun): here sv is actually classical probability vector 
         return state_fidelity(pv_noise, pv_ideal, validate=False)
 
 
+class KlReliabilityCalculator(BaseReliabilityCalculator):
+
+    def calc_fidelity(self, 
+                      circ: QuantumCircuit, 
+                      counts: Counts,
+                      **kwargs):
+        """Calculate fidelity using KL-divergence between two prob distributions"""
+        num_qubits = circ.num_qubits
+        pv_noise, shots = counts_to_vector(counts, num_qubits)
+        print(pv_noise)
+
+        trans = transpile(circ, self._sv_sim) 
+        #print(trans)
+        res_ideal = self._run_ideal_sim(trans, **kwargs)
+        counts_ideal = res_ideal.get_counts(trans)
+        pv_ideal, shots = counts_to_vector(counts_ideal, num_qubits)
+        print(pv_ideal)
+
+        # FIXME(zhaoyilun): here sv is actually classical probability vector 
+        return entropy(pv_ideal, pv_noise)

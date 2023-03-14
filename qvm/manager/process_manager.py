@@ -1,10 +1,14 @@
+import random
+
 from qiskit.circuit import QuantumCircuit
+from qiskit.compiler import transpile
 from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
-from qvm.util.circuit import circuit_virtual_to_real
 from qvm.model.executable import BaseExecutable, Process
 
-from typing import Dict, List
+from typing import List
+
+from qvm.util.circuit import circuit_virtual_to_real
 
 
 class BaseProcessManager:
@@ -18,6 +22,13 @@ class BaseProcessManager:
 
     def _merge_circuits(self, 
             circuits: List[QuantumCircuit]) -> QuantumCircuit:
+        """Simple method to merge all circuits 
+
+        Args
+            circuits: Circuits to be merged, here we assume that the 
+                circuit is logical circuit, i.e., before transpilation
+                thus have same number of clbits and qubits
+        """
 
         if len(circuits) <= 1:
             raise ValueError("Please merge at least two circuits")
@@ -122,6 +133,40 @@ class QvmProcessManager(BaseProcessManager):
                 sch.insert(time, inst, inplace=True)
 
         return sch
+
+    def _merge_executables(self, exes: List[BaseExecutable]) -> QuantumCircuit:
+        """Merge multiple executables to one quantum circuit
+        This is used for experiments on real device, thus first
+        call `circuit_virtual_to_real` to transform to real circuis
+        """
+        circ = None
+
+        for i, e in enumerate(exes):
+            rcirc = circuit_virtual_to_real(e.circ, e.resource)
+            if i == 0:
+                circ = rcirc
+            else:
+                circ.compose(rcirc, inplace=True)
+
+        return circ
+
+    def _select(self, processes: List[Process]) -> List[BaseExecutable]:
+        """Randomly select n different executables from n different processes """
+        # Here we assume that the backend partition is exactly the same for all applications 
+        # 1. Get all resources
+        res = set()
+        for proc in processes:
+            res |= proc.resources
+        
+        exes = []
+        # 2. Randomly select n different resources from n different process
+        for proc in processes:
+            proc_res = res & proc.resources
+            rid = random.choice(list(proc_res))
+            exes.append(proc[rid])
+            res -= {rid}
+        
+        return exes
     
     def run(self, processes: List[Process]):
         """Run multiple processes
@@ -132,8 +177,11 @@ class QvmProcessManager(BaseProcessManager):
         Args:
             processes: List of processes to run on a single backend
         """
-        # Here we assume that the backend partition is exactly the same for all applications 
-         
+        exes = self._select(processes)
+        circ = self._merge_executables(exes)
+        #print(circ)
+        return self._backend.run(circ)
+
 
 
 class BaselineProcessManager(BaseProcessManager):
@@ -145,8 +193,13 @@ class BaselineProcessManager(BaseProcessManager):
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
 
-    def run(self, circ_list: List[QuantumCircuit]):
-        pass
+    def run(self, 
+            circ_list: List[QuantumCircuit],
+            **kwargs):
+        circ = self._merge_circuits(circ_list)
+        trans = transpile(circ, self._backend)
+        print(trans)
+        return self._backend.run(trans, **kwargs)
 
 
 PROCESS_MANAGERS = {
