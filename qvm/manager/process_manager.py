@@ -2,7 +2,7 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
 from qvm.util.circuit import circuit_virtual_to_real
-from qvm.model.executable import BaseExecutable
+from qvm.model.executable import BaseExecutable, Process
 
 from typing import Dict, List
 
@@ -123,15 +123,14 @@ class QvmProcessManager(BaseProcessManager):
 
         return sch
     
-    def run(self, aggregated_exes: List[Dict[int, BaseExecutable]]):
-        """ Run a list of executables without compilation 
-        1. Randomly select n different compute units with cu_ids = [cu_0, cu_1, ... cu_n]
-        2. For at most n executable_list, select executable_list_0[cu_0], executable_list_1[cu_1], ... to run
+    def run(self, processes: List[Process]):
+        """Run multiple processes
+        1. Merge all resources
+        2. Randomly select different executables compiled on different 
+           resources from different processes
 
         Args:
-            aggregated_exes: List of executables to run. Each list element corresponds to a single application.
-                For each application, we compile it to all resources if possible, the key is resource id and
-                the value is the compilation result on this resource.
+            processes: List of processes to run on a single backend
         """
         # Here we assume that the backend partition is exactly the same for all applications 
          
