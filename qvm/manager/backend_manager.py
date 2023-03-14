@@ -10,7 +10,7 @@ from qiskit.pulse import Schedule
 
 from qvm.exceptions import QvmError
 from qvm.model.compute_unit import ComputeUnit
-from qvm.model.executable import BaseExecutable
+from qvm.model.executable import BaseExecutable, Process
 from qvm.util.graph import * 
 from qvm.util.circuit import circuit_virtual_to_real
 from qvm.util.backend import *
@@ -189,7 +189,7 @@ class BaseBackendManager:
         merged_nodes = self.merge_graph_nodes_from_cus(cu_list)
         return self.extract_single_compute_unit(merged_nodes)
 
-    def compile(self, circuit: QuantumCircuit):
+    def compile(self, circuit: QuantumCircuit) -> Process:
         """ Implement a simple redundant compilation 
         In this version, we assume that compute unit size is the same as 
         circuit size
@@ -197,16 +197,17 @@ class BaseBackendManager:
         if not self._compute_units:
             raise QvmError("Compute units should be initialized first")
 
-        res = []
+        proc = Process()
         for cu_id, cu in enumerate(self._compute_units):
             try:
                 exe = self._do_compile(circuit, cu)
-                exe.resource_id = cu_id
-                res.append(exe)
             except Exception:
                 warning("Current circuit: {} cannot compile on compute unit: {}".format(circuit, cu))
                 continue
-        return res
+            exe.resource_id = cu_id
+            exe.num_resources = len(self._compute_units)
+            proc.append(exe)
+        return proc
     
     def _do_compile(self, circuit: QuantumCircuit, cu: ComputeUnit) -> BaseExecutable:
         """ Compilation on compute unit 

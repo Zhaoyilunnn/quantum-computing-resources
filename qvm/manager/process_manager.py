@@ -4,7 +4,7 @@ from qiskit.providers import BackendV1
 from qvm.util.circuit import circuit_virtual_to_real
 from qvm.model.executable import BaseExecutable
 
-from typing import List
+from typing import Dict, List
 
 
 class BaseProcessManager:
@@ -123,12 +123,18 @@ class QvmProcessManager(BaseProcessManager):
 
         return sch
     
-    def run(self, exe_lists: List[List[BaseExecutable]]):
+    def run(self, aggregated_exes: List[Dict[int, BaseExecutable]]):
         """ Run a list of executables without compilation 
         1. Randomly select n different compute units with cu_ids = [cu_0, cu_1, ... cu_n]
         2. For at most n executable_list, select executable_list_0[cu_0], executable_list_1[cu_1], ... to run
+
+        Args:
+            aggregated_exes: List of executables to run. Each list element corresponds to a single application.
+                For each application, we compile it to all resources if possible, the key is resource id and
+                the value is the compilation result on this resource.
         """
-        pass
+        # Here we assume that the backend partition is exactly the same for all applications 
+         
 
 
 class BaselineProcessManager(BaseProcessManager):

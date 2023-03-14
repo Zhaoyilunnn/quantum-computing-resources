@@ -106,8 +106,8 @@ class TestBaseBackendManager(BaseTest):
         circ = self.create_dummy_bell_state((0,1))
         
         res = self._manager.compile(circ)
-        for e in res:
-            print(e.resource.real_qubits, e.resource_id)
+        for rid in res:
+            print(rid, res[rid].resource.real_qubits, res[rid].resource_id)
 
 
 class TestKlBackendManager(BaseTest):
