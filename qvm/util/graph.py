@@ -1,6 +1,5 @@
 import copy
-import queue
-from networkx import subgraph
+import numpy as np
 
 from networkx.algorithms.community import kernighan_lin_bisection
 
@@ -174,10 +173,36 @@ class BfsPartitioner(BasePartitioner):
         return partitions 
 
 
+class FrpPartitioner(BasePartitioner):
+
+    def _get_utility(self, graph: np.ndarray):
+        """Compute utility for each vertex
+        utility = (number of links)/(sum of link errors)
+        """
+        utility = []
+        for v in graph:
+            n_links = sum(1 for l in v if l > 0)
+            sum_err = sum(v)
+            utility.append(n_links / sum_err)
+        return utility
+
+    def partition(self, 
+                  graph: np.ndarray,
+                  alpha: float,
+                  beta: float) -> List[int]:
+        """Implementation of Fair and Reliable Partitioning
+        See reference Algorithm. 1
+        Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
+
+        """ 
+        # Get utility list
+
+
 PARTITIONERS = {
     "naive": NaivePartitioner,
     "kl": KlPartitioner,
-    "bfs": BfsPartitioner
+    "bfs": BfsPartitioner,
+    "frp": FrpPartitioner
 }
 
 

@@ -39,7 +39,7 @@ class NormalBackendGraphExtractor(BaseBackendGraphExtractor):
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
 
-    def extract(self):
+    def extract(self) -> np.ndarray:
         """ Transform backend configuration to error map
         Return:
             graph: np.array[num_qubits, num_qubits], where graph[i][j] is the 
@@ -88,3 +88,10 @@ class NormalBackendNxGraphExtractor(BaseBackendGraphExtractor):
                     break
         
         return graph
+
+
+class BackendWeightGraphExtractor(BaseBackendGraphExtractor):
+
+    def extract(self):
+        """Transform coupling map and gate error to weighted graph"""
+        pass

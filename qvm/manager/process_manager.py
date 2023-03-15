@@ -7,6 +7,7 @@ from qiskit.providers import BackendV1
 from qvm.model.executable import BaseExecutable, Process
 
 from typing import List
+from qvm.util.backend import NormalBackendGraphExtractor
 
 from qvm.util.circuit import circuit_virtual_to_real
 
@@ -188,6 +189,8 @@ class BaselineProcessManager(BaseProcessManager):
 
     """
     Runtime compilation
+    Merge multiple circuits into a single circuit using 
+    qiskit compose and run
     """
 
     def __init__(self, backend: BackendV1) -> None:
@@ -198,8 +201,23 @@ class BaselineProcessManager(BaseProcessManager):
             **kwargs):
         circ = self._merge_circuits(circ_list)
         trans = transpile(circ, self._backend)
-        print(trans)
+        #print(trans)
         return self._backend.run(trans, **kwargs)
+
+class FrpProcessManager(BaselineProcessManager):
+    """
+    Fair and Reliable Partitioning (FRP) and compile 
+    separately on different partitions
+
+    Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
+    """
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+        self._extractor = NormalBackendGraphExtractor(self._backend)
+        self._partitioner = None
+
+    def _merge_circuits(self, circuits: List[QuantumCircuit]) -> QuantumCircuit:
+        pass
 
 
 PROCESS_MANAGERS = {

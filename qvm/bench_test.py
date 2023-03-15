@@ -66,7 +66,7 @@ class TestBench(BaseTest):
         #print(base_res.get_counts())
 
         # Calculate fidelity
-        self._fid_calculator = KlReliabilityCalculator()
+        #self._fid_calculator = KlReliabilityCalculator()
         fid_qvm = self._fid_calculator.calc_fidelity(circ, qvm_res.get_counts(), shots=shots)
         fid_base = self._fid_calculator.calc_fidelity(circ, base_res.get_counts(), shots=shots)
         print("Fid of qvm & baseline\t{}\t{}".format(fid_qvm, fid_base))
