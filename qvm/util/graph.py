@@ -4,7 +4,7 @@ import numpy as np
 from collections import OrderedDict
 from networkx.algorithms.community import kernighan_lin_bisection
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 def coupling_map_to_nodes(coupling_map: List[List[int]]) -> List[int]:
     """
@@ -176,31 +176,47 @@ class BfsPartitioner(BasePartitioner):
 
 class FrpPartitioner(BasePartitioner):
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 graph: Optional[np.ndarray]=None) -> None:
         super().__init__()
         self._visited = set()
+        self._graph = None
+        if graph:
+            self._graph = graph
 
-    def _get_utilities(self, graph: np.ndarray):
+    @property
+    def graph(self):
+        return self._graph
+
+    @graph.setter
+    def graph(self, graph: np.ndarray):
+        self._graph = graph
+
+    def _get_utilities(self):
         """Compute utility for each vertex
         utility = (number of links)/(sum of link errors)
         """
+        if self._graph is None:
+            raise ValueError("Please first set the graph of FrpPartitioner")
+
         utility = []
-        for v in graph:
+        for v in self._graph:
             n_links = sum(1 for l in v if l > 0)
             sum_err = sum(v)
             utility.append(n_links / sum_err)
         return utility
 
     def _bfs_single_part(self,
-                         graph: np.ndarray,
                          root: int,
                          sub_size: int):
         """Start from root node and grow a graph satisfying sub_size
         Args:
-            graph (np.ndarray): Input graph
             root (int): Root node id
             sub_size (int): Subgraph size, i.e., the program size
         """
+        if self._graph is None:
+            raise ValueError("Please first set the graph of FrpPartitioner")
+
         que = []
         que.append(root)
         count = 0
@@ -215,7 +231,7 @@ class FrpPartitioner(BasePartitioner):
                 count += 1
                 if count == sub_size:
                     break
-                neighbors = [i for i, e in enumerate(graph[front]) if e > 0 ]
+                neighbors = [i for i, e in enumerate(self._graph[front]) if e > 0 ]
                 for n in neighbors:
                     if n not in self._visited:
                         que.append(n)
@@ -235,8 +251,21 @@ class FrpPartitioner(BasePartitioner):
             ranks[vertex] = utility
         return ranks
 
+    def _get_root(self,
+                  ranks: OrderedDict,
+                  alpha: float,
+                  beta: float):
+        """Find root node to generate a subgraph
+        A root with good quality should satisfy:
+        1. alpha percent of root’s neighbors have high utility
+        2. beta percent of nodes including root have measurement
+           errors lower than avg measurement error
+        """
+        for v, _ in ranks.items():
+            if v not in self._visited:
+                break
+
     def partition(self, 
-                  graph: np.ndarray,
                   sub_size: int,
                   alpha: float,
                   beta: float) -> List[Any]:
@@ -244,14 +273,18 @@ class FrpPartitioner(BasePartitioner):
         See reference Algorithm. 1
         Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
         Args:
-            graph (np.ndarray): Input graph representing the
-                topology of qubit chip
             sub_size: Size of subgraph
-            alpha:
-            beta:
+            alpha (float): alpha percent of root's neighbors
+                should have `high` utility
+            beta (float): beta percent of nodes including root
+                should have measurement errors lower than avg 
+                measurement error
         """ 
+        if self._graph is None:
+            raise ValueError("Please first set the graph of FrpPartitioner")
+
         # Get utility list
-        utilities = self._get_utilities(graph)
+        utilities = self._get_utilities()
 
         # Rank vertexes (physical qubits) in order of utility
         ranks = self._get_ranks(utilities)
@@ -260,7 +293,7 @@ class FrpPartitioner(BasePartitioner):
         part = []
         for v, _ in ranks.items():
             if v not in self._visited:
-                part = self._bfs_single_part(graph, v, sub_size)
+                part = self._bfs_single_part(v, sub_size)
                 break
         return part
 

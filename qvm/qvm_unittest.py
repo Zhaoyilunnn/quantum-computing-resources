@@ -268,7 +268,8 @@ class TestFrpPartitioner(BaseTest):
 
     def test_partition(self):
         graph = self._extractor.extract() 
-        part = self._partitioner.partition(graph, 4, 0, 0)
-        part1 = self._partitioner.partition(graph, 4, 0, 0)
+        self._partitioner.graph = graph
+        part = self._partitioner.partition(4, 0, 0)
+        part1 = self._partitioner.partition(4, 0, 0)
         print(part)
         print(part1)
