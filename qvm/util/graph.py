@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 
+from collections import OrderedDict
 from networkx.algorithms.community import kernighan_lin_bisection
 
 from typing import Dict, List
@@ -175,7 +176,11 @@ class BfsPartitioner(BasePartitioner):
 
 class FrpPartitioner(BasePartitioner):
 
-    def _get_utility(self, graph: np.ndarray):
+    def __init__(self) -> None:
+        super().__init__()
+        self._visited = set()
+
+    def _get_utilities(self, graph: np.ndarray):
         """Compute utility for each vertex
         utility = (number of links)/(sum of link errors)
         """
@@ -185,6 +190,39 @@ class FrpPartitioner(BasePartitioner):
             sum_err = sum(v)
             utility.append(n_links / sum_err)
         return utility
+
+    def _bfs_single_part(self,
+                         graph: np.ndarray,
+                         root: int,
+                         sub_size: int):
+        """Start from root node and grow a graph satisfying sub_size
+        Args:
+            graph (np.ndarray): Input graph
+            root (int): Root node id
+            sub_size (int): Subgraph size, i.e., the program size
+        """
+        que = []
+        que.append(root)
+        count = 0
+        part = []
+
+        while len(que) > 0:
+            layer_size = len(que)
+            for _ in range(layer_size):
+                front = que[0]
+                part.append(front)
+                self._visited.add(front)
+                count += 1
+                if count == sub_size:
+                    break
+                neighbors = [i for i, e in enumerate(graph[root]) if e > 0 ]
+                for n in neighbors:
+                    if n not in self._visited:
+                        que.append(n)
+                que.pop(0)
+            if count == sub_size:
+                break
+        return part
 
     def partition(self, 
                   graph: np.ndarray,
@@ -196,6 +234,10 @@ class FrpPartitioner(BasePartitioner):
 
         """ 
         # Get utility list
+        utilities = self._get_utilities(graph)
+        ranks = OrderedDict()
+        for vertex, utility in enumerate(utilities):
+            ranks[vertex] = utility
 
 
 PARTITIONERS = {

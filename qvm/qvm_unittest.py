@@ -261,8 +261,8 @@ class TestFrpPartitioner(BaseTest):
         self._extractor = NormalBackendGraphExtractor(self._backend)
         self._partitioner = ParitionProvider.get_partioner("frp")
 
-    def test_get_utility(self):
+    def test_get_utilities(self):
         graph = self._extractor.extract()
-        utility = self._partitioner._get_utility(graph)
+        utility = self._partitioner._get_utilities(graph)
         print(utility)
 
