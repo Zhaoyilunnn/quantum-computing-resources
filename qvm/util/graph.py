@@ -4,7 +4,7 @@ import numpy as np
 from collections import OrderedDict
 from networkx.algorithms.community import kernighan_lin_bisection
 
-from typing import Dict, List
+from typing import Any, Dict, List
 
 def coupling_map_to_nodes(coupling_map: List[List[int]]) -> List[int]:
     """
@@ -215,7 +215,7 @@ class FrpPartitioner(BasePartitioner):
                 count += 1
                 if count == sub_size:
                     break
-                neighbors = [i for i, e in enumerate(graph[root]) if e > 0 ]
+                neighbors = [i for i, e in enumerate(graph[front]) if e > 0 ]
                 for n in neighbors:
                     if n not in self._visited:
                         que.append(n)
@@ -223,21 +223,46 @@ class FrpPartitioner(BasePartitioner):
             if count == sub_size:
                 break
         return part
-
-    def partition(self, 
-                  graph: np.ndarray,
-                  alpha: float,
-                  beta: float) -> List[int]:
-        """Implementation of Fair and Reliable Partitioning
-        See reference Algorithm. 1
-        Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
-
-        """ 
-        # Get utility list
-        utilities = self._get_utilities(graph)
+    
+    def _get_ranks(self,
+                   utilities: List[Any]):
+        """Rank the vertexes in order of utility
+        Args
+            utilities (List): List of utilities, the index is the vertex id
+        """
         ranks = OrderedDict()
         for vertex, utility in enumerate(utilities):
             ranks[vertex] = utility
+        return ranks
+
+    def partition(self, 
+                  graph: np.ndarray,
+                  sub_size: int,
+                  alpha: float,
+                  beta: float) -> List[Any]:
+        """Implementation of Fair and Reliable Partitioning
+        See reference Algorithm. 1
+        Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
+        Args:
+            graph (np.ndarray): Input graph representing the
+                topology of qubit chip
+            sub_size: Size of subgraph
+            alpha:
+            beta:
+        """ 
+        # Get utility list
+        utilities = self._get_utilities(graph)
+
+        # Rank vertexes (physical qubits) in order of utility
+        ranks = self._get_ranks(utilities)
+
+        # Generate subgraph
+        part = []
+        for v, _ in ranks.items():
+            if v not in self._visited:
+                part = self._bfs_single_part(graph, v, sub_size)
+                break
+        return part
 
 
 PARTITIONERS = {
