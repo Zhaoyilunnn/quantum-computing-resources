@@ -3,6 +3,7 @@ import numpy as np
 
 from collections import OrderedDict
 from networkx.algorithms.community import kernighan_lin_bisection
+from qvm.util.misc import split_list
 
 from typing import Any, Dict, List, Optional
 
@@ -177,10 +178,21 @@ class BfsPartitioner(BasePartitioner):
 class FrpPartitioner(BasePartitioner):
 
     def __init__(self,
-                 graph: Optional[np.ndarray]=None) -> None:
+                 graph: Optional[np.ndarray]=None,
+                 errs: Optional[List[float]]=None) -> None:
         super().__init__()
+        self._NUM_LEVELS = 3
+        self._alpha, self._beta = 0, 0
         self._visited = set()
+        self._utilities = []
+        self._ranks = OrderedDict() 
+        self._levels = []
+
         self._graph = None
+        self._readout_errs = []
+        self._mean_rd_errs = 0  # Average readout errors
+        if errs:
+            self._readout_errs = errs
         if graph:
             self._graph = graph
 
@@ -192,6 +204,31 @@ class FrpPartitioner(BasePartitioner):
     def graph(self, graph: np.ndarray):
         self._graph = graph
 
+    @property
+    def readout_errs(self):
+        return self._readout_errs
+
+    @readout_errs.setter
+    def readout_errs(self, errs: List[float]):
+        self._readout_errs = errs
+        self._mean_rd_errs = np.average(errs)
+
+    @property
+    def alpha(self):
+        return self._alpha
+
+    @alpha.setter
+    def alpha(self, val):
+        self._alpha = val
+
+    @property
+    def beta(self):
+        return self._beta
+
+    @beta.setter
+    def beta(self, val):
+        self._beta = val
+
     def _get_utilities(self):
         """Compute utility for each vertex
         utility = (number of links)/(sum of link errors)
@@ -199,12 +236,12 @@ class FrpPartitioner(BasePartitioner):
         if self._graph is None:
             raise ValueError("Please first set the graph of FrpPartitioner")
 
-        utility = []
+        self._utilities = []
         for v in self._graph:
             n_links = sum(1 for l in v if l > 0)
             sum_err = sum(v)
-            utility.append(n_links / sum_err)
-        return utility
+            self._utilities.append(n_links / sum_err)
+        return self._utilities
 
     def _bfs_single_part(self,
                          root: int,
@@ -240,35 +277,52 @@ class FrpPartitioner(BasePartitioner):
                 break
         return part
     
-    def _get_ranks(self,
-                   utilities: List[Any]):
-        """Rank the vertexes in order of utility
-        Args
-            utilities (List): List of utilities, the index is the vertex id
+    def _get_ranks(self):
+        """Rank the vertexes in order of utility"""
+        self._ranks = OrderedDict()
+        for vertex, utility in enumerate(self._utilities):
+            self._ranks[vertex] = utility
+        return self._ranks
+
+    def _get_levels(self):
+        """Partition the vertexes (physical qubits) into high, medium, low,
+        3 levels based on utilities. 
+        Here we assume it is a simple splict
         """
-        ranks = OrderedDict()
-        for vertex, utility in enumerate(utilities):
-            ranks[vertex] = utility
-        return ranks
+        vertexes = list(self._ranks.keys())
+        return [set(l) for l in split_list(vertexes, self._NUM_LEVELS)]
 
     def _get_root(self,
-                  ranks: OrderedDict,
-                  alpha: float,
-                  beta: float):
+                  ranks: OrderedDict):
         """Find root node to generate a subgraph
         A root with good quality should satisfy:
         1. alpha percent of root’s neighbors have high utility
         2. beta percent of nodes including root have measurement
            errors lower than avg measurement error
         """
+        if len(self._ranks) == 0:
+            raise ValueError("Please first calculate ranks!")
+        
+        if not isinstance(self._graph, np.ndarray):
+            raise ValueError("Please first set graph!")
+        
+        root = 0
         for v, _ in ranks.items():
             if v not in self._visited:
+                num_neighbors = sum([1 for n in self._graph[v] if n > 0])
+                num_valid_nbs = sum([1 for n in self._graph[v] if n in self._levels[0]])
+                if num_valid_nbs/num_neighbors < self._alpha:
+                    continue
+                num_valid_rds = sum([1 if self._readout_errs[v] >= self._mean_rd_errs else 0]) +\
+                                sum([1 for i,_ in enumerate(self._graph[v]) if self._readout_errs[i] >= self._mean_rd_errs])
+                if num_valid_rds/(num_neighbors+1) < self._beta:
+                    continue
+                root = v
                 break
+        return root
 
     def partition(self, 
-                  sub_size: int,
-                  alpha: float,
-                  beta: float) -> List[Any]:
+                  sub_size: int) -> List[Any]:
         """Implementation of Fair and Reliable Partitioning
         See reference Algorithm. 1
         Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
@@ -284,10 +338,13 @@ class FrpPartitioner(BasePartitioner):
             raise ValueError("Please first set the graph of FrpPartitioner")
 
         # Get utility list
-        utilities = self._get_utilities()
+        self._get_utilities()
 
         # Rank vertexes (physical qubits) in order of utility
-        ranks = self._get_ranks(utilities)
+        ranks = self._get_ranks()
+
+        # Partition physical qubits into 3 levels based on rank
+        self._get_levels()
 
         # Generate subgraph
         part = []
@@ -314,47 +371,4 @@ class ParitionProvider:
     def get_partioner(cls, name: str):
         return cls._partitions[name]()
 
-
-
-# ChatGPT generated solution
-def partition_graph(graph, subgraph_size):
-    visited = [False] * len(graph)
-    subgraphs = []
-    num_nodes = len(graph)
-    subgraph_count = num_nodes // subgraph_size
-
-    # Create subgraphs
-    for i in range(subgraph_count):
-        start_node = i * subgraph_size
-        subgraph = []
-        while start_node < num_nodes and visited[start_node]:
-            start_node += 1
-        if start_node == num_nodes:
-            break
-        dfs(start_node, graph, visited, subgraph, subgraph_size)
-        subgraphs.append(subgraph)
-
-    # Handle any remaining nodes that were not partitioned
-    remaining_nodes = [i for i in range(num_nodes) if not visited[i]]
-    remaining_index = 0
-    for i in range(len(subgraphs)):
-        while len(subgraphs[i]) < subgraph_size and remaining_index < len(remaining_nodes):
-            node = remaining_nodes[remaining_index]
-            if all(n in subgraphs[i] for n in graph[node]):
-                subgraphs[i].append(node)
-                visited[node] = True
-                remaining_index += 1
-            else:
-                remaining_index += 1
-
-    return subgraphs
-
-def dfs(node, graph, visited, subgraph, subgraph_size):
-    visited[node] = True
-    subgraph.append(node)
-    if len(subgraph) == subgraph_size:
-        return
-    for neighbor in graph[node]:
-        if not visited[neighbor] and len(subgraph) < subgraph_size and all(n in subgraph for n in graph[neighbor]):
-            dfs(neighbor, graph, visited, subgraph, subgraph_size)
 

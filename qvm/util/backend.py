@@ -34,10 +34,28 @@ class BaseBackendGraphExtractor:
         return coupling_map_to_graph(cm)
 
 
-class NormalBackendGraphExtractor(BaseBackendGraphExtractor):
+class BackendAdjMatGraphExtractor(BaseBackendGraphExtractor):
+    """Read the calibration data of two-qubit gates and transform to adjacency matrix 
+    """
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
+        self._conf = self._backend.configuration()
+        self._props = self._backend.properties()
+
+    def get_readout_errs(self) -> List[float]:
+        """Transform qubit property to readout error List
+        Return
+            List[float]: A list of readout errors, of which the index is 
+                the physical qubit id
+        """
+        rd_errs = [] # Readout error list
+        props_dict = self._props.to_dict()
+        for qubit in props_dict["qubits"]:
+            for prop in qubit:
+                if prop['name'] == 'readout_error':
+                    rd_errs.append(prop['value'])
+        return rd_errs
 
     def extract(self) -> np.ndarray:
         """ Transform backend configuration to error map

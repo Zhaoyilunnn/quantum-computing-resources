@@ -12,6 +12,7 @@ from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.circuit import BaseReliabilityCalculator
 from qvm.util.backend import *
+from qvm.util.misc import *
 from qvm.test.base import *
 
 from util import *
@@ -221,7 +222,12 @@ class TestCircuitUtil(BaseTest):
 class TestNormalBackendGraphExtractor(BaseTest):
 
     def setup_class(self):
-        self._extractor = NormalBackendGraphExtractor(self._backend) 
+        self._extractor = BackendAdjMatGraphExtractor(self._backend) 
+
+    def test_get_readout_errs(self):
+        print("================ Test get readout errors =====================")
+        rd_errs = self._extractor.get_readout_errs()
+        print(rd_errs)
 
     def test_graph_extraction(self):
         print("================ Test graph extraction =====================")
@@ -258,18 +264,25 @@ class TestBfsPartitioner(BaseTest):
 class TestFrpPartitioner(BaseTest):
 
     def setup_class(self):
-        self._extractor = NormalBackendGraphExtractor(self._backend)
+        self._extractor = BackendAdjMatGraphExtractor(self._backend)
         self._partitioner = ParitionProvider.get_partioner("frp")
+        graph = self._extractor.extract()
+        self._partitioner.graph = graph
 
     def test_get_utilities(self):
-        graph = self._extractor.extract()
-        utility = self._partitioner._get_utilities(graph)
+        utility = self._partitioner._get_utilities()
         print(utility)
 
     def test_partition(self):
-        graph = self._extractor.extract() 
-        self._partitioner.graph = graph
         part = self._partitioner.partition(4, 0, 0)
         part1 = self._partitioner.partition(4, 0, 0)
         print(part)
         print(part1)
+
+
+class TestUtilMisc(BaseTest):
+
+    def test_split_list(self):
+        lst = [1,2,3,4,5,6,7,8,9,10]
+        res = split_list(lst, 3)
+        assert res == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]] 

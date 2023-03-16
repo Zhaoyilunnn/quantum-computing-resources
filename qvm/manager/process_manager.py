@@ -7,7 +7,7 @@ from qiskit.providers import BackendV1
 from qvm.model.executable import BaseExecutable, Process
 
 from typing import List
-from qvm.util.backend import NormalBackendGraphExtractor
+from qvm.util.backend import BackendAdjMatGraphExtractor
 
 from qvm.util.circuit import circuit_virtual_to_real
 
@@ -213,7 +213,7 @@ class FrpProcessManager(BaselineProcessManager):
     """
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
-        self._extractor = NormalBackendGraphExtractor(self._backend)
+        self._extractor = BackendAdjMatGraphExtractor(self._backend)
         self._partitioner = None
 
     def _merge_circuits(self, circuits: List[QuantumCircuit]) -> QuantumCircuit:
