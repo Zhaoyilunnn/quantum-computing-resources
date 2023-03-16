@@ -1,16 +1,10 @@
-from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile, schedule
 from qiskit.providers.fake_provider import *
-from qiskit.quantum_info import state_fidelity
 
-from qiskit_aer import Aer 
-from qiskit_aer.noise import NoiseModel
 #from qiskit import Aer
 #from qiskit.providers.aer.noise import NoiseModel
 
 from qvm.manager.backend_manager import * 
-from qvm.manager.process_manager import *
-from qvm.util.circuit import BaseReliabilityCalculator
 from qvm.util.backend import *
 from qvm.util.misc import *
 from qvm.test.base import *
@@ -205,91 +199,3 @@ class TestProcessManager(BaseTest):
         assert sch_original.instructions == sch_merged.instructions
 
 
-class TestCircuitUtil(BaseTest):
-
-    _calculator = BaseReliabilityCalculator()
-
-    def test_calc_fidelity(self):
-
-        print("================ Test fidelity calculation =====================")
-        circ = self.create_dummy_bell_state((0,1))
-        counts_noise = self._backend.run(circ).result().get_counts(circ)
-        print(counts_noise) 
-        fidelity = self._calculator.calc_fidelity(circ, counts_noise)
-        print("Test fidelity: {}".format(fidelity))
-
-
-class TestNormalBackendGraphExtractor(BaseTest):
-
-    def setup_class(self):
-        self._extractor = BackendAdjMatGraphExtractor(self._backend) 
-
-    def test_get_readout_errs(self):
-        print("================ Test get readout errors =====================")
-        rd_errs = self._extractor.get_readout_errs()
-        print(rd_errs)
-
-    def test_graph_extraction(self):
-        print("================ Test graph extraction =====================")
-        graph = self._extractor.extract()
-        print(graph)
-
-        assert graph[6,7] == 0.01431875092381174
-        
-
-class TestKlPartitioner(BaseTest):
-
-    def setup_class(self):
-        self._extractor = NormalBackendNxGraphExtractor(self._backend)
-        self._partitioner = ParitionProvider.get_partioner("kl")
-
-    def test_graph_partition(self):
-        graph = self._extractor.extract()
-        parts = self._partitioner.partition(graph)
-        print(parts)
-
-
-class TestBfsPartitioner(BaseTest):
-
-    def setup_class(self):
-        self._extractor = BaseBackendGraphExtractor(self._backend)
-        self._partitioner = ParitionProvider.get_partioner("bfs")
-
-    def test_graph_partition(self):
-        graph = self._extractor.extract()
-        parts = self._partitioner.partition(graph)
-        print(parts)
-
-
-class TestFrpPartitioner(BaseTest):
-
-    def setup_class(self):
-        self._extractor = BackendAdjMatGraphExtractor(self._backend)
-        self._partitioner = ParitionProvider.get_partioner("frp")
-        graph = self._extractor.extract()
-        self._partitioner.graph = graph
-
-    def test_get_utilities(self):
-        utility = self._partitioner._get_utilities()
-        print(utility)
-
-    def test_get_levels(self):
-        utility = self._partitioner._get_utilities()
-        ranks = self._partitioner._get_ranks()
-        levels = self._partitioner._get_levels()
-        print(ranks)
-        print(levels)
-
-    def test_partition(self):
-        part = self._partitioner.partition(4)
-        part1 = self._partitioner.partition(4)
-        print(part)
-        print(part1)
-
-
-class TestUtilMisc(BaseTest):
-
-    def test_split_list(self):
-        lst = [1,2,3,4,5,6,7,8,9,10]
-        res = split_list(lst, 3)
-        assert res == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]] 

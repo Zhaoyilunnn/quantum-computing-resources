@@ -2,7 +2,6 @@ import networkx as nx
 import numpy as np
 
 from qiskit.providers.backend import BackendV1
-from qiskit.providers.models import BackendConfiguration, BackendProperties
 
 from typing import List
 

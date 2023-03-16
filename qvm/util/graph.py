@@ -182,6 +182,11 @@ class FrpPartitioner(BasePartitioner):
                  errs: Optional[List[float]]=None) -> None:
         super().__init__()
         self._NUM_LEVELS = 3
+        #alpha (float): alpha percent of root's neighbors
+        #    should have `high` utility
+        #beta (float): beta percent of nodes including root
+        #    should have measurement errors lower than avg 
+        #    measurement error
         self._alpha, self._beta = 0, 0
         self._visited = set()
         self._utilities = []
@@ -331,11 +336,6 @@ class FrpPartitioner(BasePartitioner):
         Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
         Args:
             sub_size: Size of subgraph
-            alpha (float): alpha percent of root's neighbors
-                should have `high` utility
-            beta (float): beta percent of nodes including root
-                should have measurement errors lower than avg 
-                measurement error
         """ 
         if self._graph is None:
             raise ValueError("Please first set the graph of FrpPartitioner")
