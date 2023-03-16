@@ -279,9 +279,9 @@ class FrpPartitioner(BasePartitioner):
     
     def _get_ranks(self):
         """Rank the vertexes in order of utility"""
-        self._ranks = OrderedDict()
-        for vertex, utility in enumerate(self._utilities):
-            self._ranks[vertex] = utility
+        indexed_list = [(i,v) for i, v in enumerate(self._utilities)]
+        sorted_list = sorted(indexed_list, key=lambda x: x[1], reverse=True)
+        self._ranks = OrderedDict([(i[0], i[1]) for i in sorted_list])
         return self._ranks
 
     def _get_levels(self):
@@ -289,6 +289,9 @@ class FrpPartitioner(BasePartitioner):
         3 levels based on utilities. 
         Here we assume it is a simple splict
         """
+        if len(self._ranks) == 0:
+            raise ValueError("Please calculate ranks first!")
+
         vertexes = list(self._ranks.keys())
         return [set(l) for l in split_list(vertexes, self._NUM_LEVELS)]
 

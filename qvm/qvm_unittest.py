@@ -273,9 +273,16 @@ class TestFrpPartitioner(BaseTest):
         utility = self._partitioner._get_utilities()
         print(utility)
 
+    def test_get_levels(self):
+        utility = self._partitioner._get_utilities()
+        ranks = self._partitioner._get_ranks()
+        levels = self._partitioner._get_levels()
+        print(ranks)
+        print(levels)
+
     def test_partition(self):
-        part = self._partitioner.partition(4, 0, 0)
-        part1 = self._partitioner.partition(4, 0, 0)
+        part = self._partitioner.partition(4)
+        part1 = self._partitioner.partition(4)
         print(part)
         print(part1)
 
