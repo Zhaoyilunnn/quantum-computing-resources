@@ -53,6 +53,9 @@ class TestFrpPartitioner(BaseTest):
         self._partitioner = ParitionProvider.get_partioner("frp")
         graph = self._extractor.extract()
         self._partitioner.graph = graph
+        readout_errs = self._extractor.get_readout_errs()
+        #print(readout_errs)
+        self._partitioner.readout_errs = readout_errs
 
     def test_get_utilities(self):
         utility = self._partitioner._get_utilities()
@@ -64,6 +67,11 @@ class TestFrpPartitioner(BaseTest):
         levels = self._partitioner._get_levels()
         print(ranks)
         print(levels)
+
+    def test_get_root(self):
+        self._partitioner.initialize()
+        root0 = self._partitioner._get_root()
+        print(root0)
 
     def test_partition(self, alpha, beta):
         self._partitioner.alpha = alpha

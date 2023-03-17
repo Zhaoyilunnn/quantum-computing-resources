@@ -1,3 +1,5 @@
+import os
+
 from qiskit.circuit import QuantumCircuit
 from qiskit.circuit.random import random_circuit
 from qiskit.compiler import transpile
@@ -26,10 +28,20 @@ class BaseTest:
     #_sv_sim = Aer.get_backend("aer_simulator")
     _fid_calculator = BaseReliabilityCalculator()
 
-    def get_small_bench_circ(self, bench_name):
+    def get_small_bench_circ(self, 
+                             bench_name,
+                             qasm_path: Optional[str]=None):
         circ = None
         if bench_name == "random":
             circ = random_circuit(4, 10, measure=True) 
+        elif bench_name == "qasm":
+            if not isinstance(qasm_path, str):
+                raise ValueError("Qasm file path shoud be a string")
+            if not os.path.isfile(qasm_path):
+                raise ValueError("Please specify qasm file path!")
+            circ = QuantumCircuit().from_qasm_file(qasm_path)
+        else:
+            raise NotImplementedError("Unsupported bench type!")
 
         return circ
         

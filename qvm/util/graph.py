@@ -3,6 +3,7 @@ import numpy as np
 
 from collections import OrderedDict
 from networkx.algorithms.community import kernighan_lin_bisection
+from qvm.exceptions import *
 from qvm.util.misc import split_list
 
 from typing import Any, Dict, List, Optional
@@ -177,10 +178,19 @@ class BfsPartitioner(BasePartitioner):
 
 class FrpPartitioner(BasePartitioner):
 
+    """Implementation of MICRO-2019: A Case for Multi-Programming Quantum Computers
+
+    Algorithm 1: Fair and Reliable Partitioning (FRP)
+    
+    Reference: https://dl.acm.org/doi/10.1145/3352460.3358287
+    """
+
     def __init__(self,
                  graph: Optional[np.ndarray]=None,
                  errs: Optional[List[float]]=None) -> None:
         super().__init__()
+
+        # Initialize some parameters for partitioning
         self._NUM_LEVELS = 3
         #alpha (float): alpha percent of root's neighbors
         #    should have `high` utility
@@ -188,6 +198,8 @@ class FrpPartitioner(BasePartitioner):
         #    should have measurement errors lower than avg 
         #    measurement error
         self._alpha, self._beta = 0, 0
+        self._is_low_cmr = False
+
         self._visited = set()
         self._utilities = []
         self._ranks = OrderedDict() 
@@ -200,6 +212,14 @@ class FrpPartitioner(BasePartitioner):
             self._readout_errs = errs
         if graph:
             self._graph = graph
+
+    @property
+    def is_low_cmr(self):
+        return self._is_low_cmr
+
+    @is_low_cmr.setter
+    def is_low_cmr(self, is_low_cmr: bool):
+        self._is_low_cmr = is_low_cmr
 
     @property
     def graph(self):
@@ -298,36 +318,69 @@ class FrpPartitioner(BasePartitioner):
             raise ValueError("Please calculate ranks first!")
 
         vertexes = list(self._ranks.keys())
-        return [set(l) for l in split_list(vertexes, self._NUM_LEVELS)]
+        self._levels = [set(l) for l in split_list(vertexes, self._NUM_LEVELS)]
+        return self._levels
 
-    def _get_root(self,
-                  ranks: OrderedDict):
+    def _get_root(self):
         """Find root node to generate a subgraph
         A root with good quality should satisfy:
         1. alpha percent of root’s neighbors have high utility
         2. beta percent of nodes including root have measurement
            errors lower than avg measurement error
+        Return:
+            int: Id of root
         """
         if len(self._ranks) == 0:
             raise ValueError("Please first calculate ranks!")
+
+        if len(self._levels) == 0:
+            raise ValueError("Please first calculate levels")
         
         if not isinstance(self._graph, np.ndarray):
             raise ValueError("Please first set graph!")
         
-        root = 0
-        for v, _ in ranks.items():
+        root = -1
+        for v, _ in self._ranks.items():
             if v not in self._visited:
+                # See Alg. 1 >> line 14-15: If CMR is low, exclude nodes with large measurement
+                # errors. Here if CMR is low, we will not consider vertex with measurement error
+                # larger than average measurement error
+                is_cur_high_rd = 1 if self._readout_errs[v] >= self._mean_rd_errs else 0
+                if is_cur_high_rd and self._is_low_cmr:
+                    continue
+                
+                # See Alg. 1 >> line 5-6: A valid root should have alpha percent of neighbors
+                # with high utility, and beta percent of nodes have measurement errors lower 
+                # than average measurement errors
                 num_neighbors = sum([1 for n in self._graph[v] if n > 0])
                 num_valid_nbs = sum([1 for n in self._graph[v] if n in self._levels[0]])
                 if num_valid_nbs/num_neighbors < self._alpha:
                     continue
-                num_valid_rds = sum([1 if self._readout_errs[v] >= self._mean_rd_errs else 0]) +\
-                                sum([1 for i,_ in enumerate(self._graph[v]) if self._readout_errs[i] >= self._mean_rd_errs])
+                num_valid_rds = (1 - is_cur_high_rd) +\
+                                sum([1 for i,_ in enumerate(self._graph[v]) \
+                                        if self._readout_errs[i] < self._mean_rd_errs])
                 if num_valid_rds/(num_neighbors+1) < self._beta:
                     continue
+
+                # Root is found
                 root = v
                 break
+        if root < 0:
+            raise QvmError("FRP Partition: No root available!")
         return root
+
+    def initialize(self):
+        """Initialize some intermediate reusable properties of the graph
+        1. Initialize utilities
+        2. Initialize ranks
+        3. Initialize levels
+        """
+        if not isinstance(self._graph, np.ndarray):
+            raise ValueError("Please first set the backend graph")
+
+        self._get_utilities()
+        self._get_ranks()
+        self._get_levels()
 
     def partition(self, 
                   sub_size: int) -> List[Any]:
