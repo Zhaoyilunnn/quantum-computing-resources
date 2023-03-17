@@ -311,6 +311,8 @@ class FrpPartitioner(BasePartitioner):
                     # if current program is low CMR (Alg. 1 >> line 14-15)
                     need_filter_high_mer, _ = self._filter_high_mer(n)
                     if need_filter_high_mer:
+                        warn("Find high measurement error node:{} "\
+                                "when growing from root:{}".format(n, root))
                         continue
 
                     if n not in self._visited:
@@ -429,10 +431,11 @@ class FrpPartitioner(BasePartitioner):
                 part = self._bfs_single_part(root, sub_size)
                 break
             except QvmError:
+                warn("Failed to grow a subgraph from root: {}, "\
+                        "current visited status: {}".format(root, self._visited)) 
                 self._visited = cur_visited # Reset visited status
                 self._visited.add(root) # But root should be visited
                 #logger.warning("Failed to grow a subgraph from root: {}".format(root)) 
-                warn("Failed to grow a subgraph from root: {}".format(root)) 
         return part
 
 
