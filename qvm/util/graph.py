@@ -1,6 +1,7 @@
 import copy
 import logging
 import numpy as np
+import sys
 
 from collections import OrderedDict
 from logging import warning 
@@ -300,26 +301,31 @@ class FrpPartitioner(BasePartitioner):
             layer_size = len(que)
             for _ in range(layer_size):
                 front = que[0]
-                part.append(front)
-                self._visited.add(front)
-                count += 1
-                if count == sub_size:
-                    break
-                neighbors = [i for i, e in enumerate(self._graph[front]) if e > 0 ]
-                for n in neighbors:
-                    # Here we also need to filter high measurement error nodes
-                    # if current program is low CMR (Alg. 1 >> line 14-15)
-                    need_filter_high_mer, _ = self._filter_high_mer(n)
-                    if need_filter_high_mer:
-                        warn("Find high measurement error node:{} "\
-                                "when growing from root:{}".format(n, root))
-                        continue
+                # Here we also need to filter high measurement error nodes
+                # if current program is low CMR (Alg. 1 >> line 14-15)
+                need_filter_high_mer, _ = self._filter_high_mer(front)
+                if need_filter_high_mer:
+                    logging.warning("Find high measurement error node:{} "\
+                            "when growing from root:{}".format(front, root))
+                else:
+                    # Add valid node to subgraph
+                    part.append(front)
+                    self._visited.add(front)
+                    count += 1
+                    if count == sub_size:
+                        break
 
-                    if n not in self._visited:
-                        que.append(n)
+                    # Put neighbors to next layer
+                    neighbors = [i for i, e in enumerate(self._graph[front]) if e > 0 ]
+                    for n in neighbors:
+                        if n not in self._visited:
+                            que.append(n)
                 que.pop(0)
+
             if count == sub_size:
                 break
+        logging.info("Currently growed subgraph: {}, "\
+                "current visited status: {}".format(part, self._visited))
         if count < sub_size:
             raise QvmError("Cannot grow a graph "\
                     "that satisfy the subgraph size from current root: {}".format(root))
@@ -375,6 +381,8 @@ class FrpPartitioner(BasePartitioner):
                 # larger than average measurement error
                 need_filter_high_mer, is_cur_high_rd = self._filter_high_mer(v)
                 if need_filter_high_mer:
+                    logging.warning("Node:{} is not valid due to "\
+                            "high measurement error:{}".format(v, self._readout_errs[v]))
                     continue
                 
                 # See Alg. 1 >> line 5-6: A valid root should have alpha percent of neighbors
@@ -395,6 +403,7 @@ class FrpPartitioner(BasePartitioner):
                 break
         if root < 0:
             raise QvmError("FRP Partition: No root available!")
+        logging.info("Find root:{} to start grow a subgraph".format(root))
         return root
 
     def initialize(self):
@@ -431,11 +440,10 @@ class FrpPartitioner(BasePartitioner):
                 part = self._bfs_single_part(root, sub_size)
                 break
             except QvmError:
-                warn("Failed to grow a subgraph from root: {}, "\
+                logging.warning("Failed to grow a subgraph from root: {}, "\
                         "current visited status: {}".format(root, self._visited)) 
                 self._visited = cur_visited # Reset visited status
                 self._visited.add(root) # But root should be visited
-                #logger.warning("Failed to grow a subgraph from root: {}".format(root)) 
         return part
 
 
