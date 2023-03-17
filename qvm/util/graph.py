@@ -1,12 +1,21 @@
 import copy
+import logging
 import numpy as np
 
 from collections import OrderedDict
+from logging import warning 
+from warnings import warn
 from networkx.algorithms.community import kernighan_lin_bisection
 from qvm.exceptions import *
 from qvm.util.misc import split_list
 
 from typing import Any, Dict, List, Optional
+
+# Logging configuration
+#logging.basicConfig(filename='qvm_util_graph.log', encoding='utf-8', level=logging.DEBUG,
+#                format='%(asctime)s %(message)s')
+#logger = logging.getLogger("qvm_util_graph_logger")
+
 
 def coupling_map_to_nodes(coupling_map: List[List[int]]) -> List[int]:
     """
@@ -212,6 +221,9 @@ class FrpPartitioner(BasePartitioner):
             self._readout_errs = errs
         if graph:
             self._graph = graph
+        
+        # When called initialize() explicitly, this flag will be set to True
+        self._init = False
 
     @property
     def is_low_cmr(self):
@@ -295,11 +307,20 @@ class FrpPartitioner(BasePartitioner):
                     break
                 neighbors = [i for i, e in enumerate(self._graph[front]) if e > 0 ]
                 for n in neighbors:
+                    # Here we also need to filter high measurement error nodes
+                    # if current program is low CMR (Alg. 1 >> line 14-15)
+                    need_filter_high_mer, _ = self._filter_high_mer(n)
+                    if need_filter_high_mer:
+                        continue
+
                     if n not in self._visited:
                         que.append(n)
                 que.pop(0)
             if count == sub_size:
                 break
+        if count < sub_size:
+            raise QvmError("Cannot grow a graph "\
+                    "that satisfy the subgraph size from current root: {}".format(root))
         return part
     
     def _get_ranks(self):
@@ -320,6 +341,11 @@ class FrpPartitioner(BasePartitioner):
         vertexes = list(self._ranks.keys())
         self._levels = [set(l) for l in split_list(vertexes, self._NUM_LEVELS)]
         return self._levels
+
+    def _filter_high_mer(self, v: int):
+        """Check if we need to filter a node with high measurement error"""
+        is_cur_high_rd = 1 if self._readout_errs[v] >= self._mean_rd_errs else 0
+        return is_cur_high_rd and self._is_low_cmr, is_cur_high_rd
 
     def _get_root(self):
         """Find root node to generate a subgraph
@@ -345,8 +371,8 @@ class FrpPartitioner(BasePartitioner):
                 # See Alg. 1 >> line 14-15: If CMR is low, exclude nodes with large measurement
                 # errors. Here if CMR is low, we will not consider vertex with measurement error
                 # larger than average measurement error
-                is_cur_high_rd = 1 if self._readout_errs[v] >= self._mean_rd_errs else 0
-                if is_cur_high_rd and self._is_low_cmr:
+                need_filter_high_mer, is_cur_high_rd = self._filter_high_mer(v)
+                if need_filter_high_mer:
                     continue
                 
                 # See Alg. 1 >> line 5-6: A valid root should have alpha percent of neighbors
@@ -381,6 +407,7 @@ class FrpPartitioner(BasePartitioner):
         self._get_utilities()
         self._get_ranks()
         self._get_levels()
+        self._init = True
 
     def partition(self, 
                   sub_size: int) -> List[Any]:
@@ -390,24 +417,22 @@ class FrpPartitioner(BasePartitioner):
         Args:
             sub_size: Size of subgraph
         """ 
-        if self._graph is None:
-            raise ValueError("Please first set the graph of FrpPartitioner")
+        if not self._init:
+            self.initialize()
 
-        # Get utility list
-        self._get_utilities()
-
-        # Rank vertexes (physical qubits) in order of utility
-        ranks = self._get_ranks()
-
-        # Partition physical qubits into 3 levels based on rank
-        self._get_levels()
-
-        # Generate subgraph
         part = []
-        for v, _ in ranks.items():
-            if v not in self._visited:
-                part = self._bfs_single_part(v, sub_size)
+        while len(self._visited) < self._graph.shape[0]:
+            root = self._get_root()
+            # Keep current status of visited
+            cur_visited = copy.deepcopy(self._visited)
+            try:
+                part = self._bfs_single_part(root, sub_size)
                 break
+            except QvmError:
+                self._visited = cur_visited # Reset visited status
+                self._visited.add(root) # But root should be visited
+                #logger.warning("Failed to grow a subgraph from root: {}".format(root)) 
+                warn("Failed to grow a subgraph from root: {}".format(root)) 
         return part
 
 
