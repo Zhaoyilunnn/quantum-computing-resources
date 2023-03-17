@@ -24,6 +24,25 @@ def kl_divergence(p, q):
     return np.sum(np.where(p != 0, p * np.log(p / q), 0))
 
 
+def calc_cmr(circuit: QuantumCircuit):
+    """Calculate Compute to Measure Ratio (CMR) of a circuit
+    The definition of CMR is very vague in original ParitionProvider
+    According to the relevant statement:
+        "The algorithm optimizes for gate error rates over measurement errors 
+        if a program has large number of 2-qubit gate operations 
+        using the compute to measurement ratio"
+    And the pseudocode (Algorithm. 3, line 16):
+        CMR_i = Number of operations 
+    Here we calculate CMR using (Number of 2-qubit operations)/(number of qubits)
+    Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
+    """
+    num_2q = 0
+    for inst in circuit.data:
+        if len(inst.qubits) >= 2:
+            num_2q += 1
+    return num_2q / circuit.num_qubits
+
+
 #TODO: Deprecate this, using qiskit circuit compose is enough
 def relocate_circuit(circuit: QuantumCircuit,
                      locations: List[int],
