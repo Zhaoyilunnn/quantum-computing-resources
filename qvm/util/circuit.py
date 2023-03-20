@@ -24,6 +24,31 @@ def kl_divergence(p, q):
     return np.sum(np.where(p != 0, p * np.log(p / q), 0))
 
 
+def merge_circuits(circuits: List[QuantumCircuit]) -> QuantumCircuit:
+    """Simple method to merge all circuits 
+
+    Args
+        circuits: Circuits to be merged, here we assume that the 
+            circuit is logical circuit, i.e., before transpilation
+            thus have same number of clbits and qubits
+    """
+
+    if len(circuits) <= 1:
+        raise ValueError("Please merge at least two circuits")
+
+    sum_qubits = sum([circ.num_qubits for circ in circuits])
+    circ_merged = QuantumCircuit(sum_qubits, sum_qubits)
+    base = 0
+
+    for circ in circuits:
+        nq = circ.num_qubits
+        locations = [i+base for i in range(nq)]
+        circ_merged.compose(circ, qubits=locations, clbits=locations, inplace=True)
+        base += nq
+
+    return circ_merged
+
+
 def calc_cmr(circuit: QuantumCircuit):
     """Calculate Compute to Measure Ratio (CMR) of a circuit
     The definition of CMR is very vague in original ParitionProvider

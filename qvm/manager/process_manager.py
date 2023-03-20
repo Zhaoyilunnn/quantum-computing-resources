@@ -9,7 +9,10 @@ from qvm.model.executable import BaseExecutable, Process
 from typing import List
 from qvm.util.backend import BackendAdjMatGraphExtractor
 
-from qvm.util.circuit import circuit_virtual_to_real
+from qvm.util.circuit import calc_cmr, \
+        circuit_virtual_to_real, \
+        merge_circuits
+from qvm.util.graph import FrpPartitioner
 
 
 class BaseProcessManager:
@@ -23,28 +26,7 @@ class BaseProcessManager:
 
     def _merge_circuits(self, 
             circuits: List[QuantumCircuit]) -> QuantumCircuit:
-        """Simple method to merge all circuits 
-
-        Args
-            circuits: Circuits to be merged, here we assume that the 
-                circuit is logical circuit, i.e., before transpilation
-                thus have same number of clbits and qubits
-        """
-
-        if len(circuits) <= 1:
-            raise ValueError("Please merge at least two circuits")
-
-        sum_qubits = sum([circ.num_qubits for circ in circuits])
-        circ_merged = QuantumCircuit(sum_qubits, sum_qubits)
-        base = 0
-
-        for circ in circuits:
-            nq = circ.num_qubits
-            locations = [i+base for i in range(nq)]
-            circ_merged.compose(circ, qubits=locations, clbits=locations, inplace=True)
-            base += nq
-
-        return circ_merged
+        return merge_circuits(circuits)
 
     def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
         """
@@ -214,9 +196,22 @@ class FrpProcessManager(BaselineProcessManager):
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
         self._extractor = BackendAdjMatGraphExtractor(self._backend)
-        self._partitioner = None
+        graph = self._extractor.extract()
+        rd_errs = self._extractor.get_readout_errs()
+        self._partitioner = FrpPartitioner(graph=graph, errs=rd_errs)
 
-    def _merge_circuits(self, circuits: List[QuantumCircuit]) -> QuantumCircuit:
+    #def _merge_circuits(self, circuits: List[QuantumCircuit]) -> QuantumCircuit:
+    #    pass
+
+    def _gen_partition(self, circ: QuantumCircuit):
+        """Generate partition for single circuit"""
+        cmr = calc_cmr(circ)
+        # TODO: set is_low_cmr flag
+        return self._partitioner.partition(circ.num_qubits)
+
+    def run(self,
+            circ_list: List[QuantumCircuit],
+            **kwargs):
         pass
 
 

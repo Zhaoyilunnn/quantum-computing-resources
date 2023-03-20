@@ -219,7 +219,8 @@ class FrpPartitioner(BasePartitioner):
         self._mean_rd_errs = 0  # Average readout errors
         if errs:
             self._readout_errs = errs
-        if graph:
+            self._mean_rd_errs = np.average(errs)
+        if isinstance(graph, np.ndarray):
             self._graph = graph
         
         # When called initialize() explicitly, this flag will be set to True

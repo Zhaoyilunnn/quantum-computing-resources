@@ -1,10 +1,10 @@
 import logging
 
 
-# Logging configuration
-logging.basicConfig(filename='qvm_test.log', encoding='utf-8', level=logging.DEBUG,
-                format='%(asctime)s %(message)s')
-logger = logging.getLogger("qvm_pytest_logger")
+## Logging configuration
+#logging.basicConfig(filename='qvm_test.log', encoding='utf-8', level=logging.DEBUG,
+#                format='%(asctime)s %(message)s')
+#logger = logging.getLogger("qvm_pytest_logger")
 
 
 def pytest_addoption(parser):
