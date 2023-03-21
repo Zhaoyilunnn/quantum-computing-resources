@@ -47,3 +47,21 @@ class TestUtilCircuit(BaseTest):
                  labels, 
                  figname="cmr_multi_benches.png",
                  figsize=(20,6)) 
+
+    def test_calc_cmr_multi_benches_n4(self):
+        cmrs = []
+        labels = []
+        for b in SMALL_BENCHES:
+            if not b.endswith("_n4"):
+                continue
+            try:
+                b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+            except Exception:
+                continue
+            cmrs.append(calc_cmr(circ))
+            labels.append(b)
+        plot_bar(cmrs, 
+                 labels, 
+                 figname="cmr_multi_benches_n4.png",
+                 figsize=(20,6)) 

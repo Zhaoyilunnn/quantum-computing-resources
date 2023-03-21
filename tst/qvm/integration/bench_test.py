@@ -76,6 +76,10 @@ class TestBench(BaseTest):
         compute units, a better implementation should be in FrpProcessManager->run() method
         """
         proc = FrpProcessManager(self._backend)
+        if "is_low_cmr" in kwargs:
+            is_low_cmr = kwargs["is_low_cmr"]
+            proc._partitioner.is_low_cmr = is_low_cmr
+
         part_list = [proc._gen_partition(circ) for circ in circ_list]
         cu_list = [self._backend_manager.extract_single_compute_unit(part) \
                 for part in part_list]
@@ -144,8 +148,45 @@ class TestBench(BaseTest):
                 fids_qvm.append(fid_qvm)
                 fids_frp.append(fid_frp)
                 labels.append(b)
-        print("Fid of QVM: {}".format("\t".join( [str(f) for f in fids_qvm] )))
-        print("Fid of FRP: {}".format("\t".join( [str(f) for f in fids_frp] )))
+        print("Fid of QVM:\t{}".format("\t".join( [str(f) for f in fids_qvm] )))
+        print("Fid of FRP:\t{}".format("\t".join( [str(f) for f in fids_frp] )))
+        print("Benches: {}".format("\t".join(labels)))
+        
+        plot_bar([fids_qvm, fids_frp],
+                 labels,
+                 data_labels=["QVM", "FRP"],
+                 figname="fid_qvm_frp_qasm_n4_two.png",
+                 figsize=(20,6))
+
+    def test_two_n4_qasm_bench_with_cmr(self):
+        """Test two 4-qubit programs, compare qvm and frp
+        Here we introduce CMR to graph partition in FRP
+        """
+        shots = 2**20
+        fids_qvm = []
+        fids_frp = []
+        labels = []
+        self._fid_calculator = KlReliabilityCalculator()
+        for b in SMALL_BENCHES:
+            if b.endswith("_n4"):
+                try:
+                    b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                    circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+                    circ_merged = merge_circuits([circ, circ])
+                    cmr = calc_cmr(circ)
+                    is_low_cmr = True if cmr < 10 else False
+                except Exception:
+                    continue
+                print("Bench Name: {}, is_low_cmr: {}, cmr: {}".format(b, is_low_cmr, cmr))
+                qvm_res = self.run_qvm([circ, circ], shots=shots)
+                frp_res = self.run_frp([circ, circ], shots=shots, is_low_cmr=is_low_cmr)
+                fid_qvm = self._fid_calculator.calc_fidelity(circ_merged, qvm_res.get_counts(), shots=shots)
+                fid_frp = self._fid_calculator.calc_fidelity(circ_merged, frp_res.get_counts(), shots=shots)
+                fids_qvm.append(fid_qvm)
+                fids_frp.append(fid_frp)
+                labels.append(b)
+        print("Fid of QVM:\t{}".format("\t".join( [str(f) for f in fids_qvm] )))
+        print("Fid of FRP:\t{}".format("\t".join( [str(f) for f in fids_frp] )))
         print("Benches: {}".format("\t".join(labels)))
         
         plot_bar([fids_qvm, fids_frp],
