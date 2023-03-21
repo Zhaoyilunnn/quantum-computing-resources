@@ -1,11 +1,6 @@
 from qiskit.providers.fake_provider import *
-from qiskit.quantum_info import state_fidelity
 
-from qiskit_aer import Aer 
-from qiskit_aer.noise import NoiseModel
-#from qiskit import Aer
-#from qiskit.providers.aer.noise import NoiseModel
-
+from qvm.constants import *
 from qvm.manager.backend_manager import * 
 from qvm.manager.process_manager import *
 from qvm.util.circuit import BaseReliabilityCalculator, KlReliabilityCalculator
@@ -13,6 +8,7 @@ from qvm.util.backend import *
 from qvm.test.base import *
 
 from util import *
+from util.plot import plot_bar
 
 
 class TestBench(BaseTest):
@@ -37,7 +33,7 @@ class TestBench(BaseTest):
 
         print("Fidelity Comparison\t{}\t{}".format(fid_qvm, fid_org))
 
-    def test_two_bench(self, bench):
+    def test_two_bench_native(self, bench):
         """Testing qvm vs. baseline (native QISKIT)"""
         shots = 2**20
 
@@ -67,7 +63,7 @@ class TestBench(BaseTest):
         #print(base_res.get_counts())
 
         # Calculate fidelity
-        #self._fid_calculator = KlReliabilityCalculator()
+        self._fid_calculator = KlReliabilityCalculator()
         fid_qvm = self._fid_calculator.calc_fidelity(circ, qvm_res.get_counts(), shots=shots)
         fid_base = self._fid_calculator.calc_fidelity(circ, base_res.get_counts(), shots=shots)
         print("Fid of qvm & baseline\t{}\t{}".format(fid_qvm, fid_base))
@@ -126,5 +122,34 @@ class TestBench(BaseTest):
         fid_frp = self._fid_calculator.calc_fidelity(circ, frp_res.get_counts(), shots=shots)
         print("Fid of qvm & frp\t{}\t{}".format(fid_qvm, fid_frp))
 
-
-
+    def test_two_n4_qasm_bench(self):
+        """Test two 4-qubit programs, compare qvm and frp"""
+        shots = 2**20
+        fids_qvm = []
+        fids_frp = []
+        labels = []
+        self._fid_calculator = KlReliabilityCalculator()
+        for b in SMALL_BENCHES:
+            if b.endswith("_n4"):
+                try:
+                    b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                    circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+                    circ_merged = merge_circuits([circ, circ])
+                except Exception:
+                    continue
+                qvm_res = self.run_qvm([circ, circ], shots=shots)
+                frp_res = self.run_frp([circ, circ], shots=shots)
+                fid_qvm = self._fid_calculator.calc_fidelity(circ_merged, qvm_res.get_counts(), shots=shots)
+                fid_frp = self._fid_calculator.calc_fidelity(circ_merged, frp_res.get_counts(), shots=shots)
+                fids_qvm.append(fid_qvm)
+                fids_frp.append(fid_frp)
+                labels.append(b)
+        print("Fid of QVM: {}".format("\t".join( [str(f) for f in fids_qvm] )))
+        print("Fid of FRP: {}".format("\t".join( [str(f) for f in fids_frp] )))
+        print("Benches: {}".format("\t".join(labels)))
+        
+        plot_bar([fids_qvm, fids_frp],
+                 labels,
+                 data_labels=["QVM", "FRP"],
+                 figname="fid_qvm_frp_qasm_n4_two.png",
+                 figsize=(20,6))
