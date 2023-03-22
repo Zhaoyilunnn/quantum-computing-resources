@@ -11,7 +11,7 @@ from qvm.util.backend import BackendAdjMatGraphExtractor
 
 from qvm.util.circuit import calc_cmr, \
         circuit_virtual_to_real, \
-        merge_circuits
+        merge_circuits, merge_circuits_v2
 from qvm.util.graph import FrpPartitioner
 
 
@@ -26,7 +26,7 @@ class BaseProcessManager:
 
     def _merge_circuits(self, 
             circuits: List[QuantumCircuit]) -> QuantumCircuit:
-        return merge_circuits(circuits)
+        return merge_circuits_v2(circuits)
 
     def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
         """

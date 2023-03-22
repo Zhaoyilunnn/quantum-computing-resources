@@ -1,6 +1,7 @@
 from qvm.util.circuit import \
         BaseReliabilityCalculator, \
-        calc_cmr
+        calc_cmr, \
+        merge_circuits_v2
 from qvm.constants import *
 from qvm.test.base import *
 from util.plot import plot_bar
@@ -65,3 +66,17 @@ class TestUtilCircuit(BaseTest):
                  labels, 
                  figname="cmr_multi_benches_n4.png",
                  figsize=(20,6)) 
+
+    def test_merge_circuits_v2(self):
+        b = "vqe_uccsd_n4"
+        b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+        circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+        print("clbits: {}".format(circ.clbits))
+        print("clbits: {}".format(circ.num_clbits))
+        print("qubits: {}".format(circ.qubits))
+        print(circ)
+        circ_merged = merge_circuits_v2([circ, circ], save_state=True)
+        print(circ_merged)
+        sim = Aer.get_backend("aer_simulator")
+        res = sim.run(circ_merged, shots=2**20).result()
+        print(res.get_counts())

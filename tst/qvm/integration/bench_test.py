@@ -3,7 +3,7 @@ from qiskit.providers.fake_provider import *
 from qvm.constants import *
 from qvm.manager.backend_manager import * 
 from qvm.manager.process_manager import *
-from qvm.util.circuit import BaseReliabilityCalculator, KlReliabilityCalculator
+from qvm.util.circuit import merge_circuits_v2, KlReliabilityCalculator
 from qvm.util.backend import *
 from qvm.test.base import *
 
@@ -139,7 +139,8 @@ class TestBench(BaseTest):
                     b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
                     circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
                     circ_merged = merge_circuits([circ, circ])
-                except Exception:
+                except Exception as e:
+                    print("Error: {}, when running benchmark: {}".format(e, b))
                     continue
                 qvm_res = self.run_qvm([circ, circ], shots=shots)
                 frp_res = self.run_frp([circ, circ], shots=shots)
@@ -172,7 +173,7 @@ class TestBench(BaseTest):
                 try:
                     b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
                     circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
-                    circ_merged = merge_circuits([circ, circ])
+                    circ_merged = merge_circuits_v2([circ, circ])
                     cmr = calc_cmr(circ)
                     is_low_cmr = True if cmr < 10 else False
                 except Exception:

@@ -1,7 +1,7 @@
 import copy
 import numpy as np
 
-from typing import List
+from typing import List, Optional
 from qiskit.circuit import \
         QuantumCircuit, \
         QuantumRegister, \
@@ -10,6 +10,7 @@ from qiskit.circuit import \
         Clbit
 
 from qiskit.compiler import transpile
+from qiskit.providers.fake_provider.fake_backend import circuit
 from qiskit.quantum_info import Statevector, state_fidelity
 from qiskit.result import Counts
 from qiskit.result.mitigation.utils import counts_to_vector
@@ -22,6 +23,35 @@ from scipy.stats import entropy
 
 def kl_divergence(p, q):
     return np.sum(np.where(p != 0, p * np.log(p / q), 0))
+
+
+def merge_circuits_v2(circuits: List[QuantumCircuit],
+                      save_state: Optional[bool]=False) -> QuantumCircuit:
+    """Merge all circuits to a new large circuit
+    This version supports circuits that have different
+    number of qubits and clbits
+    """
+    if len(circuits) <= 1:
+        raise ValueError("Please merge at least two circuits")
+
+    sum_qubits = sum([circ.num_qubits for circ in circuits])
+    sum_clbits = sum([circ.num_clbits for circ in circuits])
+    circ_merged = QuantumCircuit(sum_qubits, sum_clbits)
+    base_q, base_c = 0, 0
+
+    for circ in circuits:
+        nq = circ.num_qubits
+        nc = circ.num_clbits
+        locations_q = [i+base_q for i in range(nq)]
+        locations_c = [i+base_c for i in range(nc)]
+        circ_merged.compose(circ, qubits=locations_q, clbits=locations_c, inplace=True)
+        base_q += nq
+        base_c += nc
+    
+    if save_state:
+        circ_merged.save_state()
+
+    return circ_merged
 
 
 def merge_circuits(circuits: List[QuantumCircuit]) -> QuantumCircuit:
