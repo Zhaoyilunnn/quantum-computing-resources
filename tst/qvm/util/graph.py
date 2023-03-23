@@ -7,7 +7,7 @@ from util import *
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-class TestNormalBackendGraphExtractor(BaseTest):
+class TestNormalBackendGraphExtractor(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = BackendAdjMatGraphExtractor(self._backend) 
@@ -25,7 +25,7 @@ class TestNormalBackendGraphExtractor(BaseTest):
         assert graph[6,7] == 0.01431875092381174
         
 
-class TestKlPartitioner(BaseTest):
+class TestKlPartitioner(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = NormalBackendNxGraphExtractor(self._backend)
@@ -37,7 +37,7 @@ class TestKlPartitioner(BaseTest):
         print(parts)
 
 
-class TestBfsPartitioner(BaseTest):
+class TestBfsPartitioner(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = BaseBackendGraphExtractor(self._backend)
@@ -49,7 +49,7 @@ class TestBfsPartitioner(BaseTest):
         print(parts)
 
 
-class TestFrpPartitioner(BaseTest):
+class TestFrpPartitioner(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = BackendAdjMatGraphExtractor(self._backend)
@@ -97,7 +97,7 @@ class TestFrpPartitioner(BaseTest):
         print(part0, part1, part2, part3)
 
 
-class TestUtilMisc(BaseTest):
+class TestUtilMisc(QvmBaseTest):
 
     def test_split_list(self):
         lst = [1,2,3,4,5,6,7,8,9,10]

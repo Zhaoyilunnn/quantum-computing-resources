@@ -4,7 +4,7 @@ from qvm.test.base import *
 from util import *
 
 
-class TestUtilMisc(BaseTest):
+class TestUtilMisc(QvmBaseTest):
 
     def test_split_list(self):
         lst = [1,2,3,4,5,6,7,8,9,10]

@@ -3,7 +3,7 @@ from qiskit.compiler import transpile, schedule
 from qvm.util.backend import *
 from qvm.test.base import *
 
-class TestNormalBackendGraphExtractor(BaseTest):
+class TestNormalBackendGraphExtractor(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = BackendAdjMatGraphExtractor(self._backend) 

@@ -1,7 +1,7 @@
 from qvm.test.base import *
 
 
-class TestQvm(BaseTest):
+class TestQvm(QvmBaseTest):
 
     def setup_class(self):
         self._backend_manager = BfsBackendManager(self._backend)

@@ -11,7 +11,7 @@ from util import *
 from util.plot import plot_bar
 
 
-class TestBench(BaseTest):
+class TestBench(QvmBaseTest):
     """
     Integration of backend manager and process manager
     """

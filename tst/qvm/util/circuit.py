@@ -8,7 +8,7 @@ from qvm.test.base import *
 from util.plot import plot_bar
 
 
-class TestBaseReliabilityCalculator(BaseTest):
+class TestBaseReliabilityCalculator(QvmBaseTest):
     _calculator = BaseReliabilityCalculator()
 
     def test_calc_fidelity(self):
@@ -21,7 +21,7 @@ class TestBaseReliabilityCalculator(BaseTest):
         print("Test fidelity: {}".format(fidelity))
 
 
-class TestSvFidReliabilityCalculator(BaseTest):
+class TestSvFidReliabilityCalculator(QvmBaseTest):
 
     _calculator = SvFidReliabilityCalculator()
 
@@ -56,7 +56,7 @@ class TestSvFidReliabilityCalculator(BaseTest):
         print("TestSvFidReliabilityCalculator fid of bell state: {}".format(fid))
 
 
-class TestUtilCircuitMisc(BaseTest):
+class TestUtilCircuitMisc(QvmBaseTest):
 
     def test_calc_cmr(self):
 

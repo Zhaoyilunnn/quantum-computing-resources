@@ -12,7 +12,7 @@ from qvm.test.base import *
 from util import *
 
 
-class TestProcessManager(BaseTest):
+class TestProcessManager(QvmBaseTest):
 
     def test_qvm_manager(self):
 

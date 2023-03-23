@@ -12,7 +12,7 @@ from qvm.test.base import *
 from util import *
 
 
-class TestBaseBackendManager(BaseTest):
+class TestBaseBackendManager(QvmBaseTest):
     
     def setup_class(self):
         self._manager = BaseBackendManager(self._backend)
@@ -106,7 +106,7 @@ class TestBaseBackendManager(BaseTest):
             print(res[rid].circ)
 
 
-class TestKlBackendManager(BaseTest):
+class TestKlBackendManager(QvmBaseTest):
 
     def setup_class(self):
         self._manager = KlBackendManager(self._backend)
@@ -123,7 +123,7 @@ class TestKlBackendManager(BaseTest):
             cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
 
 
-class TestBfsBackendManager(BaseTest):
+class TestBfsBackendManager(QvmBaseTest):
 
     def setup_class(self):
         self._manager = BfsBackendManager(self._backend)
@@ -140,7 +140,7 @@ class TestBfsBackendManager(BaseTest):
             cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
 
 
-class TestProcessManager(BaseTest):
+class TestProcessManager(QvmBaseTest):
 
     def test_qvm_manager(self):
 
