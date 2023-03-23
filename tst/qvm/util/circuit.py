@@ -1,5 +1,6 @@
 from qvm.util.circuit import \
         BaseReliabilityCalculator, \
+        SvFidReliabilityCalculator, \
         calc_cmr, \
         merge_circuits_v2
 from qvm.constants import *
@@ -7,8 +8,7 @@ from qvm.test.base import *
 from util.plot import plot_bar
 
 
-class TestUtilCircuit(BaseTest):
-
+class TestBaseReliabilityCalculator(BaseTest):
     _calculator = BaseReliabilityCalculator()
 
     def test_calc_fidelity(self):
@@ -19,6 +19,44 @@ class TestUtilCircuit(BaseTest):
         print(counts_noise) 
         fidelity = self._calculator.calc_fidelity(circ, counts_noise)
         print("Test fidelity: {}".format(fidelity))
+
+
+class TestSvFidReliabilityCalculator(BaseTest):
+
+    _calculator = SvFidReliabilityCalculator()
+
+    def test_calc_fidelity(self):
+        #TODO(zhaoyilun): Currently vqe runs too slow
+        shots = 2**1
+        is_trans = False
+
+        b = "vqe_uccsd_n4"
+        b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+        circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+        trans = circ
+        if is_trans:
+            trans = transpile(circ, self._backend)
+        trans.save_state()
+        res = self._backend.run(trans, shots=shots).result()
+        sv_noise = res.get_statevector()
+        fid = self._calculator.calc_fidelity(trans, sv_noise, is_trans=is_trans, shots=shots)
+        print("TestSvFidReliabilityCalculator fid of {}: {}".format(b, fid))
+
+    def test_calc_fidelity_bell_state(self):
+        shots = 2**10
+        circ = self.create_dummy_bell_state((0,1), is_measure=False)
+        circ.save_state()
+        print(circ)
+        self._backend.set_options(method="statevector")
+        res = self._backend.run(circ, shots=shots).result()
+        print(res.data())
+        #sv_noise = res.data()["density_matrix"]
+        sv_noise = res.get_statevector()
+        fid = self._calculator.calc_fidelity(circ, sv_noise, is_trans=False, shots=shots)
+        print("TestSvFidReliabilityCalculator fid of bell state: {}".format(fid))
+
+
+class TestUtilCircuitMisc(BaseTest):
 
     def test_calc_cmr(self):
 
@@ -80,3 +118,4 @@ class TestUtilCircuit(BaseTest):
         sim = Aer.get_backend("aer_simulator")
         res = sim.run(circ_merged, shots=2**20).result()
         print(res.get_counts())
+        print(res.get_statevector())

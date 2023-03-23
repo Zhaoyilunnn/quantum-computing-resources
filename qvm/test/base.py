@@ -101,7 +101,8 @@ class BaseTest:
 
     def create_dummy_bell_state(self, 
             qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
-            num_qubits=None) -> QuantumCircuit:
+            num_qubits=None,
+            is_measure=True) -> QuantumCircuit:
         """
         Create a bell state circuit for test
         q0: the first qubit id to operate on
@@ -113,7 +114,8 @@ class BaseTest:
         def do_bell_state(dummy_circ, q0, q1):
             dummy_circ.h(q0)
             dummy_circ.cx(q0, q1)
-            dummy_circ.measure([q0, q1], [q0, q1])
+            if is_measure:
+                dummy_circ.measure([q0, q1], [q0, q1])
 
 
         dummy_circ = None

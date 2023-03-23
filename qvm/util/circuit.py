@@ -11,7 +11,7 @@ from qiskit.circuit import \
 
 from qiskit.compiler import transpile
 from qiskit.providers.fake_provider.fake_backend import circuit
-from qiskit.quantum_info import Statevector, state_fidelity
+from qiskit.quantum_info import DensityMatrix, Statevector, state_fidelity
 from qiskit.result import Counts
 from qiskit.result.mitigation.utils import counts_to_vector
 
@@ -220,15 +220,44 @@ class KlReliabilityCalculator(BaseReliabilityCalculator):
                       **kwargs):
         """Calculate fidelity using KL-divergence between two prob distributions"""
         num_qubits = circ.num_qubits
-        pv_noise, shots = counts_to_vector(counts, num_qubits)
+        pv_noise, _ = counts_to_vector(counts, num_qubits)
         print(pv_noise)
 
         trans = transpile(circ, self._sv_sim) 
         #print(trans)
         res_ideal = self._run_ideal_sim(trans, **kwargs)
         counts_ideal = res_ideal.get_counts(trans)
-        pv_ideal, shots = counts_to_vector(counts_ideal, num_qubits)
+        pv_ideal, _ = counts_to_vector(counts_ideal, num_qubits)
         print(pv_ideal)
 
         # FIXME(zhaoyilun): here sv is actually classical probability vector 
         return entropy(pv_ideal, pv_noise)
+
+class SvFidReliabilityCalculator(BaseReliabilityCalculator):
+
+    def calc_fidelity(self,
+                      circ: QuantumCircuit,
+                      sv: Statevector | DensityMatrix,
+                      is_trans=True,
+                      **kwargs):
+        """Calculate state fidelity between ideal simulation and noise result
+        This is used for circuit without measurement, we save the final statevector
+        Args:
+            circ (QuantumCircuit): Circuit to run ideal simulation, we assume that
+                it appends save_state() instruction at the end.
+            sv (Statevector): Statevector of noisy result
+            is_trans (bool): Whether transpile the circuit before run ideal simulation
+        """
+        trans = circ
+        if is_trans:
+            trans = transpile(circ, self._sv_sim) 
+        self._sv_sim.set_options(method="statevector")
+        res_ideal = self._run_ideal_sim(trans, **kwargs)
+        if isinstance(sv, Statevector):
+            sv_ideal = res_ideal.get_statevector()
+        elif isinstance(sv, DensityMatrix):
+            print(res_ideal)
+            sv_ideal = res_ideal.data()["density_matrix"] 
+        else:
+            raise NotImplementedError("Unsupported state type")
+        return state_fidelity(sv, sv_ideal)
