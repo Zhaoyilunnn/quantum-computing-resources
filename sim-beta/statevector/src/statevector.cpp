@@ -105,14 +105,26 @@ void StateVector::run_without_computation(const frame::Qobj &qobj) {
 //    }
 //}
 
+// Get global qubits. The global qubits are indexes of 
+// local qubit groups, i.e., the minumum storage unit 
+// on secondary storage.
+// It have two usages:
+//  1. The size of global qubits is used to 
+//     identify the number of storage units that each
+//     group consumes. After reorganization, the 
+//     vector size of a group is 1ULL << (num_qubits)
+//     where num_qubits is the number of qubits in 
+//     current subcircuit!
+//  2. The indexes of global qubits are used to 
+//     identify the indexes of storage units
 inline void get_global_qubits(
             const std::vector<uint_t> &org_qubits, 
             const uint_t local_qubits, 
-            reg_t* logical_global_qubits) {
+            reg_t* global_qubits) {
     uint_t ilg = 0, q_lg = local_qubits;
     for (size_t i = 0; i < org_qubits.size(); i++) {
         if (org_qubits[i] >= local_qubits) {
-             logical_global_qubits->push_back(org_qubits[i] - local_qubits);
+             global_qubits->push_back(org_qubits[i] - local_qubits);
         }
     } 
 }
@@ -132,16 +144,16 @@ inline uint_t get_start_group_id(const uint_t num_primary_groups,
 
 // TODO: make the time statistics decorator
 void StateVector::load(const std::vector<uint_t> &org_qubits) {
-    reg_t logical_global_qubits; // the size should be fixed
-    get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
-    const uint_t LGDIM = logical_global_qubits.size(); // Logical global qubits' size
+    reg_t global_qubits; // the size should be fixed
+    get_global_qubits(org_qubits, _num_local, &global_qubits);
+    const uint_t LGDIM = global_qubits.size(); // Logical global qubits' size
     uint_t isub = 0;
     uint_t num_prim_grps = num_primary_groups(LGDIM, _num_primary, _num_local);
     uint_t start_group_id = get_start_group_id(num_prim_grps, _chunk.chunk_idx); 
     uint_t end_group_id = start_group_id + num_prim_grps;
 
     for (uint_t gid = start_group_id; gid < end_group_id; gid++) {
-        const auto inds = indexes(logical_global_qubits, gid);
+        const auto inds = indexes(global_qubits, gid);
         #pragma omp parallel for
         for (size_t idx = 0; idx < 1ULL<<LGDIM; idx++) {
             // Consider we have, nq=6, np=4, nl=2

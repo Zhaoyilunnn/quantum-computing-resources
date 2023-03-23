@@ -50,7 +50,7 @@ $ make install (optional)
 pip install conan=1.52.0
 ```
 
-### Build
+### Build & Test
 
 ```
 $ mkdir build
@@ -58,4 +58,6 @@ $ cd build
 $ conan install ..
 $ cmake ..
 $ make -j 8
+$ make test
+$ # Alternatively, cd ../test && ../build/bin/simtest
 ```
