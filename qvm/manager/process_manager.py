@@ -26,7 +26,8 @@ class BaseProcessManager:
 
     def _merge_circuits(self, 
             circuits: List[QuantumCircuit]) -> QuantumCircuit:
-        return merge_circuits_v2(circuits)
+        #return merge_circuits_v2(circuits)
+        return merge_circuits(circuits)
 
     def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
         """

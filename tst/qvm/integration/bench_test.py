@@ -173,7 +173,8 @@ class TestBench(BaseTest):
                 try:
                     b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
                     circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
-                    circ_merged = merge_circuits_v2([circ, circ])
+                    #circ_merged = merge_circuits_v2([circ, circ])
+                    circ_merged = merge_circuits([circ, circ])
                     cmr = calc_cmr(circ)
                     is_low_cmr = True if cmr < 10 else False
                 except Exception:
