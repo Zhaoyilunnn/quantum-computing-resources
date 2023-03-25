@@ -64,7 +64,8 @@ class SvManager:
         TODO(zhaoyilun): detailed description 
         """
         if len(org_qubits) <= self._nl:
-            raise ValueError("Number of qubits in a sub-circuit should be larger than local qubits")
+            raise ValueError("Number of qubits in a sub-circuit "\
+                    "should be larger than local qubits")
 
         global_qubits = self._get_global_qubits(org_qubits) 
         LGDIM = len(global_qubits) # Logical global qubits' size
@@ -82,3 +83,25 @@ class SvManager:
                 # Populate to current chunk
                 vec = np.load(fn)
                 self._chunk[isub<<self._nl: (isub<<self._nl) + (1<<self._nl)] = vec
+
+    def store_sv(self, org_qubits: List[int]):
+        if len(org_qubits) <= self._nl:
+            raise ValueError("Number of qubits in a sub-circuit should be larger than local qubits")
+
+        global_qubits = self._get_global_qubits(org_qubits) 
+        LGDIM = len(global_qubits) # Logical global qubits' size
+        isub = 0
+        num_prim_grps = self._num_primary_groups(LGDIM)
+        
+        start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
+        end_group_id = start_group_id + num_prim_grps
+
+        for gid in range(start_group_id, end_group_id):
+            inds = indexes(global_qubits, gid)
+            for idx in range(1<<LGDIM):
+                isub = (1<<LGDIM) * (gid-start_group_id) + idx
+                fn = generate_secondary_file_name(inds[idx])
+                # Save corresponding slice to secondary storage
+                chk_start = isub<<self._nl
+                chk_end = (isub<<self._nl) + (1<<self._nl)
+                np.save(fn, self._chunk[chk_start: chk_end])

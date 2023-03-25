@@ -51,3 +51,29 @@ class TestSvDao(QdaoBaseTest):
         np.testing.assert_array_equal(self._sv_dao._chunk[4:8], vec2)
         np.testing.assert_array_equal(self._sv_dao._chunk[8:12], vec1)
         np.testing.assert_array_equal(self._sv_dao._chunk[12:16], vec3)
+
+    def test_save_sv_continuous(self):
+        vec = np.random.rand(16) + 1j * np.random.rand(16)
+        self._sv_dao._chunk = vec
+        self._sv_dao.store_sv([0,1,2])
+        vec0 = np.load("sv0.npy")
+        vec1 = np.load("sv1.npy")
+        vec2 = np.load("sv2.npy")
+        vec3 = np.load("sv3.npy")
+        np.testing.assert_array_equal(self._sv_dao._chunk[0:4], vec0)
+        np.testing.assert_array_equal(self._sv_dao._chunk[4:8], vec1)
+        np.testing.assert_array_equal(self._sv_dao._chunk[8:12], vec2)
+        np.testing.assert_array_equal(self._sv_dao._chunk[12:16], vec3)
+
+    def test_save_sv_interleave(self):
+        vec = np.random.rand(16) + 1j * np.random.rand(16)
+        self._sv_dao._chunk = vec
+        self._sv_dao.store_sv([0,1,3])
+        vec0 = np.load("sv0.npy")
+        vec1 = np.load("sv1.npy")
+        vec2 = np.load("sv2.npy")
+        vec3 = np.load("sv3.npy")
+        np.testing.assert_array_equal(self._sv_dao._chunk[0:4], vec0)
+        np.testing.assert_array_equal(self._sv_dao._chunk[8:12], vec1)
+        np.testing.assert_array_equal(self._sv_dao._chunk[4:8], vec2)
+        np.testing.assert_array_equal(self._sv_dao._chunk[12:16], vec3)
