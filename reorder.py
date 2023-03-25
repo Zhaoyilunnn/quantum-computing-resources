@@ -1,5 +1,5 @@
 import sys
-from util import print_op_list, BARRIER_OP_LIST
+from utils.misc import print_op_list, BARRIER_OP_LIST
 
 class ReorderMethod:
     _n_primary = 5

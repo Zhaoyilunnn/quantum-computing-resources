@@ -7,7 +7,6 @@ from qvm.util.circuit import merge_circuits_v2, KlReliabilityCalculator
 from qvm.util.backend import *
 from qvm.test.base import *
 
-from util import *
 from util.plot import plot_bar
 
 

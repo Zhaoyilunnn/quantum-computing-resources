@@ -38,6 +38,14 @@ MASKS = [
 ]
 
 
+SECONDARY_PREFIX = "sv"
+SECONDARY_SUFFIX = ".npy"
+
+
+def generate_secondary_file_name(idx: int):
+    return SECONDARY_PREFIX + str(idx) + SECONDARY_SUFFIX
+
+
 def index0(qubits, k):
     """
     Used to find the start entry of an single matrix-vector multiplication

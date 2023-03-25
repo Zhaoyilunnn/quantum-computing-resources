@@ -7,19 +7,23 @@ from qiskit.pulse import Schedule
 from qiskit_aer import Aer 
 
 from typing import *
-from util import *
 
 
 class BaseTest:
 
-    _sv_sim = Aer.get_backend("statevector_simulator")
+    #_sv_sim = Aer.get_backend("statevector_simulator")
+    _sv_sim = Aer.get_backend("aer_simulator")
+    _sv_sim.set_options(method="statevector")
 
     def get_small_bench_circ(self, 
                              bench_name,
+                             num_qubits: int=4,
+                             depth: int=10,
+                             measure: bool=True,
                              qasm_path: Optional[str]=None):
         circ = None
         if bench_name == "random":
-            circ = random_circuit(4, 10, measure=True) 
+            circ = random_circuit(num_qubits, depth, measure=measure) 
         elif bench_name == "qasm":
             if not isinstance(qasm_path, str):
                 raise ValueError("Qasm file path shoud be a string")

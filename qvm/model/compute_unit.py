@@ -8,7 +8,7 @@ from qiskit.providers.models import *
 from qvm.util.graph import * 
 from qvm.util.backend import *
 from qvm.util.misc import *
-from util import *
+from utils.misc import *
 
 
 class ComputeUnit:

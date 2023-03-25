@@ -144,7 +144,7 @@ inline uint_t get_start_group_id(const uint_t num_primary_groups,
 
 // TODO: make the time statistics decorator
 void StateVector::load(const std::vector<uint_t> &org_qubits) {
-    reg_t global_qubits; // the size should be fixed
+    reg_t global_qubits;
     get_global_qubits(org_qubits, _num_local, &global_qubits);
     const uint_t LGDIM = global_qubits.size(); // Logical global qubits' size
     uint_t isub = 0;
@@ -175,7 +175,7 @@ void StateVector::load(const std::vector<uint_t> &org_qubits) {
 }
 
 void StateVector::store(const std::vector<uint_t> &org_qubits) {
-    reg_t logical_global_qubits; // the size should be fixed
+    reg_t logical_global_qubits;
     get_global_qubits(org_qubits, _num_local, &logical_global_qubits);
     const uint_t LGDIM = logical_global_qubits.size();
     uint_t isub = 0;

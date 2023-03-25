@@ -9,8 +9,6 @@ from qvm.util.backend import *
 from qvm.util.misc import *
 from qvm.test.base import *
 
-from util import *
-
 
 class TestProcessManager(QvmBaseTest):
 

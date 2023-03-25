@@ -15,7 +15,7 @@ from qvm.util.graph import *
 from qvm.util.circuit import circuit_virtual_to_real
 from qvm.util.backend import *
 from qvm.util.misc import *
-from util import *
+from utils.misc import *
 
     
 class BaseBackendManager:

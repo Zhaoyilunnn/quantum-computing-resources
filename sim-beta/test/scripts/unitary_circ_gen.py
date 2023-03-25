@@ -12,7 +12,6 @@ import argparse
 
 from reorder import Reorder 
 from bench import get_op_lists, get_op_list_without_measure
-from util import print_op_list 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='')

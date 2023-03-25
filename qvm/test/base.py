@@ -16,7 +16,6 @@ from qvm.manager.process_manager import *
 from qvm.util.circuit import BaseReliabilityCalculator
 from qvm.util.backend import *
 
-from util import *
 from test.base import BaseTest
 
 
@@ -25,7 +24,6 @@ class QvmBaseTest(BaseTest):
     #_backend = FakeLagos()
     #_backend = FakeManila()
     _backend = FakeCairo()
-    _sv_sim = Aer.get_backend("statevector_simulator")
     #_sv_sim = Aer.get_backend("aer_simulator")
     _fid_calculator = BaseReliabilityCalculator()
 

@@ -5,7 +5,7 @@ from qvm.util.circuit import \
         merge_circuits_v2
 from qvm.constants import *
 from qvm.test.base import *
-from util.plot import plot_bar
+from utils.plot import plot_bar
 
 
 class TestBaseReliabilityCalculator(QvmBaseTest):
