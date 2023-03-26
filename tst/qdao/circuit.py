@@ -1,9 +1,9 @@
-from qdao.circuit import BasePartitioner
+from qdao.circuit import BasePartitioner, StaticPartitioner
 from qdao.test import QdaoBaseTest
 
 
 class TestBasePartitioner(QdaoBaseTest):
-    
+
     _part = BasePartitioner()
 
     def test_gen_sub_circ(self):
@@ -12,4 +12,21 @@ class TestBasePartitioner(QdaoBaseTest):
         print(circ)
         sub_instrs = circ.data[0:4]
         sub_circ = self._part._gen_sub_circ(circ, sub_instrs)
-        print(sub_circ)
+        print(sub_circ.circ, sub_circ.real_qubits)
+
+
+class TestStaticPartitioner(QdaoBaseTest):
+
+    _part = StaticPartitioner(np=6, nl=2)
+
+
+    def test_run(self):
+
+        circ = self.get_small_bench_circ("random",
+                num_qubits=8, depth=20, measure=False)
+        print(circ)
+
+        sub_circs = self._part.run(circ)
+
+        for sub_circ in sub_circs:
+            print(sub_circ.circ, sub_circ.real_qubits)
