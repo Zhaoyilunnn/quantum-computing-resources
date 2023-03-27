@@ -1,5 +1,5 @@
 import os
-import sys
+import logging
 import numpy as np
 
 from typing import List
@@ -89,12 +89,43 @@ class SvManager:
 
         for gid in range(start_group_id, end_group_id):
             inds = indexes(global_qubits, gid)
+            logging.debug("Indexing for group: {}, "\
+                    "indexes: {}, "\
+                    "org_qubits: {}, "\
+                    "global_qubits: {}"\
+                    .format(
+                        gid,
+                        inds,
+                        org_qubits,
+                        global_qubits
+                    ))
             for idx in range(1<<LGDIM):
                 isub = (1<<LGDIM) * (gid-start_group_id) + idx
                 fn = generate_secondary_file_name(inds[idx])
                 # Populate to current chunk
                 vec = np.load(fn)
-                self._chunk[isub<<self._nl: (isub<<self._nl) + (1<<self._nl)] = vec
+                chk_start = isub<<self._nl
+                chk_end = (isub<<self._nl) + (1<<self._nl)
+                self._chunk[chk_start: chk_end] = vec
+
+                logging.debug("Loading sub chunk: {}, "\
+                        "for group: {}, "\
+                        "inds: {}, "\
+                        "fn: {}, \n"\
+                        "chk_start: {}, "\
+                        "chk_end: {}, "\
+                        "chunk: {}, "\
+                        "chunk_size: {}"\
+                        .format(
+                            isub,
+                            gid,
+                            inds,
+                            fn,
+                            chk_start,
+                            chk_end,
+                            self._chunk,
+                            self._chunk.shape[0]
+                        ))
         return self._chunk
 
     def store_sv(self, org_qubits: List[int]):
@@ -111,6 +142,16 @@ class SvManager:
 
         for gid in range(start_group_id, end_group_id):
             inds = indexes(global_qubits, gid)
+            logging.debug("Indexing for group: {}, "\
+                    "indexes: {}, "\
+                    "org_qubits: {}, "\
+                    "global_qubits: {}"\
+                    .format(
+                        gid,
+                        inds,
+                        org_qubits,
+                        global_qubits
+                    ))
             for idx in range(1<<LGDIM):
                 isub = (1<<LGDIM) * (gid-start_group_id) + idx
                 fn = generate_secondary_file_name(inds[idx])
@@ -118,3 +159,31 @@ class SvManager:
                 chk_start = isub<<self._nl
                 chk_end = (isub<<self._nl) + (1<<self._nl)
                 np.save(fn, self._chunk[chk_start: chk_end])
+
+                loaded_arr = np.load(fn)
+                try:
+                    assert loaded_arr.shape[0] != 0
+                except AssertionError:
+                    logging.warn("Loaded data shape is 0!!: {}, \n"\
+                            "original: {}".format(loaded_arr, self._chunk[chk_start: chk_end]))
+                assert np.array_equal(loaded_arr, self._chunk[chk_start: chk_end])
+
+                logging.debug("Saving sub chunk: {}, "\
+                        "for group: {}, "\
+                        "inds: {}, "\
+                        "fn: {}, \n"\
+                        "chk_start: {}, "\
+                        "chk_end: {}, "\
+                        "chunk: {}, "\
+                        "chunk_size: {}"\
+                        .format(
+                            isub,
+                            gid,
+                            inds,
+                            fn,
+                            chk_start,
+                            chk_end,
+                            self._chunk,
+                            self._chunk.shape[0]
+                        ))
+

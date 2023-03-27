@@ -1,6 +1,9 @@
+import copy
+import logging
+
 from typing import Optional
 from qiskit.circuit import QuantumCircuit
-from qiskit.quantum_info.states.statevector import Statevector
+from qiskit.quantum_info.states.statevector import QiskitError, Statevector
 from qiskit_aer import Aer
 
 from qdao.circuit import BasePartitioner, StaticPartitioner, VirtualCircuit
@@ -107,7 +110,14 @@ class Engine:
                 original sub-circ sequence
         """
         for ichunk in range(self._num_chunks):
-            self._preprocess(sub_circ, isub, ichunk)
+            try:
+                self._preprocess(sub_circ, isub, ichunk)
+            except QiskitError as e:
+                assert e.message == "Sum of amplitudes-squared does not equal one."
+                logging.info("Skipping all-zero chunk: {}, "\
+                        "for sub-circuit: {}".format(ichunk, sub_circ.circ))
+                continue
+            #self._preprocess(sub_circ, isub, ichunk)
             res = self._sim.run(sub_circ.circ).result()
             sv = res.get_statevector()
             self._postprocess(sub_circ, ichunk, sv)
@@ -120,6 +130,14 @@ class Engine:
            different part of statevector
         """
         sub_circs = self._part.run(self._circ)
+
+        # TODO(zhaoyilun): delete this
+        circ = copy.deepcopy(self._circ)
+        circ.save_state()
+        print(circ)
+        print(sub_circs[0].circ)
+        assert sub_circs[0].circ == circ
+        # TODO(zhaoyilun): delete this
 
         for isub, sub_circ in enumerate(sub_circs):
             self._run(sub_circ, isub)

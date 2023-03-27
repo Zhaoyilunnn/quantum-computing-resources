@@ -1,4 +1,5 @@
 
+
 BITS = [
     1, 2, 4, 8,
     16, 32, 64, 128,
@@ -90,14 +91,25 @@ def index0(qubits, k):
         # End
         retval |= lowbits
 
-        return retval
+    return retval
 
 
 def indexes(qubits, k):
     """
     Get the indexes that an op operate on
-    E.g., qubits = [1, 3], k = 0, ==> [00000,00010,01000,01010]
+    E.g.,
+          qubits = [1, 3], k = 0, ==> [00000,00010,01000,01010]
                            k = 1, ==> [00001,00011,01001,01011]
+
+          qubits = [0, 2, 3], k = 0
+            ==> [00000000, 00000001, 00000100, 00000101
+                 00001000, 00001001, 00001100, 00001101]
+            k = 1
+            ==> [00000010, 00000011, 00000110, 00000111
+                 00001010, 00001011, 00001110, 00001111]
+            k = 2
+            ==> [00010000, 00010001, 00010100, 00010101
+                 00011000, 00011001, 00011100, 00011101]
     Explanation: TODO: Add doc link
 
     Args:
@@ -126,3 +138,27 @@ def indexes(qubits, k):
             ret[n+j] = ret[j] | bias
 
     return ret
+
+
+def retrieve_sv(num_qubits: int, num_local: int=2):
+    """Retrieve statevector from disk
+
+    This is used only for test, and must be used after simulation finished
+
+    Args:
+        num_qubits (int): Number of qubits
+        num_local (int): Number of qubits stored in single storage unit
+    """
+    import numpy as np
+
+    # Calculate the number of storage units
+    num_sus = 1 << (num_qubits - num_local)
+    su_size = 1 << num_local
+    sv = np.zeros(1<<num_qubits, dtype=complex)
+
+    for i in range(num_sus):
+        fn = generate_secondary_file_name(i)
+        vec = np.load(fn)
+        sv[i*su_size: (i+1)*su_size] = vec
+
+    return sv

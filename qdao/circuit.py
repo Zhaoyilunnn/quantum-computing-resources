@@ -81,8 +81,8 @@ class BasePartitioner:
             for q in instr.qubits:
                 qset.add(q._index)
 
-        num_qubits = len(qset)
-        sub_circ = QuantumCircuit(num_qubits)
+        #num_qubits = len(qset)
+        sub_circ = QuantumCircuit(self._np)
 
         real_qubits = sorted(list(qset))
         qubit_map = {
