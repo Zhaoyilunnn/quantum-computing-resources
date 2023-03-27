@@ -15,34 +15,30 @@ class Engine:
             partitioner: Optional[BasePartitioner] = None,
             manager: Optional[SvManager] = None,
             circuit: QuantumCircuit = QuantumCircuit(),
-            **options
+            num_primary: int=4,
+            num_local: int=2
         ) -> None:
         if isinstance(partitioner, BasePartitioner):
             self._part = partitioner
         else:
-            self._part = StaticPartitioner(**options)
+            self._part = StaticPartitioner(np=num_primary, nl=num_local)
 
+        self._circ = circuit
+        self._nq = circuit.num_qubits
         if isinstance(manager, SvManager):
             self._manager = manager
         else:
-            self._manager = SvManager(**options)
+            self._manager = SvManager(
+                num_qubits=self._nq,
+                num_primary=num_primary,
+                num_local=num_local
+            )
 
-        self._circ = circuit
+        self._np, self._nl = num_primary, num_local
+        self._num_chunks = 1 << (self._nq - self._np)
+
         self._sim = Aer.get_backend("aer_simulator")
         self._sim.set_options(method="statevector")
-        
-        self._nq, self._np, self._nl = 6, 4, 2
-
-        if "nq" in options:
-            self._nq = options["nq"] 
-
-        if "np" in options:
-            self._np = options["np"] 
-
-        if "nl" in options:
-            self._nl = options["nl"] 
-
-        self._num_chunks = 1 << (self._nq - self._np)
     
     @property
     def num_chunks(self):
