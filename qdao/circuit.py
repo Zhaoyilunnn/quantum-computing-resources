@@ -22,6 +22,10 @@ class VirtualCircuit:
     def circ(self) -> QuantumCircuit:
         return self._circ
 
+    @circ.setter
+    def circ(self, circ: QuantumCircuit):
+        self._circ = circ
+
     @property
     def real_qubits(self) -> List[int]:
         return self._real_qubits
@@ -125,7 +129,7 @@ class StaticPartitioner(BasePartitioner):
             else:
                 sub_circ = self._gen_sub_circ(circuit, instrs)
                 sub_circs.append(sub_circ)
-                logging.info("Find sub-circuit: {}, qubits: {}".format(sub_circ.circ, qset)) 
+                logging.info("Find sub-circuit: {}, qubits: {}".format(sub_circ.circ, qset))
                 instrs = [instr]
                 qset = qs
         if instrs:

@@ -37,13 +37,13 @@ MASKS = [
     1152921504606846975, 2305843009213693951, 4611686018427387903, 9223372036854775807
 ]
 
-
+DATA_DIR = "data"
 SECONDARY_PREFIX = "sv"
 SECONDARY_SUFFIX = ".npy"
 
 
 def generate_secondary_file_name(idx: int):
-    return SECONDARY_PREFIX + str(idx) + SECONDARY_SUFFIX
+    return DATA_DIR + '/' + SECONDARY_PREFIX + str(idx) + SECONDARY_SUFFIX
 
 
 def index0(qubits, k):
@@ -60,8 +60,8 @@ def index0(qubits, k):
      00110
      00111
      So the frist group is 00000,00001,00100,00101, we can see that the start
-     is 00000, which is inserting 0 at index 0 and 2. Similarly the second group's 
-     start is 00010, which is inserting 0 at index 0 and 2 to 1 
+     is 00000, which is inserting 0 at index 0 and 2. Similarly the second group's
+     start is 00010, which is inserting 0 at index 0 and 2 to 1
     Therefore, find the kth group's start is inserting 0 to k based on qubits.
     The algorithm works as follows
      1. A binary abcde, we want to add 0 to position 1, then it becomes abcd0e
@@ -74,7 +74,7 @@ def index0(qubits, k):
     Args:
         qubits (List): the qubits that are acted on
         k (int): the k-th group of state vectors that are operated on
-    
+
     Returns:
         int: the first index of the k-th group of elements
 
@@ -98,12 +98,12 @@ def indexes(qubits, k):
     Get the indexes that an op operate on
     E.g., qubits = [1, 3], k = 0, ==> [00000,00010,01000,01010]
                            k = 1, ==> [00001,00011,01001,01011]
-    Explanation: TODO: Add doc link 
+    Explanation: TODO: Add doc link
 
     Args:
         qubits (List): the qubits that are acted on
         k (int): the k-th group of state vectors that are operated on
-    
+
     Returns:
         list[int]: List of indexes of k-th state group
     """
@@ -124,5 +124,5 @@ def indexes(qubits, k):
         bias = BITS[qubits[i]];
         for j in range(n):
             ret[n+j] = ret[j] | bias
-    
+
     return ret

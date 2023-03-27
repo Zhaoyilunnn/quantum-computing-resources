@@ -1,7 +1,8 @@
+import os
+import sys
 import numpy as np
 
 from typing import List
-from qiskit.quantum_info.states.statevector import Statevector
 
 from qdao.util import *
 
@@ -16,12 +17,15 @@ class SvManager:
         Args:
             num_qubits (int): Number of qubits in the target circuit
             num_primary (int): Number of qubits that reside in primary storage (i.e., host memory)
-            num_local (int): Number of qubits that reside in secondary storage (i.e., disk). 
+            num_local (int): Number of qubits that reside in secondary storage (i.e., disk).
                 Note that this defines the size of minimum storage unit.
         """
         self._nq, self._np, self._nl = num_qubits, num_primary, num_local
         self._chunk_idx = 0
-        self._chunk = np.zeros(1<<num_primary, dtype=complex) 
+        self._chunk = np.zeros(1<<num_primary, dtype=complex)
+
+        if not os.path.isdir("data"):
+            os.mkdir("data")
 
     @property
     def num_qubits(self):
@@ -46,7 +50,7 @@ class SvManager:
     @property
     def chunk(self):
         return self._chunk
-    
+
     @chunk.setter
     def chunk(self, data: np.ndarray):
         self._chunk = data
@@ -68,18 +72,18 @@ class SvManager:
 
     def load_sv(self, org_qubits: List[int]):
         """Load a `chunk` of statevector into memory
-        Reference: sim-beta/statevector/src/statevector.cpp 
-        TODO(zhaoyilun): detailed description 
+        Reference: sim-beta/statevector/src/statevector.cpp
+        TODO(zhaoyilun): detailed description
         """
         if len(org_qubits) <= self._nl:
             raise ValueError("Number of qubits in a sub-circuit "\
                     "should be larger than local qubits")
 
-        global_qubits = self._get_global_qubits(org_qubits) 
+        global_qubits = self._get_global_qubits(org_qubits)
         LGDIM = len(global_qubits) # Logical global qubits' size
         isub = 0
         num_prim_grps = self._num_primary_groups(LGDIM)
-        
+
         start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
         end_group_id = start_group_id + num_prim_grps
 
@@ -91,16 +95,17 @@ class SvManager:
                 # Populate to current chunk
                 vec = np.load(fn)
                 self._chunk[isub<<self._nl: (isub<<self._nl) + (1<<self._nl)] = vec
+        return self._chunk
 
     def store_sv(self, org_qubits: List[int]):
         if len(org_qubits) <= self._nl:
             raise ValueError("Number of qubits in a sub-circuit should be larger than local qubits")
 
-        global_qubits = self._get_global_qubits(org_qubits) 
+        global_qubits = self._get_global_qubits(org_qubits)
         LGDIM = len(global_qubits) # Logical global qubits' size
         isub = 0
         num_prim_grps = self._num_primary_groups(LGDIM)
-        
+
         start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
         end_group_id = start_group_id + num_prim_grps
 

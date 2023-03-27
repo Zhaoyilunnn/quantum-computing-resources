@@ -39,32 +39,41 @@ class Engine:
 
         self._sim = Aer.get_backend("aer_simulator")
         self._sim.set_options(method="statevector")
-    
+
     @property
     def num_chunks(self):
         return self._num_chunks
 
     def _preprocess(
-            self, 
+            self,
             sub_circ: VirtualCircuit,
             isub: int,
             ichunk: int
-        ) -> None:
+        ):
         """Preprocessing before running a sub-simulation
         Args:
             sub_circ (VirtualCircuit):
             isub (int): Position in the sub-circuit sequence
-            ichunk (int): For each sub-circuit, we need to 
+            ichunk (int): For each sub-circuit, we need to
                 simulate chunk by chunk, (num_chunks = 1<<(nq-np))
         Comments:
-            For the first sub_circuit we do not need to load
-            statevector from secondary storage
+            1. For the first sub_circuit we do not need to load
+               statevector from secondary storage
+            2. Currently qiskit QuantumCircuit.initialize will
+               append an initialize instruction at the end of
+               the circuit, we need create a new instance and
+               init from statevector at the begining
         """
         if isub == 0:
             return
         self._manager.chunk_idx = ichunk
         sv = self._manager.load_sv(sub_circ.real_qubits)
-        sub_circ.circ.initialize(sv)
+        nq = sub_circ.circ.num_qubits
+        circ = QuantumCircuit(nq)
+        circ.initialize(sv, range(nq))
+        circ.compose(sub_circ.circ, inplace=True)
+        sub_circ.circ = circ
+        return Statevector(sv)
 
     def _postprocess(
             self,
@@ -75,16 +84,16 @@ class Engine:
         """Postprocessing after running a sub-simulation
         Args:
             sub_circ (VirtualCircuit):
-            ichunk (int): For each sub-circuit, we need to 
+            ichunk (int): For each sub-circuit, we need to
                 simulate chunk by chunk, (num_chunks = 1<<(nq-np))
             sv (Statevector): Statevector result of simulation
-        """ 
+        """
         self._manager.chunk_idx = ichunk
         self._manager.chunk = sv.data
         self._manager.store_sv(sub_circ.real_qubits)
 
     def _run(
-            self, 
+            self,
             sub_circ: VirtualCircuit,
             isub: int
         ) -> None:
@@ -94,7 +103,7 @@ class Engine:
             sub_circ (VirtualCircuit): Sub circuit with
                 metadata recording the mapping between
                 virtual and real qubits
-            isub (int): Position of current sub-circ in 
+            isub (int): Position of current sub-circ in
                 original sub-circ sequence
         """
         for ichunk in range(self._num_chunks):
@@ -106,6 +115,9 @@ class Engine:
     def run(self):
         """Run simulation
         1. Partition the circuit into sub-circuits
+        2. For each sub-circuit, run for 1<<(nq-np) times of
+           simulations. Each simulation will init from a
+           different part of statevector
         """
         sub_circs = self._part.run(self._circ)
 
