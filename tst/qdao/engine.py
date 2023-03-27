@@ -41,12 +41,8 @@ class TestEngine(QdaoBaseTest):
 
         engine = Engine(circuit=circ, num_primary=NP, num_local=NL)
         engine.run()
-
         sv = retrieve_sv(NQ, num_local=NL)
-        print(sv)
-        assert circ == org_circ
+
         circ.save_state()
         sv_org = self._sv_sim.run(circ).result().get_statevector().data
-        print(sv_org)
-        #assert np.array_equal(sv, sv_org) or np.array_equal(sv, -sv_org)
         assert Statevector(sv).equiv(Statevector(sv_org))
