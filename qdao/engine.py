@@ -1,14 +1,18 @@
 import copy
 import logging
+import numpy as np
 
 from typing import Optional
-from qiskit.circuit import QuantumCircuit
+from qiskit.circuit import CircuitInstruction, QuantumCircuit
 from qiskit.quantum_info.states.statevector import QiskitError, Statevector
 from qiskit_aer import Aer
 
 from qdao.circuit import BasePartitioner, StaticPartitioner, VirtualCircuit
 from qdao.manager import SvManager
+from qdao.util import retrieve_sv, generate_secondary_file_name
+from qdao.qiskit.initializer import initialize
 
+QuantumCircuit.initialize = initialize
 
 class Engine:
     """Engine to execute a quantum circuit"""
@@ -50,33 +54,28 @@ class Engine:
     def _preprocess(
             self,
             sub_circ: VirtualCircuit,
-            isub: int,
             ichunk: int
         ):
         """Preprocessing before running a sub-simulation
         Args:
             sub_circ (VirtualCircuit):
-            isub (int): Position in the sub-circuit sequence
             ichunk (int): For each sub-circuit, we need to
                 simulate chunk by chunk, (num_chunks = 1<<(nq-np))
         Comments:
-            1. For the first sub_circuit we do not need to load
-               statevector from secondary storage
-            2. Currently qiskit QuantumCircuit.initialize will
+            1. Currently qiskit QuantumCircuit.initialize will
                append an initialize instruction at the end of
                the circuit, we need create a new instance and
                init from statevector at the begining
         """
-        if isub == 0:
-            return
         self._manager.chunk_idx = ichunk
         sv = self._manager.load_sv(sub_circ.real_qubits)
+        logging.debug("loaded sv: {}".format(sv))
         nq = sub_circ.circ.num_qubits
         circ = QuantumCircuit(nq)
         circ.initialize(sv, range(nq))
         circ.compose(sub_circ.circ, inplace=True)
-        sub_circ.circ = circ
-        return Statevector(sv)
+        logging.debug(circ)
+        return Statevector(sv), circ
 
     def _postprocess(
             self,
@@ -98,7 +97,6 @@ class Engine:
     def _run(
             self,
             sub_circ: VirtualCircuit,
-            isub: int
         ) -> None:
         """Run single sub-circuit
 
@@ -106,21 +104,48 @@ class Engine:
             sub_circ (VirtualCircuit): Sub circuit with
                 metadata recording the mapping between
                 virtual and real qubits
-            isub (int): Position of current sub-circ in
-                original sub-circ sequence
         """
         for ichunk in range(self._num_chunks):
-            try:
-                self._preprocess(sub_circ, isub, ichunk)
-            except QiskitError as e:
-                assert e.message == "Sum of amplitudes-squared does not equal one."
-                logging.info("Skipping all-zero chunk: {}, "\
-                        "for sub-circuit: {}".format(ichunk, sub_circ.circ))
-                continue
-            #self._preprocess(sub_circ, isub, ichunk)
-            res = self._sim.run(sub_circ.circ).result()
+            _, circ = self._preprocess(sub_circ, ichunk)
+            res = self._sim.run(circ).result()
             sv = res.get_statevector()
             self._postprocess(sub_circ, ichunk, sv)
+
+    def debug(self, sub_circ: VirtualCircuit):
+        """
+        After running a sub-circuit,
+        test the result statevector is correct
+        """
+        NQ = self._circ.num_qubits
+        circ = QuantumCircuit(NQ)
+        qubit_map = {
+            sub_circ.circ.qubits[i]: circ.qubits[q]
+            for i, q in enumerate(sub_circ.real_qubits)
+        }
+        for instr in sub_circ.circ.data[:-1]: # Omit last save_state
+            op = instr.operation.copy()
+            qubits = [qubit_map[i] for i in instr.qubits]
+            new_instr = CircuitInstruction(op, qubits=qubits)
+            circ.append(new_instr)
+        circ.save_state()
+
+        print(circ)
+        sv = self._sim.run(circ).result().get_statevector(-1)
+        sv_res = Statevector(retrieve_sv(NQ, self._nl))
+        print(sv)
+        print(sv_res)
+        assert sv.equiv(sv_res)
+
+    def _initialize(self):
+        # Calc number of storage units
+        num_sus = (1 << (self._circ.num_qubits - self._nl))
+        for i in range(num_sus):
+            # Init a storage unit
+            su = np.zeros(1<<self._nl, dtype=complex)
+            if i == 0:
+                su[0] = 1.
+            fn = generate_secondary_file_name(i)
+            np.save(fn, su)
 
     def run(self):
         """Run simulation
@@ -130,16 +155,9 @@ class Engine:
            different part of statevector
         """
         sub_circs = self._part.run(self._circ)
-
-        # TODO(zhaoyilun): delete this
-        circ = copy.deepcopy(self._circ)
-        circ.save_state()
-        print(circ)
-        print(sub_circs[0].circ)
-        assert sub_circs[0].circ == circ
-        # TODO(zhaoyilun): delete this
-
-        for isub, sub_circ in enumerate(sub_circs):
-            self._run(sub_circ, isub)
+        self._initialize()
+        for sub_circ in sub_circs:
+            self._run(sub_circ)
+            #self.debug(sub_circ)
 
 

@@ -85,6 +85,9 @@ class BasePartitioner:
         sub_circ = QuantumCircuit(self._np)
 
         real_qubits = sorted(list(qset))
+
+        assert len(real_qubits) <= self._np
+
         qubit_map = {
             circ.qubits[q]: sub_circ.qubits[i]
             for i, q in enumerate(real_qubits)
@@ -130,6 +133,8 @@ class StaticPartitioner(BasePartitioner):
                 sub_circ = self._gen_sub_circ(circuit, instrs)
                 sub_circs.append(sub_circ)
                 logging.info("Find sub-circuit: {}, qubits: {}".format(sub_circ.circ, qset))
+                # FIXME(zhaoyilun): Here the instr's qubits size may exceed
+                # (self._np - self._nl)
                 instrs = [instr]
                 qset = qs
         if instrs:
