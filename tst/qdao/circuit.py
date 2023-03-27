@@ -27,6 +27,11 @@ class TestStaticPartitioner(QdaoBaseTest):
         print(circ)
 
         sub_circs = self._part.run(circ)
+        print("Number of sub-circuits: {}".format(len(sub_circs)))
+        print("Number operations in original circuit: {}".format(len(circ)))
 
-        for sub_circ in sub_circs:
-            print(sub_circ.circ, sub_circ.real_qubits)
+        sum_ops_sub_circs = sum([len(s.circ) for s in sub_circs])
+        assert sum_ops_sub_circs == len(circ) + len(sub_circs)
+
+        #for sub_circ in sub_circs:
+        #    print(sub_circ.circ, sub_circ.real_qubits)

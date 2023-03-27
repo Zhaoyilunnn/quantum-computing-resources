@@ -43,6 +43,14 @@ class SvManager:
     def chunk_idx(self, idx):
         self._chunk_idx = idx
 
+    @property
+    def chunk(self):
+        return self._chunk
+    
+    @chunk.setter
+    def chunk(self, data: np.ndarray):
+        self._chunk = data
+
     def _get_global_qubits(self, org_qubits: List[int]):
         glob_q = []
         for org_q in org_qubits:

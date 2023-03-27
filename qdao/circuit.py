@@ -2,6 +2,7 @@
 This module provides methods to partition original circuit
 into sub-circuits.
 """
+import logging
 
 from typing import List
 from qiskit.circuit import QuantumCircuit, CircuitInstruction
@@ -124,7 +125,8 @@ class StaticPartitioner(BasePartitioner):
             else:
                 sub_circ = self._gen_sub_circ(circuit, instrs)
                 sub_circs.append(sub_circ)
-                instrs.clear()
+                logging.info("Find sub-circuit: {}, qubits: {}".format(sub_circ.circ, qset)) 
+                instrs = [instr]
                 qset = qs
         if instrs:
             sub_circ = self._gen_sub_circ(circuit, instrs)
