@@ -13,6 +13,7 @@ def pytest_addoption(parser):
     parser.addoption("--qasm", action="store", default="")
     parser.addoption("--alpha", action="store", default=0)
     parser.addoption("--beta", action="store", default=0)
+    parser.addoption("--nq", action="store", default=10)
 
 
 def pytest_generate_tests(metafunc):
@@ -30,10 +31,16 @@ def pytest_generate_tests(metafunc):
     if 'qasm' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("qasm", [option_value])
 
+    # Alpha paramter in FRP
     option_value = metafunc.config.option.alpha
     if 'alpha' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("alpha", [option_value])
 
+    # Beta paramter in FRP
     option_value = metafunc.config.option.beta
     if 'beta' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("beta", [option_value])
+
+    option_value = metafunc.config.option.nq
+    if 'nq' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("nq", [option_value])

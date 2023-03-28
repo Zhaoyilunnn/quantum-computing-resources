@@ -30,16 +30,16 @@ class TestEngine(QdaoBaseTest):
 
         assert sv == sv_load
 
-    def test_run(self):
-        NQ = 25
-        NP = NQ -2
+    def test_run(self, nq):
+        NQ = int(nq)
+        NP = NQ - 2
         NL = NQ - 10
 
         circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
         circ = transpile(circ, self._sv_sim)
         #circ.global_phase = 0
 
-        engine = Engine(circuit=circ, num_primary=NP, num_local=NL)
+        engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
         st = time()
         engine.run()
         print("Qdao runs: {}".format(time() - st))

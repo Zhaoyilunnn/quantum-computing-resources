@@ -1,11 +1,14 @@
 import concurrent.futures
 import os
 import logging
+import multiprocessing as mp
 import numpy as np
 
+from threading import Thread
 from typing import List
 
 from qdao.util import *
+from qdao.executor import ParallelExecutor
 
 from utils.misc import print_statistics, time_it
 
@@ -15,7 +18,8 @@ class SvManager:
     def __init__(self,
                  num_qubits: int=6,
                  num_primary: int=4,
-                 num_local: int=2) -> None:
+                 num_local: int=2,
+                 is_parallel: bool=False) -> None:
         """
         Args:
             num_qubits (int): Number of qubits in the target circuit
@@ -26,6 +30,7 @@ class SvManager:
         self._nq, self._np, self._nl = num_qubits, num_primary, num_local
         self._chunk_idx = 0
         self._chunk = np.zeros(1<<num_primary, dtype=complex)
+        self._is_parallel = is_parallel
 
         if not os.path.isdir("data"):
             os.mkdir("data")
@@ -73,6 +78,14 @@ class SvManager:
                             chunk_idx: int):
         return chunk_idx * num_primary_groups;
 
+
+    def _load_single_su(self, isub: int, fn: str):
+        # Populate to current chunk
+        vec = np.load(fn)
+        chk_start = isub<<self._nl
+        chk_end = (isub<<self._nl) + (1<<self._nl)
+        self._chunk[chk_start: chk_end] = vec
+
     @time_it
     def load_sv(self, org_qubits: List[int]):
         """Load a `chunk` of statevector into memory
@@ -91,97 +104,34 @@ class SvManager:
         start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
         end_group_id = start_group_id + num_prim_grps
 
+
+        load_single_su_params = []
         for gid in range(start_group_id, end_group_id):
             inds = indexes(global_qubits, gid)
-            logging.debug("Indexing for group: {}, "\
-                    "indexes: {}, "\
-                    "org_qubits: {}, "\
-                    "global_qubits: {}"\
-                    .format(
-                        gid,
-                        inds,
-                        org_qubits,
-                        global_qubits
-                    ))
             for idx in range(1<<LGDIM):
                 isub = (1<<LGDIM) * (gid-start_group_id) + idx
                 fn = generate_secondary_file_name(inds[idx])
-                # Populate to current chunk
-                vec = np.load(fn)
-                chk_start = isub<<self._nl
-                chk_end = (isub<<self._nl) + (1<<self._nl)
-                self._chunk[chk_start: chk_end] = vec
+                load_single_su_params.append((isub, fn))
+                #self._load_single_su(isub, fn)
 
-                logging.debug("Loading sub chunk: {}, "\
-                        "for group: {}, "\
-                        "inds: {}, "\
-                        "fn: {}, \n"\
-                        "chk_start: {}, "\
-                        "chk_end: {}, "\
-                        "chunk: {}, "\
-                        "chunk_size: {}"\
-                        .format(
-                            isub,
-                            gid,
-                            inds,
-                            fn,
-                            chk_start,
-                            chk_end,
-                            self._chunk,
-                            self._chunk.shape[0]
-                        ))
+        #with mp.Pool(mp.cpu_count()) as pool:
+        #    pool.starmap(self._load_single_su, load_single_su_params)
+        #    pool.close()
+        #    pool.join()
+        if self._is_parallel:
+            executor = ParallelExecutor(self._load_single_su, load_single_su_params)
+            executor.execute()
+        else:
+            for isub, fn in load_single_su_params:
+                self._load_single_su(isub, fn)
+
         return self._chunk
 
-    #def store_sv(self, org_qubits: List[int]):
-    #    if len(org_qubits) <= self._nl:
-    #        raise ValueError("Number of qubits in a sub-circuit should be larger than local qubits")
-
-    #    global_qubits = self._get_global_qubits(org_qubits)
-    #    LGDIM = len(global_qubits) # Logical global qubits' size
-    #    isub = 0
-    #    num_prim_grps = self._num_primary_groups(LGDIM)
-
-    #    start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
-    #    end_group_id = start_group_id + num_prim_grps
-
-    #    for gid in range(start_group_id, end_group_id):
-    #        inds = indexes(global_qubits, gid)
-    #        logging.debug("Indexing for group: {}, "\
-    #                "indexes: {}, "\
-    #                "org_qubits: {}, "\
-    #                "global_qubits: {}"\
-    #                .format(
-    #                    gid,
-    #                    inds,
-    #                    org_qubits,
-    #                    global_qubits
-    #                ))
-    #        for idx in range(1<<LGDIM):
-    #            isub = (1<<LGDIM) * (gid-start_group_id) + idx
-    #            fn = generate_secondary_file_name(inds[idx])
-    #            # Save corresponding slice to secondary storage
-    #            chk_start = isub<<self._nl
-    #            chk_end = (isub<<self._nl) + (1<<self._nl)
-    #            np.save(fn, self._chunk[chk_start: chk_end])
-
-    #            logging.debug("Saving sub chunk: {}, "\
-    #                    "for group: {}, "\
-    #                    "inds: {}, "\
-    #                    "fn: {}, \n"\
-    #                    "chk_start: {}, "\
-    #                    "chk_end: {}, "\
-    #                    "chunk: {}, "\
-    #                    "chunk_size: {}"\
-    #                    .format(
-    #                        isub,
-    #                        gid,
-    #                        inds,
-    #                        fn,
-    #                        chk_start,
-    #                        chk_end,
-    #                        self._chunk,
-    #                        self._chunk.shape[0]
-    #                    ))
+    def _store_single_su(self, isub: int, fn: str):
+        # Save corresponding slice to secondary storage
+        chk_start = isub<<self._nl
+        chk_end = (isub<<self._nl) + (1<<self._nl)
+        np.save(fn, self._chunk[chk_start: chk_end])
 
     @time_it
     def store_sv(self, org_qubits: List[int]):
@@ -196,52 +146,85 @@ class SvManager:
         start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
         end_group_id = start_group_id + num_prim_grps
 
-        def save_to_file(gid, inds, idx):
-            isub = (1<<LGDIM) * (gid-start_group_id) + idx
-            fn = generate_secondary_file_name(inds[idx])
-            # Save corresponding slice to secondary storage
-            chk_start = isub<<self._nl
-            chk_end = (isub<<self._nl) + (1<<self._nl)
-            np.save(fn, self._chunk[chk_start: chk_end])
+        store_single_su_params = []
+        for gid in range(start_group_id, end_group_id):
+            inds = indexes(global_qubits, gid)
+            for idx in range(1<<LGDIM):
+                isub = (1<<LGDIM) * (gid-start_group_id) + idx
+                fn = generate_secondary_file_name(inds[idx])
+                store_single_su_params.append((isub, fn))
+                #self._store_single_su(isub, fn)
 
-            logging.debug("Saving sub chunk: {}, "\
-                    "for group: {}, "\
-                    "inds: {}, "\
-                    "fn: {}, \n"\
-                    "chk_start: {}, "\
-                    "chk_end: {}, "\
-                    "chunk: {}, "\
-                    "chunk_size: {}"\
-                    .format(
-                        isub,
-                        gid,
-                        inds,
-                        fn,
-                        chk_start,
-                        chk_end,
-                        self._chunk,
-                        self._chunk.shape[0]
-                    ))
+        #with mp.Pool(mp.cpu_count()) as pool:
+        #    pool.starmap(self._store_single_su, store_single_su_params)
+        #    pool.close()
+        #    pool.join()
+        if self._is_parallel:
+            executor = ParallelExecutor(self._store_single_su, store_single_su_params)
+            executor.execute()
+        else:
+            for isub, fn in store_single_su_params:
+                self._store_single_su(isub, fn)
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            futures = []
-            for gid in range(start_group_id, end_group_id):
-                inds = indexes(global_qubits, gid)
-                logging.debug("Indexing for group: {}, "\
-                        "indexes: {}, "\
-                        "org_qubits: {}, "\
-                        "global_qubits: {}"\
-                        .format(
-                            gid,
-                            inds,
-                            org_qubits,
-                            global_qubits
-                        ))
-                for idx in range(1<<LGDIM):
-                    futures.append(executor.submit(save_to_file, gid, inds, idx))
+    #@time_it
+    #def store_sv(self, org_qubits: List[int]):
+    #    if len(org_qubits) <= self._nl:
+    #        raise ValueError("Number of qubits in a sub-circuit should be larger than local qubits")
 
-            # wait for all threads to complete
-            for future in concurrent.futures.as_completed(futures):
-                pass
+    #    global_qubits = self._get_global_qubits(org_qubits)
+    #    LGDIM = len(global_qubits) # Logical global qubits' size
+    #    isub = 0
+    #    num_prim_grps = self._num_primary_groups(LGDIM)
+
+    #    start_group_id = self._get_start_group_id(num_prim_grps, self._chunk_idx)
+    #    end_group_id = start_group_id + num_prim_grps
+
+    #    def save_to_file(gid, inds, idx):
+    #        isub = (1<<LGDIM) * (gid-start_group_id) + idx
+    #        fn = generate_secondary_file_name(inds[idx])
+    #        # Save corresponding slice to secondary storage
+    #        chk_start = isub<<self._nl
+    #        chk_end = (isub<<self._nl) + (1<<self._nl)
+    #        np.save(fn, self._chunk[chk_start: chk_end])
+
+    #        logging.debug("Saving sub chunk: {}, "\
+    #                "for group: {}, "\
+    #                "inds: {}, "\
+    #                "fn: {}, \n"\
+    #                "chk_start: {}, "\
+    #                "chk_end: {}, "\
+    #                "chunk: {}, "\
+    #                "chunk_size: {}"\
+    #                .format(
+    #                    isub,
+    #                    gid,
+    #                    inds,
+    #                    fn,
+    #                    chk_start,
+    #                    chk_end,
+    #                    self._chunk,
+    #                    self._chunk.shape[0]
+    #                ))
+
+    #    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    #        futures = []
+    #        for gid in range(start_group_id, end_group_id):
+    #            inds = indexes(global_qubits, gid)
+    #            logging.debug("Indexing for group: {}, "\
+    #                    "indexes: {}, "\
+    #                    "org_qubits: {}, "\
+    #                    "global_qubits: {}"\
+    #                    .format(
+    #                        gid,
+    #                        inds,
+    #                        org_qubits,
+    #                        global_qubits
+    #                    ))
+    #            for idx in range(1<<LGDIM):
+    #                futures.append(executor.submit(save_to_file, gid, inds, idx))
+
+    #        # wait for all threads to complete
+    #        for future in concurrent.futures.as_completed(futures):
+    #            pass
 
 SvManager.print_statistics = print_statistics

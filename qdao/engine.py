@@ -1,4 +1,5 @@
 import logging
+from time import time
 import numpy as np
 
 from typing import Optional
@@ -24,7 +25,8 @@ class Engine:
             manager: Optional[SvManager] = None,
             circuit: QuantumCircuit = QuantumCircuit(),
             num_primary: int=4,
-            num_local: int=2
+            num_local: int=2,
+            is_parallel: bool=False
         ) -> None:
         if isinstance(partitioner, BasePartitioner):
             self._part = partitioner
@@ -39,7 +41,8 @@ class Engine:
             self._manager = SvManager(
                 num_qubits=self._nq,
                 num_primary=num_primary,
-                num_local=num_local
+                num_local=num_local,
+                is_parallel=is_parallel
             )
 
         self._np, self._nl = num_primary, num_local
@@ -112,8 +115,10 @@ class Engine:
         """
         for ichunk in range(self._num_chunks):
             _, circ = self._preprocess(sub_circ, ichunk)
+            st = time()
             res = self._sim.run(circ).result()
             sv = res.get_statevector()
+            print("Partial simulation consumes time: {}".format(time() - st))
             self._postprocess(sub_circ, ichunk, sv)
 
     def debug(self, sub_circ: VirtualCircuit):
@@ -161,6 +166,7 @@ class Engine:
            different part of statevector
         """
         sub_circs = self._part.run(self._circ)
+        logging.info("Number of sub-circuits: {}".format(len(sub_circs)))
         self._initialize()
         for sub_circ in sub_circs:
             self._run(sub_circ)
