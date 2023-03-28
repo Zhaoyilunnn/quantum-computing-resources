@@ -1,4 +1,5 @@
 import copy
+from time import time
 import numpy as np
 
 from qiskit.compiler import transpile
@@ -30,19 +31,24 @@ class TestEngine(QdaoBaseTest):
         assert sv == sv_load
 
     def test_run(self):
-        NQ = 8
-        NP = 6
-        NL = 2
+        NQ = 25
+        NP = NQ -2
+        NL = NQ - 10
 
         circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
         circ = transpile(circ, self._sv_sim)
-        circ.global_phase = 0
-        org_circ = copy.deepcopy(circ)
+        #circ.global_phase = 0
 
         engine = Engine(circuit=circ, num_primary=NP, num_local=NL)
+        st = time()
         engine.run()
+        print("Qdao runs: {}".format(time() - st))
         sv = retrieve_sv(NQ, num_local=NL)
+        engine.print_statistics()
+        engine._manager.print_statistics()
 
         circ.save_state()
+        st = time()
         sv_org = self._sv_sim.run(circ).result().get_statevector().data
+        print("Qiskit runs: {}".format(time() - st))
         assert Statevector(sv).equiv(Statevector(sv_org))

@@ -1,4 +1,3 @@
-import copy
 import logging
 import numpy as np
 
@@ -11,6 +10,8 @@ from qdao.circuit import BasePartitioner, StaticPartitioner, VirtualCircuit
 from qdao.manager import SvManager
 from qdao.util import retrieve_sv, generate_secondary_file_name
 from qdao.qiskit.initializer import initialize
+
+from utils.misc import print_statistics, time_it
 
 QuantumCircuit.initialize = initialize
 
@@ -45,12 +46,13 @@ class Engine:
         self._num_chunks = 1 << (self._nq - self._np)
 
         self._sim = Aer.get_backend("aer_simulator")
-        self._sim.set_options(method="statevector")
+        #self._sim.set_options(method="statevector")
 
     @property
     def num_chunks(self):
         return self._num_chunks
 
+    @time_it
     def _preprocess(
             self,
             sub_circ: VirtualCircuit,
@@ -73,10 +75,12 @@ class Engine:
         nq = sub_circ.circ.num_qubits
         circ = QuantumCircuit(nq)
         circ.initialize(sv, range(nq))
+        circ.print_statistics()
         circ.compose(sub_circ.circ, inplace=True)
         logging.debug(circ)
         return Statevector(sv), circ
 
+    @time_it
     def _postprocess(
             self,
             sub_circ: VirtualCircuit,
@@ -94,6 +98,7 @@ class Engine:
         self._manager.chunk = sv.data
         self._manager.store_sv(sub_circ.real_qubits)
 
+    @time_it
     def _run(
             self,
             sub_circ: VirtualCircuit,
@@ -136,6 +141,7 @@ class Engine:
         print(sv_res)
         assert sv.equiv(sv_res)
 
+    @time_it
     def _initialize(self):
         # Calc number of storage units
         num_sus = (1 << (self._circ.num_qubits - self._nl))
@@ -160,4 +166,4 @@ class Engine:
             self._run(sub_circ)
             #self.debug(sub_circ)
 
-
+Engine.print_statistics = print_statistics

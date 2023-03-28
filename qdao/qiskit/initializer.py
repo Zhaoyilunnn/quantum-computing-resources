@@ -20,8 +20,13 @@ from qiskit.circuit import QuantumRegister
 from qiskit.circuit import Instruction
 from qiskit.circuit import Qubit
 from qdao.qiskit.state_preparation import StatePreparation
+from qdao.qiskit.circ_append import append_init_sv, _append_init_sv
+from utils.misc import time_it, print_statistics
 
 _EPS = 1e-10  # global variable used to chop very small numbers to zero
+
+QuantumCircuit.append_init_sv = append_init_sv
+QuantumCircuit._append_init_sv = _append_init_sv
 
 
 class Initialize(Instruction):
@@ -87,6 +92,7 @@ class Initialize(Instruction):
         return self._stateprep.broadcast_arguments(qargs, cargs)
 
 
+@time_it
 def initialize(self, params, qubits=None):
     r"""Initialize qubits in a specific state.
 
@@ -188,7 +194,8 @@ def initialize(self, params, qubits=None):
         qubits = [qubits]
     num_qubits = len(qubits) if isinstance(params, int) else None
 
-    return self.append(Initialize(params, num_qubits), qubits)
+    return self.append_init_sv(Initialize(params, num_qubits), qubits)
 
 
 QuantumCircuit.initialize = initialize
+QuantumCircuit.print_statistics = print_statistics

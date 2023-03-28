@@ -4,7 +4,7 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.circuit.random import random_circuit
 from qiskit.pulse import Schedule
 
-from qiskit_aer import Aer 
+from qiskit_aer import Aer
 
 from typing import *
 
@@ -13,9 +13,9 @@ class BaseTest:
 
     #_sv_sim = Aer.get_backend("statevector_simulator")
     _sv_sim = Aer.get_backend("aer_simulator")
-    _sv_sim.set_options(method="statevector")
+    #_sv_sim.set_options(method="statevector")
 
-    def get_small_bench_circ(self, 
+    def get_small_bench_circ(self,
                              bench_name,
                              num_qubits: int=4,
                              depth: int=10,
@@ -23,7 +23,7 @@ class BaseTest:
                              qasm_path: Optional[str]=None):
         circ = None
         if bench_name == "random":
-            circ = random_circuit(num_qubits, depth, measure=measure) 
+            circ = random_circuit(num_qubits, depth, measure=measure)
         elif bench_name == "qasm":
             if not isinstance(qasm_path, str):
                 raise ValueError("Qasm file path shoud be a string")
@@ -34,12 +34,12 @@ class BaseTest:
             raise NotImplementedError("Unsupported bench type!")
 
         return circ
-        
+
     def show_scheduled_debug_info(self, scheduled: Schedule) -> None:
         for inst in scheduled.instructions:
             print(inst)
-    
-    def create_dummy_bell_state(self, 
+
+    def create_dummy_bell_state(self,
             qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
             num_qubits=None,
             is_measure=True) -> QuantumCircuit:
@@ -48,7 +48,7 @@ class BaseTest:
         q0: the first qubit id to operate on
         q1: the second qubit id to operate on
 
-        The circuit size will be q1+1, which is 
+        The circuit size will be q1+1, which is
         useful to emulate virtualization
         """
         def do_bell_state(dummy_circ, q0, q1):

@@ -9,11 +9,35 @@ from qiskit.visualization.qcstyle import json
 from qiskit.visualization import plot_coupling_map, plot_gate_map, plot_error_map
 
 BARRIER_OP_LIST = [
-    "measure", 
+    "measure",
     "reset",
     "barrier",
     "bfunc"
 ]
+
+def time_it(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        func_name = func.__name__
+        obj = args[0]
+
+        if not hasattr(obj, '_exec_times'):
+            obj._exec_times = {}
+        # Record execution time to class member
+        obj._exec_times.setdefault(func_name, 0)
+        obj._exec_times[func_name] += end_time - start_time
+        return result
+
+    return wrapper
+
+
+def print_statistics(self):
+    try:
+        print(self._exec_times)
+    except Exception:
+        print("No statistics found!")
 
 def profile(func):
     def wrapper(*args, **kwargs):
@@ -91,7 +115,7 @@ def load_qobj_from_path(qobj_path):
     qobj_dict = None
     with open(qobj_path, 'r') as fr:
         qobj_dict = json.load(fr)
-    return qobj_dict 
+    return qobj_dict
 
 def plot_topology(backend, figname=None):
     """ Plot backend topology """
@@ -105,7 +129,7 @@ def plot_error(backend, figname=None):
         fig.savefig(figname)
 
 def pretty(d: Dict, indent=0) -> None:
-    """ 
+    """
     Pretty print dictionary
 
     Ref: https://stackoverflow.com/questions/3229419/how-to-pretty-print-nested-dictionaries
@@ -122,7 +146,7 @@ def couple_map_to_graph(coupling_map: List[List]):
     Transform coupling map to dictionary for convenience
     """
     graph = {}
-    
+
     for edge in coupling_map:
         if len(edge) != 2:
             raise ValueError("Each edge should be a List with length 2!")
