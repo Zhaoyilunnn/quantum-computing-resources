@@ -305,8 +305,9 @@ class Instruction(Operation):
         instruction = QasmQobjInstruction(name=self.name)
         # Evaluate parameters
         if self.params:
-            params = [x.evalf(x) if hasattr(x, "evalf") else x for x in self.params]
-            instruction.params = params
+            #params = [x.evalf(x) if hasattr(x, "evalf") else x for x in self.params]
+            # FIXME(zhaoyilun): No need to do so for initializing statevector
+            instruction.params = self.params
         # Add placeholder for qarg and carg params
         if self.num_qubits:
             instruction.qubits = list(range(self.num_qubits))

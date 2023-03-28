@@ -30,6 +30,26 @@ class TestEngine(QdaoBaseTest):
 
         assert sv == sv_load
 
+    #def test_run_step(self, nq):
+    #    NQ = int(nq)
+    #    NP = NQ
+    #    NL = NQ - 10
+
+    #    circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
+    #    circ = transpile(circ, self._sv_sim)
+    #    #circ.global_phase = 0
+
+    #    engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
+    #    sub_circs = engine._part.run(circ)
+    #    engine._initialize()
+    #    _, circ = engine._preprocess(sub_circs[0], 0)
+    #    #engine._sim.run(sub_circs[0].circ)
+    #    st = time()
+    #    print("Start running simulation")
+    #    engine._sim.run(circ)
+    #    print("Qiskit runs: {}".format(time() - st))
+    #    print("sub-circs num: {}".format(len(sub_circs)))
+
     def test_run(self, nq):
         NQ = int(nq)
         NP = NQ - 2
@@ -38,6 +58,14 @@ class TestEngine(QdaoBaseTest):
         circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
         circ = transpile(circ, self._sv_sim)
         #circ.global_phase = 0
+
+        engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=False)
+        st = time()
+        engine.run()
+        print("Qdao runs: {}".format(time() - st))
+        sv = retrieve_sv(NQ, num_local=NL)
+        engine.print_statistics()
+        engine._manager.print_statistics()
 
         engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
         st = time()
@@ -52,3 +80,14 @@ class TestEngine(QdaoBaseTest):
         sv_org = self._sv_sim.run(circ).result().get_statevector().data
         print("Qiskit runs: {}".format(time() - st))
         assert Statevector(sv).equiv(Statevector(sv_org))
+
+    #def test_run_qiskit(self, nq):
+    #    NQ = int(nq)
+
+    #    circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
+    #    circ = transpile(circ, self._sv_sim)
+
+    #    circ.save_state()
+    #    st = time()
+    #    sv_org = self._sv_sim.run(circ).result().get_statevector().data
+    #    print("Qiskit runs: {}".format(time() - st))
