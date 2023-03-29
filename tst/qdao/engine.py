@@ -59,13 +59,13 @@ class TestEngine(QdaoBaseTest):
         circ = transpile(circ, self._sv_sim)
         #circ.global_phase = 0
 
-        engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=False)
-        st = time()
-        engine.run()
-        print("Qdao runs: {}".format(time() - st))
-        sv = retrieve_sv(NQ, num_local=NL)
-        engine.print_statistics()
-        engine._manager.print_statistics()
+        #engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=False)
+        #st = time()
+        #engine.run()
+        #print("Qdao runs: {}".format(time() - st))
+        #sv = retrieve_sv(NQ, num_local=NL)
+        #engine.print_statistics()
+        #engine._manager.print_statistics()
 
         engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
         st = time()

@@ -1,20 +1,20 @@
 from qiskit.providers.fake_provider import *
 
 from qvm.constants import *
-from qvm.manager.backend_manager import * 
+from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.circuit import merge_circuits_v2, KlReliabilityCalculator
 from qvm.util.backend import *
 from qvm.test.base import *
 
-from util.plot import plot_bar
+from utils.plot import plot_bar
 
 
 class TestBench(QvmBaseTest):
     """
     Integration of backend manager and process manager
     """
-    
+
     def setup_class(self):
         self._backend_manager = BfsBackendManager(self._backend)
         self._backend_manager.init_helpers()
@@ -23,7 +23,7 @@ class TestBench(QvmBaseTest):
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
 
     def test_single_bench(self, bench):
-        #circ = self.create_dummy_bell_state((0,1))  
+        #circ = self.create_dummy_bell_state((0,1))
         self._fid_calculator = KlReliabilityCalculator()
         circ = self.get_small_bench_circ(bench)
         cu = self._backend_manager.allocate(circ)
@@ -40,7 +40,7 @@ class TestBench(QvmBaseTest):
         #circ1 = self.create_dummy_bell_state((0,1))
         circ0 = self.get_small_bench_circ(bench)
         circ1 = self.get_small_bench_circ(bench)
-        
+
         process0 = self._backend_manager.compile(circ0)
         process1 = self._backend_manager.compile(circ1)
 
@@ -67,11 +67,11 @@ class TestBench(QvmBaseTest):
         fid_base = self._fid_calculator.calc_fidelity(circ, base_res.get_counts(), shots=shots)
         print("Fid of qvm & baseline\t{}\t{}".format(fid_qvm, fid_base))
 
-    def run_frp(self, 
+    def run_frp(self,
             circ_list: List[QuantumCircuit],
             **kwargs):
         """Run using FRP process manager
-        Here we temporarily use backend manager to extract compute units and compile on 
+        Here we temporarily use backend manager to extract compute units and compile on
         compute units, a better implementation should be in FrpProcessManager->run() method
         """
         proc = FrpProcessManager(self._backend)
@@ -89,11 +89,11 @@ class TestBench(QvmBaseTest):
         res = cu.backend.run(exe, **kwargs).result()
         return res
 
-    def run_qvm(self, 
+    def run_qvm(self,
             circ_list: List[QuantumCircuit],
             **kwargs):
         """Run using qvm process manager
-        Here we temporarily use backend manager to extract compute units and compile on 
+        Here we temporarily use backend manager to extract compute units and compile on
         compute units, a better implementation should be in QvmProcessManager->run() method
         """
         qvm_proc = QvmProcessManager(self._backend)
@@ -115,7 +115,7 @@ class TestBench(QvmBaseTest):
         circ0 = self.get_small_bench_circ(bench)
         circ1 = self.get_small_bench_circ(bench)
         circ = merge_circuits([circ0, circ1])
-        
+
         qvm_res = self.run_qvm([circ0, circ1], shots=shots)
         frp_res = self.run_frp([circ0, circ1], shots=shots)
 
@@ -151,7 +151,7 @@ class TestBench(QvmBaseTest):
         print("Fid of QVM:\t{}".format("\t".join( [str(f) for f in fids_qvm] )))
         print("Fid of FRP:\t{}".format("\t".join( [str(f) for f in fids_frp] )))
         print("Benches: {}".format("\t".join(labels)))
-        
+
         plot_bar([fids_qvm, fids_frp],
                  labels,
                  data_labels=["QVM", "FRP"],
@@ -189,7 +189,7 @@ class TestBench(QvmBaseTest):
         print("Fid of QVM:\t{}".format("\t".join( [str(f) for f in fids_qvm] )))
         print("Fid of FRP:\t{}".format("\t".join( [str(f) for f in fids_frp] )))
         print("Benches: {}".format("\t".join(labels)))
-        
+
         plot_bar([fids_qvm, fids_frp],
                  labels,
                  data_labels=["QVM", "FRP"],
