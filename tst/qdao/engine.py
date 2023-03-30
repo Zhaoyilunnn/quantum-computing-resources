@@ -42,7 +42,7 @@ class TestEngine(QdaoBaseTest):
         circ_sv.save_state()
         st = time()
         job = self._sv_sim.run(circ_sv)
-        sv = job.result()
+        sv0 = job.result().get_statevector()
         print("Qiskit runs: {}".format(time() - st))
 
         engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
@@ -58,8 +58,10 @@ class TestEngine(QdaoBaseTest):
 
         st = time()
         print("Start getting statevector")
-        sv = job.result().get_statevector()
+        sv1 = job.result().get_statevector()
         print("Getting statevector runs: {}".format(time() - st))
+
+        assert sv0.equiv(sv1)
 
     def test_run(self, nq):
         NQ = int(nq)

@@ -218,15 +218,15 @@ class Instruction(Operation):
         # FIXME(zhaoyilun): No need to
         # append one-by-one when setting statevector
         st = time.time()
-        if isinstance(parameters, list):
-            self._params = parameters
-            return
-        if not isinstance(parameters, numpy.ndarray):
-            raise ValueError("For qdao, must initialize "\
-                    "from a statevector (np.numpy.ndarray)")
-        #self._params = list(parameters)
-        self._params = parameters.tolist()
-        #self._params = parameters
+        #if isinstance(parameters, list):
+        #    self._params = parameters
+        #    return
+        #if not isinstance(parameters, numpy.ndarray):
+        #    raise ValueError("For qdao, must initialize "\
+        #            "from a statevector (np.numpy.ndarray)")
+        ##self._params = list(parameters)
+        #self._params = parameters.tolist()
+        self._params = parameters
         print("Time of setting params: {}".format(time.time() - st))
 
         #for single_param in parameters:
@@ -304,10 +304,10 @@ class Instruction(Operation):
         """Assemble a QasmQobjInstruction"""
         instruction = QasmQobjInstruction(name=self.name)
         # Evaluate parameters
-        if self.params:
-            #params = [x.evalf(x) if hasattr(x, "evalf") else x for x in self.params]
-            # FIXME(zhaoyilun): No need to do so for initializing statevector
-            instruction.params = self.params
+        #if self.params:
+        #params = [x.evalf(x) if hasattr(x, "evalf") else x for x in self.params]
+        # FIXME(zhaoyilun): No need to do so for initializing statevector
+        instruction.params = self.params
         # Add placeholder for qarg and carg params
         if self.num_qubits:
             instruction.qubits = list(range(self.num_qubits))
