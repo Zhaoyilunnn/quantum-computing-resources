@@ -10,7 +10,7 @@ from qvm.test.base import *
 from utils.plot import plot_bar
 
 
-class TestBench(QvmBaseTest):
+class TestBenchQvmBfs(QvmBaseTest):
     """
     Integration of backend manager and process manager
     """
@@ -125,7 +125,7 @@ class TestBench(QvmBaseTest):
         fid_frp = self._fid_calculator.calc_fidelity(circ, frp_res.get_counts(), shots=shots)
         print("Fid of qvm & frp\t{}\t{}".format(fid_qvm, fid_frp))
 
-    def test_two_n4_qasm_bench(self):
+    def test_two_n4_qasm_bench_wo_cmr(self):
         """Test two 4-qubit programs, compare qvm and frp"""
         shots = 2**20
         fids_qvm = []
@@ -195,3 +195,12 @@ class TestBench(QvmBaseTest):
                  data_labels=["QVM", "FRP"],
                  figname="fid_qvm_frp_qasm_n4_two.png",
                  figsize=(20,6))
+
+
+class TestBenchQvmFrp(TestBenchQvmBfs):
+
+    def setup_class(self):
+        self._backend_manager = FrpBackendManager(self._backend)
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_compute_units()
+        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)

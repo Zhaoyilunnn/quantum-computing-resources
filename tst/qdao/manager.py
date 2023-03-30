@@ -1,3 +1,6 @@
+import random
+
+from time import time
 import numpy as np
 
 from qiskit.compiler import transpile
@@ -6,7 +9,7 @@ from qdao.manager import SvManager
 from qdao.test import QdaoBaseTest
 
 
-class TestSvDao(QdaoBaseTest):
+class TestSvManager(QdaoBaseTest):
 
     _sv_dao = SvManager()
 
@@ -77,3 +80,36 @@ class TestSvDao(QdaoBaseTest):
         np.testing.assert_array_equal(self._sv_dao._chunk[8:12], vec1)
         np.testing.assert_array_equal(self._sv_dao._chunk[4:8], vec2)
         np.testing.assert_array_equal(self._sv_dao._chunk[12:16], vec3)
+
+    def test_load_save_large(self, nq):
+        NQ = int(nq)
+        NP = NQ - 2
+        qubits = list(range(NQ-10)) + sorted(random.sample(range(NQ-10, NQ), NP-NQ+10))
+        print("qubits::\t{}".format(qubits))
+        vec = np.random.rand(1<<NP) + 1j * np.random.rand(1<<NP)
+
+        sv_dao = SvManager(num_qubits=NQ, num_primary=NP, num_local=NQ-10, is_parallel=False)
+        sv_dao.chunk = vec
+
+        print("store_sv::start::NQ::\t{}".format(NQ))
+        st = time()
+        sv_dao.store_sv(qubits)
+        print("store_sv::time::\t{}".format(time()-st))
+
+        print("load_sv::start::NQ::\t{}".format(NQ))
+        st = time()
+        sv_dao.load_sv(qubits)
+        print("load_sv::time::\t{}".format(time()-st))
+
+        sv_dao = SvManager(num_qubits=NQ, num_primary=NP, num_local=NQ-10, is_parallel=True)
+        sv_dao.chunk = vec
+
+        print("store_sv::start::NQ::\t{}".format(NQ))
+        st = time()
+        sv_dao.store_sv(qubits)
+        print("store_sv::time::\t{}".format(time()-st))
+
+        print("load_sv::start::NQ::\t{}".format(NQ))
+        st = time()
+        sv_dao.load_sv(qubits)
+        print("load_sv::time::\t{}".format(time()-st))

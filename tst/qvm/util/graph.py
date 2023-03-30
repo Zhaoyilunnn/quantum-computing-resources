@@ -8,7 +8,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 class TestNormalBackendGraphExtractor(QvmBaseTest):
 
     def setup_class(self):
-        self._extractor = BackendAdjMatGraphExtractor(self._backend) 
+        self._extractor = BackendAdjMatGraphExtractor(self._backend)
 
     def test_get_readout_errs(self):
         print("================ Test get readout errors =====================")
@@ -21,13 +21,13 @@ class TestNormalBackendGraphExtractor(QvmBaseTest):
         print(graph)
 
         assert graph[6,7] == 0.01431875092381174
-        
+
 
 class TestKlPartitioner(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = NormalBackendNxGraphExtractor(self._backend)
-        self._partitioner = ParitionProvider.get_partioner("kl")
+        self._partitioner = GraphPartitionProvider.get_partitioner("kl")
 
     def test_graph_partition(self):
         graph = self._extractor.extract()
@@ -39,7 +39,7 @@ class TestBfsPartitioner(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = BaseBackendGraphExtractor(self._backend)
-        self._partitioner = ParitionProvider.get_partioner("bfs")
+        self._partitioner = GraphPartitionProvider.get_partitioner("bfs")
 
     def test_graph_partition(self):
         graph = self._extractor.extract()
@@ -51,7 +51,7 @@ class TestFrpPartitioner(QvmBaseTest):
 
     def setup_class(self):
         self._extractor = BackendAdjMatGraphExtractor(self._backend)
-        self._partitioner = ParitionProvider.get_partioner("frp")
+        self._partitioner = GraphPartitionProvider.get_partitioner("frp")
         graph = self._extractor.extract()
         self._partitioner.graph = graph
         readout_errs = self._extractor.get_readout_errs()
@@ -100,4 +100,4 @@ class TestUtilMisc(QvmBaseTest):
     def test_split_list(self):
         lst = [1,2,3,4,5,6,7,8,9,10]
         res = split_list(lst, 3)
-        assert res == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]] 
+        assert res == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]

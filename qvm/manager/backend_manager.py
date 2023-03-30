@@ -43,7 +43,7 @@ class BaseBackendManager:
 
     def init_helpers(self) -> None:
         """ Init helper classes """
-        self._partitioner = ParitionProvider.get_partioner("naive")
+        self._partitioner = GraphPartitionProvider.get_partitioner("naive")
         self._graph_extractor = BaseBackendGraphExtractor(self._backend)
 
     def init_compute_units(self) -> List[ComputeUnit]:
@@ -250,7 +250,7 @@ class KlBackendManager(BaseBackendManager):
         super().__init__(backend)
 
     def init_helpers(self) -> None:
-        self._partitioner = ParitionProvider.get_partioner("kl")
+        self._partitioner = GraphPartitionProvider.get_partitioner("kl")
         self._graph_extractor = NormalBackendNxGraphExtractor(self._backend)
 
     def init_compute_units(self) -> List[ComputeUnit]:
@@ -264,11 +264,42 @@ class KlBackendManager(BaseBackendManager):
 
 
 class BfsBackendManager(BaseBackendManager):
-    """ Manager using BFS to get connected compute units """
+    """Manager using BFS to get connected compute units
+    Workflow:
+        1. Randomly select a root
+        2. Grow a compute unit (with fixed size) from the root
+        3. Remove the compute unit from the original graph and
+           repeat 1 & 2 until all nodes are assigned to compute
+           units
+    """
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
 
     def init_helpers(self) -> None:
-        self._partitioner = ParitionProvider.get_partioner("bfs")
+        self._partitioner = GraphPartitionProvider.get_partitioner("bfs")
         self._graph_extractor = BaseBackendGraphExtractor(self._backend)
+
+class FrpBackendManager(BaseBackendManager):
+    """Using FRP to extract a compute unit"""
+
+    def init_helpers(self) -> None:
+        self._graph_extractor = BackendAdjMatGraphExtractor(self._backend)
+        graph = self._graph_extractor.extract()
+        rd_errs = self._graph_extractor.get_readout_errs()
+        self._partitioner = GraphPartitionProvider.get_partitioner(
+                                                "frp",
+                                                graph=graph,
+                                                errs=rd_errs)
+
+    def init_compute_units(self) -> List[ComputeUnit]:
+        if not self._cu_size:
+            raise ValueError("Please set compute unit size before init compute units")
+
+        self._compute_units = []
+        part = self._partitioner.partition(self._cu_size)
+        while part:
+            cu = self.extract_single_compute_unit(part)
+            self._compute_units.append(cu)
+            part = self._partitioner.partition(self._cu_size)
+        return self._compute_units

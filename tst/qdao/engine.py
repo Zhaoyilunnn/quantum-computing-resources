@@ -30,25 +30,36 @@ class TestEngine(QdaoBaseTest):
 
         assert sv == sv_load
 
-    #def test_run_step(self, nq):
-    #    NQ = int(nq)
-    #    NP = NQ
-    #    NL = NQ - 10
+    def test_run_step(self, nq):
+        NQ = int(nq)
+        NP = NQ
+        NL = NQ - 10
 
-    #    circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
-    #    circ = transpile(circ, self._sv_sim)
-    #    #circ.global_phase = 0
+        circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
+        circ = transpile(circ, self._sv_sim)
+        #circ.global_phase = 0
+        circ_sv = copy.deepcopy(circ)
+        circ_sv.save_state()
+        st = time()
+        job = self._sv_sim.run(circ_sv)
+        sv = job.result()
+        print("Qiskit runs: {}".format(time() - st))
 
-    #    engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
-    #    sub_circs = engine._part.run(circ)
-    #    engine._initialize()
-    #    _, circ = engine._preprocess(sub_circs[0], 0)
-    #    #engine._sim.run(sub_circs[0].circ)
-    #    st = time()
-    #    print("Start running simulation")
-    #    engine._sim.run(circ)
-    #    print("Qiskit runs: {}".format(time() - st))
-    #    print("sub-circs num: {}".format(len(sub_circs)))
+        engine = Engine(circuit=circ, num_primary=NP, num_local=NL, is_parallel=True)
+        sub_circs = engine._part.run(circ)
+        engine._initialize()
+        _, sub_circ = engine._preprocess(sub_circs[0], 0)
+        #engine._sim.run(sub_circs[0].sub_circ)
+        st = time()
+        print("Start running simulation")
+        job = engine._sim.run(sub_circ)
+        print("Qiskit runs: {}".format(time() - st))
+        print("sub-circs num: {}".format(len(sub_circs)))
+
+        st = time()
+        print("Start getting statevector")
+        sv = job.result().get_statevector()
+        print("Getting statevector runs: {}".format(time() - st))
 
     def test_run(self, nq):
         NQ = int(nq)
