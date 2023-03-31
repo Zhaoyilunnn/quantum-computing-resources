@@ -4,8 +4,7 @@ into sub-circuits.
 """
 import logging
 
-from typing import List
-from qiskit.circuit import QuantumCircuit, CircuitInstruction
+from typing import Any, List
 from qdao.qiskit.circuit import QiskitCircuitHelper
 
 
@@ -13,18 +12,18 @@ class QdaoCircuit:
 
     def __init__(
             self,
-            circ: QuantumCircuit,
+            circ: Any,
             real_qubits: List[int]
         ) -> None:
         self._circ = circ
         self._real_qubits = real_qubits
 
     @property
-    def circ(self) -> QuantumCircuit:
+    def circ(self) -> Any:
         return self._circ
 
     @circ.setter
-    def circ(self, circ: QuantumCircuit):
+    def circ(self, circ: Any):
         self._circ = circ
 
     @property
@@ -38,10 +37,12 @@ class BasePartitioner:
     def __init__(
             self,
             np=4,
-            nl=2
+            nl=2,
+            backend="qiskit"
         ) -> None:
         self._np = np
         self._nl = nl
+        self._circ_helper = CircuitHelperProvider.get_helper(backend)
 
     @property
     def np(self):
@@ -59,54 +60,7 @@ class BasePartitioner:
     def nl(self, n):
         self._nl = n
 
-    def _gen_sub_circ(
-            self,
-            circ: QuantumCircuit,
-            instrs: List[CircuitInstruction]
-        ) -> QdaoCircuit:
-        """Generate a sub circuit based on a list of circuit instructions
-        We assume there's no conditional instructions and no measurement
-        instructions
-
-        Args:
-            circ (QuantumCircuit): The circuit that originally contains
-                instrs. Used to extract qubit object.
-            instrs (List[CircuitInstruction]): A list of instructions
-        Return:
-            VirtualCircuit
-        """
-
-        # 1. Get the set of qubits
-        qset = set(range(self._nl))
-        for instr in instrs:
-            for q in instr.qubits:
-                qset.add(q._index)
-
-        #num_qubits = len(qset)
-        sub_circ = QuantumCircuit(self._np)
-
-        real_qubits = sorted(list(qset))
-
-        assert len(real_qubits) <= self._np
-
-        qubit_map = {
-            circ.qubits[q]: sub_circ.qubits[i]
-            for i, q in enumerate(real_qubits)
-        }
-
-        for instr in instrs:
-            op = instr.operation.copy()
-            if len(instr.clbits) > 0:
-                raise NotImplementedError("Currently not support measure/control operations")
-            qubits = [qubit_map[q] for q in instr.qubits]
-            sub_instr = CircuitInstruction(op, qubits=qubits)
-            sub_circ.append(sub_instr)
-
-        sub_circ.save_state()
-        #print(sub_circ)
-        return QdaoCircuit(sub_circ, real_qubits)
-
-    def run(self, circuit: QuantumCircuit) -> List[QdaoCircuit]:
+    def run(self, circuit: Any) -> List[QdaoCircuit]:
 
         sub_circs = []
 
@@ -116,22 +70,30 @@ class StaticPartitioner(BasePartitioner):
     """ Static partitioner which traverse the operations in original order """
 
 
-    def run(self, circuit: QuantumCircuit) -> List[QdaoCircuit]:
+    def run(self, circuit: Any) -> List[QdaoCircuit]:
+
+        # Set cicuit of circuit helper
+        self._circ_helper.circ = circuit
 
         sub_circs = []
 
         instrs = []
         qset = set()
-        for instr in circuit.data:
+        for instr in self._circ_helper.instructions:
             qs = set()
-            for q in instr.qubits:
-                if q._index >= self._nl:
-                    qs.add(q._index)
+            for q in self._circ_helper.get_instr_qubits(instr):
+                if q >= self._nl:
+                    qs.add(q)
+
             if len(qset | qs) <= (self._np - self._nl):
                 qset = qset | qs
                 instrs.append(instr)
             else:
-                sub_circ = self._gen_sub_circ(circuit, instrs)
+                sub_circ = self._circ_helper.gen_sub_circ(
+                                instrs,
+                                self._nl,
+                                self._np
+                            )
                 sub_circs.append(sub_circ)
                 logging.info("Find sub-circuit: {}, qubits: {}".format(sub_circ.circ, qset))
                 # FIXME(zhaoyilun): Here the instr's qubits size may exceed
@@ -139,7 +101,11 @@ class StaticPartitioner(BasePartitioner):
                 instrs = [instr]
                 qset = qs
         if instrs:
-            sub_circ = self._gen_sub_circ(circuit, instrs)
+            sub_circ = self._circ_helper.gen_sub_circ(
+                            instrs,
+                            self._nl,
+                            self._np
+                        )
             sub_circs.append(sub_circ)
 
         return sub_circs

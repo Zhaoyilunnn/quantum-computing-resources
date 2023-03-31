@@ -39,7 +39,7 @@ class Engine:
 
         self._circ = circuit
         self._circ_helper.circ = circuit
-        self._nq = self._circ_helper.get_num_qubits()
+        self._nq = self._circ_helper.num_qubits
 
         if isinstance(manager, SvManager):
             self._manager = manager
