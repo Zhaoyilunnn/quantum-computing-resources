@@ -22,13 +22,13 @@ class TestEngine(QdaoBaseTest):
         sub_circs = engine._part.run(engine._circ)
 
         res = engine._sim.run(sub_circs[0].circ).result()
-        sv = res.get_statevector()
+        sv = res.get_statevector().data
         engine._postprocess(sub_circs[0], 0, sv)
 
         sv_load, _ = engine._preprocess(sub_circs[0], 0)
         print(sub_circs[0].circ)
 
-        assert sv == sv_load
+        assert np.array_equal(sv, sv_load)
 
     def test_run_step(self, nq):
         NQ = int(nq)

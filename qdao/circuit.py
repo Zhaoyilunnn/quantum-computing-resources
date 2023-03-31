@@ -6,9 +6,10 @@ import logging
 
 from typing import List
 from qiskit.circuit import QuantumCircuit, CircuitInstruction
+from qdao.qiskit.circuit import QiskitCircuitHelper
 
 
-class VirtualCircuit:
+class QdaoCircuit:
 
     def __init__(
             self,
@@ -62,7 +63,7 @@ class BasePartitioner:
             self,
             circ: QuantumCircuit,
             instrs: List[CircuitInstruction]
-        ) -> VirtualCircuit:
+        ) -> QdaoCircuit:
         """Generate a sub circuit based on a list of circuit instructions
         We assume there's no conditional instructions and no measurement
         instructions
@@ -103,9 +104,9 @@ class BasePartitioner:
 
         sub_circ.save_state()
         #print(sub_circ)
-        return VirtualCircuit(sub_circ, real_qubits)
+        return QdaoCircuit(sub_circ, real_qubits)
 
-    def run(self, circuit: QuantumCircuit) -> List[VirtualCircuit]:
+    def run(self, circuit: QuantumCircuit) -> List[QdaoCircuit]:
 
         sub_circs = []
 
@@ -115,7 +116,7 @@ class StaticPartitioner(BasePartitioner):
     """ Static partitioner which traverse the operations in original order """
 
 
-    def run(self, circuit: QuantumCircuit) -> List[VirtualCircuit]:
+    def run(self, circuit: QuantumCircuit) -> List[QdaoCircuit]:
 
         sub_circs = []
 
@@ -149,6 +150,11 @@ PARTITIONERS = {
 }
 
 
+INITIALIZERS = {
+    "qiskit": QiskitCircuitHelper
+}
+
+
 class PartitionerProvider:
 
     @classmethod
@@ -158,3 +164,13 @@ class PartitionerProvider:
             **configs,
         ):
         return PARTITIONERS[part_name](**configs)
+
+class CircuitHelperProvider:
+
+    @classmethod
+    def get_helper(
+            cls,
+            backend_name: str,
+            **props
+        ):
+        return INITIALIZERS[backend_name](**props)
