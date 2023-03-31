@@ -150,7 +150,7 @@ class Engine:
         num_sus = (1 << (self._nq - self._nl))
         for i in range(num_sus):
             # Init a storage unit
-            su = np.zeros(1<<self._nl, dtype=complex)
+            su = np.zeros(1<<self._nl, dtype=np.complex128)
             if i == 0:
                 su[0] = 1.
             fn = generate_secondary_file_name(i)

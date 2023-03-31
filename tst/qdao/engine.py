@@ -1,10 +1,11 @@
 import copy
-from time import time
+import os
+import sys
+from time import time, sleep
 import numpy as np
 
 from qiskit.compiler import transpile
 from qiskit.quantum_info import Statevector
-from qdao.quafu.simulator import QuafuSimulator
 from qdao.simulator import QdaoSimObj
 
 from qdao.test import QdaoBaseTest
@@ -109,18 +110,61 @@ class TestEngine(QdaoBaseTest):
     #    sv_org = self._sv_sim.run(circ).result().get_statevector().data
     #    print("Qiskit runs: {}".format(time() - st))
 
-    def test_run_quafu(self, bench):
+    def test_run_quafu_random(self, nq):
+        NQ = int(nq)
+        NP = NQ - 2
+        NL = NQ - 10
+
+        circ = self.get_small_bench_circ("random", num_qubits=NQ, depth=9, measure=False)
+        circ = transpile(circ, self._sv_sim)
+        from quafu.circuits.quantum_circuit import QuantumCircuit
+
+        quafu_circ = QuantumCircuit(1)
+        quafu_circ.from_openqasm(circ.qasm())
+        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
+        st = time()
+        engine.run()
+        print("Qdao runs: {}".format(time() - st))
+        #sv = retrieve_sv(NQ, num_local=NL)
+        engine.print_statistics()
+        engine._manager.print_statistics()
+
+        from quafu.simulators.simulator import simulate
+        st = time()
+        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv[0] = 1
+        sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+        #sv_org = simulate(quafu_circ, output="state_vector").get_statevector()
+        print("Quafu runs: {}".format(time() - st))
+
+        ##init_sv = np.random.rand(1<<NQ)+1j*np.random.rand(1<<NQ)
+        #init_sv = np.arange(1<<NQ, dtype=np.complex128)
+
+        ##sleep(10)
+
+        #st = time()
+        #sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+        #print("Quafu runs: {}".format(time() - st))
+
+        #circ.save_state()
+        #sv_org_qiskit = self._sv_sim.run(circ).result().get_statevector().data
+        #assert Statevector(sv_org_qiskit).equiv(Statevector(sv_org))
+
+
+    def test_run_quafu_bench(self, bench):
         qasm_path = LARGE_BENCH_PATH + '/' + bench + '/' + bench + '.qasm'
         quafu_circ = self.get_quafu_circ_from_qasm(qasm_path)
         NQ = quafu_circ.num
         NP = NQ - 2
         NL = NQ - 10
 
-        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
         engine.run()
         sv = retrieve_sv(NQ, num_local=NL)
 
+        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv[0] = 1
         from quafu.simulators.simulator import simulate
-        sv_org = simulate(quafu_circ, output="state_vector").get_statevector()
+        sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
 
         assert Statevector(sv).equiv(Statevector(sv_org))

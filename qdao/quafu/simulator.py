@@ -23,4 +23,6 @@ class QuafuSimulator:
 
         # Calculate repeat number
         rep_num = expected_sv_size // sv.shape[0]
+        if rep_num == 1:
+            return sv
         return np.tile(sv, rep_num)

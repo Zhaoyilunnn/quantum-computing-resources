@@ -29,7 +29,7 @@ class SvManager:
         """
         self._nq, self._np, self._nl = num_qubits, num_primary, num_local
         self._chunk_idx = 0
-        self._chunk = np.zeros(1<<num_primary, dtype=complex)
+        self._chunk = np.zeros(1<<num_primary, dtype=np.complex128)
         self._is_parallel = is_parallel
 
         if not os.path.isdir("data"):
