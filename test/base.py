@@ -35,6 +35,15 @@ class BaseTest:
 
         return circ
 
+    def get_quafu_circ_from_qasm(self, qasm_path):
+        from quafu.circuits.quantum_circuit import QuantumCircuit
+        with open(qasm_path, 'r') as qasm:
+            # FIXME(zhaoyilun): Quafu QuantumCircuit's num will be
+            # read from qasm
+            circ = QuantumCircuit(1)
+            circ.from_openqasm(qasm.read())
+            return circ
+
     def show_scheduled_debug_info(self, scheduled: Schedule) -> None:
         for inst in scheduled.instructions:
             print(inst)

@@ -6,6 +6,7 @@ import logging
 
 from typing import Any, List
 from qdao.qiskit.circuit import QiskitCircuitHelper
+from qdao.quafu.circuit import QuafuCircuitHelper
 
 
 class QdaoCircuit:
@@ -117,7 +118,8 @@ PARTITIONERS = {
 
 
 INITIALIZERS = {
-    "qiskit": QiskitCircuitHelper
+    "qiskit": QiskitCircuitHelper,
+    "quafu": QuafuCircuitHelper
 }
 
 

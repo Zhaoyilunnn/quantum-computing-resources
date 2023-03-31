@@ -1,4 +1,4 @@
-## Storage Access Optimization (State-vector)
+## QDAO: Quantum Data Access Optimization
 
 ### Redundancy
 

@@ -35,3 +35,24 @@ SMALL_BENCHES = [
     "wstate_n3"
 ]
 
+LARGE_BENCH_PATH="/root/projects/QASMBench/large/"
+
+LARGE_BENCHES = [
+    "bigadder_n18",
+    "bv_n19",
+    "bwt_n21",
+    "cat_state_n22",
+    "cc_n18",
+    "class_number_n60045",
+    "dnn_n16",
+    "ghz_state_n23",
+    "ising_model_n1000",
+    "ising_model_n500",
+    "ising_n26",
+    "multiplier_n25",
+    "qft_n20",
+    "square_root_n18",
+    "swap_test_n25",
+    "vqe_n24",
+    "wstate_n27"
+]

@@ -3,7 +3,7 @@ from qvm.util.circuit import \
         SvFidReliabilityCalculator, \
         calc_cmr, \
         merge_circuits_v2
-from qvm.constants import *
+from constants import *
 from qvm.test.base import *
 from utils.plot import plot_bar
 
@@ -16,7 +16,7 @@ class TestBaseReliabilityCalculator(QvmBaseTest):
         print("================ Test fidelity calculation =====================")
         circ = self.create_dummy_bell_state((0,1))
         counts_noise = self._backend.run(circ).result().get_counts(circ)
-        print(counts_noise) 
+        print(counts_noise)
         fidelity = self._calculator.calc_fidelity(circ, counts_noise)
         print("Test fidelity: {}".format(fidelity))
 
@@ -82,10 +82,10 @@ class TestUtilCircuitMisc(QvmBaseTest):
                 continue
             cmrs.append(calc_cmr(circ))
             labels.append(b)
-        plot_bar(cmrs, 
-                 labels, 
+        plot_bar(cmrs,
+                 labels,
                  figname="cmr_multi_benches.png",
-                 figsize=(20,6)) 
+                 figsize=(20,6))
 
     def test_calc_cmr_multi_benches_n4(self):
         cmrs = []
@@ -100,10 +100,10 @@ class TestUtilCircuitMisc(QvmBaseTest):
                 continue
             cmrs.append(calc_cmr(circ))
             labels.append(b)
-        plot_bar(cmrs, 
-                 labels, 
+        plot_bar(cmrs,
+                 labels,
                  figname="cmr_multi_benches_n4.png",
-                 figsize=(20,6)) 
+                 figsize=(20,6))
 
     def test_merge_circuits_v2(self):
         b = "vqe_uccsd_n4"

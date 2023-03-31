@@ -1,12 +1,11 @@
-from typing import List, Optional
 import numpy as np
-from qiskit.circuit import QuantumCircuit, CircuitInstruction
+import copy
 
-from .initializer import initialize
+from typing import List, Optional
+from quafu.circuits.quantum_circuit import QuantumCircuit, QuantumGate, SingleQubitGate
 
-QuantumCircuit.initialize = initialize
 
-class QiskitCircuitHelper:
+class QuafuCircuitHelper:
 
     def __init__(
             self,
@@ -26,40 +25,30 @@ class QiskitCircuitHelper:
     def num_qubits(self):
         if not isinstance(self._circ, QuantumCircuit):
             raise ValueError("Please set circ")
-        return self._circ.num_qubits
+        return self._circ.num
 
     @property
     def instructions(self):
         if not isinstance(self._circ, QuantumCircuit):
             raise ValueError("Please set circ")
-        return self._circ.data
+        # FIXME(zhaoyilun): temporarily remove barrier like this
+        # Needs better impl
+        return self._circ.gates[:-1]
 
-    def get_instr_qubits(self, instruction: CircuitInstruction):
-        for q in instruction.qubits:
-            yield q._index
+    def get_instr_qubits(self, instruction: QuantumGate):
+        if isinstance(instruction, SingleQubitGate):
+            return [instruction.pos]
+        return instruction.pos
 
     def init_circ_from_sv(self, sv: np.ndarray):
-        """Initialize qiskit QuantumCircuit from given statevector
-
-        Comments:
-            1. Currently qiskit QuantumCircuit.initialize will
-               append an initialize instruction at the end of
-               the circuit, we need create a new instance and
-               init from statevector at the begining
-        """
         from qdao.simulator import QdaoSimObj
         if not isinstance(self._circ, QuantumCircuit):
-            raise ValueError("Please set circ before initializing from sv!")
-
-        nq = self._circ.num_qubits
-        circ = QuantumCircuit(nq)
-        circ.initialize(sv, range(nq))
-        circ.compose(self._circ, inplace=True)
-        return QdaoSimObj(sv, circ)
+            raise ValueError("Please set circ")
+        return QdaoSimObj(sv, self._circ)
 
     def gen_sub_circ(
             self,
-            instrs: List[CircuitInstruction],
+            instrs: List[QuantumGate],
             num_local: int,
             num_primary: int
         ):
@@ -68,7 +57,7 @@ class QiskitCircuitHelper:
         instructions
 
         Args:
-            instrs (List[CircuitInstruction]): A list of instructions
+            instrs (List[QuantumGate]): A list of instructions
         Return:
             QdaoCircuit
         """
@@ -79,8 +68,8 @@ class QiskitCircuitHelper:
         # 1. Get the set of qubits
         qset = set(range(num_local))
         for instr in instrs:
-            for q in instr.qubits:
-                qset.add(q._index)
+            for q in self.get_instr_qubits(instr):
+                qset.add(q)
 
         sub_circ = QuantumCircuit(num_primary)
 
@@ -89,17 +78,17 @@ class QiskitCircuitHelper:
         assert len(real_qubits) <= num_primary
 
         qubit_map = {
-            self._circ.qubits[q]: sub_circ.qubits[i]
+            q: i
             for i, q in enumerate(real_qubits)
         }
 
         for instr in instrs:
-            op = instr.operation.copy()
-            if len(instr.clbits) > 0:
-                raise NotImplementedError("Currently not support measure/control operations")
-            qubits = [qubit_map[q] for q in instr.qubits]
-            sub_instr = CircuitInstruction(op, qubits=qubits)
-            sub_circ.append(sub_instr)
+            new_instr = copy.deepcopy(instr)
+            if isinstance(instr, SingleQubitGate):
+                new_pos = qubit_map[instr.pos]
+            else:
+                new_pos = [qubit_map[q] for q in instr.pos]
+            new_instr.pos = new_pos
+            sub_circ.add_gate(new_instr)
 
-        sub_circ.save_state()
         return QdaoCircuit(sub_circ, real_qubits)

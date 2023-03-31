@@ -1,6 +1,6 @@
 from qiskit.providers.fake_provider import *
 
-from qvm.constants import *
+from constants import *
 from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.circuit import merge_circuits_v2, KlReliabilityCalculator

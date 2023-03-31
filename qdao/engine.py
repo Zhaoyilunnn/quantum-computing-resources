@@ -7,7 +7,7 @@ from typing import Any, Optional
 from qdao.circuit import BasePartitioner, CircuitHelperProvider, StaticPartitioner, QdaoCircuit
 from qdao.manager import SvManager
 from qdao.util import generate_secondary_file_name
-from qdao.simulator_provider import SimulatorProvider
+from qdao.simulator import SimulatorProvider
 
 from utils.misc import print_statistics, time_it
 
@@ -28,7 +28,11 @@ class Engine:
         if isinstance(partitioner, BasePartitioner):
             self._part = partitioner
         else:
-            self._part = StaticPartitioner(np=num_primary, nl=num_local)
+            self._part = StaticPartitioner(
+                    np=num_primary,
+                    nl=num_local,
+                    backend=backend
+                )
 
         # Get circuit simulator
         self._sim = SimulatorProvider.get_simulator(backend)
@@ -75,9 +79,7 @@ class Engine:
         logging.debug("loaded sv: {}".format(sv))
 
         self._circ_helper.circ = sub_circ.circ
-        circ = self._circ_helper.init_circ_from_sv(sv)
-
-        return sv, circ
+        return self._circ_helper.init_circ_from_sv(sv)
 
     @time_it
     def _postprocess(
@@ -110,10 +112,9 @@ class Engine:
                 virtual and real qubits
         """
         for ichunk in range(self._num_chunks):
-            _, circ = self._preprocess(sub_circ, ichunk)
+            simobj = self._preprocess(sub_circ, ichunk)
             st = time()
-            res = self._sim.run(circ).result()
-            sv = res.get_statevector().data
+            sv = self._sim.run(simobj)
             print("Partial simulation consumes time: {}".format(time() - st))
             self._postprocess(sub_circ, ichunk, sv)
 
@@ -145,7 +146,7 @@ class Engine:
     @time_it
     def _initialize(self):
         # Calc number of storage units
-        num_sus = (1 << (self._circ.num_qubits - self._nl))
+        num_sus = (1 << (self._nq - self._nl))
         for i in range(num_sus):
             # Init a storage unit
             su = np.zeros(1<<self._nl, dtype=complex)
