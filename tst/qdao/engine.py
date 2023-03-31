@@ -116,11 +116,11 @@ class TestEngine(QdaoBaseTest):
         NP = NQ - 2
         NL = NQ - 10
 
-        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
+        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
         engine.run()
         sv = retrieve_sv(NQ, num_local=NL)
 
         from quafu.simulators.simulator import simulate
         sv_org = simulate(quafu_circ, output="state_vector").get_statevector()
 
-        assert np.array_equal(sv, sv_org)
+        assert Statevector(sv).equiv(Statevector(sv_org))

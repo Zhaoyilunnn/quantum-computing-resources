@@ -110,6 +110,9 @@ class SvManager:
             inds = indexes(global_qubits, gid)
             for idx in range(1<<LGDIM):
                 isub = (1<<LGDIM) * (gid-start_group_id) + idx
+
+                assert (isub<<self._nl) + (1<<self._nl) <= (1<<self._np)
+
                 fn = generate_secondary_file_name(inds[idx])
                 load_single_su_params.append((isub, fn))
                 #self._load_single_su(isub, fn)
@@ -151,6 +154,7 @@ class SvManager:
             inds = indexes(global_qubits, gid)
             for idx in range(1<<LGDIM):
                 isub = (1<<LGDIM) * (gid-start_group_id) + idx
+                assert (isub<<self._nl) + (1<<self._nl) <= (1<<self._np)
                 fn = generate_secondary_file_name(inds[idx])
                 store_single_su_params.append((isub, fn))
                 #self._store_single_su(isub, fn)

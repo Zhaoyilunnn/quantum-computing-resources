@@ -115,6 +115,7 @@ class Engine:
             simobj = self._preprocess(sub_circ, ichunk)
             st = time()
             sv = self._sim.run(simobj)
+            assert sv.shape[0] == (1<<self._np)
             print("Partial simulation consumes time: {}".format(time() - st))
             self._postprocess(sub_circ, ichunk, sv)
 

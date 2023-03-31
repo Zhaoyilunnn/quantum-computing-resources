@@ -1,8 +1,14 @@
+import logging
+
 import numpy as np
 import copy
 
 from typing import List, Optional
-from quafu.circuits.quantum_circuit import QuantumCircuit, QuantumGate, SingleQubitGate
+from quafu.circuits.quantum_circuit import \
+        QuantumCircuit, \
+        QuantumGate, \
+        SingleQubitGate, \
+        ControlledGate
 
 
 class QuafuCircuitHelper:
@@ -88,7 +94,14 @@ class QuafuCircuitHelper:
                 new_pos = qubit_map[instr.pos]
             else:
                 new_pos = [qubit_map[q] for q in instr.pos]
+                if isinstance(instr, ControlledGate):
+                    new_ctrls = [qubit_map[q] for q in instr.ctrls]
+                    new_targs = [qubit_map[q] for q in instr.targs]
+                    new_instr.ctrls = new_ctrls
+                    new_instr.targs = new_targs
+
             new_instr.pos = new_pos
             sub_circ.add_gate(new_instr)
-
+            logging.debug("New_instr::pos::{}, real_qubits::{}".format(new_pos, real_qubits))
+            #sub_circ.draw_circuit()
         return QdaoCircuit(sub_circ, real_qubits)
