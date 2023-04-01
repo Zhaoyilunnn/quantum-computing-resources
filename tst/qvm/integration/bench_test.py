@@ -25,7 +25,7 @@ class TestBenchQvmBfs(QvmBaseTest):
     def test_single_bench(self, bench):
         #circ = self.create_dummy_bell_state((0,1))
         self._fid_calculator = KlReliabilityCalculator()
-        circ = self.get_small_bench_circ(bench)
+        circ = self.get_qiskit_circ(bench)
         cu = self._backend_manager.allocate(circ)
         fid_qvm = self.run_on_backend_and_get_fid(circ, cu.backend)
         fid_org = self.run_on_backend_and_get_fid(circ, self._backend)
@@ -38,8 +38,8 @@ class TestBenchQvmBfs(QvmBaseTest):
 
         #circ0 = self.create_dummy_bell_state((0,1))
         #circ1 = self.create_dummy_bell_state((0,1))
-        circ0 = self.get_small_bench_circ(bench)
-        circ1 = self.get_small_bench_circ(bench)
+        circ0 = self.get_qiskit_circ(bench)
+        circ1 = self.get_qiskit_circ(bench)
 
         process0 = self._backend_manager.compile(circ0)
         process1 = self._backend_manager.compile(circ1)
@@ -112,8 +112,8 @@ class TestBenchQvmBfs(QvmBaseTest):
 
         #circ0 = self.create_dummy_bell_state((0,1))
         #circ1 = self.create_dummy_bell_state((0,1))
-        circ0 = self.get_small_bench_circ(bench)
-        circ1 = self.get_small_bench_circ(bench)
+        circ0 = self.get_qiskit_circ(bench)
+        circ1 = self.get_qiskit_circ(bench)
         circ = merge_circuits([circ0, circ1])
 
         qvm_res = self.run_qvm([circ0, circ1], shots=shots)
@@ -136,7 +136,7 @@ class TestBenchQvmBfs(QvmBaseTest):
             if b.endswith("_n4"):
                 try:
                     b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
-                    circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+                    circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
                     circ_merged = merge_circuits([circ, circ])
                 except Exception as e:
                     print("Error: {}, when running benchmark: {}".format(e, b))
@@ -171,7 +171,7 @@ class TestBenchQvmBfs(QvmBaseTest):
             if b.endswith("_n4"):
                 try:
                     b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
-                    circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+                    circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
                     #circ_merged = merge_circuits_v2([circ, circ])
                     circ_merged = merge_circuits([circ, circ])
                     cmr = calc_cmr(circ)

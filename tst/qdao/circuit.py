@@ -8,7 +8,7 @@ class TestBasePartitioner(QdaoBaseTest):
 
     def test_gen_sub_circ(self):
         """Testing generation of sub-circuits"""
-        circ = self.get_small_bench_circ("random")
+        circ = self.get_qiskit_circ("random")
         print(circ)
         sub_instrs = circ.data[0:4]
         sub_circ = self._part._gen_sub_circ(circ, sub_instrs)
@@ -22,7 +22,7 @@ class TestStaticPartitioner(QdaoBaseTest):
 
     def test_run(self):
 
-        circ = self.get_small_bench_circ("random",
+        circ = self.get_qiskit_circ("random",
                 num_qubits=8, depth=20, measure=False)
         print(circ)
 
@@ -35,7 +35,7 @@ class TestStaticPartitioner(QdaoBaseTest):
 
     def test_run_same(self):
         """Testing when circuit size is equal to sub-circ size"""
-        circ = self.get_small_bench_circ("random",
+        circ = self.get_qiskit_circ("random",
                 num_qubits=6, depth=20, measure=False)
         print(circ)
 

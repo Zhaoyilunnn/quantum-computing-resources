@@ -21,7 +21,7 @@ def run_qdao(circ: QuantumCircuit):
     eng.run()
 
 def main():
-    circ = TEST_BASE.get_small_bench_circ("random", num_qubits=30, depth=10, measure=False)
+    circ = TEST_BASE.get_qiskit_circ("random", num_qubits=30, depth=10, measure=False)
     circ = transpile(circ, TEST_BASE._sv_sim)
 
     run_base(circ)

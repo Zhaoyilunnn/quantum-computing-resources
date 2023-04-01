@@ -32,7 +32,7 @@ class TestSvFidReliabilityCalculator(QvmBaseTest):
 
         b = "vqe_uccsd_n4"
         b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
-        circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+        circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
         trans = circ
         if is_trans:
             trans = transpile(circ, self._backend)
@@ -68,7 +68,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
                                    bench,
                                    qasm):
         print("===== Testing Bench: {}, Qasm: {}".format(bench, qasm))
-        circ = self.get_small_bench_circ(bench, qasm_path=qasm)
+        circ = self.get_qiskit_circ(bench, qasm_path=qasm)
         print(calc_cmr(circ))
 
     def test_calc_cmr_multi_benches(self):
@@ -77,7 +77,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
         for b in SMALL_BENCHES:
             try:
                 b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
-                circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+                circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
             except Exception:
                 continue
             cmrs.append(calc_cmr(circ))
@@ -95,7 +95,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
                 continue
             try:
                 b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
-                circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+                circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
             except Exception:
                 continue
             cmrs.append(calc_cmr(circ))
@@ -108,7 +108,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
     def test_merge_circuits_v2(self):
         b = "vqe_uccsd_n4"
         b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
-        circ = self.get_small_bench_circ("qasm", qasm_path=b_file)
+        circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
         print("clbits: {}".format(circ.clbits))
         print("clbits: {}".format(circ.num_clbits))
         print("qubits: {}".format(circ.qubits))
