@@ -60,7 +60,7 @@ class TestEngine(QdaoBaseTest):
 
         assert sv0.equiv(sv1)
 
-    def test_run_qiskit(self, nq):
+    def test_run_qiskit_random(self, nq):
         NQ = int(nq)
         NP = NQ - 2
         NL = NQ - 10
@@ -120,22 +120,71 @@ class TestEngine(QdaoBaseTest):
         sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
         print("Quafu runs: {}".format(time() - st))
 
+    def test_run_quafu_step_by_step_random(self, nq):
+        NQ = int(nq)
+        NP = NQ - 2
+        NL = NQ - 4
+        D = NQ-3 # depth
+
+        from qdao.qiskit.utils import random_circuit
+        circ = random_circuit(NQ, D, max_operands=2, measure=False)
+        circ = transpile(circ, self._sv_sim)
+
+        from quafu.circuits.quantum_circuit import QuantumCircuit
+        quafu_circ = QuantumCircuit(1)
+        quafu_circ.from_openqasm(circ.qasm())
+        print("\nOriginal Circ")
+        quafu_circ.draw_circuit()
+
+        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+
+        sub_circs = engine._part.run(engine._circ)
+        engine._initialize()
+
+        num_acc_ops = 0
+        input_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        input_sv[0] = 1
+        for sub_circ in sub_circs:
+            for ichunk in range(engine._num_chunks):
+                simobj = engine._preprocess(sub_circ, ichunk)
+                sv = engine._sim.run(simobj)
+                engine._postprocess(sub_circ, ichunk, sv)
+
+            sv_expected = retrieve_sv(NQ, num_local=NL)
+            print("\n:::::debugging sub-circ::::\n")
+            sub_circ.circ.draw_circuit()
+            self.debug_run_quafu_circ(
+                    quafu_circ,
+                    input_sv,
+                    sv_expected,
+                    (num_acc_ops, num_acc_ops+len(sub_circ.circ.gates))
+                )
+            num_acc_ops += len(sub_circ.circ.gates)
+            input_sv = sv_expected
+
+
     def test_run_quafu_random(self, nq):
         NQ = int(nq)
         NP = NQ - 2
-        NL = NQ - 10
+        NL = NQ - 4
+        D = NQ-3 # depth
 
-        circ = self.get_qiskit_circ("random", num_qubits=NQ, depth=9, measure=False)
+        from qdao.qiskit.utils import random_circuit
+        circ = random_circuit(NQ, D, max_operands=2, measure=False)
         circ = transpile(circ, self._sv_sim)
-        from quafu.circuits.quantum_circuit import QuantumCircuit
 
+        from quafu.circuits.quantum_circuit import QuantumCircuit
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
+        print("\nOriginal Circ")
+        quafu_circ.draw_circuit()
+
+        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
         st = time()
         engine.run()
         print("Qdao runs: {}".format(time() - st))
-        #sv = retrieve_sv(NQ, num_local=NL)
+        sv = retrieve_sv(NQ, num_local=NL)
+        print(sv)
         engine.print_statistics()
         engine._manager.print_statistics()
 
@@ -145,6 +194,9 @@ class TestEngine(QdaoBaseTest):
         init_sv[0] = 1
         sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
         print("Quafu runs: {}".format(time() - st))
+        print(sv_org)
+
+        assert Statevector(sv).equiv(Statevector(sv_org))
 
     def test_run_quafu_vs_qiskit_single_random_with_init(self, nq):
         NQ = int(nq)

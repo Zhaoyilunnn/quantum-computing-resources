@@ -39,7 +39,9 @@ class QuafuCircuitHelper:
             raise ValueError("Please set circ")
         # FIXME(zhaoyilun): temporarily remove barrier like this
         # Needs better impl
-        return self._circ.gates[:-1]
+        # TODO(zhaoyilun): For random circuit, no need to remove barrier
+        # since it is not in the gate set. For qasm bench, needs better implementations
+        return self._circ.gates
 
     def get_instr_qubits(self, instruction: QuantumGate):
         if isinstance(instruction, SingleQubitGate):
@@ -103,5 +105,7 @@ class QuafuCircuitHelper:
             new_instr.pos = new_pos
             sub_circ.add_gate(new_instr)
             logging.debug("New_instr::pos::{}, real_qubits::{}".format(new_pos, real_qubits))
-            #sub_circ.draw_circuit()
+
+        logging.debug(sub_circ.draw_circuit())
+        logging.info("\nGenerated sub-circ, real_qubits::{}".format(real_qubits))
         return QdaoCircuit(sub_circ, real_qubits)
