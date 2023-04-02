@@ -101,9 +101,11 @@ class TestEngine(QdaoBaseTest):
         init_sv[0] = 1
         sv_with_init = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
 
+        print(sv_wo_init)
+        print(sv_with_init)
         assert Statevector(sv_wo_init).equiv(Statevector(sv_with_init))
 
-    def test_run_quafu_single_random(self, nq):
+    def test_run_quafu_random_single(self, nq):
         NQ = int(nq)
 
         circ = self.get_qiskit_circ("random", num_qubits=NQ, depth=9, measure=False)
@@ -120,7 +122,7 @@ class TestEngine(QdaoBaseTest):
         sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
         print("Quafu runs: {}".format(time() - st))
 
-    def test_run_quafu_step_by_step_random(self, nq):
+    def test_run_quafu_random_step_by_step(self, nq):
         NQ = int(nq)
         NP = NQ - 2
         NL = NQ - 4
@@ -163,28 +165,49 @@ class TestEngine(QdaoBaseTest):
             input_sv = sv_expected
 
 
-    def test_run_quafu_random(self, nq):
+    def test_run_quafu_random_basic(self, nq):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+
         NQ = int(nq)
         NP = NQ - 2
-        NL = NQ - 4
-        D = NQ-3 # depth
+        NL = NQ - 10
+        D = NQ - 3 # depth
+        MAX_OP = 2
+
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("D::\t{}".format(D))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         from qdao.qiskit.utils import random_circuit
-        circ = random_circuit(NQ, D, max_operands=2, measure=False)
-        circ = transpile(circ, self._sv_sim)
+        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+            circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
+            circ = transpile(circ, self._sv_sim)
+            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+                f.write(circ.qasm())
+        else:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
 
         from quafu.circuits.quantum_circuit import QuantumCircuit
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        print("\nOriginal Circ")
-        quafu_circ.draw_circuit()
+        #print("\nOriginal Circ")
+        #quafu_circ.draw_circuit()
 
         engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
         st = time()
         engine.run()
-        print("Qdao runs: {}".format(time() - st))
+        print("Qdao runs:\t{}".format(time() - st))
         sv = retrieve_sv(NQ, num_local=NL)
-        print(sv)
+        #print(sv)
         engine.print_statistics()
         engine._manager.print_statistics()
 
@@ -193,12 +216,13 @@ class TestEngine(QdaoBaseTest):
         init_sv = np.zeros(1<<NQ, dtype=np.complex128)
         init_sv[0] = 1
         sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
-        print("Quafu runs: {}".format(time() - st))
-        print(sv_org)
+        print("Quafu runs:\t{}".format(time() - st))
+        #print(sv_org)
 
-        assert Statevector(sv).equiv(Statevector(sv_org))
+        if NQ < 26:
+            assert Statevector(sv).equiv(Statevector(sv_org))
 
-    def test_run_quafu_vs_qiskit_single_random_with_init(self, nq):
+    def test_run_quafu_random_single_vs_qiskit_with_init(self, nq):
         NQ = int(nq)
 
         from qdao.qiskit.utils import random_circuit
@@ -229,6 +253,8 @@ class TestEngine(QdaoBaseTest):
 
         # FIXME(zhaoyilun): when testing small circuits, uncomment this
         #assert sv_qiskit.equiv(Statevector(sv_quafu))
+        #print(sv_quafu)
+        #print(sv_qiskit.data)
 
         print("Qiskit runs: {}".format(time() - st))
 

@@ -56,3 +56,5 @@ LARGE_BENCHES = [
     "vqe_n24",
     "wstate_n27"
 ]
+
+QDAO_QASM_DIR = "/root/projects/qcs/qdao/benchmarks/qasm/"

@@ -35,7 +35,9 @@ def time_it(func):
 
 def print_statistics(self):
     try:
-        print(self._exec_times)
+        for k, v in self._exec_times.items():
+            print("{}\t{}".format(k, v))
+        #print(self._exec_times)
     except Exception:
         print("No statistics found!")
 

@@ -106,6 +106,6 @@ class QuafuCircuitHelper:
             sub_circ.add_gate(new_instr)
             logging.debug("New_instr::pos::{}, real_qubits::{}".format(new_pos, real_qubits))
 
-        logging.debug(sub_circ.draw_circuit())
+        #logging.debug(sub_circ.draw_circuit())
         logging.info("\nGenerated sub-circ, real_qubits::{}".format(real_qubits))
         return QdaoCircuit(sub_circ, real_qubits)
