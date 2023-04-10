@@ -174,8 +174,8 @@ class TestEngine(QdaoBaseTest):
         """
 
         NQ = int(nq)
-        NP = NQ - 2
-        NL = NQ - 10
+        NP = NQ - 1     # Normally set 2
+        NL = NQ - 4     # Normally set 10
         D = NQ - 3 # depth
         MAX_OP = 2
 
