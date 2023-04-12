@@ -1,0 +1,182 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 3 items
+
+qvm/qvm_test.py .[CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[ParameterExpression(1.5707963267949)]), qubits=(Qubit(QuantumRegister(3, 'q'), 0),), clbits=()), CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(Qubit(QuantumRegister(3, 'q'), 0),), clbits=()), CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[ParameterExpression(1.5707963267949)]), qubits=(Qubit(QuantumRegister(3, 'q'), 0),), clbits=()), CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(Qubit(QuantumRegister(3, 'q'), 0), Qubit(QuantumRegister(3, 'q'), 1)), clbits=()), CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(Qubit(QuantumRegister(3, 'q'), 0),), clbits=(Clbit(ClassicalRegister(2, 'c'), 0),)), CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(Qubit(QuantumRegister(3, 'q'), 1),), clbits=(Clbit(ClassicalRegister(2, 'c'), 1),))]
+[CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[ParameterExpression(1.5707963267949)]), qubits=(Qubit(QuantumRegister(7, 'q'), 1),), clbits=()), CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(Qubit(QuantumRegister(7, 'q'), 1),), clbits=()), CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[ParameterExpression(1.5707963267949)]), qubits=(Qubit(QuantumRegister(7, 'q'), 1),), clbits=()), CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(Qubit(QuantumRegister(7, 'q'), 1), Qubit(QuantumRegister(7, 'q'), 2)), clbits=()), CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(Qubit(QuantumRegister(7, 'q'), 1),), clbits=(Clbit(ClassicalRegister(7, 'c'), 1),)), CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(Qubit(QuantumRegister(7, 'q'), 2),), clbits=(Clbit(ClassicalRegister(7, 'c'), 2),))]
+(0, ShiftPhase(-1.5707963268, DriveChannel(1)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(0)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(4)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(5)))
+(0, Play(Drag(duration=160, amp=(0.09906579450883057+0.0006035124897805573j), sigma=40, beta=-1.3327844316397903, name='X90p_d1'), DriveChannel(1), name='X90p_d1'))
+(160, ShiftPhase(-1.5707963268, DriveChannel(1)))
+(160, ShiftPhase(-3.141592653589793, DriveChannel(1)))
+(160, ShiftPhase(-1.5707963267948966, DriveChannel(2)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(0)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(0)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(2)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(4)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(4)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(5)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(5)))
+(160, Play(Drag(duration=160, amp=(-0.0006035124897805432+0.09906579450883057j), sigma=40, beta=-1.3327844316397903, name='Y90p_d1'), DriveChannel(1), name='Y90p_d1'))
+(160, Play(Drag(duration=160, amp=(0.09690743253275873+0.00027294211222236137j), sigma=40, beta=-0.1693537248408087, name='X90p_d2'), DriveChannel(2), name='X90p_d2'))
+(320, Play(GaussianSquare(duration=496, amp=(0.07620546967014027+0.00220230091775001j), sigma=64, width=240, name='CR90p_d1_u4'), DriveChannel(1), name='CR90p_d1_u4'))
+(320, Play(GaussianSquare(duration=496, amp=(0.06590983922276733-0.18577254891358022j), sigma=64, width=240, name='CR90p_u4'), ControlChannel(4), name='CR90p_u4'))
+(816, Play(Drag(duration=160, amp=(0.1941645033134716+0j), sigma=40, beta=-0.14696625731968221, name='Xp_d2'), DriveChannel(2), name='Xp_d2'))
+(976, Play(GaussianSquare(duration=496, amp=(-0.07620546967014027-0.0022023009177500005j), sigma=64, width=240, name='CR90m_d1_u4'), DriveChannel(1), name='CR90m_d1_u4'))
+(976, Play(GaussianSquare(duration=496, amp=(-0.0659098392227673+0.18577254891358022j), sigma=64, width=240, name='CR90m_u4'), ControlChannel(4), name='CR90m_u4'))
+(1472, ShiftPhase(-1.5707963267948966, DriveChannel(1)))
+(1472, ShiftPhase(-1.5707963267948966, ControlChannel(0)))
+(1472, ShiftPhase(-1.5707963267948966, ControlChannel(4)))
+(1472, ShiftPhase(-1.5707963267948966, ControlChannel(5)))
+(1472, Play(Drag(duration=160, amp=(0.09906579450883057+0.0006035124897805573j), sigma=40, beta=-1.3327844316397903, name='X90p_d1'), DriveChannel(1), name='X90p_d1'))
+(1472, Play(Drag(duration=160, amp=(0.00027294211222233215-0.09690743253275873j), sigma=40, beta=-0.1693537248408087, name='Y90m_d2'), DriveChannel(2), name='Y90m_d2'))
+(1632, Acquire(1792, AcquireChannel(1), MemorySlot(1)))
+(1632, Acquire(1792, AcquireChannel(2), MemorySlot(2)))
+(1632, Play(GaussianSquare(duration=1792, amp=(0.3285731456445053+0.09912581884289645j), sigma=64, width=1536, name='M_m1'), MeasureChannel(1), name='M_m1'))
+(1632, Play(GaussianSquare(duration=1792, amp=(0.3955993755630196+0.07059569997633694j), sigma=64, width=1536, name='M_m2'), MeasureChannel(2), name='M_m2'))
+(3424, Delay(1376, MeasureChannel(1)))
+(3424, Delay(1376, MeasureChannel(2)))
+{'01': 10, '10': 21, '00': 499, '11': 494}
+================== Original ========================
+{'100': 13, '110': 501, '010': 10, '000': 500}
+.===================== Schedule 0 ===========================
+(0, ShiftPhase(-1.5707963268, DriveChannel(0)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(1)))
+(0, Play(Drag(duration=160, amp=(0.09700785849079412+0.0006838822148985323j), sigma=40, beta=5.282055461474985, name='X90p_d0'), DriveChannel(0), name='X90p_d0'))
+(160, ShiftPhase(-1.5707963268, DriveChannel(0)))
+(160, ShiftPhase(1.5707963267948966, DriveChannel(0)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(1)))
+(160, ShiftPhase(1.5707963267948966, ControlChannel(1)))
+(160, Play(Drag(duration=160, amp=(-3.558410355734585e-17-0.1937108374546353j), sigma=40, beta=-0.06760800029241476, name='Ym_d0'), DriveChannel(0), name='Ym_d0'))
+(160, Play(Drag(duration=160, amp=(0.09906579450883057+0.0006035124897805573j), sigma=40, beta=-1.3327844316397903, name='X90p_d1'), DriveChannel(1), name='X90p_d1'))
+(320, Play(GaussianSquare(duration=528, amp=(0.059531778127442786+0.0006222467505656092j), sigma=64, width=272, name='CR90p_d1_u0'), DriveChannel(1), name='CR90p_d1_u0'))
+(320, Play(GaussianSquare(duration=528, amp=(-0.5516190247498072-0.376236452440652j), sigma=64, width=272, name='CR90p_u0'), ControlChannel(0), name='CR90p_u0'))
+(848, Play(Drag(duration=160, amp=(0.1937108374546353+0j), sigma=40, beta=-0.06760800029241476, name='Xp_d0'), DriveChannel(0), name='Xp_d0'))
+(1008, Play(GaussianSquare(duration=528, amp=(-0.059531778127442786-0.000622246750565602j), sigma=64, width=272, name='CR90m_d1_u0'), DriveChannel(1), name='CR90m_d1_u0'))
+(1008, Play(GaussianSquare(duration=528, amp=(0.5516190247498072+0.37623645244065196j), sigma=64, width=272, name='CR90m_u0'), ControlChannel(0), name='CR90m_u0'))
+(1536, Acquire(1792, AcquireChannel(0), MemorySlot(0)))
+(1536, Acquire(1792, AcquireChannel(1), MemorySlot(1)))
+(1536, Play(GaussianSquare(duration=1792, amp=(-0.2508475239421851-0.06837777220760317j), sigma=64, width=1536, name='M_m0'), MeasureChannel(0), name='M_m0'))
+(1536, Play(GaussianSquare(duration=1792, amp=(0.3285731456445053+0.09912581884289645j), sigma=64, width=1536, name='M_m1'), MeasureChannel(1), name='M_m1'))
+(3328, Delay(1376, MeasureChannel(0)))
+(3328, Delay(1376, MeasureChannel(1)))
+{'00': 272, '01': 752}
+===================== Schedule 1 ===========================
+(0, ShiftPhase(-1.5707963268, DriveChannel(3)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(3)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(8)))
+(0, Play(Drag(duration=160, amp=(0.10932996649356053+0.0010635640359038386j), sigma=40, beta=-0.7499638879839299, name='X90p_d3'), DriveChannel(3), name='X90p_d3'))
+(160, ShiftPhase(-1.5707963268, DriveChannel(3)))
+(160, ShiftPhase(-3.141592653589793, DriveChannel(3)))
+(160, ShiftPhase(-1.5707963267948966, DriveChannel(5)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(11)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(3)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(3)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(6)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(7)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(8)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(8)))
+(160, Play(Drag(duration=160, amp=(-0.0010635640359038315+0.10932996649356053j), sigma=40, beta=-0.7499638879839299, name='Y90p_d3'), DriveChannel(3), name='Y90p_d3'))
+(160, Play(Drag(duration=160, amp=(0.09792433039192666+0.0010339059174239574j), sigma=40, beta=-1.4826527260496107, name='X90p_d5'), DriveChannel(5), name='X90p_d5'))
+(320, Play(GaussianSquare(duration=512, amp=(0.07893177166941104+0.0010152469837428398j), sigma=64, width=256, name='CR90p_d3_u8'), DriveChannel(3), name='CR90p_d3_u8'))
+(320, Play(GaussianSquare(duration=512, amp=(0.3294166507634605-0.08835948670559464j), sigma=64, width=256, name='CR90p_u8'), ControlChannel(8), name='CR90p_u8'))
+(832, Play(Drag(duration=160, amp=(0.19623973253249485+0j), sigma=40, beta=-1.5340309643349348, name='Xp_d5'), DriveChannel(5), name='Xp_d5'))
+(992, Play(GaussianSquare(duration=512, amp=(-0.07893177166941104-0.00101524698374283j), sigma=64, width=256, name='CR90m_d3_u8'), DriveChannel(3), name='CR90m_d3_u8'))
+(992, Play(GaussianSquare(duration=512, amp=(-0.3294166507634605+0.08835948670559468j), sigma=64, width=256, name='CR90m_u8'), ControlChannel(8), name='CR90m_u8'))
+(1504, ShiftPhase(-1.5707963267948966, DriveChannel(3)))
+(1504, ShiftPhase(-1.5707963267948966, ControlChannel(3)))
+(1504, ShiftPhase(-1.5707963267948966, ControlChannel(8)))
+(1504, Play(Drag(duration=160, amp=(0.10932996649356053+0.0010635640359038386j), sigma=40, beta=-0.7499638879839299, name='X90p_d3'), DriveChannel(3), name='X90p_d3'))
+(1504, Play(Drag(duration=160, amp=(0.0010339059174239399-0.09792433039192668j), sigma=40, beta=-1.4826527260496107, name='Y90m_d5'), DriveChannel(5), name='Y90m_d5'))
+(1664, Acquire(1792, AcquireChannel(3), MemorySlot(3)))
+(1664, Acquire(1792, AcquireChannel(5), MemorySlot(5)))
+(1664, Play(GaussianSquare(duration=1792, amp=(0.12436034953295419+0.18147865842583658j), sigma=64, width=1536, name='M_m3'), MeasureChannel(3), name='M_m3'))
+(1664, Play(GaussianSquare(duration=1792, amp=(0.4166982839130902+0.05255987237318649j), sigma=64, width=1536, name='M_m5'), MeasureChannel(5), name='M_m5'))
+(3456, Delay(1376, MeasureChannel(3)))
+(3456, Delay(1376, MeasureChannel(5)))
+{'000000': 230, '000001': 794}
+===================== Schedule ===========================
+(0, ShiftPhase(-1.5707963268, DriveChannel(0)))
+(0, ShiftPhase(-1.5707963268, DriveChannel(3)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(1)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(3)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(8)))
+(0, Play(Drag(duration=160, amp=(0.09700785849079412+0.0006838822148985323j), sigma=40, beta=5.282055461474985, name='X90p_d0'), DriveChannel(0), name='X90p_d0'))
+(0, Play(Drag(duration=160, amp=(0.10932996649356053+0.0010635640359038386j), sigma=40, beta=-0.7499638879839299, name='X90p_d3'), DriveChannel(3), name='X90p_d3'))
+(160, ShiftPhase(-1.5707963268, DriveChannel(0)))
+(160, ShiftPhase(1.5707963267948966, DriveChannel(0)))
+(160, ShiftPhase(-1.5707963268, DriveChannel(3)))
+(160, ShiftPhase(-3.141592653589793, DriveChannel(3)))
+(160, ShiftPhase(-1.5707963267948966, DriveChannel(5)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(1)))
+(160, ShiftPhase(1.5707963267948966, ControlChannel(1)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(11)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(3)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(3)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(6)))
+(160, ShiftPhase(-1.5707963267948966, ControlChannel(7)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(8)))
+(160, ShiftPhase(-3.141592653589793, ControlChannel(8)))
+(160, Play(Drag(duration=160, amp=(-3.558410355734585e-17-0.1937108374546353j), sigma=40, beta=-0.06760800029241476, name='Ym_d0'), DriveChannel(0), name='Ym_d0'))
+(160, Play(Drag(duration=160, amp=(0.09906579450883057+0.0006035124897805573j), sigma=40, beta=-1.3327844316397903, name='X90p_d1'), DriveChannel(1), name='X90p_d1'))
+(160, Play(Drag(duration=160, amp=(-0.0010635640359038315+0.10932996649356053j), sigma=40, beta=-0.7499638879839299, name='Y90p_d3'), DriveChannel(3), name='Y90p_d3'))
+(160, Play(Drag(duration=160, amp=(0.09792433039192666+0.0010339059174239574j), sigma=40, beta=-1.4826527260496107, name='X90p_d5'), DriveChannel(5), name='X90p_d5'))
+(320, Play(GaussianSquare(duration=512, amp=(0.07893177166941104+0.0010152469837428398j), sigma=64, width=256, name='CR90p_d3_u8'), DriveChannel(3), name='CR90p_d3_u8'))
+(320, Play(GaussianSquare(duration=512, amp=(0.3294166507634605-0.08835948670559464j), sigma=64, width=256, name='CR90p_u8'), ControlChannel(8), name='CR90p_u8'))
+(320, Play(GaussianSquare(duration=528, amp=(0.059531778127442786+0.0006222467505656092j), sigma=64, width=272, name='CR90p_d1_u0'), DriveChannel(1), name='CR90p_d1_u0'))
+(320, Play(GaussianSquare(duration=528, amp=(-0.5516190247498072-0.376236452440652j), sigma=64, width=272, name='CR90p_u0'), ControlChannel(0), name='CR90p_u0'))
+(832, Play(Drag(duration=160, amp=(0.19623973253249485+0j), sigma=40, beta=-1.5340309643349348, name='Xp_d5'), DriveChannel(5), name='Xp_d5'))
+(848, Play(Drag(duration=160, amp=(0.1937108374546353+0j), sigma=40, beta=-0.06760800029241476, name='Xp_d0'), DriveChannel(0), name='Xp_d0'))
+(992, Play(GaussianSquare(duration=512, amp=(-0.07893177166941104-0.00101524698374283j), sigma=64, width=256, name='CR90m_d3_u8'), DriveChannel(3), name='CR90m_d3_u8'))
+(992, Play(GaussianSquare(duration=512, amp=(-0.3294166507634605+0.08835948670559468j), sigma=64, width=256, name='CR90m_u8'), ControlChannel(8), name='CR90m_u8'))
+(1008, Play(GaussianSquare(duration=528, amp=(-0.059531778127442786-0.000622246750565602j), sigma=64, width=272, name='CR90m_d1_u0'), DriveChannel(1), name='CR90m_d1_u0'))
+(1008, Play(GaussianSquare(duration=528, amp=(0.5516190247498072+0.37623645244065196j), sigma=64, width=272, name='CR90m_u0'), ControlChannel(0), name='CR90m_u0'))
+(1504, ShiftPhase(-1.5707963267948966, DriveChannel(3)))
+(1504, ShiftPhase(-1.5707963267948966, ControlChannel(3)))
+(1504, ShiftPhase(-1.5707963267948966, ControlChannel(8)))
+(1504, Play(Drag(duration=160, amp=(0.10932996649356053+0.0010635640359038386j), sigma=40, beta=-0.7499638879839299, name='X90p_d3'), DriveChannel(3), name='X90p_d3'))
+(1504, Play(Drag(duration=160, amp=(0.0010339059174239399-0.09792433039192668j), sigma=40, beta=-1.4826527260496107, name='Y90m_d5'), DriveChannel(5), name='Y90m_d5'))
+(1664, Acquire(1792, AcquireChannel(0), MemorySlot(0)))
+(1664, Acquire(1792, AcquireChannel(1), MemorySlot(1)))
+(1664, Acquire(1792, AcquireChannel(3), MemorySlot(3)))
+(1664, Acquire(1792, AcquireChannel(5), MemorySlot(5)))
+(1664, Play(GaussianSquare(duration=1792, amp=(-0.2508475239421851-0.06837777220760317j), sigma=64, width=1536, name='M_m0'), MeasureChannel(0), name='M_m0'))
+(1664, Play(GaussianSquare(duration=1792, amp=(0.3285731456445053+0.09912581884289645j), sigma=64, width=1536, name='M_m1'), MeasureChannel(1), name='M_m1'))
+(1664, Play(GaussianSquare(duration=1792, amp=(0.12436034953295419+0.18147865842583658j), sigma=64, width=1536, name='M_m3'), MeasureChannel(3), name='M_m3'))
+(1664, Play(GaussianSquare(duration=1792, amp=(0.4166982839130902+0.05255987237318649j), sigma=64, width=1536, name='M_m5'), MeasureChannel(5), name='M_m5'))
+(3456, Delay(1376, MeasureChannel(0)))
+(3456, Delay(1376, MeasureChannel(1)))
+(3456, Delay(1376, MeasureChannel(3)))
+(3456, Delay(1376, MeasureChannel(5)))
+{'000000': 66, '000001': 958}
+.
+
+=============================== warnings summary ===============================
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+  /root/projects/qcs/qvm/backend_manager.py:205: DeprecationWarning: Back-references to from Bit instances to their containing Registers have been deprecated. Instead, inspect Registers to find their contained Bits.
+    r_qubits.append(real_circ.qubits[real_q[q.index]])
+
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+  /root/projects/qcs/qvm/backend_manager.py:210: DeprecationWarning: Back-references to from Bit instances to their containing Registers have been deprecated. Instead, inspect Registers to find their contained Bits.
+    r_clbits.append(real_circ.clbits[real_q[c.index]])
+
+qvm/qvm_test.py::TestBackendManager::test_compilation_on_compute_unit[qasm]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qvm/qvm_test.py::TestProcessManager::test_merge_schedules
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/pulse/controllers/pulse_controller.py:144: UserWarning: Warning: qubit_lo_freq was not specified in PulseQobj and there is no default, so it is being automatically determined from the drift Hamiltonian.
+    warn('Warning: qubit_lo_freq was not specified in PulseQobj and there is no default, '
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================== 3 passed, 11 warnings in 881.37s (0:14:41) ==================

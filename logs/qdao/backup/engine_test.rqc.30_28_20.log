@@ -1,0 +1,72 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 2 items / 1 deselected / 1 selected
+
+tst/qdao/engine.py Time of setting params: 8.329441547393799
+{'initialize': 8.329894542694092}
+Partial simulation consumes time: 34.75434947013855
+Time of setting params: 8.28067398071289
+{'initialize': 8.280982494354248}
+Partial simulation consumes time: 35.95552062988281
+Time of setting params: 8.223291397094727
+{'initialize': 8.223599672317505}
+Partial simulation consumes time: 35.81518864631653
+Time of setting params: 8.191243171691895
+{'initialize': 8.191552877426147}
+Partial simulation consumes time: 36.01786208152771
+Time of setting params: 8.967327117919922
+{'initialize': 8.967714309692383}
+Partial simulation consumes time: 39.37772250175476
+Time of setting params: 8.534649133682251
+{'initialize': 8.53497314453125}
+Partial simulation consumes time: 35.69462513923645
+Time of setting params: 8.16918420791626
+{'initialize': 8.169474840164185}
+Partial simulation consumes time: 33.762216329574585
+Time of setting params: 8.184680700302124
+{'initialize': 8.184973955154419}
+Partial simulation consumes time: 33.66179037094116
+Time of setting params: 10.45111608505249
+{'initialize': 10.451450109481812}
+Partial simulation consumes time: 36.64606499671936
+Time of setting params: 10.902714729309082
+{'initialize': 10.903022289276123}
+Partial simulation consumes time: 32.21261787414551
+Time of setting params: 9.059486150741577
+{'initialize': 9.059804201126099}
+Partial simulation consumes time: 32.294978618621826
+Time of setting params: 8.22453498840332
+{'initialize': 8.224891662597656}
+Partial simulation consumes time: 32.13517475128174
+Time of setting params: 8.871764898300171
+{'initialize': 8.872094631195068}
+Partial simulation consumes time: 31.81611657142639
+Time of setting params: 8.287556171417236
+{'initialize': 8.288069009780884}
+Partial simulation consumes time: 34.440138816833496
+Time of setting params: 8.705018281936646
+{'initialize': 8.705331563949585}
+Partial simulation consumes time: 34.39653038978577
+Time of setting params: 8.175403594970703
+{'initialize': 8.175933837890625}
+Partial simulation consumes time: 33.457972049713135
+Time of setting params: 8.30713701248169
+{'initialize': 8.307481050491333}
+Partial simulation consumes time: 31.151113271713257
+Time of setting params: 8.16326379776001
+{'initialize': 8.163569211959839}
+Partial simulation consumes time: 32.844531297683716
+Time of setting params: 8.199259996414185
+{'initialize': 8.199573516845703}
+Partial simulation consumes time: 31.417232275009155
+Time of setting params: 8.190845966339111
+{'initialize': 8.191141128540039}
+Partial simulation consumes time: 30.873135805130005
+Qdao runs: 1104.971704006195
+{'_initialize': 27.53001046180725, '_preprocess': 254.85474228858948, '_postprocess': 82.0509192943573, '_run': 1077.025799036026}
+{'load_sv': 77.46185231208801}
+Qiskit runs: 46.70850610733032
+.
+
+================= 1 passed, 1 deselected in 1259.70s (0:20:59) =================

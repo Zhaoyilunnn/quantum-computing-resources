@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 5 items / 4 deselected / 1 selected
+
+tst/qdao/manager.py store_sv::time::	6.216872453689575
+.
+
+======================= 1 passed, 4 deselected in 15.18s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 5 items / 4 deselected / 1 selected
+
+tst/qdao/manager.py store_sv::time::	17.226003170013428
+.
+
+======================= 1 passed, 4 deselected in 33.36s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 5 items / 4 deselected / 1 selected
+
+tst/qdao/manager.py store_sv::time::	0.5695497989654541
+.
+
+======================= 1 passed, 4 deselected in 32.26s =======================
