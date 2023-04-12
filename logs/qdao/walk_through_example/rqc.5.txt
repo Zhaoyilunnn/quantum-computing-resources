@@ -1,0 +1,45 @@
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \targ & \gate{\mathrm{R_Z}\,(\mathrm{2.976})} & \qw & \qw & \targ & \gate{\mathrm{R_Z}\,(\mathrm{-2.976})} & \targ & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \ctrl{-1} & \qw & \qw & \gate{\mathrm{Y}} & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \ctrl{-2} & \qw & \ctrl{-2} & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \gate{\mathrm{U_3}\,(\mathrm{0.6156,\frac{-\pi}{2},1.837})} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{4} :  } & \lstick{{q}_{4} :  } & \qw & \ctrl{-2} & \qw & \ctrl{-3} & \qw & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}
+[0, 1, 2, 3]
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \targ & \gate{\mathrm{R_Z}\,(\mathrm{2.976})} & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \ctrl{-1} & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \qw & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \gate{\mathrm{U_3}\,(\mathrm{0.6156,\frac{-\pi}{2},1.837})} & \qw & \qw & \qw\\
+\\ }}
+\end{document}
+[0, 1, 2, 4]
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \qw & \qw & \qw & \targ & \gate{\mathrm{R_Z}\,(\mathrm{-2.976})} & \targ & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \qw & \qw & \gate{\mathrm{Y}} & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \ctrl{-2} & \qw & \ctrl{-2} & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \ctrl{-1} & \qw & \ctrl{-2} & \qw & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}

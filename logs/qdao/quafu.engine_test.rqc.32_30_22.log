@@ -1,0 +1,102 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 5 items / 4 deselected / 1 selected
+
+tst/qdao/engine.py np_inputstate::Consumed:: 5
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 4
+simulate::Consumed:: 57274358
+np_inputstate::Consumed:: 4
+StateVector::state::Consumed:: 1
+set_num::Consumed:: 6
+simulate::Consumed:: 56885299
+np_inputstate::Consumed:: 4
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 5
+simulate::Consumed:: 57774595
+np_inputstate::Consumed:: 4
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 5
+simulate::Consumed:: 60367904
+np_inputstate::Consumed:: 4
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 14
+simulate::Consumed:: 55574717
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 5
+simulate::Consumed:: 56646859
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 4
+simulate::Consumed:: 57200770
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 1
+set_num::Consumed:: 1
+simulate::Consumed:: 57535936
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 11
+simulate::Consumed:: 33445433
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 5
+simulate::Consumed:: 33163366
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 12
+simulate::Consumed:: 33503300
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 1
+simulate::Consumed:: 33015510
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 4
+simulate::Consumed:: 17942800
+np_inputstate::Consumed:: 3
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 1
+simulate::Consumed:: 18003302
+np_inputstate::Consumed:: 4
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 1
+simulate::Consumed:: 17019966
+np_inputstate::Consumed:: 4
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 6
+simulate::Consumed:: 17183528
+np_inputstate::Consumed:: 2
+StateVector::state::Consumed:: 0
+set_num::Consumed:: 1
+simulate::Consumed:: 642892003
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Partial simulation consumes time: 57.33076548576355
+Partial simulation consumes time: 56.918092012405396
+Partial simulation consumes time: 57.89613389968872
+Partial simulation consumes time: 60.43890595436096
+Partial simulation consumes time: 55.696746826171875
+Partial simulation consumes time: 56.683494091033936
+Partial simulation consumes time: 57.23528575897217
+Partial simulation consumes time: 57.59483337402344
+Partial simulation consumes time: 33.470643281936646
+Partial simulation consumes time: 33.18980884552002
+Partial simulation consumes time: 33.54332709312439
+Partial simulation consumes time: 33.05956220626831
+Partial simulation consumes time: 17.953567028045654
+Partial simulation consumes time: 18.017993211746216
+Partial simulation consumes time: 17.05191993713379
+Partial simulation consumes time: 17.210516929626465
+Qdao runs: 1566.7078218460083
+{'_initialize': 218.72671961784363, '_preprocess': 99.92065787315369, '_postprocess': 584.7612018585205, '_run': 1347.9751834869385}
+{'load_sv': 99.90432786941528, 'store_sv': 584.759911775589}
+Quafu runs: 643.0083155632019
+.
+
+================= 1 passed, 4 deselected in 2217.12s (0:36:57) =================

@@ -1,0 +1,12 @@
+VmRSS:	  130508 kB
+VmRSS:	  261104 kB
+VmRSS:	  391520 kB
+VmRSS:	  498968 kB
+VmRSS:	  517720 kB
+VmRSS:	  524320 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'cx', 'u2', 'u3']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+dt: 2.2222222222222221e-10, duration: 2603056
+compile_circ:consumed time:	11.257300853729248

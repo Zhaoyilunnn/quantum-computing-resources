@@ -1,0 +1,86 @@
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \control \qw & \qw & \qw & \qw & \qw & \ctrl{4} & \qw & \qw & \qw & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{4},\frac{\pi}{2}})} & \qw & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \gate{\mathrm{U_3}\,(\mathrm{0.4037,-0.5073,2.897})} & \qw & \qw & \qw & \ctrl{4} & \qw & \qw & \qw & \ctrl{2} & \gate{\mathrm{Z}} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \qw & \qw & \qswap & \gate{\mathrm{T^\dagger}} & \qw & \qw & \qw & \qw & \qw & \control \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \gate{\mathrm{S}} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \gate{\mathrm{U_2}\,(\mathrm{0.7547,0.1106})} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \gate{\mathrm{Y}} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{3.432})} \qw & \qw & \qw & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{4} :  } & \lstick{{q}_{4} :  } & \qw & \ctrl{-4} & \qw & \gate{\mathrm{S^\dagger}} & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{5.125})} \qw & \qw & \qw & \qw & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{1.773})} \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \control \qw & \qw & \qw & \qw & \qw & \gate{\mathrm{U_3}\,(\mathrm{\pi,-\pi,-\pi})} & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{5} :  } & \lstick{{q}_{5} :  } & \qswap \qwx[1] & \qw & \qswap \qwx[-3] & \qw & \control \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{6} :  } & \lstick{{q}_{6} :  } & \qswap & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{0.3281})} \qw & \qw & \qw & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw & \qw & \qw & \qw & \ctrl{-6} & \qw & \qw & \qw\\
+	 	\nghost{{q}_{7} :  } & \lstick{{q}_{7} :  } & \gate{\mathrm{H}} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-7} & \qw & \qw & \qw & \ctrl{-1} & \gate{\mathrm{U_3}\,(\mathrm{1.3,0.7133,\frac{-\pi}{2}})} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}
+[0, 1, 2, 3, 4]
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \gate{\mathrm{U_3}\,(\mathrm{0.4037,-0.5073,2.897})} & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \gate{\mathrm{U_2}\,(\mathrm{0.7547,0.1106})} & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{4} :  } & \lstick{{q}_{4} :  } & \qw & \ctrl{-4} & \gate{\mathrm{S^\dagger}} & \qw & \qw\\
+	 	\nghost{{q}_{5} :  } & \lstick{{q}_{5} :  } & \qw & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}
+[0, 1, 2, 3, 5, 6]
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \qw & \qw & \ctrl{3} & \qw & \qw & \qw & \qw & \ctrl{2} & \gate{\mathrm{Z}} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \qw & \qswap & \qw & \qw & \qw & \qw & \gate{\mathrm{T^\dagger}} & \qw & \control \qw & \qw & \qw & \qw & \gate{\mathrm{S}} & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \qw & \qw & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{5.125})} \qw & \qw & \qw & \qw & \gate{\mathrm{Y}} & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{1.773})} \qw & \qw & \qw & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw\\
+	 	\nghost{{q}_{4} :  } & \lstick{{q}_{4} :  } & \qswap \qwx[1] & \qswap \qwx[-2] & \control \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \qw & \qw & \ctrl{-1} & \qw & \qw & \qw\\
+	 	\nghost{{q}_{5} :  } & \lstick{{q}_{5} :  } & \qswap & \gate{\mathrm{U_2}\,(\mathrm{\frac{\pi}{4},\frac{-\pi}{2}})} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}
+[0, 1, 2, 3, 4, 7]
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \qw & \control \qw & \qw & \qw & \qw & \ctrl{4} & \qw & \qw & \qw & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{4},\frac{\pi}{2}})} & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \qw & \qw & \qw & \qw & \qw & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{3.432})} \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{4} :  } & \lstick{{q}_{4} :  } & \qw & \qw & \dstick{\hspace{2.0em}\mathrm{ZZ}\,(\mathrm{0.3281})} \qw & \qw & \qw & \control \qw & \qw & \qw & \qw & \gate{\mathrm{U_3}\,(\mathrm{\pi,-\pi,-\pi})} & \qw & \qw\\
+	 	\nghost{{q}_{5} :  } & \lstick{{q}_{5} :  } & \gate{\mathrm{H}} & \ctrl{-5} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}
+[0, 1, 2, 3, 6, 7]
+\documentclass[border=2px]{standalone}
+
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+\scalebox{1.0}{
+\Qcircuit @C=1.0em @R=0.2em @!R { \\
+	 	\nghost{{q}_{0} :  } & \lstick{{q}_{0} :  } & \qw & \qw & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \qw & \qw\\
+	 	\nghost{{q}_{1} :  } & \lstick{{q}_{1} :  } & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{2} :  } & \lstick{{q}_{2} :  } & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{3} :  } & \lstick{{q}_{3} :  } & \qw & \qw & \qw & \qw & \qw & \qw\\
+	 	\nghost{{q}_{4} :  } & \lstick{{q}_{4} :  } & \targ & \gate{\mathrm{U_2}\,(\mathrm{\frac{-\pi}{2},\frac{3\pi}{4}})} & \ctrl{-4} & \qw & \qw & \qw\\
+	 	\nghost{{q}_{5} :  } & \lstick{{q}_{5} :  } & \ctrl{-1} & \gate{\mathrm{U_3}\,(\mathrm{1.3,0.7133,\frac{-\pi}{2}})} & \qw & \qw & \qw & \qw\\
+\\ }}
+\end{document}

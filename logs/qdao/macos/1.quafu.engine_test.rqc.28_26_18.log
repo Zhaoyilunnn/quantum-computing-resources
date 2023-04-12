@@ -1,0 +1,47 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 8 items / 7 deselected / 1 selected
+
+tst/qdao/engine.py Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Partial simulation consumes time: 3.5557167530059814
+Partial simulation consumes time: 3.511604070663452
+Partial simulation consumes time: 3.612865924835205
+Partial simulation consumes time: 3.512721538543701
+Partial simulation consumes time: 2.311413526535034
+Partial simulation consumes time: 2.2721364498138428
+Partial simulation consumes time: 2.375143051147461
+Partial simulation consumes time: 2.3111460208892822
+Partial simulation consumes time: 5.018750190734863
+Partial simulation consumes time: 5.018303155899048
+Partial simulation consumes time: 4.9753735065460205
+Partial simulation consumes time: 5.09794282913208
+Partial simulation consumes time: 3.4290544986724854
+Partial simulation consumes time: 3.4053213596343994
+Partial simulation consumes time: 3.592245578765869
+Partial simulation consumes time: 3.456739664077759
+Partial simulation consumes time: 2.074056386947632
+Partial simulation consumes time: 2.1711182594299316
+Partial simulation consumes time: 1.9171288013458252
+Partial simulation consumes time: 1.7962136268615723
+Qdao runs: 114.68044400215149
+{'_initialize': 9.279527187347412, '_preprocess': 7.676443576812744, '_postprocess': 32.30062961578369, '_run': 105.39265275001526}
+{'load_sv': 7.668875694274902, 'store_sv': 32.300161600112915}
+Quafu runs: 84.86142659187317
+.
+
+================= 1 passed, 7 deselected in 203.74s (0:03:23) ==================

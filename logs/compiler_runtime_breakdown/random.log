@@ -1,0 +1,408 @@
+VmRSS:	  128788 kB
+VmRSS:	  259600 kB
+VmRSS:	  391600 kB
+VmRSS:	  497464 kB
+VmRSS:	  509252 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u2', 'u1', 'cx', 'u3']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.705885648727417
+pulse_compile:consumed time:	0.37534093856811523
+dt: 2.2222222222222221e-10, duration: 170896
+random::num_qubits: 5, ::depth: 10
+VmRSS:	  128876 kB
+VmRSS:	  258156 kB
+VmRSS:	  386988 kB
+VmRSS:	  496020 kB
+VmRSS:	  509900 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u1', 'u3', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.836083889007568
+pulse_compile:consumed time:	0.506335973739624
+dt: 2.2222222222222221e-10, duration: 344272
+random::num_qubits: 6, ::depth: 10
+VmRSS:	  128972 kB
+VmRSS:	  256488 kB
+VmRSS:	  384792 kB
+VmRSS:	  495408 kB
+VmRSS:	  509932 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'u2', 'u3', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.8718531131744385
+pulse_compile:consumed time:	0.5039572715759277
+dt: 2.2222222222222221e-10, duration: 252496
+random::num_qubits: 7, ::depth: 10
+VmRSS:	  128892 kB
+VmRSS:	  256068 kB
+VmRSS:	  382260 kB
+VmRSS:	  494460 kB
+VmRSS:	  509868 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u3', 'u2', 'u1']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.949842929840088
+pulse_compile:consumed time:	0.582197904586792
+dt: 2.2222222222222221e-10, duration: 269264
+random::num_qubits: 8, ::depth: 10
+VmRSS:	  128580 kB
+VmRSS:	  257596 kB
+VmRSS:	  388012 kB
+VmRSS:	  495988 kB
+VmRSS:	  510392 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u3', 'u1', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.840212821960449
+pulse_compile:consumed time:	0.717003345489502
+dt: 2.2222222222222221e-10, duration: 325040
+random::num_qubits: 9, ::depth: 10
+VmRSS:	  128912 kB
+VmRSS:	  254248 kB
+VmRSS:	  384400 kB
+VmRSS:	  495544 kB
+VmRSS:	  511056 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u3', 'u2', 'u1', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.927815675735474
+pulse_compile:consumed time:	0.9009838104248047
+dt: 2.2222222222222221e-10, duration: 552304
+VmRSS:	  403044 kB
+random::num_qubits: 10, ::depth: 10
+VmRSS:	  128392 kB
+VmRSS:	  252356 kB
+VmRSS:	  378812 kB
+VmRSS:	  493652 kB
+VmRSS:	  510020 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u2', 'u3', 'u1', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.064882278442383
+pulse_compile:consumed time:	0.7766270637512207
+dt: 2.2222222222222221e-10, duration: 427248
+VmRSS:	  404740 kB
+random::num_qubits: 11, ::depth: 10
+VmRSS:	  128936 kB
+VmRSS:	  255896 kB
+VmRSS:	  385520 kB
+VmRSS:	  495608 kB
+VmRSS:	  511244 kB
+VmRSS:	  513620 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u2', 'u3', 'u1', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.024435997009277
+pulse_compile:consumed time:	1.0913357734680176
+dt: 2.2222222222222221e-10, duration: 603504
+random::num_qubits: 12, ::depth: 10
+VmRSS:	  128536 kB
+VmRSS:	  258364 kB
+VmRSS:	  390100 kB
+VmRSS:	  496756 kB
+VmRSS:	  509904 kB
+VmRSS:	  513536 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'cx', 'u3', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.873969078063965
+pulse_compile:consumed time:	1.2188291549682617
+dt: 2.2222222222222221e-10, duration: 441648
+random::num_qubits: 13, ::depth: 10
+VmRSS:	  128820 kB
+VmRSS:	  257556 kB
+VmRSS:	  387444 kB
+VmRSS:	  495948 kB
+VmRSS:	  510112 kB
+VmRSS:	  513688 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'cx', 'u3', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.9435553550720215
+pulse_compile:consumed time:	1.1832265853881836
+dt: 2.2222222222222221e-10, duration: 782192
+random::num_qubits: 14, ::depth: 10
+VmRSS:	  128704 kB
+VmRSS:	  258108 kB
+VmRSS:	  388788 kB
+VmRSS:	  496764 kB
+VmRSS:	  511232 kB
+VmRSS:	  513872 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u1', 'u3', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.985778093338013
+pulse_compile:consumed time:	1.4085681438446045
+dt: 2.2222222222222221e-10, duration: 558288
+random::num_qubits: 15, ::depth: 10
+VmRSS:	  128720 kB
+VmRSS:	  260276 kB
+VmRSS:	  386996 kB
+VmRSS:	  496292 kB
+VmRSS:	  510724 kB
+VmRSS:	  514564 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u3', 'u1', 'cx', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.983838319778442
+pulse_compile:consumed time:	1.7079787254333496
+dt: 2.2222222222222221e-10, duration: 840304
+VmRSS:	  311996 kB
+random::num_qubits: 16, ::depth: 10
+VmRSS:	  128576 kB
+VmRSS:	  259232 kB
+VmRSS:	  390968 kB
+VmRSS:	  497096 kB
+VmRSS:	  511432 kB
+VmRSS:	  514192 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'u3', 'u2', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.955020189285278
+pulse_compile:consumed time:	1.6960382461547852
+dt: 2.2222222222222221e-10, duration: 707504
+VmRSS:	  311424 kB
+random::num_qubits: 17, ::depth: 10
+VmRSS:	  128968 kB
+VmRSS:	  258180 kB
+VmRSS:	  387276 kB
+VmRSS:	  496308 kB
+VmRSS:	  511620 kB
+VmRSS:	  514260 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u2', 'cx', 'u3', 'u1']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.994640827178955
+pulse_compile:consumed time:	1.5165741443634033
+dt: 2.2222222222222221e-10, duration: 630704
+random::num_qubits: 18, ::depth: 10
+VmRSS:	  128420 kB
+VmRSS:	  259360 kB
+VmRSS:	  391096 kB
+VmRSS:	  497224 kB
+VmRSS:	  511640 kB
+VmRSS:	  514544 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'u3', 'u2', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	6.977105379104614
+pulse_compile:consumed time:	1.6314325332641602
+dt: 2.2222222222222221e-10, duration: 749520
+random::num_qubits: 19, ::depth: 10
+VmRSS:	  128592 kB
+VmRSS:	  256100 kB
+VmRSS:	  388364 kB
+VmRSS:	  496604 kB
+VmRSS:	  511812 kB
+VmRSS:	  514452 kB
+VmRSS:	  517884 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'u2', 'cx', 'u3']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.058438062667847
+pulse_compile:consumed time:	2.1781980991363525
+dt: 2.2222222222222221e-10, duration: 850928
+random::num_qubits: 20, ::depth: 10
+VmRSS:	  128376 kB
+VmRSS:	  251348 kB
+VmRSS:	  380708 kB
+VmRSS:	  494492 kB
+VmRSS:	  511768 kB
+VmRSS:	  514144 kB
+VmRSS:	  519424 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u2', 'u3', 'cx', 'u1']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.091598987579346
+pulse_compile:consumed time:	1.962693214416504
+dt: 2.2222222222222221e-10, duration: 896784
+random::num_qubits: 21, ::depth: 10
+VmRSS:	  128520 kB
+VmRSS:	  258384 kB
+VmRSS:	  388800 kB
+VmRSS:	  496248 kB
+VmRSS:	  512024 kB
+VmRSS:	  514664 kB
+VmRSS:	  518360 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u3', 'u1', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.125537157058716
+pulse_compile:consumed time:	2.3409974575042725
+dt: 2.2222222222222221e-10, duration: 1220688
+random::num_qubits: 22, ::depth: 10
+VmRSS:	  129012 kB
+VmRSS:	  260220 kB
+VmRSS:	  393012 kB
+VmRSS:	  497820 kB
+VmRSS:	  512424 kB
+VmRSS:	  515328 kB
+VmRSS:	  518760 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'u3', 'cx', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.021355390548706
+pulse_compile:consumed time:	2.472168445587158
+dt: 2.2222222222222221e-10, duration: 996464
+random::num_qubits: 23, ::depth: 10
+VmRSS:	  128748 kB
+VmRSS:	  259388 kB
+VmRSS:	  392180 kB
+VmRSS:	  497516 kB
+VmRSS:	  512088 kB
+VmRSS:	  514728 kB
+VmRSS:	  518160 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u3', 'u2', 'u1', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.022368431091309
+pulse_compile:consumed time:	2.3757035732269287
+dt: 2.2222222222222221e-10, duration: 713072
+random::num_qubits: 24, ::depth: 10
+VmRSS:	  128788 kB
+VmRSS:	  258036 kB
+VmRSS:	  388980 kB
+VmRSS:	  496164 kB
+VmRSS:	  512704 kB
+VmRSS:	  514552 kB
+VmRSS:	  518512 kB
+VmRSS:	  521152 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u3', 'u2', 'u1', 'cx']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.262832164764404
+pulse_compile:consumed time:	3.049363613128662
+dt: 2.2222222222222221e-10, duration: 1121296
+random::num_qubits: 25, ::depth: 10
+VmRSS:	  128736 kB
+VmRSS:	  256724 kB
+VmRSS:	  385292 kB
+VmRSS:	  495380 kB
+VmRSS:	  511752 kB
+VmRSS:	  514964 kB
+VmRSS:	  518924 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u3', 'u1', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.129215240478516
+pulse_compile:consumed time:	2.5952579975128174
+dt: 2.2222222222222221e-10, duration: 1308912
+VmRSS:	  318920 kB
+random::num_qubits: 25, ::depth: 10
+VmRSS:	  128896 kB
+VmRSS:	  254020 kB
+VmRSS:	  383644 kB
+VmRSS:	  495052 kB
+VmRSS:	  515488 kB
+VmRSS:	  516280 kB
+VmRSS:	  522352 kB
+VmRSS:	  523144 kB
+VmRSS:	  529216 kB
+VmRSS:	  530008 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u3', 'u2', 'u1']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	7.766680717468262
+pulse_compile:consumed time:	5.364253044128418
+dt: 2.2222222222222221e-10, duration: 1646576
+random::num_qubits: 25, ::depth: 20
+VmRSS:	  128960 kB
+VmRSS:	  254052 kB
+VmRSS:	  384204 kB
+VmRSS:	  495612 kB
+VmRSS:	  517268 kB
+VmRSS:	  518048 kB
+VmRSS:	  524384 kB
+VmRSS:	  524912 kB
+VmRSS:	  530984 kB
+VmRSS:	  531776 kB
+VmRSS:	  537848 kB
+VmRSS:	  538376 kB
+VmRSS:	  544448 kB
+VmRSS:	  544976 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u2', 'u3', 'u1']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	8.2119300365448
+pulse_compile:consumed time:	8.412564039230347
+dt: 2.2222222222222221e-10, duration: 3931376
+random::num_qubits: 25, ::depth: 30
+VmRSS:	  129264 kB
+VmRSS:	  254600 kB
+VmRSS:	  383696 kB
+VmRSS:	  494840 kB
+VmRSS:	  522388 kB
+VmRSS:	  522388 kB
+VmRSS:	  528932 kB
+VmRSS:	  529460 kB
+VmRSS:	  535532 kB
+VmRSS:	  536324 kB
+VmRSS:	  541340 kB
+VmRSS:	  541340 kB
+VmRSS:	  546620 kB
+VmRSS:	  547412 kB
+VmRSS:	  553484 kB
+VmRSS:	  554276 kB
+VmRSS:	  569056 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['u1', 'cx', 'u3', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	8.238879442214966
+pulse_compile:consumed time:	11.799011468887329
+dt: 2.2222222222222221e-10, duration: 5912944
+VmRSS:	  456080 kB
+random::num_qubits: 25, ::depth: 40
+VmRSS:	  128892 kB
+VmRSS:	  257664 kB
+VmRSS:	  389136 kB
+VmRSS:	  496848 kB
+VmRSS:	  524896 kB
+VmRSS:	  524896 kB
+VmRSS:	  528896 kB
+VmRSS:	  530744 kB
+VmRSS:	  533384 kB
+VmRSS:	  536816 kB
+VmRSS:	  540248 kB
+VmRSS:	  543680 kB
+VmRSS:	  547112 kB
+VmRSS:	  550544 kB
+VmRSS:	  553976 kB
+VmRSS:	  557408 kB
+VmRSS:	  560840 kB
+VmRSS:	  564272 kB
+VmRSS:	  567704 kB
+VmRSS:	  571136 kB
+NoiseModel:
+  Basis gates: ['cx', 'id', 'rz', 'sx', 'u1', 'u2', 'u3']
+  Instructions with noise: ['cx', 'u3', 'u1', 'u2']
+  All-qubits errors: ['u1', 'u2', 'u3', 'cx'] None None
+gate_compile:consumed time:	9.018804788589478
+pulse_compile:consumed time:	14.579406261444092
+dt: 2.2222222222222221e-10, duration: 4857328
+random::num_qubits: 25, ::depth: 50

@@ -1,0 +1,37 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 8 items / 7 deselected / 1 selected
+
+tst/qdao/engine.py Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu3 may be not supported by QuantumCircuit class currently.
+Warning: Operations cu1 may be not supported by QuantumCircuit class currently.
+Partial simulation consumes time: 3.9075324535369873
+Partial simulation consumes time: 3.582051992416382
+Partial simulation consumes time: 3.42293119430542
+Partial simulation consumes time: 3.2933318614959717
+Partial simulation consumes time: 1.881861686706543
+Partial simulation consumes time: 1.9731507301330566
+Partial simulation consumes time: 1.931218147277832
+Partial simulation consumes time: 1.9370508193969727
+Partial simulation consumes time: 6.728280067443848
+Partial simulation consumes time: 6.704327344894409
+Partial simulation consumes time: 6.786525011062622
+Partial simulation consumes time: 6.932208776473999
+Partial simulation consumes time: 2.7693288326263428
+Partial simulation consumes time: 2.8355846405029297
+Partial simulation consumes time: 2.700467824935913
+Partial simulation consumes time: 2.8633878231048584
+Partial simulation consumes time: 1.4469218254089355
+Partial simulation consumes time: 1.5273327827453613
+Partial simulation consumes time: 1.415130853652954
+Partial simulation consumes time: 1.4121167659759521
+Qdao runs: 117.76450324058533
+{'_initialize': 9.416847467422485, '_preprocess': 7.769294023513794, '_postprocess': 34.51819634437561, '_run': 108.33887505531311}
+{'load_sv': 7.761906147003174, 'store_sv': 34.51779341697693}
+Quafu runs: 83.50182819366455
+.
+
+================= 1 passed, 7 deselected in 205.57s (0:03:25) ==================

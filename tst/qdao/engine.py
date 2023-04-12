@@ -3,7 +3,7 @@ import os
 import sys
 from time import time, sleep
 import numpy as np
-from qiskit import qiskit
+from qiskit import QuantumCircuit, qiskit
 
 from qiskit.compiler import transpile
 from qiskit.quantum_info import Statevector
@@ -165,37 +165,14 @@ class TestEngine(QdaoBaseTest):
             input_sv = sv_expected
 
 
-    def test_run_quafu_random_basic(self, nq):
-        """
-        Basic test to run random circuits and
-        compare performance between
-        1. Qdao on top of quafu
-        2. Quafu
-        """
-
-        NQ = int(nq)
-        NP = NQ - 1     # Normally set 2
-        NL = NQ - 4     # Normally set 10
-        D = NQ - 3 # depth
-        MAX_OP = 2
-
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-        print("NQ::\t{}".format(NQ))
-        print("NP::\t{}".format(NP))
-        print("NL::\t{}".format(NL))
-        print("D::\t{}".format(D))
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-
-        from qdao.qiskit.utils import random_circuit
-        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
-        if not os.path.exists(QDAO_QASM_DIR + circ_name):
-            circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
-            circ = transpile(circ, self._sv_sim)
-            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
-                f.write(circ.qasm())
-        else:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
-
+    def run_quafu_test(
+            self,
+            circ: QuantumCircuit,
+            NQ: int,
+            NP: int,
+            NL: int
+        ):
+        """Run test from qiskit QuantumCircui"""
         from quafu.circuits.quantum_circuit import QuantumCircuit
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
@@ -221,6 +198,64 @@ class TestEngine(QdaoBaseTest):
 
         if NQ < 26:
             assert Statevector(sv).equiv(Statevector(sv_org))
+
+
+    def test_run_quafu_random_basic(self, nq):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+
+        NQ = int(nq)
+        NP = NQ - 2     # Normally set 2
+        NL = NQ - 10     # Normally set 10
+        D = NQ - 3 # depth
+        MAX_OP = 2
+
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("D::\t{}".format(D))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+
+        from qdao.qiskit.utils import random_circuit
+        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+            circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
+            circ = transpile(circ, self._sv_sim)
+            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+                f.write(circ.qasm())
+        else:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
+
+        self.run_quafu_test(circ, NQ, NP, NL)
+
+    def test_run_quafu_qasm_basic(self, bench, nq):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ = int(nq)
+        NP = NQ - 2
+        NL = NQ - 10
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+
+        qasm_path = QDAO_QASM_DIR + bench + '-' + str(NQ) + '.qasm'
+        if not os.path.exists(qasm_path):
+            raise FileNotFoundError("qasm does not exists: ".format(qasm_path))
+
+        circ = qiskit.circuit.QuantumCircuit.from_qasm_file(qasm_path)
+        self.run_quafu_test(circ, NQ, NP, NL)
+
 
     def test_run_quafu_random_single_vs_qiskit_with_init(self, nq):
         NQ = int(nq)

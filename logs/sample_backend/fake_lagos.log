@@ -1,0 +1,487 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+backend_name
+	fake_lagos
+backend_version
+	1.0.1
+n_qubits
+	7
+basis_gates
+	['id', 'rz', 'sx', 'x', 'cx', 'reset']
+gates
+	[{'name': 'id', 'parameters': [], 'qasm_def': 'gate id q { U(0, 0, 0) q; }', 'coupling_map': [[0], [1], [2], [3], [4], [5], [6]]}, {'name': 'rz', 'parameters': ['theta'], 'qasm_def': 'gate rz(theta) q { U(0, 0, theta) q; }', 'coupling_map': [[0], [1], [2], [3], [4], [5], [6]]}, {'name': 'sx', 'parameters': [], 'qasm_def': 'gate sx q { U(pi/2, 3*pi/2, pi/2) q; }', 'coupling_map': [[0], [1], [2], [3], [4], [5], [6]]}, {'name': 'x', 'parameters': [], 'qasm_def': 'gate x q { U(pi, 0, pi) q; }', 'coupling_map': [[0], [1], [2], [3], [4], [5], [6]]}, {'name': 'cx', 'parameters': [], 'qasm_def': 'gate cx q0, q1 { CX q0, q1; }', 'coupling_map': [[0, 1], [1, 0], [1, 2], [1, 3], [2, 1], [3, 1], [3, 5], [4, 5], [5, 3], [5, 4], [5, 6], [6, 5]]}, {'name': 'reset', 'parameters': None, 'qasm_def': None}]
+local
+	False
+simulator
+	False
+conditional
+	False
+open_pulse
+	True
+memory
+	True
+max_shots
+	8192
+coupling_map
+	[[0, 1], [1, 0], [1, 2], [1, 3], [2, 1], [3, 1], [3, 5], [4, 5], [5, 3], [5, 4], [5, 6], [6, 5]]
+dynamic_reprate_enabled
+	True
+supported_instructions
+	['u1', 'shiftf', 'measure', 'sx', 'id', 'u2', 'acquire', 'play', 'cx', 'u3', 'setf', 'delay', 'rz', 'x', 'reset']
+rep_delay_range
+	[0.0, 500.0]
+default_rep_delay
+	250.0
+max_experiments
+	900
+sample_name
+	family: Falcon, revision: 5.11, segment: H
+n_registers
+	1
+credits_required
+	True
+online_date
+	2021-05-20 04:00:00+00:00
+description
+	7 qubit device
+dt
+	0.2222222222222222
+dtm
+	0.2222222222222222
+processor_type
+	family
+		Falcon
+	revision
+		5.11
+	segment
+		H
+parametric_pulses
+	['gaussian', 'gaussian_square', 'drag', 'constant']
+allow_q_object
+	True
+measure_esp_enabled
+	False
+multi_meas_enabled
+	True
+quantum_volume
+	32
+qubit_channel_mapping
+	[['m0', 'u1', 'd0', 'u0'], ['u1', 'u2', 'u5', 'm1', 'u4', 'd1', 'u3', 'u0'], ['d2', 'u4', 'm2', 'u2'], ['d3', 'm3', 'u8', 'u5', 'u6', 'u3'], ['u9', 'd4', 'u7', 'm4'], ['u11', 'u9', 'u8', 'u6', 'd5', 'u10', 'u7', 'm5'], ['m6', 'u10', 'u11', 'd6']]
+uchannels_enabled
+	True
+url
+	None
+input_allowed
+	['job']
+allow_object_storage
+	True
+pulse_num_channels
+	9
+pulse_num_qubits
+	3
+n_uchannels
+	12
+u_channel_lo
+	[[{'q': 1, 'scale': (1+0j)}], [{'q': 0, 'scale': (1+0j)}], [{'q': 2, 'scale': (1+0j)}], [{'q': 3, 'scale': (1+0j)}], [{'q': 1, 'scale': (1+0j)}], [{'q': 1, 'scale': (1+0j)}], [{'q': 5, 'scale': (1+0j)}], [{'q': 5, 'scale': (1+0j)}], [{'q': 3, 'scale': (1+0j)}], [{'q': 4, 'scale': (1+0j)}], [{'q': 6, 'scale': (1+0j)}], [{'q': 5, 'scale': (1+0j)}]]
+meas_levels
+	[1, 2]
+qubit_lo_range
+	[[4.735301508394166, 5.735301508394166], [4.599410549133616, 5.599410549133616], [4.687830933005698, 5.687830933005698], [4.4868387914029295, 5.4868387914029295], [4.7852898354886, 5.7852898354886], [4.676813560910366, 5.676813560910366], [4.5640971040866924, 5.5640971040866924]]
+meas_lo_range
+	[[6.8069937230000015, 7.8069937230000015], [6.866489148, 7.866489148], [6.7489535090000015, 7.7489535090000015], [6.6840383600000015, 7.6840383600000015], [6.751846108000001, 7.751846108000001], [6.632982175, 7.632982175], [6.871521128, 7.871521128]]
+meas_kernels
+	['hw_qmfk']
+discriminators
+	['linear_discriminator', 'quadratic_discriminator', 'hw_qmfk']
+rep_times
+	[1000.0]
+meas_map
+	[[0, 1, 2, 3, 4, 5, 6]]
+acquisition_latency
+	[]
+conditional_latency
+	[]
+hamiltonian
+	description
+		Qubits are modeled as Duffing oscillators. In this case, the system includes higher energy states, i.e. not just |0> and |1>. The Pauli operators are generalized via the following set of transformations:
+
+$(\mathbb{I}-\sigma_{i}^z)/2 \rightarrow O_i \equiv b^\dagger_{i} b_{i}$,
+
+$\sigma_{+} \rightarrow b^\dagger$,
+
+$\sigma_{-} \rightarrow b$,
+
+$\sigma_{i}^X \rightarrow b^\dagger_{i} + b_{i}$.
+
+Qubits are coupled through resonator buses. The provided Hamiltonian has been projected into the zero excitation subspace of the resonator buses leading to an effective qubit-qubit flip-flop interaction. The qubit resonance frequencies in the Hamiltonian are the cavity dressed frequencies and not exactly what is returned by the backend defaults, which also includes the dressing due to the qubit-qubit interactions.
+
+Quantities are returned in angular frequencies, with units 2*pi*GHz.
+
+WARNING: Currently not all system Hamiltonian information is available to the public, missing values have been replaced with 0.
+
+	h_latex
+		\begin{align} \mathcal{H}/\hbar = & \sum_{i=0}^{6}\left(\frac{\omega_{q,i}}{2}(\mathbb{I}-\sigma_i^{z})+\frac{\Delta_{i}}{2}(O_i^2-O_i)+\Omega_{d,i}D_i(t)\sigma_i^{X}\right) \\ & + J_{0,1}(\sigma_{0}^{+}\sigma_{1}^{-}+\sigma_{0}^{-}\sigma_{1}^{+}) + J_{1,2}(\sigma_{1}^{+}\sigma_{2}^{-}+\sigma_{1}^{-}\sigma_{2}^{+}) + J_{4,5}(\sigma_{4}^{+}\sigma_{5}^{-}+\sigma_{4}^{-}\sigma_{5}^{+}) + J_{5,6}(\sigma_{5}^{+}\sigma_{6}^{-}+\sigma_{5}^{-}\sigma_{6}^{+}) \\ & + J_{1,3}(\sigma_{1}^{+}\sigma_{3}^{-}+\sigma_{1}^{-}\sigma_{3}^{+}) + J_{3,5}(\sigma_{3}^{+}\sigma_{5}^{-}+\sigma_{3}^{-}\sigma_{5}^{+}) \\ & + \Omega_{d,0}(U_{0}^{(0,1)}(t))\sigma_{0}^{X} + \Omega_{d,1}(U_{1}^{(1,0)}(t)+U_{3}^{(1,3)}(t)+U_{2}^{(1,2)}(t))\sigma_{1}^{X} \\ & + \Omega_{d,2}(U_{4}^{(2,1)}(t))\sigma_{2}^{X} + \Omega_{d,3}(U_{5}^{(3,1)}(t)+U_{6}^{(3,5)}(t))\sigma_{3}^{X} \\ & + \Omega_{d,4}(U_{7}^{(4,5)}(t))\sigma_{4}^{X} + \Omega_{d,5}(U_{8}^{(5,3)}(t)+U_{10}^{(5,6)}(t)+U_{9}^{(5,4)}(t))\sigma_{5}^{X} \\ & + \Omega_{d,6}(U_{11}^{(6,5)}(t))\sigma_{6}^{X} \\ \end{align}
+	h_str
+		['_SUM[i,0,6,wq{i}/2*(I{i}-Z{i})]', '_SUM[i,0,6,delta{i}/2*O{i}*O{i}]', '_SUM[i,0,6,-delta{i}/2*O{i}]', '_SUM[i,0,6,omegad{i}*X{i}||D{i}]', 'jq0q1*Sp0*Sm1', 'jq0q1*Sm0*Sp1', 'jq1q2*Sp1*Sm2', 'jq1q2*Sm1*Sp2', 'jq4q5*Sp4*Sm5', 'jq4q5*Sm4*Sp5', 'jq5q6*Sp5*Sm6', 'jq5q6*Sm5*Sp6', 'jq1q3*Sp1*Sm3', 'jq1q3*Sm1*Sp3', 'jq3q5*Sp3*Sm5', 'jq3q5*Sm3*Sp5', 'omegad1*X0||U0', 'omegad0*X1||U1', 'omegad3*X1||U3', 'omegad2*X1||U2', 'omegad1*X2||U4', 'omegad1*X3||U5', 'omegad5*X3||U6', 'omegad5*X4||U7', 'omegad3*X5||U8', 'omegad6*X5||U10', 'omegad4*X5||U9', 'omegad5*X6||U11']
+	osc
+	qub
+		0
+			3
+		1
+			3
+		2
+			3
+		3
+			3
+		4
+			3
+		5
+			3
+		6
+			3
+	vars
+		delta0
+			-2.135448211388058
+		delta1
+			-2.1566933305718665
+		delta2
+			-2.1484200387398324
+		delta3
+			-2.1695391887452047
+		delta4
+			-2.131471764687337
+		delta5
+			-2.141265397292608
+		delta6
+			-2.153614325215714
+		jq0q1
+			0.010831998513773207
+		jq1q2
+			0.02077489584260659
+		jq1q3
+			0.020226061098486434
+		jq3q5
+			0.014737334497554324
+		jq4q5
+			0.021340795550115622
+		jq5q6
+			0.02035402773365448
+		omegad0
+			0.9784751073523432
+		omegad1
+			0.9561856872793478
+		omegad2
+			0.9761888274104754
+		omegad3
+			0.8636715252899893
+		omegad4
+			1.0666961091353326
+		omegad5
+			0.9658656797587386
+		omegad6
+			0.9329142717450424
+		wq0
+			32.89436951619734
+		wq1
+			32.04054143759292
+		wq2
+			32.596103094393165
+		wq3
+			31.333232223416093
+		wq4
+			33.20845543852759
+		wq5
+			32.52687890392006
+		wq6
+			31.818660518528198
+channels
+	acquire0
+		operates
+			qubits
+				[0]
+		purpose
+			acquire
+		type
+			acquire
+	acquire1
+		operates
+			qubits
+				[1]
+		purpose
+			acquire
+		type
+			acquire
+	acquire2
+		operates
+			qubits
+				[2]
+		purpose
+			acquire
+		type
+			acquire
+	acquire3
+		operates
+			qubits
+				[3]
+		purpose
+			acquire
+		type
+			acquire
+	acquire4
+		operates
+			qubits
+				[4]
+		purpose
+			acquire
+		type
+			acquire
+	acquire5
+		operates
+			qubits
+				[5]
+		purpose
+			acquire
+		type
+			acquire
+	acquire6
+		operates
+			qubits
+				[6]
+		purpose
+			acquire
+		type
+			acquire
+	d0
+		operates
+			qubits
+				[0]
+		purpose
+			drive
+		type
+			drive
+	d1
+		operates
+			qubits
+				[1]
+		purpose
+			drive
+		type
+			drive
+	d2
+		operates
+			qubits
+				[2]
+		purpose
+			drive
+		type
+			drive
+	d3
+		operates
+			qubits
+				[3]
+		purpose
+			drive
+		type
+			drive
+	d4
+		operates
+			qubits
+				[4]
+		purpose
+			drive
+		type
+			drive
+	d5
+		operates
+			qubits
+				[5]
+		purpose
+			drive
+		type
+			drive
+	d6
+		operates
+			qubits
+				[6]
+		purpose
+			drive
+		type
+			drive
+	m0
+		operates
+			qubits
+				[0]
+		purpose
+			measure
+		type
+			measure
+	m1
+		operates
+			qubits
+				[1]
+		purpose
+			measure
+		type
+			measure
+	m2
+		operates
+			qubits
+				[2]
+		purpose
+			measure
+		type
+			measure
+	m3
+		operates
+			qubits
+				[3]
+		purpose
+			measure
+		type
+			measure
+	m4
+		operates
+			qubits
+				[4]
+		purpose
+			measure
+		type
+			measure
+	m5
+		operates
+			qubits
+				[5]
+		purpose
+			measure
+		type
+			measure
+	m6
+		operates
+			qubits
+				[6]
+		purpose
+			measure
+		type
+			measure
+	u0
+		operates
+			qubits
+				[0, 1]
+		purpose
+			cross-resonance
+		type
+			control
+	u1
+		operates
+			qubits
+				[1, 0]
+		purpose
+			cross-resonance
+		type
+			control
+	u10
+		operates
+			qubits
+				[5, 6]
+		purpose
+			cross-resonance
+		type
+			control
+	u11
+		operates
+			qubits
+				[6, 5]
+		purpose
+			cross-resonance
+		type
+			control
+	u2
+		operates
+			qubits
+				[1, 2]
+		purpose
+			cross-resonance
+		type
+			control
+	u3
+		operates
+			qubits
+				[1, 3]
+		purpose
+			cross-resonance
+		type
+			control
+	u4
+		operates
+			qubits
+				[2, 1]
+		purpose
+			cross-resonance
+		type
+			control
+	u5
+		operates
+			qubits
+				[3, 1]
+		purpose
+			cross-resonance
+		type
+			control
+	u6
+		operates
+			qubits
+				[3, 5]
+		purpose
+			cross-resonance
+		type
+			control
+	u7
+		operates
+			qubits
+				[4, 5]
+		purpose
+			cross-resonance
+		type
+			control
+	u8
+		operates
+			qubits
+				[5, 3]
+		purpose
+			cross-resonance
+		type
+			control
+	u9
+		operates
+			qubits
+				[5, 4]
+		purpose
+			cross-resonance
+		type
+			control
+collected 2 items
+
+qvm/backend_manager_test.py .(0, ShiftPhase(-1.5707963268, DriveChannel(0)))
+(0, ShiftPhase(-1.5707963268, ControlChannel(1)))
+(0, Play(Drag(duration=160, amp=(0.09700785849079412+0.0006838822148985323j), sigma=40, beta=5.282055461474985, name='X90p_d0'), DriveChannel(0), name='X90p_d0'))
+(160, ShiftPhase(-1.5707963268, DriveChannel(0)))
+(160, ShiftPhase(1.5707963267948966, DriveChannel(0)))
+(160, ShiftPhase(-1.5707963268, ControlChannel(1)))
+(160, ShiftPhase(1.5707963267948966, ControlChannel(1)))
+(160, Play(Drag(duration=160, amp=(-3.558410355734585e-17-0.1937108374546353j), sigma=40, beta=-0.06760800029241476, name='Ym_d0'), DriveChannel(0), name='Ym_d0'))
+(160, Play(Drag(duration=160, amp=(0.09906579450883057+0.0006035124897805573j), sigma=40, beta=-1.3327844316397903, name='X90p_d1'), DriveChannel(1), name='X90p_d1'))
+(320, Play(GaussianSquare(duration=528, amp=(0.059531778127442786+0.0006222467505656092j), sigma=64, width=272, name='CR90p_d1_u0'), DriveChannel(1), name='CR90p_d1_u0'))
+(320, Play(GaussianSquare(duration=528, amp=(-0.5516190247498072-0.376236452440652j), sigma=64, width=272, name='CR90p_u0'), ControlChannel(0), name='CR90p_u0'))
+(848, Play(Drag(duration=160, amp=(0.1937108374546353+0j), sigma=40, beta=-0.06760800029241476, name='Xp_d0'), DriveChannel(0), name='Xp_d0'))
+(1008, Play(GaussianSquare(duration=528, amp=(-0.059531778127442786-0.000622246750565602j), sigma=64, width=272, name='CR90m_d1_u0'), DriveChannel(1), name='CR90m_d1_u0'))
+(1008, Play(GaussianSquare(duration=528, amp=(0.5516190247498072+0.37623645244065196j), sigma=64, width=272, name='CR90m_u0'), ControlChannel(0), name='CR90m_u0'))
+(1536, Acquire(1792, AcquireChannel(0), MemorySlot(0)))
+(1536, Acquire(1792, AcquireChannel(1), MemorySlot(1)))
+(1536, Play(GaussianSquare(duration=1792, amp=(-0.2508475239421851-0.06837777220760317j), sigma=64, width=1536, name='M_m0'), MeasureChannel(0), name='M_m0'))
+(1536, Play(GaussianSquare(duration=1792, amp=(0.3285731456445053+0.09912581884289645j), sigma=64, width=1536, name='M_m1'), MeasureChannel(1), name='M_m1'))
+(3328, Delay(1376, MeasureChannel(0)))
+(3328, Delay(1376, MeasureChannel(1)))
+.
+
+============================== 2 passed in 2.44s ===============================

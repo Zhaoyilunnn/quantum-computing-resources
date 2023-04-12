@@ -1,12 +1,17 @@
 import os
 
 from qiskit.circuit import QuantumCircuit
+
 from qiskit.circuit.random import random_circuit
 from qiskit.pulse import Schedule
 
 from qiskit_aer import Aer
 
-from typing import *
+from typing import \
+        Optional, \
+        Tuple, \
+        Union, \
+        List
 
 
 class BaseTest:
