@@ -6,7 +6,8 @@ import numpy as np
 from qiskit import QuantumCircuit, qiskit
 
 from qiskit.compiler import transpile
-from qiskit.quantum_info import Statevector
+from qiskit.quantum_info import Statevector, random_density_matrix
+from qdao.circuit import BaselinePartitioner
 from qdao.simulator import QdaoSimObj
 
 from qdao.test import QdaoBaseTest
@@ -170,7 +171,8 @@ class TestEngine(QdaoBaseTest):
             circ: QuantumCircuit,
             NQ: int,
             NP: int,
-            NL: int
+            NL: int,
+            mode: str="QDAO"
         ):
         """Run test from qiskit QuantumCircui"""
         from quafu.circuits.quantum_circuit import QuantumCircuit
@@ -179,11 +181,22 @@ class TestEngine(QdaoBaseTest):
         #print("\nOriginal Circ")
         #quafu_circ.draw_circuit()
 
-        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+        if mode == "QDAO":
+            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+        elif mode == "BASELINE":
+            engine = Engine(
+                        circuit=quafu_circ,
+                        num_primary=NP,
+                        num_local=NL,
+                        backend="quafu",
+                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="quafu")
+                    )
+        else:
+            raise ValueError(f"Unsupported mode::{mode}, should be either QDAO or BASELINE")
+
         st = time()
         engine.run()
         print("Qdao runs:\t{}".format(time() - st))
-        sv = retrieve_sv(NQ, num_local=NL)
         #print(sv)
         engine.print_statistics()
         engine._manager.print_statistics()
@@ -197,10 +210,11 @@ class TestEngine(QdaoBaseTest):
         #print(sv_org)
 
         if NQ < 26:
+            sv = retrieve_sv(NQ, num_local=NL)
             assert Statevector(sv).equiv(Statevector(sv_org))
 
 
-    def test_run_quafu_random_basic(self, nq):
+    def test_run_quafu_random_basic(self, nq, mode):
         """
         Basic test to run random circuits and
         compare performance between
@@ -231,7 +245,7 @@ class TestEngine(QdaoBaseTest):
         else:
             circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
 
-        self.run_quafu_test(circ, NQ, NP, NL)
+        self.run_quafu_test(circ, NQ, NP, NL, mode=mode)
 
     def test_run_quafu_qasm_basic(self, bench, nq):
         """
@@ -247,6 +261,7 @@ class TestEngine(QdaoBaseTest):
         print("NQ::\t{}".format(NQ))
         print("NP::\t{}".format(NP))
         print("NL::\t{}".format(NL))
+        print("bench::\t".format(bench))
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         qasm_path = QDAO_QASM_DIR + bench + '-' + str(NQ) + '.qasm'

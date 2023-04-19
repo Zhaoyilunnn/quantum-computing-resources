@@ -1,0 +1,106 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 10 items / 9 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	28
+NP::	26
+NL::	18
+bench::	
+
+::::::::::::::::::Config::::::::::::::::::
+
+F
+
+=================================== FAILURES ===================================
+___________ TestEngine.test_run_quafu_qasm_basic[quadratic_form-28] ____________
+
+self = <engine.TestEngine object at 0x7fbd172e7e80>, bench = 'quadratic_form'
+nq = '28'
+
+    def test_run_quafu_qasm_basic(self, bench, nq):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ = int(nq)
+        NP = NQ - 2
+        NL = NQ - 10
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("bench::\t".format(bench))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        qasm_path = QDAO_QASM_DIR + bench + '-' + str(NQ) + '.qasm'
+        if not os.path.exists(qasm_path):
+            raise FileNotFoundError("qasm does not exists: ".format(qasm_path))
+    
+        circ = qiskit.circuit.QuantumCircuit.from_qasm_file(qasm_path)
+>       self.run_quafu_test(circ, NQ, NP, NL)
+
+tst/qdao/engine.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qdao/engine.py:182: in run_quafu_test
+    engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qdao.engine.Engine object at 0x7fbd16d2b4f0>, partitioner = None
+manager = None
+circuit = <quafu.circuits.quantum_circuit.QuantumCircuit object at 0x7fbd16d2b4c0>
+num_primary = 26, num_local = 18, is_parallel = False, backend = 'quafu'
+
+    def __init__(
+            self,
+            partitioner: Optional[BasePartitioner] = None,
+            manager: Optional[SvManager] = None,
+            circuit: Any=None,
+            num_primary: int=4,
+            num_local: int=2,
+            is_parallel: bool=False,
+            backend="qiskit"
+        ) -> None:
+        if isinstance(partitioner, BasePartitioner):
+            self._part = partitioner
+        else:
+            self._part = StaticPartitioner(
+                    np=num_primary,
+                    nl=num_local,
+                    backend=backend
+                )
+    
+        # Get circuit simulator
+        self._sim = SimulatorProvider.get_simulator(backend)
+    
+        # Get circuit init helper based on backend name
+        # This is used to init a circuit from statevector
+        self._circ_helper = CircuitHelperProvider.get_helper(backend)
+    
+        self._circ = circuit
+        self._circ_helper.circ = circuit
+        self._nq = self._circ_helper.num_qubits
+    
+        if isinstance(manager, SvManager):
+            self._manager = manager
+        else:
+            self._manager = SvManager(
+                num_qubits=self._nq,
+                num_primary=num_primary,
+                num_local=num_local,
+                is_parallel=is_parallel
+            )
+    
+        self._np, self._nl = num_primary, num_local
+>       self._num_chunks = 1 << (self._nq - self._np)
+E       ValueError: negative shift count
+
+qdao/engine.py:59: ValueError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_qasm_basic[quadratic_form-28]
+======================= 1 failed, 9 deselected in 2.86s ========================

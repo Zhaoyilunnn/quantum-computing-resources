@@ -67,6 +67,31 @@ class BasePartitioner:
 
         return sub_circs
 
+
+class BaselinePartitioner(BasePartitioner):
+    """ This mimic the naive implementation """
+
+    def run(self, circuit: Any) -> List[QdaoCircuit]:
+
+        # Set cicuit of circuit helper
+        self._circ_helper.circ = circuit
+
+        sub_circs = []
+
+        qset = set()
+        for instr in self._circ_helper.instructions:
+            # Each instruction forms a new sub-circuit
+            sub_circ = self._circ_helper.gen_sub_circ(
+                            [instr],
+                            self._nl,
+                            self._np
+                        )
+            sub_circs.append(sub_circ)
+            logging.info("Find sub-circuit: {}, qubits: {}".format(sub_circ.circ, qset))
+
+        return sub_circs
+
+
 class StaticPartitioner(BasePartitioner):
     """ Static partitioner which traverse the operations in original order """
 
@@ -113,6 +138,7 @@ class StaticPartitioner(BasePartitioner):
 
 
 PARTITIONERS = {
+    "baseline": BaselinePartitioner,
     "static": StaticPartitioner
 }
 

@@ -92,7 +92,8 @@ class SvManager:
         Reference: sim-beta/statevector/src/statevector.cpp
         TODO(zhaoyilun): detailed description
         """
-        if len(org_qubits) <= self._nl:
+        #if len(org_qubits) <= self._nl:
+        if len(org_qubits) < self._nl:
             raise ValueError("Number of qubits in a sub-circuit "\
                     "should be larger than local qubits")
 
@@ -138,7 +139,8 @@ class SvManager:
 
     @time_it
     def store_sv(self, org_qubits: List[int]):
-        if len(org_qubits) <= self._nl:
+        #if len(org_qubits) <= self._nl:
+        if len(org_qubits) < self._nl:
             raise ValueError("Number of qubits in a sub-circuit should be larger than local qubits")
 
         global_qubits = self._get_global_qubits(org_qubits)

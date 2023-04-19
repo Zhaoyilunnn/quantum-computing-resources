@@ -1,0 +1,84 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 10 items / 9 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	32
+NP::	30
+NL::	22
+bench::	
+
+::::::::::::::::::Config::::::::::::::::::
+
+F
+
+=================================== FAILURES ===================================
+____________ TestEngine.test_run_quafu_qasm_basic[grover_search-32] ____________
+
+self = <engine.TestEngine object at 0x7fbd017bcd90>, bench = 'grover_search'
+nq = '32'
+
+    def test_run_quafu_qasm_basic(self, bench, nq):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ = int(nq)
+        NP = NQ - 2
+        NL = NQ - 10
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("bench::\t".format(bench))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        qasm_path = QDAO_QASM_DIR + bench + '-' + str(NQ) + '.qasm'
+        if not os.path.exists(qasm_path):
+            raise FileNotFoundError("qasm does not exists: ".format(qasm_path))
+    
+>       circ = qiskit.circuit.QuantumCircuit.from_qasm_file(qasm_path)
+
+tst/qdao/engine.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/circuit/quantumcircuit.py:2488: in from_qasm_file
+    return _circuit_from_qasm(qasm)
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/circuit/quantumcircuit.py:4984: in _circuit_from_qasm
+    ast = qasm.parse()
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/qasm/qasm.py:53: in parse
+    return qasm_p.parse(self._data)
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/qasm/qasmparser.py:1137: in parse
+    self.parser.parse(data, lexer=self.lexer, debug=self.parse_deb)
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/ply/yacc.py:333: in parse
+    return self.parseopt_notrack(input, lexer, debug, tracking, tokenfunc)
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/ply/yacc.py:1120: in parseopt_notrack
+    p.callable(pslice)
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/qasm/qasmparser.py:703: in p_unitary_op_2
+    self.verify_as_gate(program[1], program[2])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qiskit.qasm.qasmparser.QasmParser object at 0x7fbd017bd450>
+obj = <qiskit.qasm.node.id.Id object at 0x7fbd0151a5c0>
+bitlist = <qiskit.qasm.node.primarylist.PrimaryList object at 0x7fbd0151a7a0>
+arglist = None
+
+    def verify_as_gate(self, obj, bitlist, arglist=None):
+        """Verify a user defined gate call."""
+        if obj.name not in self.global_symtab:
+>           raise QasmError(
+                "Cannot find gate definition for '" + obj.name + "', line",
+                str(obj.line),
+                "file",
+                obj.file,
+            )
+E           qiskit.qasm.exceptions.QasmError: "Cannot find gate definition for 'mcx_gray', line 70 file /root/projects/qcs/qdao/benchmarks/qasm/grover_search-32.qasm"
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/qasm/qasmparser.py:138: QasmError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_qasm_basic[grover_search-32]
+======================= 1 failed, 9 deselected in 1.69s ========================

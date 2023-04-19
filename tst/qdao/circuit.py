@@ -1,4 +1,4 @@
-from qdao.circuit import BasePartitioner, StaticPartitioner
+from qdao.circuit import BasePartitioner, BaselinePartitioner, StaticPartitioner
 from qdao.test import QdaoBaseTest
 
 
@@ -13,6 +13,25 @@ class TestBasePartitioner(QdaoBaseTest):
         sub_instrs = circ.data[0:4]
         sub_circ = self._part._gen_sub_circ(circ, sub_instrs)
         print(sub_circ.circ, sub_circ.real_qubits)
+
+
+class TestBaselinePartitioner(QdaoBaseTest):
+
+    _part = BaselinePartitioner(np=6, nl=2)
+
+    def test_run(self):
+        circ = self.get_qiskit_circ("random",
+                num_qubits=8, depth=20, measure=False)
+        print(circ)
+
+        sub_circs = self._part.run(circ)
+        print("Number of sub-circuits: {}".format(len(sub_circs)))
+        print("Number operations in original circuit: {}".format(len(circ)))
+
+        assert len(circ) == len(sub_circs)
+
+        sum_ops_sub_circs = sum([len(s.circ) for s in sub_circs])
+        assert sum_ops_sub_circs == len(circ) + len(sub_circs)
 
 
 class TestStaticPartitioner(QdaoBaseTest):

@@ -14,6 +14,7 @@ def pytest_addoption(parser):
     parser.addoption("--alpha", action="store", default=0)
     parser.addoption("--beta", action="store", default=0)
     parser.addoption("--nq", action="store", default=10)
+    parser.addoption("--mode", action="store", default="QDAO")
 
 
 def pytest_generate_tests(metafunc):
@@ -44,3 +45,7 @@ def pytest_generate_tests(metafunc):
     option_value = metafunc.config.option.nq
     if 'nq' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("nq", [option_value])
+
+    option_value = metafunc.config.option.mode
+    if 'mode' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("mode", [option_value])
