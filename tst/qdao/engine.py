@@ -214,17 +214,27 @@ class TestEngine(QdaoBaseTest):
             assert Statevector(sv).equiv(Statevector(sv_org))
 
 
-    def test_run_quafu_random_basic(self, nq, mode):
+    def get_qdao_params(self, nq, np, nl):
+        nq = int(nq)
+        np = int(np)
+        nl = int(nl)
+
+        NQ = nq if nq > 0 else 12
+        NP = np if np > 0 else NQ - 2     # Normally set 2
+        NL = nl if nl > 0 else NQ - 10     # Normally set 10
+
+        return NQ, NP, NL
+
+
+    def test_run_quafu_random_basic(self, nq, np, nl, mode):
         """
         Basic test to run random circuits and
         compare performance between
         1. Qdao on top of quafu
         2. Quafu
         """
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
 
-        NQ = int(nq)
-        NP = NQ - 2     # Normally set 2
-        NL = NQ - 10     # Normally set 10
         D = NQ - 3 # depth
         MAX_OP = 2
 
