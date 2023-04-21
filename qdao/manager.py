@@ -8,7 +8,7 @@ from threading import Thread
 from typing import List
 
 from qdao.util import *
-from qdao.executor import ParallelExecutor
+from qdao.executor import ParallelExecutor, PoolParallelExecutor
 
 from utils.misc import print_statistics, time_it
 
@@ -31,6 +31,7 @@ class SvManager:
         self._chunk_idx = 0
         self._chunk = np.zeros(1<<num_primary, dtype=np.complex128)
         self._is_parallel = is_parallel
+        self._executor = PoolParallelExecutor()
 
         if not os.path.isdir("data"):
             os.mkdir("data")
@@ -125,6 +126,7 @@ class SvManager:
         if self._is_parallel:
             executor = ParallelExecutor(self._load_single_su, load_single_su_params)
             executor.execute()
+            #self._executor.execute(self._load_single_su, load_single_su_params)
         else:
             for isub, fn in load_single_su_params:
                 self._load_single_su(isub, fn)
@@ -166,8 +168,9 @@ class SvManager:
         #    pool.close()
         #    pool.join()
         if self._is_parallel:
-            executor = ParallelExecutor(self._store_single_su, store_single_su_params)
-            executor.execute()
+            #executor = ParallelExecutor(self._store_single_su, store_single_su_params)
+            #executor.execute()
+            self._executor.execute(self._store_single_su, store_single_su_params)
         else:
             for isub, fn in store_single_su_params:
                 self._store_single_su(isub, fn)

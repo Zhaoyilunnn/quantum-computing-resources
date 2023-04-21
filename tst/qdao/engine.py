@@ -182,7 +182,7 @@ class TestEngine(QdaoBaseTest):
         #quafu_circ.draw_circuit()
 
         if mode == "QDAO":
-            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=quafu_circ,
