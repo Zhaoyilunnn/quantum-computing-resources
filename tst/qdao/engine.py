@@ -182,7 +182,7 @@ class TestEngine(QdaoBaseTest):
         #quafu_circ.draw_circuit()
 
         if mode == "QDAO":
-            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
+            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=quafu_circ,
@@ -253,6 +253,7 @@ class TestEngine(QdaoBaseTest):
             with open(QDAO_QASM_DIR + circ_name, 'w') as f:
                 f.write(circ.qasm())
         else:
+            print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
             circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
 
         self.run_quafu_test(circ, NQ, NP, NL, mode=mode)

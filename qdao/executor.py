@@ -26,22 +26,8 @@ class ParallelExecutor:
 
 class PoolParallelExecutor:
 
-    #def __init__(self,
-    #        num_proc:Optional[int]=None) -> None:
-    #    """
-    #    Args:
-    #        num_proc: Number of threads, if not set, will default to
-    #        number of CPU cores in the system
-    #    """
-    #    self._pool = ThreadPool(processes=mp.cpu_count())
 
     def execute(self, func, args_list):
-        #self._pool = ThreadPool(processes=mp.cpu_count())
-
-        #for arg in args:
-        #    self._pool.starmap(func, arg)
-
-        #self._pool
 
         res = []
 
