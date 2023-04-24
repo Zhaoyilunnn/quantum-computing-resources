@@ -61,6 +61,69 @@ class TestEngine(QdaoBaseTest):
 
         assert sv0.equiv(sv1)
 
+    def run_qiskit_diff_test(
+            self,
+            circ: QuantumCircuit,
+            NQ: int,
+            NP: int,
+            NL: int,
+            mode: str="QDAO"
+        ):
+
+        if mode == "QDAO":
+            engine = Engine(circuit=circ, num_primary=NP, num_local=NL, backend="qiskit", is_parallel=False)
+        elif mode == "BASELINE":
+            engine = Engine(
+                        circuit=circ,
+                        num_primary=NP,
+                        num_local=NL,
+                        backend="qiskit",
+                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="qiskit")
+                    )
+        else:
+            raise ValueError(f"Unsupported mode::{mode}, should be either QDAO or BASELINE")
+
+        st = time()
+        engine.run()
+        print("Qdao runs:\t{}".format(time() - st))
+        #print(sv)
+        engine.print_statistics()
+        engine._manager.print_statistics()
+
+        circ.save_state()
+        st = time()
+        sv_org = self._sv_sim.run(circ).result().get_statevector().data
+        print("Qiskit runs: {}".format(time() - st))
+
+
+    def test_run_qiskit_random_basic(self, nq, np, nl, mode):
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+
+        D = NQ - 3 # depth
+        MAX_OP = 2
+
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("D::\t{}".format(D))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+
+        from qdao.qiskit.utils import random_circuit
+        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+            circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
+            circ = transpile(circ, self._sv_sim)
+            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+                f.write(circ.qasm())
+        else:
+            print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
+
+        circ = transpile(circ, self._sv_sim)
+        self.run_qiskit_diff_test(circ, NQ, NP, NL, mode)
+
+
     def test_run_qiskit_random(self, nq):
         NQ = int(nq)
         NP = NQ - 2
@@ -166,7 +229,7 @@ class TestEngine(QdaoBaseTest):
             input_sv = sv_expected
 
 
-    def run_quafu_test(
+    def run_quafu_diff_test(
             self,
             circ: QuantumCircuit,
             NQ: int,
@@ -174,7 +237,7 @@ class TestEngine(QdaoBaseTest):
             NL: int,
             mode: str="QDAO"
         ):
-        """Run test from qiskit QuantumCircui"""
+        """Run test from qiskit QuantumCircuit"""
         from quafu.circuits.quantum_circuit import QuantumCircuit
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
@@ -256,7 +319,27 @@ class TestEngine(QdaoBaseTest):
             print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
             circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
 
-        self.run_quafu_test(circ, NQ, NP, NL, mode=mode)
+        self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
+
+    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+
+        circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        circ = transpile(circ, self._sv_sim)
+
+        self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
 
     def test_run_quafu_qasm_basic(self, bench, nq):
         """
@@ -280,7 +363,7 @@ class TestEngine(QdaoBaseTest):
             raise FileNotFoundError("qasm does not exists: ".format(qasm_path))
 
         circ = qiskit.circuit.QuantumCircuit.from_qasm_file(qasm_path)
-        self.run_quafu_test(circ, NQ, NP, NL)
+        self.run_quafu_diff_test(circ, NQ, NP, NL)
 
 
     def test_run_quafu_random_single_vs_qiskit_with_init(self, nq):
