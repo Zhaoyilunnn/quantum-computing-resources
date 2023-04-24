@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 8 items / 7 deselected / 1 selected
+
+tst/qdao/engine.py Quafu runs: 102.27785754203796
+Time of setting params: 2.6226043701171875e-06
+Time of setting params: 2.384185791015625e-07
+Qiskit runs: 63.75578284263611
+.
+
+================= 1 passed, 7 deselected in 168.41s (0:02:48) ==================
