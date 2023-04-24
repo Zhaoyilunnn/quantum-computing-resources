@@ -1,0 +1,85 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 10 items / 9 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	31
+NP::	29
+NL::	25
+D::	28
+
+::::::::::::::::::Config::::::::::::::::::
+
+
+:::Reusing existing bench:::::/root/projects/qcs/qdao/benchmarks/qasm/random_31_28_max_operands_2_gen.qasm::::::::
+
+Partial simulation consumes time: 93.48445320129395
+Partial simulation consumes time: 96.06195378303528
+Partial simulation consumes time: 76.8785183429718
+Partial simulation consumes time: 59.12274742126465
+Partial simulation consumes time: 18.10027575492859
+Partial simulation consumes time: 18.355539083480835
+Partial simulation consumes time: 19.847527742385864
+Partial simulation consumes time: 20.59226703643799
+Partial simulation consumes time: 27.90868639945984
+Partial simulation consumes time: 26.85462260246277
+Partial simulation consumes time: 26.784530878067017
+Partial simulation consumes time: 27.578747749328613
+Partial simulation consumes time: 28.800640106201172
+Partial simulation consumes time: 26.07992386817932
+Partial simulation consumes time: 25.84111523628235
+Partial simulation consumes time: 22.070871353149414
+Partial simulation consumes time: 9.667908668518066
+Partial simulation consumes time: 9.104727983474731
+Partial simulation consumes time: 11.857150316238403
+Partial simulation consumes time: 11.296127796173096
+Partial simulation consumes time: 6.455185651779175
+Partial simulation consumes time: 6.447024822235107
+F
+
+=================================== FAILURES ===================================
+____________ TestEngine.test_run_quafu_random_basic[31-29-25-QDAO] _____________
+
+self = <engine.TestEngine object at 0x7fab381090f0>, nq = '31', np = '29'
+nl = '25', mode = 'QDAO'
+
+>   ???
+
+tst/qdao/engine.py:259: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qdao/engine.py:198: in run_quafu_test
+    ???
+qdao/engine.py:170: in run
+    self._run(sub_circ)
+utils/misc.py:21: in wrapper
+    result = func(*args, **kwargs)
+qdao/engine.py:115: in _run
+    simobj = self._preprocess(sub_circ, ichunk)
+utils/misc.py:21: in wrapper
+    result = func(*args, **kwargs)
+qdao/engine.py:78: in _preprocess
+    sv = self._manager.load_sv(sub_circ.real_qubits)
+utils/misc.py:21: in wrapper
+    result = func(*args, **kwargs)
+qdao/manager.py:132: in load_sv
+    self._load_single_su(isub, fn)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qdao.manager.SvManager object at 0x7fab37cf85b0>, isub = 0
+fn = 'data/sv4.npy'
+
+    def _load_single_su(self, isub: int, fn: str):
+        # Populate to current chunk
+        vec = np.load(fn)
+        chk_start = isub<<self._nl
+        chk_end = (isub<<self._nl) + (1<<self._nl)
+>       self._chunk[chk_start: chk_end] = vec
+E       ValueError: could not broadcast input array from shape (4,) into shape (33554432,)
+
+qdao/manager.py:88: ValueError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_random_basic[31-29-25-QDAO]
+================= 1 failed, 9 deselected in 1115.10s (0:18:35) =================
