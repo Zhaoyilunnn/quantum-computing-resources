@@ -1,6 +1,0 @@
-============================= test session starts ==============================
-platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
-rootdir: /root/projects/qcs
-collected 8 items / 7 deselected / 1 selected
-
-tst/qdao/engine.py 
