@@ -1,6 +1,6 @@
 bench_list=(\
     head_1000_circuit_n28_m14_s5_e6_pEFGH.qasm
-    head_1000_circuit_n30_m14_s7_e6_pEFGH
+    head_1000_circuit_n30_m14_s7_e6_pEFGH.qasm
     random_28_25_max_operands_2_gen.qasm
     random_30_27_max_operands_2_gen.qasm
     qnn_n31.qasm
