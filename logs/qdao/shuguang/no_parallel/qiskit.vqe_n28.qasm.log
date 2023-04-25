@@ -12,77 +12,26 @@ NL::	22
 
 ::::::::::::::::::Config::::::::::::::::::
 
-F
+Partial simulation consumes time: 4.568331480026245
+Partial simulation consumes time: 4.485111474990845
+Partial simulation consumes time: 4.437077045440674
+Partial simulation consumes time: 4.579388618469238
+Partial simulation consumes time: 0.28655314445495605
+Partial simulation consumes time: 0.28300952911376953
+Partial simulation consumes time: 0.28085780143737793
+Partial simulation consumes time: 0.3246169090270996
+Partial simulation consumes time: 0.3506309986114502
+Partial simulation consumes time: 0.34749794006347656
+Partial simulation consumes time: 0.35090041160583496
+Partial simulation consumes time: 0.3528323173522949
+Qdao runs:	47.39905619621277
+_initialize	4.234951019287109
+_preprocess	8.960537672042847
+_postprocess	12.515211343765259
+_run	43.0834698677063
+load_sv	8.939605712890625
+store_sv	12.51467776298523
+Qiskit runs: 18.467275381088257
+.
 
-=================================== FAILURES ===================================
-_______ TestEngine.test_run_qiskit_any_qasm[vqe_n28.qasm-28-26-22-QDAO] ________
-
-self = <engine.TestEngine object at 0x7ff8ef2cfbe0>, nq = '28', np = '26'
-nl = '22', mode = 'QDAO', qasm = 'vqe_n28.qasm'
-
-    def test_run_qiskit_any_qasm(self, nq, np, nl, mode, qasm):
-        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
-    
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-        print("NQ::\t{}".format(NQ))
-        print("NP::\t{}".format(NP))
-        print("NL::\t{}".format(NL))
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-    
-        try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
-        except Exception as e:
-            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
-        circ = transpile(circ, self._sv_sim)
->       self.run_qiskit_diff_test(circ, NQ, NP, NL, mode)
-
-tst/qdao/engine.py:113: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-tst/qdao/engine.py:87: in run_qiskit_diff_test
-    engine.run()
-qdao/engine.py:166: in run
-    sub_circs = self._part.run(self._circ)
-qdao/circuit.py:118: in run
-    sub_circ = self._circ_helper.gen_sub_circ(
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = <qdao.qiskit.circuit.QiskitCircuitHelper object at 0x7ff8eed9d6f0>
-instrs = [CircuitInstruction(operation=Instruction(name='barrier', num_qubits=28, num_clbits=0, params=[]), qubits=(Qubit(Quant...t(QuantumRegister(28, 'q'), 25), Qubit(QuantumRegister(28, 'q'), 26), Qubit(QuantumRegister(28, 'q'), 27)), clbits=())]
-num_local = 22, num_primary = 26
-
-    def gen_sub_circ(
-            self,
-            instrs: List[CircuitInstruction],
-            num_local: int,
-            num_primary: int
-        ):
-        """Generate a sub circuit based on a list of circuit instructions
-        We assume there's no conditional instructions and no measurement
-        instructions
-    
-        Args:
-            instrs (List[CircuitInstruction]): A list of instructions
-        Return:
-            QdaoCircuit
-        """
-        if not isinstance(self._circ, QuantumCircuit):
-            raise ValueError("Please set self._circ")
-    
-        from qdao.circuit import QdaoCircuit
-        # 1. Get the set of qubits
-        qset = set(range(num_local))
-        for instr in instrs:
-            for q in instr.qubits:
-                qset.add(q._index)
-    
-        sub_circ = QuantumCircuit(num_primary)
-    
-        real_qubits = sorted(list(qset))
-    
->       assert len(real_qubits) <= num_primary
-E       AssertionError
-
-qdao/qiskit/circuit.py:90: AssertionError
-=========================== short test summary info ============================
-FAILED tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[vqe_n28.qasm-28-26-22-QDAO]
-======================= 1 failed, 12 deselected in 2.11s =======================
+================= 1 passed, 12 deselected in 67.98s (0:01:07) ==================

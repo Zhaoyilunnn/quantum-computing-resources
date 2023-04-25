@@ -23,7 +23,8 @@ class Engine:
             num_primary: int=4,
             num_local: int=2,
             is_parallel: bool=False,
-            backend="qiskit"
+            backend="qiskit",
+            **backend_args
         ) -> None:
         if isinstance(partitioner, BasePartitioner):
             self._part = partitioner
@@ -35,7 +36,7 @@ class Engine:
                 )
 
         # Get circuit simulator
-        self._sim = SimulatorProvider.get_simulator(backend)
+        self._sim = SimulatorProvider.get_simulator(backend, **backend_args)
 
         # Get circuit init helper based on backend name
         # This is used to init a circuit from statevector

@@ -12,83 +12,26 @@ NL::	22
 
 ::::::::::::::::::Config::::::::::::::::::
 
-F
+Partial simulation consumes time: 16.318177223205566
+Partial simulation consumes time: 13.27244257926941
+Partial simulation consumes time: 10.932688236236572
+Partial simulation consumes time: 10.923651695251465
+Partial simulation consumes time: 0.5736510753631592
+Partial simulation consumes time: 0.5456082820892334
+Partial simulation consumes time: 0.5342073440551758
+Partial simulation consumes time: 0.5345339775085449
+Partial simulation consumes time: 1.3343868255615234
+Partial simulation consumes time: 1.3754160404205322
+Partial simulation consumes time: 1.936432123184204
+Partial simulation consumes time: 2.1784913539886475
+Qdao runs:	85.47609758377075
+_initialize	4.162487268447876
+_preprocess	7.916995525360107
+_postprocess	12.927897930145264
+_run	81.30525231361389
+load_sv	7.91003680229187
+store_sv	12.927309274673462
+Quafu runs:	53.34891223907471
+.
 
-=================================== FAILURES ===================================
-________ TestEngine.test_run_quafu_any_qasm[vqe_n28.qasm-28-26-22-QDAO] ________
-
-self = <engine.TestEngine object at 0x7feafb758fd0>, nq = '28', np = '26'
-nl = '22', mode = 'QDAO', qasm = 'vqe_n28.qasm'
-
-    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm):
-        """
-        Basic test to run random circuits and
-        compare performance between
-        1. Qdao on top of quafu
-        2. Quafu
-        """
-        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
-    
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-        print("NQ::\t{}".format(NQ))
-        print("NP::\t{}".format(NP))
-        print("NL::\t{}".format(NL))
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-    
-        try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
-        except Exception as e:
-            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
-        circ = transpile(circ, self._sv_sim)
-    
->       self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
-
-tst/qdao/engine.py:362: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-tst/qdao/engine.py:278: in run_quafu_diff_test
-    engine.run()
-qdao/engine.py:166: in run
-    sub_circs = self._part.run(self._circ)
-qdao/circuit.py:130: in run
-    sub_circ = self._circ_helper.gen_sub_circ(
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = <qdao.quafu.circuit.QuafuCircuitHelper object at 0x7feafb430df0>
-instrs = [Barrier], num_local = 22, num_primary = 26
-
-    def gen_sub_circ(
-            self,
-            instrs: List[QuantumGate],
-            num_local: int,
-            num_primary: int
-        ):
-        """Generate a sub circuit based on a list of circuit instructions
-        We assume there's no conditional instructions and no measurement
-        instructions
-    
-        Args:
-            instrs (List[QuantumGate]): A list of instructions
-        Return:
-            QdaoCircuit
-        """
-        if not isinstance(self._circ, QuantumCircuit):
-            raise ValueError("Please set self._circ")
-    
-        from qdao.circuit import QdaoCircuit
-        # 1. Get the set of qubits
-        qset = set(range(num_local))
-        for instr in instrs:
-            for q in self.get_instr_qubits(instr):
-                qset.add(q)
-    
-        sub_circ = QuantumCircuit(num_primary)
-    
-        real_qubits = sorted(list(qset))
-    
->       assert len(real_qubits) <= num_primary
-E       AssertionError
-
-qdao/quafu/circuit.py:86: AssertionError
-=========================== short test summary info ============================
-FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_any_qasm[vqe_n28.qasm-28-26-22-QDAO]
-======================= 1 failed, 12 deselected in 1.89s =======================
+================= 1 passed, 12 deselected in 140.91s (0:02:20) =================
