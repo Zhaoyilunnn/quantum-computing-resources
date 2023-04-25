@@ -54,7 +54,7 @@ class VQE():
         self.circuit = qiskit.compiler.transpile(self.circuit,basis_gates=['cx','rz','sx','id','x'])
         n_param = self.circuit.num_parameters
         self.circuit = self.circuit.assign_parameters(np.random.rand(n_param)*np.pi)
-        self.circuit.measure_all()
+        #self.circuit.measure_all()
 
         #print(self.circuit)
 

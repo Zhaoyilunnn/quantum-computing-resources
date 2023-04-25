@@ -96,6 +96,23 @@ class TestEngine(QdaoBaseTest):
         print("Qiskit runs: {}".format(time() - st))
 
 
+    def test_run_qiskit_any_qasm(self, nq, np, nl, mode, qasm):
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+
+        try:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        except Exception as e:
+            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
+        circ = transpile(circ, self._sv_sim)
+        self.run_qiskit_diff_test(circ, NQ, NP, NL, mode)
+
+
     def test_run_qiskit_random_basic(self, nq, np, nl, mode):
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
 
@@ -336,7 +353,10 @@ class TestEngine(QdaoBaseTest):
         print("NL::\t{}".format(NL))
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
-        circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        try:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        except Exception as e:
+            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
 
         self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)

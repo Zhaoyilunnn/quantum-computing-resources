@@ -1,0 +1,112 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	30
+NP::	28
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+F
+
+=================================== FAILURES ===================================
+_ TestEngine.test_run_quafu_any_qasm[head_1000_circuit_n30_m14_s7_e6_pEFGH-30-28-22-QDAO] _
+
+self = <engine.TestEngine object at 0x7f35c73b9960>, nq = '30', np = '28'
+nl = '22', mode = 'QDAO', qasm = 'head_1000_circuit_n30_m14_s7_e6_pEFGH'
+
+    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+    
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        try:
+>           circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+
+tst/qdao/engine.py:357: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/root/projects/qcs/qdao/benchmarks/qasm/head_1000_circuit_n30_m14_s7_e6_pEFGH'
+
+    @staticmethod
+    def from_qasm_file(path: str) -> "QuantumCircuit":
+        """Take in a QASM file and generate a QuantumCircuit object.
+    
+        Args:
+          path (str): Path to the file for a QASM program
+        Return:
+          QuantumCircuit: The QuantumCircuit object for the input QASM
+        """
+        qasm = Qasm(filename=path)
+>       return _circuit_from_qasm(qasm)
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/circuit/quantumcircuit.py:2488: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+qasm = <qiskit.qasm.qasm.Qasm object at 0x7f35c73b9f90>
+
+    def _circuit_from_qasm(qasm: Qasm) -> "QuantumCircuit":
+        # pylint: disable=cyclic-import
+        from qiskit.converters import ast_to_dag
+        from qiskit.converters import dag_to_circuit
+    
+>       ast = qasm.parse()
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/circuit/quantumcircuit.py:4984: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qiskit.qasm.qasm.Qasm object at 0x7f35c73b9f90>
+
+    def parse(self):
+        """Parse the data."""
+        if self._filename:
+>           with open(self._filename) as ifile:
+E           FileNotFoundError: [Errno 2] No such file or directory: '/root/projects/qcs/qdao/benchmarks/qasm/head_1000_circuit_n30_m14_s7_e6_pEFGH'
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/qasm/qasm.py:48: FileNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = <engine.TestEngine object at 0x7f35c73b9960>, nq = '30', np = '28'
+nl = '22', mode = 'QDAO', qasm = 'head_1000_circuit_n30_m14_s7_e6_pEFGH'
+
+    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+    
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        try:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        except Exception as e:
+>           raise ValueError(f"Cannot load qasm file {qasm}: {e}")
+E           ValueError: Cannot load qasm file head_1000_circuit_n30_m14_s7_e6_pEFGH: [Errno 2] No such file or directory: '/root/projects/qcs/qdao/benchmarks/qasm/head_1000_circuit_n30_m14_s7_e6_pEFGH'
+
+tst/qdao/engine.py:359: ValueError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_any_qasm[head_1000_circuit_n30_m14_s7_e6_pEFGH-30-28-22-QDAO]
+======================= 1 failed, 12 deselected in 1.45s =======================
