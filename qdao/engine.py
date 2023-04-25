@@ -59,6 +59,8 @@ class Engine:
         self._np, self._nl = num_primary, num_local
         self._num_chunks = 1 << (self._nq - self._np)
 
+        self._initialize()
+
     @property
     def num_chunks(self):
         return self._num_chunks
@@ -166,7 +168,7 @@ class Engine:
         """
         sub_circs = self._part.run(self._circ)
         logging.info("Number of sub-circuits: {}".format(len(sub_circs)))
-        self._initialize()
+        #self._initialize()
         for sub_circ in sub_circs:
             self._run(sub_circ)
             #self.debug(sub_circ)

@@ -19,6 +19,7 @@ class BaseTest:
     #_sv_sim = Aer.get_backend("statevector_simulator")
     _sv_sim = Aer.get_backend("aer_simulator")
     #_sv_sim.set_options(method="statevector")
+    _sv_sim.set_options(fusion_enable=False)
 
     def get_qiskit_circ(self,
                              bench_name,

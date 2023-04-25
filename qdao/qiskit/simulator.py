@@ -9,13 +9,16 @@ class QiskitSimulator:
 
     def __init__(
             self,
-            provider: Optional[str]=None
+            provider: Optional[str]=None,
+            fusion: Optional[bool]=False
         ) -> None:
         if provider:
             if provider == 'ddsim':
                 self._sim = ddsim.DDSIMProvider().get_backend('qasm_simulator')
         else:
             self._sim = Aer.get_backend("aer_simulator")
+
+        self._sim.set_options(fusion_enable=fusion)
 
     def run(self, simobj) -> np.ndarray:
 
