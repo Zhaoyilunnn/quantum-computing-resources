@@ -1,8 +1,6 @@
 import sys
 import os
 
-import os
-
 def traverse_files(path, version):
     for root, dirs, files in os.walk(path):
         for f in files:

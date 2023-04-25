@@ -4,3 +4,42 @@ rootdir: /root/projects/qcs
 collected 13 items / 12 deselected / 1 selected
 
 tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	30
+NP::	28
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 48.927093505859375
+Partial simulation consumes time: 41.67651891708374
+Partial simulation consumes time: 47.8569016456604
+Partial simulation consumes time: 41.69664001464844
+Partial simulation consumes time: 3.1994788646698
+Partial simulation consumes time: 3.103288412094116
+Partial simulation consumes time: 2.9204201698303223
+Partial simulation consumes time: 2.8261196613311768
+Partial simulation consumes time: 5.7821831703186035
+Partial simulation consumes time: 5.9327168464660645
+Partial simulation consumes time: 5.696528196334839
+Partial simulation consumes time: 5.821325063705444
+Partial simulation consumes time: 3.9372005462646484
+Partial simulation consumes time: 3.8084168434143066
+Partial simulation consumes time: 3.89448618888855
+Partial simulation consumes time: 3.8565104007720947
+Partial simulation consumes time: 2.345799684524536
+Partial simulation consumes time: 2.429680585861206
+Partial simulation consumes time: 2.4448773860931396
+Partial simulation consumes time: 2.355754852294922
+Qdao runs:	385.84833788871765
+_initialize	17.119415283203125
+_preprocess	51.47205352783203
+_postprocess	93.8478364944458
+_run	385.8333885669708
+load_sv	51.458691358566284
+store_sv	93.84667944908142
+Quafu runs:	284.9404671192169
+.
+
+================= 1 passed, 12 deselected in 690.72s (0:11:30) =================

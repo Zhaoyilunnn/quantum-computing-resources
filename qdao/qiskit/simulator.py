@@ -1,3 +1,5 @@
+import logging
+
 from typing import Optional
 import numpy as np
 
@@ -23,5 +25,10 @@ class QiskitSimulator:
     def run(self, simobj) -> np.ndarray:
 
         res = self._sim.run(simobj.circ).result()
-        return res.get_statevector().data
+        try:
+            sv = res.get_statevector().data
+        except Exception as e:
+            sv = np.zeros(1<<simobj.circ.num_qubits)
+            logging.info(f"No state vector for this sub-circuit: {e}")
+        return sv
 
