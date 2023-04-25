@@ -1,0 +1,269 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 12 items / 11 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	24
+NP::	20
+NL::	16
+D::	21
+
+::::::::::::::::::Config::::::::::::::::::
+
+
+:::Reusing existing bench:::::/root/projects/qcs/qdao/benchmarks/qasm/random_24_21_max_operands_2_gen.qasm::::::::
+
+Partial simulation consumes time: 0.04862165451049805
+Partial simulation consumes time: 0.05606818199157715
+Partial simulation consumes time: 0.05340385437011719
+Partial simulation consumes time: 0.05551886558532715
+Partial simulation consumes time: 0.04658794403076172
+Partial simulation consumes time: 0.0513761043548584
+Partial simulation consumes time: 0.0559847354888916
+Partial simulation consumes time: 0.04545426368713379
+Partial simulation consumes time: 0.04636406898498535
+Partial simulation consumes time: 0.04881429672241211
+Partial simulation consumes time: 0.0459904670715332
+Partial simulation consumes time: 0.04745674133300781
+Partial simulation consumes time: 0.05594658851623535
+Partial simulation consumes time: 0.05024003982543945
+Partial simulation consumes time: 0.05059456825256348
+Partial simulation consumes time: 0.04886627197265625
+Partial simulation consumes time: 0.038625240325927734
+Partial simulation consumes time: 0.038735389709472656
+Partial simulation consumes time: 0.03887486457824707
+Partial simulation consumes time: 0.03966236114501953
+Partial simulation consumes time: 0.039103031158447266
+Partial simulation consumes time: 0.04053044319152832
+Partial simulation consumes time: 0.038422584533691406
+Partial simulation consumes time: 0.03673672676086426
+Partial simulation consumes time: 0.04336977005004883
+Partial simulation consumes time: 0.053810834884643555
+Partial simulation consumes time: 0.042067527770996094
+Partial simulation consumes time: 0.03902459144592285
+Partial simulation consumes time: 0.04145979881286621
+Partial simulation consumes time: 0.04306626319885254
+Partial simulation consumes time: 0.03867292404174805
+Partial simulation consumes time: 0.041350603103637695
+Partial simulation consumes time: 0.03175163269042969
+Partial simulation consumes time: 0.03110790252685547
+Partial simulation consumes time: 0.0307769775390625
+Partial simulation consumes time: 0.0343019962310791
+Partial simulation consumes time: 0.03175020217895508
+Partial simulation consumes time: 0.03025984764099121
+Partial simulation consumes time: 0.030646085739135742
+Partial simulation consumes time: 0.03426551818847656
+Partial simulation consumes time: 0.03616213798522949
+Partial simulation consumes time: 0.03213071823120117
+Partial simulation consumes time: 0.03139352798461914
+Partial simulation consumes time: 0.031022310256958008
+Partial simulation consumes time: 0.036101341247558594
+Partial simulation consumes time: 0.03141212463378906
+Partial simulation consumes time: 0.03194689750671387
+Partial simulation consumes time: 0.030353307723999023
+Partial simulation consumes time: 0.06270384788513184
+Partial simulation consumes time: 0.06863570213317871
+Partial simulation consumes time: 0.07063531875610352
+Partial simulation consumes time: 0.07655453681945801
+Partial simulation consumes time: 0.07088994979858398
+Partial simulation consumes time: 0.07030177116394043
+Partial simulation consumes time: 0.07207036018371582
+Partial simulation consumes time: 0.06920933723449707
+Partial simulation consumes time: 0.0682375431060791
+Partial simulation consumes time: 0.09083747863769531
+Partial simulation consumes time: 0.08542346954345703
+Partial simulation consumes time: 0.07736849784851074
+Partial simulation consumes time: 0.05908846855163574
+Partial simulation consumes time: 0.06805777549743652
+Partial simulation consumes time: 0.07124853134155273
+Partial simulation consumes time: 0.06659817695617676
+Partial simulation consumes time: 0.032536983489990234
+Partial simulation consumes time: 0.029886722564697266
+Partial simulation consumes time: 0.031505584716796875
+Partial simulation consumes time: 0.03119182586669922
+Partial simulation consumes time: 0.029831409454345703
+Partial simulation consumes time: 0.04195904731750488
+Partial simulation consumes time: 0.029832124710083008
+Partial simulation consumes time: 0.03599882125854492
+Partial simulation consumes time: 0.03321242332458496
+Partial simulation consumes time: 0.02933788299560547
+Partial simulation consumes time: 0.030002593994140625
+Partial simulation consumes time: 0.031132221221923828
+Partial simulation consumes time: 0.030772686004638672
+Partial simulation consumes time: 0.03038763999938965
+Partial simulation consumes time: 0.03152036666870117
+Partial simulation consumes time: 0.03116774559020996
+Partial simulation consumes time: 0.05449366569519043
+Partial simulation consumes time: 0.048609256744384766
+Partial simulation consumes time: 0.041234493255615234
+Partial simulation consumes time: 0.04243040084838867
+Partial simulation consumes time: 0.04168987274169922
+Partial simulation consumes time: 0.06152653694152832
+Partial simulation consumes time: 0.045555830001831055
+Partial simulation consumes time: 0.04413914680480957
+Partial simulation consumes time: 0.04123973846435547
+Partial simulation consumes time: 0.04250645637512207
+Partial simulation consumes time: 0.041349172592163086
+Partial simulation consumes time: 0.04142904281616211
+Partial simulation consumes time: 0.042050838470458984
+Partial simulation consumes time: 0.04174518585205078
+Partial simulation consumes time: 0.04451751708984375
+Partial simulation consumes time: 0.04167938232421875
+Partial simulation consumes time: 0.07826447486877441
+Partial simulation consumes time: 0.08142590522766113
+Partial simulation consumes time: 0.0854640007019043
+Partial simulation consumes time: 0.08938932418823242
+Partial simulation consumes time: 0.06965970993041992
+Partial simulation consumes time: 0.07837247848510742
+Partial simulation consumes time: 0.06479763984680176
+Partial simulation consumes time: 0.09653425216674805
+Partial simulation consumes time: 0.07419276237487793
+Partial simulation consumes time: 0.06349062919616699
+Partial simulation consumes time: 0.06371259689331055
+Partial simulation consumes time: 0.07399463653564453
+Partial simulation consumes time: 0.06507325172424316
+Partial simulation consumes time: 0.0753934383392334
+Partial simulation consumes time: 0.06769108772277832
+Partial simulation consumes time: 0.08313417434692383
+Partial simulation consumes time: 0.037955522537231445
+Partial simulation consumes time: 0.03347325325012207
+Partial simulation consumes time: 0.03657817840576172
+Partial simulation consumes time: 0.030024051666259766
+Partial simulation consumes time: 0.043915510177612305
+Partial simulation consumes time: 0.04017019271850586
+Partial simulation consumes time: 0.038042545318603516
+Partial simulation consumes time: 0.03915572166442871
+Partial simulation consumes time: 0.04255199432373047
+Partial simulation consumes time: 0.043824195861816406
+Partial simulation consumes time: 0.038109779357910156
+Partial simulation consumes time: 0.03971242904663086
+Partial simulation consumes time: 0.03896355628967285
+Partial simulation consumes time: 0.04074740409851074
+Partial simulation consumes time: 0.03177189826965332
+Partial simulation consumes time: 0.04960799217224121
+Partial simulation consumes time: 0.03785109519958496
+Partial simulation consumes time: 0.03620743751525879
+Partial simulation consumes time: 0.03332185745239258
+Partial simulation consumes time: 0.035344600677490234
+Partial simulation consumes time: 0.0354313850402832
+Partial simulation consumes time: 0.038336753845214844
+Partial simulation consumes time: 0.03793787956237793
+Partial simulation consumes time: 0.03881335258483887
+Partial simulation consumes time: 0.04360818862915039
+Partial simulation consumes time: 0.051456451416015625
+Partial simulation consumes time: 0.045923471450805664
+Partial simulation consumes time: 0.039537668228149414
+Partial simulation consumes time: 0.04783272743225098
+Partial simulation consumes time: 0.038360595703125
+Partial simulation consumes time: 0.03324317932128906
+Partial simulation consumes time: 0.037728309631347656
+Partial simulation consumes time: 0.11606240272521973
+Partial simulation consumes time: 0.1087486743927002
+Partial simulation consumes time: 0.13084006309509277
+Partial simulation consumes time: 0.10926294326782227
+Partial simulation consumes time: 0.11075854301452637
+Partial simulation consumes time: 0.12232351303100586
+Partial simulation consumes time: 0.1281423568725586
+Partial simulation consumes time: 0.13462495803833008
+Partial simulation consumes time: 0.10831594467163086
+Partial simulation consumes time: 0.11320662498474121
+Partial simulation consumes time: 0.12323975563049316
+Partial simulation consumes time: 0.12567520141601562
+Partial simulation consumes time: 0.11025476455688477
+Partial simulation consumes time: 0.10828208923339844
+Partial simulation consumes time: 0.12810540199279785
+Partial simulation consumes time: 0.14207911491394043
+Partial simulation consumes time: 0.04725909233093262
+Partial simulation consumes time: 0.05118989944458008
+Partial simulation consumes time: 0.06609439849853516
+Partial simulation consumes time: 0.057053565979003906
+Partial simulation consumes time: 0.06264305114746094
+Partial simulation consumes time: 0.05547595024108887
+Partial simulation consumes time: 0.058106422424316406
+Partial simulation consumes time: 0.0528261661529541
+Partial simulation consumes time: 0.058841705322265625
+Partial simulation consumes time: 0.046890974044799805
+Partial simulation consumes time: 0.04640078544616699
+Partial simulation consumes time: 0.05037212371826172
+Partial simulation consumes time: 0.06292510032653809
+Partial simulation consumes time: 0.049193382263183594
+Partial simulation consumes time: 0.051984548568725586
+Partial simulation consumes time: 0.046877145767211914
+Partial simulation consumes time: 0.023451805114746094
+Partial simulation consumes time: 0.02785658836364746
+Partial simulation consumes time: 0.023006677627563477
+Partial simulation consumes time: 0.0234375
+Partial simulation consumes time: 0.024902820587158203
+Partial simulation consumes time: 0.026283979415893555
+Partial simulation consumes time: 0.03309464454650879
+Partial simulation consumes time: 0.022461891174316406
+Partial simulation consumes time: 0.026877403259277344
+Partial simulation consumes time: 0.024808168411254883
+Partial simulation consumes time: 0.022962570190429688
+Partial simulation consumes time: 0.02369546890258789
+Partial simulation consumes time: 0.025536537170410156
+Partial simulation consumes time: 0.02340078353881836
+Partial simulation consumes time: 0.02334904670715332
+Partial simulation consumes time: 0.02547621726989746
+Partial simulation consumes time: 0.08820796012878418
+Partial simulation consumes time: 0.08576297760009766
+Partial simulation consumes time: 0.0755467414855957
+Partial simulation consumes time: 0.07442688941955566
+Partial simulation consumes time: 0.08305072784423828
+Partial simulation consumes time: 0.0843038558959961
+Partial simulation consumes time: 0.07630157470703125
+Partial simulation consumes time: 0.0945274829864502
+Partial simulation consumes time: 0.08463335037231445
+Partial simulation consumes time: 0.0774834156036377
+Partial simulation consumes time: 0.0735025405883789
+Partial simulation consumes time: 0.07166314125061035
+Partial simulation consumes time: 0.07161188125610352
+Partial simulation consumes time: 0.07587122917175293
+Partial simulation consumes time: 0.07046246528625488
+Partial simulation consumes time: 0.0897681713104248
+Partial simulation consumes time: 0.05508255958557129
+Partial simulation consumes time: 0.04794502258300781
+Partial simulation consumes time: 0.04133319854736328
+Partial simulation consumes time: 0.048933982849121094
+Partial simulation consumes time: 0.0463871955871582
+Partial simulation consumes time: 0.04099225997924805
+Partial simulation consumes time: 0.04180121421813965
+Partial simulation consumes time: 0.04155087471008301
+Partial simulation consumes time: 0.03996777534484863
+Partial simulation consumes time: 0.03875136375427246
+Partial simulation consumes time: 0.047837257385253906
+Partial simulation consumes time: 0.05040478706359863
+Partial simulation consumes time: 0.050946950912475586
+Partial simulation consumes time: 0.04848790168762207
+Partial simulation consumes time: 0.04585576057434082
+Partial simulation consumes time: 0.04894375801086426
+Partial simulation consumes time: 0.0380558967590332
+Partial simulation consumes time: 0.03377652168273926
+Partial simulation consumes time: 0.037949323654174805
+Partial simulation consumes time: 0.03711342811584473
+Partial simulation consumes time: 0.032622337341308594
+Partial simulation consumes time: 0.03293752670288086
+Partial simulation consumes time: 0.02994513511657715
+Partial simulation consumes time: 0.029099702835083008
+Partial simulation consumes time: 0.03439164161682129
+Partial simulation consumes time: 0.028527259826660156
+Partial simulation consumes time: 0.03137707710266113
+Partial simulation consumes time: 0.032785892486572266
+Partial simulation consumes time: 0.036921024322509766
+Partial simulation consumes time: 0.03395581245422363
+Partial simulation consumes time: 0.034354209899902344
+Partial simulation consumes time: 0.029635190963745117
+Qdao runs:	22.355676889419556
+_initialize	0.42839932441711426
+_preprocess	2.6653501987457275
+_postprocess	6.683501958847046
+_run	21.90333843231201
+load_sv	2.5716257095336914
+store_sv	6.679254055023193
+Quafu runs:	15.44491982460022
+.
+
+====================== 1 passed, 11 deselected in 41.68s =======================
