@@ -1,0 +1,84 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 12 items / 11 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	30
+NP::	28
+NL::	26
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 378.042870759964
+Partial simulation consumes time: 412.0674874782562
+F
+
+=================================== FAILURES ===================================
+_ TestEngine.test_run_quafu_any_qasm[circuit_n30_m14_s7_e6_pEFGH.qasm-30-28-26-QDAO] _
+
+self = <engine.TestEngine object at 0x7f3c29ba15d0>, nq = '30', np = '28'
+nl = '26', mode = 'QDAO', qasm = 'circuit_n30_m14_s7_e6_pEFGH.qasm'
+
+        print("NL::\t{}".format(NL))
+        print("D::\t{}".format(D))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        from qdao.qiskit.utils import random_circuit
+        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+            circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
+            circ = transpile(circ, self._sv_sim)
+            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+                f.write(circ.qasm())
+        else:
+            print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
+    
+        self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
+    
+    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm):
+>       """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+
+tst/qdao/engine.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qdao/engine.py:261: in run_quafu_diff_test
+    ???
+qdao/engine.py:170: in run
+    self._run(sub_circ)
+utils/misc.py:21: in wrapper
+    result = func(*args, **kwargs)
+qdao/engine.py:115: in _run
+    simobj = self._preprocess(sub_circ, ichunk)
+utils/misc.py:21: in wrapper
+    result = func(*args, **kwargs)
+qdao/engine.py:78: in _preprocess
+    sv = self._manager.load_sv(sub_circ.real_qubits)
+utils/misc.py:21: in wrapper
+    result = func(*args, **kwargs)
+qdao/manager.py:132: in load_sv
+    self._load_single_su(isub, fn)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qdao.manager.SvManager object at 0x7f3c282e6440>, isub = 0
+fn = 'data/sv8.npy'
+
+    def _load_single_su(self, isub: int, fn: str):
+        # Populate to current chunk
+        vec = np.load(fn)
+        chk_start = isub<<self._nl
+        chk_end = (isub<<self._nl) + (1<<self._nl)
+>       self._chunk[chk_start: chk_end] = vec
+E       ValueError: could not broadcast input array from shape (4,) into shape (67108864,)
+
+qdao/manager.py:88: ValueError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_any_qasm[circuit_n30_m14_s7_e6_pEFGH.qasm-30-28-26-QDAO]
+================= 1 failed, 11 deselected in 832.66s (0:13:52) =================

@@ -23,7 +23,8 @@ class Engine:
             num_primary: int=4,
             num_local: int=2,
             is_parallel: bool=False,
-            backend="qiskit"
+            backend="qiskit",
+            **backend_args
         ) -> None:
         if isinstance(partitioner, BasePartitioner):
             self._part = partitioner
@@ -35,7 +36,7 @@ class Engine:
                 )
 
         # Get circuit simulator
-        self._sim = SimulatorProvider.get_simulator(backend)
+        self._sim = SimulatorProvider.get_simulator(backend, **backend_args)
 
         # Get circuit init helper based on backend name
         # This is used to init a circuit from statevector
@@ -57,6 +58,8 @@ class Engine:
 
         self._np, self._nl = num_primary, num_local
         self._num_chunks = 1 << (self._nq - self._np)
+
+        self._initialize()
 
     @property
     def num_chunks(self):
@@ -165,7 +168,7 @@ class Engine:
         """
         sub_circs = self._part.run(self._circ)
         logging.info("Number of sub-circuits: {}".format(len(sub_circs)))
-        self._initialize()
+        #self._initialize()
         for sub_circ in sub_circs:
             self._run(sub_circ)
             #self.debug(sub_circ)

@@ -39,6 +39,7 @@ class SimulatorProvider:
     @classmethod
     def get_simulator(
             cls,
-            backend_name: str
+            backend_name: str,
+            **kwargs
         ):
-        return SIMS[backend_name]()
+        return SIMS[backend_name](**kwargs)
