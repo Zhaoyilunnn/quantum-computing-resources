@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 12 items / 11 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	26
+NP::	24
+NL::	16
+D::	23
+
+::::::::::::::::::Config::::::::::::::::::
+
+
+:::Reusing existing bench:::::/root/projects/qcs/qdao/benchmarks/qasm/random_26_23_max_operands_2_gen.qasm::::::::
+
+Partial simulation consumes time: 4.3549580574035645
+Partial simulation consumes time: 4.111799716949463
+Partial simulation consumes time: 3.979487895965576
+Partial simulation consumes time: 4.051648139953613
+Partial simulation consumes time: 2.4397947788238525
+Partial simulation consumes time: 2.460334062576294
+Partial simulation consumes time: 2.11352276802063
+Partial simulation consumes time: 2.12225341796875
+Partial simulation consumes time: 4.157796144485474
+Partial simulation consumes time: 4.176915168762207
+Partial simulation consumes time: 4.370174169540405
+Partial simulation consumes time: 4.274767637252808
+Partial simulation consumes time: 4.390567064285278
+Partial simulation consumes time: 4.381218671798706
+Partial simulation consumes time: 4.3337602615356445
+Partial simulation consumes time: 4.539333343505859
+Partial simulation consumes time: 2.1060357093811035
+Partial simulation consumes time: 2.2601356506347656
+Partial simulation consumes time: 2.2703983783721924
+Partial simulation consumes time: 2.398414373397827
+Partial simulation consumes time: 0.7056233882904053
+Partial simulation consumes time: 0.6578342914581299
+Partial simulation consumes time: 0.6598150730133057
+Partial simulation consumes time: 0.7240457534790039
+Qdao runs:	90.97282934188843
+_initialize	2.9914116859436035
+_preprocess	4.061561822891235
+_postprocess	11.851693630218506
+_run	87.95464730262756
+load_sv	4.05096435546875
+store_sv	11.851263761520386
+Quafu runs:	74.9668481349945
+.
+
+================= 1 passed, 11 deselected in 168.17s (0:02:48) =================
