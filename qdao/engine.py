@@ -59,7 +59,8 @@ class Engine:
         self._np, self._nl = num_primary, num_local
         self._num_chunks = 1 << (self._nq - self._np)
 
-        self._initialize()
+        #FIXME(zhaoyilun): Put initialize to run
+        #self._initialize()
 
     @property
     def num_chunks(self):
@@ -149,15 +150,10 @@ class Engine:
 
     @time_it
     def _initialize(self):
-        # Calc number of storage units
-        num_sus = (1 << (self._nq - self._nl))
-        for i in range(num_sus):
-            # Init a storage unit
-            su = np.zeros(1<<self._nl, dtype=np.complex128)
-            if i == 0:
-                su[0] = 1.
-            fn = generate_secondary_file_name(i)
-            np.save(fn, su)
+        """
+        Init storage units to "|000...0>"
+        """
+        self._manager.initialize()
 
     def run(self):
         """Run simulation
@@ -168,7 +164,7 @@ class Engine:
         """
         sub_circs = self._part.run(self._circ)
         logging.info("Number of sub-circuits: {}".format(len(sub_circs)))
-        #self._initialize()
+        self._initialize()
         for sub_circ in sub_circs:
             self._run(sub_circ)
             #self.debug(sub_circ)

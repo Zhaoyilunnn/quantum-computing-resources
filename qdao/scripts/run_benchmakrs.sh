@@ -30,15 +30,25 @@ n_list=(\
 
 N=${#n_list[@]}
 
-mode=$1 # no_parallel or parallel
+
+if [ $# -ne 2 ]; then
+    mode=no_parallel # no_parallel or parallel
+    version=qiskit
+else
+    mode=$1
+    version=$2
+fi
+
+res_dir=logs/qdao/shuguang/${mode}/${version}/$(date +%s)
+mkdir -p $res_dir
 
 for i in $(seq 0 $((N-1))); do
     NQ=${n_list[${i}]}
     NP=$((NQ-2))
     NL=22
     bench_name=${bench_list[$i]}
-    pytest -s -k test_run_qiskit_any_qasm \
+    pytest -s -k test_run_${version}_any_qasm \
         tst/qdao/engine.py \
         --nq $NQ --np $NP --nl $NL --qasm ${bench_name} |
-        tee logs/qdao/shuguang/${mode}/qiskit/qiskit.${bench_name}.log
+        tee ${res_dir}/${bench_name}.log
 done

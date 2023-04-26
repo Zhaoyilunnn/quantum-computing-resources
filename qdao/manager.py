@@ -79,6 +79,24 @@ class SvManager:
                             chunk_idx: int):
         return chunk_idx * num_primary_groups;
 
+    def _init_single_su(self, i):
+        # Init a storage unit
+        su = np.zeros(1<<self._nl, dtype=np.complex128)
+        if i == 0:
+            su[0] = 1.
+        fn = generate_secondary_file_name(i)
+        np.save(fn, su)
+
+    @time_it
+    def initialize(self):
+        # Calc number of storage units
+        num_sus = (1 << (self._nq - self._nl))
+        init_single_su_params = [[i] for i in range(num_sus)]
+        if self._is_parallel:
+            for i in range(num_sus):
+                self._init_single_su(i)
+        else:
+            self._executor.execute(self._init_single_su, init_single_su_params)
 
     def _load_single_su(self, isub: int, fn: str):
         # Populate to current chunk
