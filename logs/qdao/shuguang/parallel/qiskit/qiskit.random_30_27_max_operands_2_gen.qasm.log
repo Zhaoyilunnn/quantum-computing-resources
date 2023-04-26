@@ -1,0 +1,57 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	30
+NP::	28
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 7.589562177658081
+Partial simulation consumes time: 6.910752296447754
+Partial simulation consumes time: 7.536566495895386
+Partial simulation consumes time: 7.184578895568848
+Partial simulation consumes time: 7.976961612701416
+Partial simulation consumes time: 9.009119749069214
+Partial simulation consumes time: 7.999592065811157
+Partial simulation consumes time: 8.791614294052124
+Partial simulation consumes time: 8.174512386322021
+Partial simulation consumes time: 9.72304081916809
+Partial simulation consumes time: 9.253526210784912
+Partial simulation consumes time: 8.564448356628418
+Partial simulation consumes time: 6.699643850326538
+Partial simulation consumes time: 7.962223768234253
+Partial simulation consumes time: 8.118079662322998
+Partial simulation consumes time: 6.581388711929321
+Partial simulation consumes time: 9.063825130462646
+Partial simulation consumes time: 9.463731288909912
+Partial simulation consumes time: 8.65574598312378
+Partial simulation consumes time: 9.262019157409668
+Partial simulation consumes time: 10.817216157913208
+Partial simulation consumes time: 12.179592847824097
+Partial simulation consumes time: 10.789392948150635
+Partial simulation consumes time: 12.184951066970825
+Partial simulation consumes time: 12.055039167404175
+Partial simulation consumes time: 12.07356882095337
+Partial simulation consumes time: 11.56281566619873
+Partial simulation consumes time: 10.479818105697632
+Partial simulation consumes time: 1.3915116786956787
+Partial simulation consumes time: 1.3518633842468262
+Partial simulation consumes time: 1.3722281455993652
+Partial simulation consumes time: 1.796799659729004
+Qdao runs:	316.6354036331177
+_initialize	17.117166996002197
+_preprocess	15.311997652053833
+_postprocess	27.151108741760254
+_run	316.31874990463257
+load_sv	15.187583208084106
+store_sv	27.148736715316772
+Qiskit runs: 342.56697154045105
+.
+
+================= 1 passed, 12 deselected in 679.33s (0:11:19) =================

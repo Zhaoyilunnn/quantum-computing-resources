@@ -23,7 +23,8 @@ def parse_res(file_path, file_name, version):
 
     if res_qdao and res_quafu:
         runtime = float(res_qdao) / float(res_quafu)
-        print("\t".join([bench_name, res_qdao, res_quafu, str(runtime)]))
+        overhead = (float(res_qdao) - float(res_quafu)) / float(res_qdao)
+        print("\t".join([bench_name, res_qdao, res_quafu, str(runtime), str(overhead)]))
 
 
 if __name__ == '__main__':

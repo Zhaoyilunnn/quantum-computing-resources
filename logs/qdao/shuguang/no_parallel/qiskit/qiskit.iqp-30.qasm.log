@@ -12,26 +12,26 @@ NL::	22
 
 ::::::::::::::::::Config::::::::::::::::::
 
-Partial simulation consumes time: 20.25620174407959
-Partial simulation consumes time: 22.10983681678772
-Partial simulation consumes time: 20.264336109161377
-Partial simulation consumes time: 19.898475646972656
-Partial simulation consumes time: 5.348168134689331
-Partial simulation consumes time: 5.474009275436401
-Partial simulation consumes time: 6.081090927124023
-Partial simulation consumes time: 6.246509790420532
-Partial simulation consumes time: 1.2911078929901123
-Partial simulation consumes time: 1.7022509574890137
-Partial simulation consumes time: 1.3438713550567627
-Partial simulation consumes time: 1.3716375827789307
-Qdao runs:	196.8551149368286
-_initialize	16.461711406707764
-_preprocess	30.397377490997314
-_postprocess	51.20137405395508
-_run	196.46632075309753
-load_sv	30.367128133773804
-store_sv	51.20066714286804
-Qiskit runs: 103.72567439079285
+Partial simulation consumes time: 20.704800605773926
+Partial simulation consumes time: 21.161226749420166
+Partial simulation consumes time: 19.099047660827637
+Partial simulation consumes time: 19.40644669532776
+Partial simulation consumes time: 6.605158567428589
+Partial simulation consumes time: 6.1268229484558105
+Partial simulation consumes time: 5.502316951751709
+Partial simulation consumes time: 5.195992946624756
+Partial simulation consumes time: 1.3888933658599854
+Partial simulation consumes time: 1.385066032409668
+Partial simulation consumes time: 1.3424575328826904
+Partial simulation consumes time: 1.369687795639038
+Qdao runs:	219.0805914402008
+_initialize	16.31380558013916
+_preprocess	49.839704751968384
+_postprocess	56.40074706077576
+_run	218.6993818283081
+load_sv	49.80550956726074
+store_sv	56.39998126029968
+Qiskit runs: 108.91688251495361
 .
 
-================= 1 passed, 12 deselected in 319.89s (0:05:19) =================
+================= 1 passed, 12 deselected in 347.22s (0:05:47) =================

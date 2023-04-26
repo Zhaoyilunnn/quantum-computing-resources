@@ -10,9 +10,15 @@ def traverse_files(path):
             file_path = os.path.join(root, f)
             parse_res(file_path, f, res_dict)
 
-    print(res_dict)
+    #print(res_dict)
     for q in res_dict:
-        plot_bar_3d(res_dict[q], labels=("M", "K", "Overhead"), figname="test.pdf")
+        plot_bar_3d(
+            res_dict[q],
+            labels=(r'$K$', r'$M$', 'Normalized Overhead'),
+            figname=f"params_rqc_{q}.pdf",
+            normalize=True,
+            integer=True
+        )
 
 def parse_res(file_path, file_name, res_dict):
 
@@ -34,7 +40,7 @@ def parse_res(file_path, file_name, res_dict):
         memory = 2**(NQ-NP)
         print("\t".join([str(NQ), str(NP), str(NL), res_qdao, res_quafu, str(memory), str(runtime)]))
         res_dict.setdefault(NQ, [])
-        res_dict[NQ].append((NP, NL, runtime))
+        res_dict[NQ].append((NL, NP, runtime))
 
 
 

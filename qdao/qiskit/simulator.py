@@ -21,6 +21,7 @@ class QiskitSimulator:
             self._sim = Aer.get_backend("aer_simulator")
 
         self._sim.set_options(fusion_enable=fusion)
+        self._sim.set_options(method='statevector')
 
     def run(self, simobj) -> np.ndarray:
 
