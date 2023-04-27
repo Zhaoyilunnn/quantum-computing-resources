@@ -5,10 +5,14 @@ bench_list=(\
     random_30_27_max_operands_2_gen.qasm
     qnn_n31.qasm
     qnn_n29.qasm
-    graph_state-30.qasm
-    hidden_linear_function-30.qasm
-    qft-30.qasm
-    iqp-30.qasm
+    #graph_state-30.qasm
+    #hidden_linear_function-30.qasm
+    #qft-30.qasm
+    #iqp-30.qasm
+    graph_state-28.qasm
+    hidden_linear_function-28.qasm
+    qft-28.qasm
+    iqp-28.qasm
     vqe_n28.qasm
     vqe_n30.qasm\
 )
@@ -20,10 +24,14 @@ n_list=(\
     30
     31
     29
-    30
-    30
-    30
-    30
+    #30
+    #30
+    #30
+    #30
+    28
+    28
+    28
+    28
     28
     30\
 )

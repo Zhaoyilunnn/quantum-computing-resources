@@ -71,7 +71,7 @@ class TestEngine(QdaoBaseTest):
         ):
 
         if mode == "QDAO":
-            engine = Engine(circuit=circ, num_primary=NP, num_local=NL, backend="qiskit", is_parallel=False)
+            engine = Engine(circuit=circ, num_primary=NP, num_local=NL, backend="qiskit", is_parallel=True)
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=circ,
