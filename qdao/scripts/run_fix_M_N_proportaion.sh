@@ -2,17 +2,18 @@
 # mode = parallel or no_parallel
 # version = quafu or qiskit
 
-if [ $# -eq 2 ]; then
+if [ $# -ne 3 ]; then
+    echo "Usage: bash $0 <mode (no_parallel | parallel)> <version (qiskit | quafu)> <system (shuguang | macos)>"
+    exit 1
+else
     mode=$1
     version=$2
-else
-    mode=parallel
-    version=quafu
+    system=$3
 fi
 
 
-res_dir=logs/qdao/shuguang/${mode}/fix_M_to_N/${version}/$(date +%s)
-mkdir $res_dir
+res_dir=logs/qdao/${system}/${mode}/fix_M_to_N/${version}/$(date +%s)
+mkdir -p $res_dir
 
 for i in $(seq 22 32); do
     np=$((i-2))

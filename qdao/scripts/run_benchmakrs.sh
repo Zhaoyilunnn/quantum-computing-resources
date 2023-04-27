@@ -31,15 +31,21 @@ n_list=(\
 N=${#n_list[@]}
 
 
-if [ $# -ne 2 ]; then
-    mode=no_parallel # no_parallel or parallel
-    version=qiskit
+mode=no_parallel # no_parallel or parallel
+version=qiskit
+system=shuguang
+
+if [ $# -ne 3 ]; then
+    echo "Usage: bash $0 <mode (no_parallel | parallel)> <version (qiskit | quafu)> <system (shuguang | macos)>"
+    exit 1
 else
     mode=$1
     version=$2
+    system=$3
 fi
 
-res_dir=logs/qdao/shuguang/${mode}/${version}/$(date +%s)
+
+res_dir=logs/qdao/${system}/${mode}/${version}/$(date +%s)
 mkdir -p $res_dir
 
 for i in $(seq 0 $((N-1))); do
