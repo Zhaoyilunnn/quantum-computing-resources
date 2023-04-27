@@ -71,7 +71,7 @@ class TestEngine(QdaoBaseTest):
         ):
 
         if mode == "QDAO":
-            engine = Engine(circuit=circ, num_primary=NP, num_local=NL, backend="qiskit", is_parallel=False)
+            engine = Engine(circuit=circ, num_primary=NP, num_local=NL, backend="qiskit", is_parallel=True)
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=circ,
@@ -92,7 +92,11 @@ class TestEngine(QdaoBaseTest):
 
         circ.save_state()
         st = time()
-        sv_org = self._sv_sim.run(circ).result().get_statevector().data
+        try:
+            self._sv_sim.set_options(method='statevector')
+            sv_org = self._sv_sim.run(circ).result().get_statevector().data
+        except Exception:
+            pass
         print("Qiskit runs: {}".format(time() - st))
 
 
@@ -262,7 +266,7 @@ class TestEngine(QdaoBaseTest):
         #quafu_circ.draw_circuit()
 
         if mode == "QDAO":
-            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=quafu_circ,

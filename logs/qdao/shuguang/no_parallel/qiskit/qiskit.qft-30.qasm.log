@@ -12,127 +12,34 @@ NL::	22
 
 ::::::::::::::::::Config::::::::::::::::::
 
-Partial simulation consumes time: 26.41964864730835
-Partial simulation consumes time: 26.99953031539917
-Partial simulation consumes time: 24.723378896713257
-Partial simulation consumes time: 24.976531982421875
-Partial simulation consumes time: 1.7170331478118896
-Partial simulation consumes time: 1.7599527835845947
-Partial simulation consumes time: 1.7780539989471436
-Partial simulation consumes time: 1.7838854789733887
-Partial simulation consumes time: 2.080435037612915
-Partial simulation consumes time: 2.285893678665161
-Partial simulation consumes time: 2.3536465167999268
-Partial simulation consumes time: 2.1933677196502686
-Partial simulation consumes time: 1.2876641750335693
-Partial simulation consumes time: 1.358006238937378
-Partial simulation consumes time: 1.3078110218048096
-Partial simulation consumes time: 1.3661527633666992
-F
+Partial simulation consumes time: 27.1233389377594
+Partial simulation consumes time: 26.61257028579712
+Partial simulation consumes time: 24.665610313415527
+Partial simulation consumes time: 26.19468593597412
+Partial simulation consumes time: 1.6254229545593262
+Partial simulation consumes time: 1.7311928272247314
+Partial simulation consumes time: 1.7784907817840576
+Partial simulation consumes time: 1.6773970127105713
+Partial simulation consumes time: 2.1500954627990723
+Partial simulation consumes time: 2.078826427459717
+Partial simulation consumes time: 2.772582769393921
+Partial simulation consumes time: 2.287067413330078
+Partial simulation consumes time: 1.3567261695861816
+Partial simulation consumes time: 1.5166704654693604
+Partial simulation consumes time: 1.333841323852539
+Partial simulation consumes time: 1.335662603378296
+Partial simulation consumes time: 0.6165642738342285
+Partial simulation consumes time: 0.6177747249603271
+Partial simulation consumes time: 0.6193375587463379
+Partial simulation consumes time: 0.6208038330078125
+Qdao runs:	268.31905126571655
+_initialize	16.32890224456787
+_preprocess	50.471303939819336
+_postprocess	82.57792782783508
+_run	267.8675231933594
+load_sv	50.43452048301697
+store_sv	82.57722210884094
+Qiskit runs: 110.2368426322937
+.
 
-=================================== FAILURES ===================================
-________ TestEngine.test_run_qiskit_any_qasm[qft-30.qasm-30-28-22-QDAO] ________
-
-self = Result(backend_name='aer_simulator', backend_version='0.11.0', qobj_id='f50685d9-87c1-40db-81b4-3c2e144c2019', job_id=...en_load_qobj': 0.000254692, 'num_processes_per_experiments': 1, 'omp_enabled': True}, time_taken=0.0008585453033447266)
-experiment = None, decimals = None
-
-    def get_statevector(self, experiment=None, decimals=None):
-        """Get the final statevector of an experiment.
-    
-        Args:
-            experiment (str or QuantumCircuit or Schedule or int or None): the index of the
-                experiment, as specified by ``data()``.
-            decimals (int): the number of decimals in the statevector.
-                If None, does not round.
-    
-        Returns:
-            list[complex]: list of 2^num_qubits complex amplitudes.
-    
-        Raises:
-            QiskitError: if there is no statevector for the experiment.
-        """
-        try:
-            return postprocess.format_statevector(
->               self.data(experiment)["statevector"], decimals=decimals
-            )
-E           KeyError: 'statevector'
-
-/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/result/result.py:314: KeyError
-
-The above exception was the direct cause of the following exception:
-
-self = <engine.TestEngine object at 0x7f71264f9330>, nq = '30', np = '28'
-nl = '22', mode = 'QDAO', qasm = 'qft-30.qasm'
-
-    def test_run_qiskit_any_qasm(self, nq, np, nl, mode, qasm):
-        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
-    
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-        print("NQ::\t{}".format(NQ))
-        print("NP::\t{}".format(NP))
-        print("NL::\t{}".format(NL))
-        print("\n::::::::::::::::::Config::::::::::::::::::\n")
-    
-        try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
-        except Exception as e:
-            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
-        circ = transpile(circ, self._sv_sim)
->       self.run_qiskit_diff_test(circ, NQ, NP, NL, mode)
-
-tst/qdao/engine.py:113: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-tst/qdao/engine.py:87: in run_qiskit_diff_test
-    engine.run()
-qdao/engine.py:173: in run
-    self._run(sub_circ)
-utils/misc.py:21: in wrapper
-    result = func(*args, **kwargs)
-qdao/engine.py:120: in _run
-    sv = self._sim.run(simobj)
-qdao/qiskit/simulator.py:26: in run
-    return res.get_statevector().data
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = Result(backend_name='aer_simulator', backend_version='0.11.0', qobj_id='f50685d9-87c1-40db-81b4-3c2e144c2019', job_id=...en_load_qobj': 0.000254692, 'num_processes_per_experiments': 1, 'omp_enabled': True}, time_taken=0.0008585453033447266)
-experiment = None, decimals = None
-
-    def get_statevector(self, experiment=None, decimals=None):
-        """Get the final statevector of an experiment.
-    
-        Args:
-            experiment (str or QuantumCircuit or Schedule or int or None): the index of the
-                experiment, as specified by ``data()``.
-            decimals (int): the number of decimals in the statevector.
-                If None, does not round.
-    
-        Returns:
-            list[complex]: list of 2^num_qubits complex amplitudes.
-    
-        Raises:
-            QiskitError: if there is no statevector for the experiment.
-        """
-        try:
-            return postprocess.format_statevector(
-                self.data(experiment)["statevector"], decimals=decimals
-            )
-        except KeyError as ex:
->           raise QiskitError(f'No statevector for experiment "{repr(experiment)}"') from ex
-E           qiskit.exceptions.QiskitError: 'No statevector for experiment "None"'
-
-/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/result/result.py:317: QiskitError
-=============================== warnings summary ===============================
-tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[qft-30.qasm-30-28-22-QDAO]
-tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[qft-30.qasm-30-28-22-QDAO]
-  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/quantum_info/operators/symplectic/clifford.py:229: PendingDeprecationWarning: The StabilizerTable class has been superseded by PauliList and is pending deprecation. This class will be deprecated in the future release and subsequently removed after that.
-    return StabilizerTable(array, phase)
-
-tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[qft-30.qasm-30-28-22-QDAO]
-tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[qft-30.qasm-30-28-22-QDAO]
-  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/quantum_info/operators/symplectic/stabilizer_table.py:203: PendingDeprecationWarning: The PauliTable class has been superseded by PauliList and is pending deprecation. This class will be deprecated in the future release and subsequently removed after that.
-    super().__init__(pauli)
-
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========================== short test summary info ============================
-FAILED tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[qft-30.qasm-30-28-22-QDAO]
-=========== 1 failed, 12 deselected, 4 warnings in 293.84s (0:04:53) ===========
+================= 1 passed, 12 deselected in 397.85s (0:06:37) =================
