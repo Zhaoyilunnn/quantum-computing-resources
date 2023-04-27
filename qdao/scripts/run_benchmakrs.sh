@@ -5,10 +5,14 @@ bench_list=(\
     random_30_27_max_operands_2_gen.qasm
     qnn_n31.qasm
     qnn_n29.qasm
-    graph_state-30.qasm
-    hidden_linear_function-30.qasm
-    qft-30.qasm
-    iqp-30.qasm
+    #graph_state-30.qasm
+    #hidden_linear_function-30.qasm
+    #qft-30.qasm
+    #iqp-30.qasm
+    graph_state-28.qasm
+    hidden_linear_function-28.qasm
+    qft-28.qasm
+    iqp-28.qasm
     vqe_n28.qasm
     vqe_n30.qasm\
 )
@@ -20,10 +24,14 @@ n_list=(\
     30
     31
     29
-    30
-    30
-    30
-    30
+    #30
+    #30
+    #30
+    #30
+    28
+    28
+    28
+    28
     28
     30\
 )
@@ -31,15 +39,21 @@ n_list=(\
 N=${#n_list[@]}
 
 
-if [ $# -ne 2 ]; then
-    mode=no_parallel # no_parallel or parallel
-    version=qiskit
+mode=no_parallel # no_parallel or parallel
+version=qiskit
+system=shuguang
+
+if [ $# -ne 3 ]; then
+    echo "Usage: bash $0 <mode (no_parallel | parallel)> <version (qiskit | quafu)> <system (shuguang | macos)>"
+    exit 1
 else
     mode=$1
     version=$2
+    system=$3
 fi
 
-res_dir=logs/qdao/shuguang/${mode}/${version}/$(date +%s)
+
+res_dir=logs/qdao/${system}/${mode}/${version}/$(date +%s)
 mkdir -p $res_dir
 
 for i in $(seq 0 $((N-1))); do

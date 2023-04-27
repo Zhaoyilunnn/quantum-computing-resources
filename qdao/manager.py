@@ -93,10 +93,10 @@ class SvManager:
         num_sus = (1 << (self._nq - self._nl))
         init_single_su_params = [[i] for i in range(num_sus)]
         if self._is_parallel:
+            self._executor.execute(self._init_single_su, init_single_su_params)
+        else:
             for i in range(num_sus):
                 self._init_single_su(i)
-        else:
-            self._executor.execute(self._init_single_su, init_single_su_params)
 
     def _load_single_su(self, isub: int, fn: str):
         # Populate to current chunk
@@ -142,9 +142,9 @@ class SvManager:
         #    pool.close()
         #    pool.join()
         if self._is_parallel:
-            executor = ParallelExecutor(self._load_single_su, load_single_su_params)
-            executor.execute()
-            #self._executor.execute(self._load_single_su, load_single_su_params)
+            #executor = ParallelExecutor(self._load_single_su, load_single_su_params)
+            #executor.execute()
+            self._executor.execute(self._load_single_su, load_single_su_params)
         else:
             for isub, fn in load_single_su_params:
                 self._load_single_su(isub, fn)
