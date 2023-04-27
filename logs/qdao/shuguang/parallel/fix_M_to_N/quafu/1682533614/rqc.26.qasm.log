@@ -1,0 +1,71 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	26
+NP::	24
+NL::	20
+D::	23
+
+::::::::::::::::::Config::::::::::::::::::
+
+
+:::Reusing existing bench:::::/root/projects/qcs/qdao/benchmarks/qasm/random_26_23_max_operands_2_gen.qasm::::::::
+
+Partial simulation consumes time: 2.5178956985473633
+Partial simulation consumes time: 2.1760170459747314
+Partial simulation consumes time: 2.4772777557373047
+Partial simulation consumes time: 2.2176711559295654
+Partial simulation consumes time: 0.4107222557067871
+Partial simulation consumes time: 0.4093656539916992
+Partial simulation consumes time: 0.4089078903198242
+Partial simulation consumes time: 0.3937194347381592
+Partial simulation consumes time: 0.6927454471588135
+Partial simulation consumes time: 0.6927359104156494
+Partial simulation consumes time: 0.9660806655883789
+Partial simulation consumes time: 0.8724026679992676
+Partial simulation consumes time: 0.7094650268554688
+Partial simulation consumes time: 0.6998140811920166
+Partial simulation consumes time: 0.7070479393005371
+Partial simulation consumes time: 0.7166562080383301
+Partial simulation consumes time: 0.36272621154785156
+Partial simulation consumes time: 0.3695518970489502
+Partial simulation consumes time: 0.36296606063842773
+Partial simulation consumes time: 0.365142822265625
+Partial simulation consumes time: 0.7057318687438965
+Partial simulation consumes time: 0.5053877830505371
+Partial simulation consumes time: 0.6377401351928711
+Partial simulation consumes time: 0.5159616470336914
+Partial simulation consumes time: 0.5515925884246826
+Partial simulation consumes time: 0.7167541980743408
+Partial simulation consumes time: 0.7260494232177734
+Partial simulation consumes time: 0.7134249210357666
+Partial simulation consumes time: 1.479806900024414
+Partial simulation consumes time: 1.4415638446807861
+Partial simulation consumes time: 1.8223371505737305
+Partial simulation consumes time: 1.4472568035125732
+Partial simulation consumes time: 1.0446083545684814
+Partial simulation consumes time: 1.0366551876068115
+Partial simulation consumes time: 1.5601963996887207
+Partial simulation consumes time: 1.0459458827972412
+Partial simulation consumes time: 0.32985353469848633
+Partial simulation consumes time: 0.33356547355651855
+Partial simulation consumes time: 0.3308563232421875
+Partial simulation consumes time: 0.3350977897644043
+Qdao runs:	40.12381386756897
+_initialize	0.9708504676818848
+_preprocess	1.4694280624389648
+_postprocess	1.8067841529846191
+_run	39.087767124176025
+initialize	0.9708311557769775
+load_sv	1.4389300346374512
+store_sv	1.8050243854522705
+Quafu runs:	25.56912589073181
+.
+
+================= 1 passed, 12 deselected in 67.21s (0:01:07) ==================
