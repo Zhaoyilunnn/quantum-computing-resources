@@ -8,7 +8,7 @@ from threading import Thread
 from typing import List
 
 from qdao.util import *
-from qdao.executor import ParallelExecutor, PoolParallelExecutor
+from qdao.executor import AsyncIoExecutor, BatchParallelExecutor, ConstantPoolParallelExecutor, ParallelExecutor, PoolParallelExecutor
 
 from utils.misc import print_statistics, time_it
 
@@ -31,7 +31,7 @@ class SvManager:
         self._chunk_idx = 0
         self._chunk = np.zeros(1<<num_primary, dtype=np.complex128)
         self._is_parallel = is_parallel
-        self._executor = PoolParallelExecutor()
+        self._executor = AsyncIoExecutor()
 
         if not os.path.isdir("data"):
             os.mkdir("data")
