@@ -67,18 +67,26 @@ class TestEngine(QdaoBaseTest):
             NQ: int,
             NP: int,
             NL: int,
-            mode: str="QDAO"
+            mode: str="QDAO",
+            is_parallel: bool=True
         ):
 
         if mode == "QDAO":
-            engine = Engine(circuit=circ, num_primary=NP, num_local=NL, backend="qiskit", is_parallel=True)
+            engine = Engine(
+                    circuit=circ,
+                    num_primary=NP,
+                    num_local=NL,
+                    backend="qiskit",
+                    is_parallel=is_parallel
+                )
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=circ,
                         num_primary=NP,
                         num_local=NL,
                         backend="qiskit",
-                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="qiskit")
+                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="qiskit"),
+                        is_parallel=is_parallel
                     )
         else:
             raise ValueError(f"Unsupported mode::{mode}, should be either QDAO or BASELINE")
@@ -100,8 +108,17 @@ class TestEngine(QdaoBaseTest):
         print("Qiskit runs: {}".format(time() - st))
 
 
-    def test_run_qiskit_any_qasm(self, nq, np, nl, mode, qasm):
+    def test_run_qiskit_any_qasm(
+            self,
+            nq,
+            np,
+            nl,
+            mode,
+            qasm,
+            parallel
+        ):
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+        parallel = True if int(parallel) == 1 else False
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
         print("NQ::\t{}".format(NQ))
@@ -114,7 +131,14 @@ class TestEngine(QdaoBaseTest):
         except Exception as e:
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
-        self.run_qiskit_diff_test(circ, NQ, NP, NL, mode)
+        self.run_qiskit_diff_test(
+                circ,
+                NQ,
+                NP,
+                NL,
+                mode,
+                is_parallel=parallel
+            )
 
 
     def test_run_qiskit_random_basic(self, nq, np, nl, mode):
@@ -256,7 +280,8 @@ class TestEngine(QdaoBaseTest):
             NQ: int,
             NP: int,
             NL: int,
-            mode: str="QDAO"
+            mode: str="QDAO",
+            is_parallel: bool=True
         ):
         """Run test from qiskit QuantumCircuit"""
         from quafu.circuits.quantum_circuit import QuantumCircuit
@@ -266,14 +291,21 @@ class TestEngine(QdaoBaseTest):
         #quafu_circ.draw_circuit()
 
         if mode == "QDAO":
-            engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
+            engine = Engine(
+                    circuit=quafu_circ,
+                    num_primary=NP,
+                    num_local=NL,
+                    backend="quafu",
+                    is_parallel=is_parallel
+                )
         elif mode == "BASELINE":
             engine = Engine(
                         circuit=quafu_circ,
                         num_primary=NP,
                         num_local=NL,
                         backend="quafu",
-                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="quafu")
+                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="quafu"),
+                        is_parallel=is_parallel
                     )
         else:
             raise ValueError(f"Unsupported mode::{mode}, should be either QDAO or BASELINE")
@@ -319,7 +351,8 @@ class TestEngine(QdaoBaseTest):
         """
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
 
-        D = NQ - 3 # depth
+        #D = NQ - 3 # depth
+        D = 2 # depth
         MAX_OP = 2
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
@@ -342,7 +375,15 @@ class TestEngine(QdaoBaseTest):
 
         self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
 
-    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm):
+    def test_run_quafu_any_qasm(
+            self,
+            nq,
+            np,
+            nl,
+            mode,
+            qasm,
+            parallel
+        ):
         """
         Basic test to run random circuits and
         compare performance between
@@ -350,6 +391,7 @@ class TestEngine(QdaoBaseTest):
         2. Quafu
         """
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+        parallel = True if int(parallel) == 1 else False
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
         print("NQ::\t{}".format(NQ))
@@ -363,7 +405,14 @@ class TestEngine(QdaoBaseTest):
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
 
-        self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
+        self.run_quafu_diff_test(
+                circ,
+                NQ,
+                NP,
+                NL,
+                mode=mode,
+                is_parallel=parallel
+            )
 
     def test_run_quafu_qasm_basic(self, bench, nq):
         """

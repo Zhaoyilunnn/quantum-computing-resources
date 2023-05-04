@@ -23,9 +23,9 @@ def traverse_files(path):
 def parse_res(file_path, file_name, res_dict):
 
     items = file_name.split('.')
-    NQ = int(items[1])
-    NP = NQ - int(items[2])
-    NL = NP - int(items[3])
+    NQ = int(items[1].split('-')[0])
+    NP = int(items[1].split('-')[1])
+    NL = int(items[1].split('-')[2])
 
     res_qdao, res_quafu = None, None
     with open(file_path, 'r') as f:
