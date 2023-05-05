@@ -1,39 +1,27 @@
 bench_list=(\
-    #head_1000_circuit_n28_m14_s5_e6_pEFGH.qasm
-    head_1000_circuit_n30_m14_s7_e6_pEFGH.qasm
-    #random_28_25_max_operands_2_gen.qasm
-    random_30_27_max_operands_2_gen.qasm
-    #qnn_n31.qasm
-    qnn_n29.qasm
-    graph_state-30.qasm
-    hidden_linear_function-30.qasm
-    qft-30.qasm
-    iqp-30.qasm
-    #graph_state-28.qasm
-    #hidden_linear_function-28.qasm
-    #qft-28.qasm
-    #iqp-28.qasm
-    #vqe_n28.qasm
-    vqe_n30.qasm\
+    a.rqc_30_0.qasm
+    a.rqc_30_1.qasm
+    a.vqa.qnn_29_0.qasm
+    a.vqa.qnn_29_1.qasm
+    a.vqa.vqe_29.qasm
+    a.vqa.vqe_30.qasm
+    b.gs_30.qasm
+    b.hlf_30.qasm
+    b.iqp_30.qasm
+    b.qft_30.qasm
 )
 
 n_list=(\
-    #28
     30
-    #28
     30
-    #31
+    29
+    29
     29
     30
     30
     30
     30
-    #28
-    #28
-    #28
-    #28
-    #28
-    30\
+    30
 )
 
 N=${#n_list[@]}

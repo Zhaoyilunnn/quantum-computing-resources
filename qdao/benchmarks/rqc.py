@@ -1,7 +1,9 @@
+import sys
 import time
 from qiskit.circuit import QuantumCircuit
 
 from qiskit.compiler import transpile
+from qiskit_aer import Aer
 
 from qdao.test import QdaoBaseTest
 from qdao.engine import Engine
@@ -31,4 +33,19 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    from qdao.qiskit.utils import random_circuit
+
+    # Number of qubits
+    n = int(sys.argv[1])
+
+    # Depth
+    d = int(sys.argv[2])
+
+    sim = Aer.get_backend("aer_simulator")
+    circ = random_circuit(n, d, max_operands=2, measure=False)
+
+    circ = transpile(circ, sim)
+    file_name = "qasm/rqc_{}.qasm".format(n)
+    with open(file_name, 'w') as f:
+        f.write(circ.qasm())
