@@ -5,3 +5,55 @@ plugins: anyio-3.6.2
 collected 13 items / 12 deselected / 1 selected
 
 tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	30
+NP::	28
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 7.744570016860962
+Partial simulation consumes time: 7.039952754974365
+Partial simulation consumes time: 7.90892219543457
+Partial simulation consumes time: 8.962545156478882
+Partial simulation consumes time: 9.320289373397827
+Partial simulation consumes time: 8.866624593734741
+Partial simulation consumes time: 8.52581524848938
+Partial simulation consumes time: 8.910631895065308
+Partial simulation consumes time: 8.49205231666565
+Partial simulation consumes time: 9.53085470199585
+Partial simulation consumes time: 8.152836084365845
+Partial simulation consumes time: 9.001724481582642
+Partial simulation consumes time: 7.7225563526153564
+Partial simulation consumes time: 7.8444437980651855
+Partial simulation consumes time: 6.8903515338897705
+Partial simulation consumes time: 7.4482951164245605
+Partial simulation consumes time: 8.675660133361816
+Partial simulation consumes time: 9.136656045913696
+Partial simulation consumes time: 9.330267667770386
+Partial simulation consumes time: 8.966852188110352
+Partial simulation consumes time: 10.293567895889282
+Partial simulation consumes time: 10.388078212738037
+Partial simulation consumes time: 10.322537183761597
+Partial simulation consumes time: 10.94853401184082
+Partial simulation consumes time: 10.374422311782837
+Partial simulation consumes time: 11.756945848464966
+Partial simulation consumes time: 10.43204951286316
+Partial simulation consumes time: 11.251656293869019
+Partial simulation consumes time: 1.346207857131958
+Partial simulation consumes time: 1.3589415550231934
+Partial simulation consumes time: 1.3692469596862793
+Partial simulation consumes time: 1.4841053485870361
+Qdao runs:	489.14306592941284
+_initialize	13.566121101379395
+_preprocess	82.59763932228088
+_postprocess	125.8680055141449
+_run	475.2672643661499
+initialize	13.566086053848267
+load_sv	82.5361897945404
+store_sv	125.86630821228027
+Qiskit runs: 353.13940834999084
+.
+
+================= 1 passed, 12 deselected in 845.17s (0:14:05) =================
