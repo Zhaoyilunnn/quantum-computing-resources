@@ -33,6 +33,8 @@ class BaseParser(ABC):
             for f in files:
                 file_path = os.path.join(root, f)
                 one_res = self.parse_one(file_path, *self.parse_args)
+                if not one_res:
+                    continue
                 print("\t".join([str(it) for it in one_res]))
                 cnt += 1
                 if not avg:

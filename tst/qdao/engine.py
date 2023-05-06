@@ -6,6 +6,7 @@ import numpy as np
 from qiskit import QuantumCircuit, qiskit
 
 from qiskit.compiler import transpile
+from qiskit.compiler.transpiler import parallel
 from qiskit.quantum_info import Statevector, random_density_matrix
 from qdao.circuit import BaselinePartitioner
 from qdao.simulator import QdaoSimObj
@@ -342,7 +343,8 @@ class TestEngine(QdaoBaseTest):
         return NQ, NP, NL
 
 
-    def test_run_quafu_random_basic(self, nq, np, nl, mode):
+    def test_run_quafu_random_basic(
+            self, nq, np, nl, mode, parallel):
         """
         Basic test to run random circuits and
         compare performance between
@@ -350,9 +352,10 @@ class TestEngine(QdaoBaseTest):
         2. Quafu
         """
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+        parallel = True if int(parallel) == 1 else False
 
-        #D = NQ - 3 # depth
-        D = 2 # depth
+        D = NQ - 3 # depth
+        #D = 2 # depth
         MAX_OP = 2
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
@@ -373,7 +376,11 @@ class TestEngine(QdaoBaseTest):
             print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
             circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
 
-        self.run_quafu_diff_test(circ, NQ, NP, NL, mode=mode)
+        self.run_quafu_diff_test(
+            circ, NQ, NP, NL,
+            mode=mode,
+            is_parallel=parallel
+        )
 
     def test_run_quafu_any_qasm(
             self,

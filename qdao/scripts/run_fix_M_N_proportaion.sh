@@ -11,6 +11,14 @@ else
     system=$3
 fi
 
+if [ ${mode} = "no_parallel" ]; then
+    parallel=0
+elif [ ${mode} = "parallel" ]; then
+    parallel=1
+else
+    echo "Unsupported mode"
+    exit 1
+fi
 
 res_dir=logs/qdao/${system}/${mode}/fix_M_to_N/${version}/$(date +%s)
 mkdir -p $res_dir
@@ -25,6 +33,7 @@ for i in $(seq 22 32); do
     pytest -s -k test_run_${version}_random_basic tst/qdao/engine.py \
         --nq ${i} \
         --np ${np} \
-        --nl ${nl} |
+        --nl ${nl} \
+        --parallel ${parallel} |
         tee ${res_dir}/rqc.${i}-${np}-${nl}.qasm.log
 done
