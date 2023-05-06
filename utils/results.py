@@ -29,6 +29,7 @@ class BaseParser(ABC):
         avg = []
         cnt = 0
         for root, dirs, files in os.walk(self.logs_path):
+            files.sort()
             for f in files:
                 file_path = os.path.join(root, f)
                 one_res = self.parse_one(file_path, *self.parse_args)
