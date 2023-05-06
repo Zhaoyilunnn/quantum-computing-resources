@@ -1,0 +1,34 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	27
+NP::	25
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 8.23282504081726
+Partial simulation consumes time: 8.177898406982422
+Partial simulation consumes time: 8.046270608901978
+Partial simulation consumes time: 8.367003202438354
+Partial simulation consumes time: 0.24316859245300293
+Partial simulation consumes time: 0.24622344970703125
+Partial simulation consumes time: 0.2350928783416748
+Partial simulation consumes time: 0.29943227767944336
+Qdao runs:	45.0134756565094
+_initialize	2.9586007595062256
+_preprocess	2.604875326156616
+_postprocess	4.764210224151611
+_run	41.824318647384644
+initialize	2.958590269088745
+load_sv	2.584339141845703
+store_sv	4.764101028442383
+Qiskit runs: 33.35063195228577
+.
+
+================= 1 passed, 12 deselected in 81.15s (0:01:21) ==================

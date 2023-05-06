@@ -31,7 +31,7 @@ class SvManager:
         self._chunk_idx = 0
         self._chunk = np.zeros(1<<num_primary, dtype=np.complex128)
         self._is_parallel = is_parallel
-        self._executor = AsyncIoExecutor()
+        self._executor = BatchParallelExecutor()
 
         if not os.path.isdir("data"):
             os.mkdir("data")

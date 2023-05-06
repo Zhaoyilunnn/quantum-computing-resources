@@ -4,3 +4,31 @@ rootdir: /root/projects/qcs
 collected 13 items / 12 deselected / 1 selected
 
 tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	29
+NP::	27
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 37.20863056182861
+Partial simulation consumes time: 37.44560885429382
+Partial simulation consumes time: 37.016968965530396
+Partial simulation consumes time: 37.67924618721008
+Partial simulation consumes time: 1.237095832824707
+Partial simulation consumes time: 1.7046337127685547
+Partial simulation consumes time: 1.250758409500122
+Partial simulation consumes time: 1.028207778930664
+Qdao runs:	225.20115494728088
+_initialize	15.020961284637451
+_preprocess	44.98160123825073
+_postprocess	7.035479545593262
+_run	209.91000175476074
+initialize	15.020942449569702
+load_sv	44.853065729141235
+store_sv	7.035130977630615
+Qiskit runs: 0.25586438179016113
+.
+
+================= 1 passed, 12 deselected in 230.52s (0:03:50) =================
