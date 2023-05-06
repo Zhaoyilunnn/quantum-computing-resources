@@ -17,6 +17,7 @@ def pytest_addoption(parser):
     parser.addoption("--np", action="store", default=0)
     parser.addoption("--nl", action="store", default=0)
     parser.addoption("--mode", action="store", default="QDAO")
+    parser.addoption("--parallel", action="store", default=1)
 
 
 def pytest_generate_tests(metafunc):
@@ -59,3 +60,7 @@ def pytest_generate_tests(metafunc):
     option_value = metafunc.config.option.mode
     if 'mode' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("mode", [option_value])
+
+    option_value = metafunc.config.option.parallel
+    if 'parallel' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("parallel", [option_value])

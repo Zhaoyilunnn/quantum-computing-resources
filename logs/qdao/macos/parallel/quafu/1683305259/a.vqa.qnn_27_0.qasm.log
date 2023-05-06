@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	27
+NP::	25
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Warning: Operations gate may be not supported by QuantumCircuit class currently.
+Partial simulation consumes time: 11.574899911880493
+Partial simulation consumes time: 11.579744100570679
+Partial simulation consumes time: 11.996947050094604
+Partial simulation consumes time: 12.588215589523315
+Partial simulation consumes time: 0.6035165786743164
+Partial simulation consumes time: 0.5341565608978271
+Partial simulation consumes time: 0.584712028503418
+Partial simulation consumes time: 0.6347341537475586
+Qdao runs:	59.609469413757324
+_initialize	2.1893739700317383
+_preprocess	2.5608673095703125
+_postprocess	4.751077890396118
+_run	57.40907287597656
+initialize	2.189366340637207
+load_sv	2.5572032928466797
+store_sv	4.750965356826782
+Quafu runs:	57.02702212333679
+.
+
+================= 1 passed, 12 deselected in 119.72s (0:01:59) =================

@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	30
+NP::	28
+NL::	22
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 119.04727864265442
+Partial simulation consumes time: 124.64953112602234
+Partial simulation consumes time: 145.96742343902588
+Partial simulation consumes time: 145.1756682395935
+Partial simulation consumes time: 13.533741235733032
+Partial simulation consumes time: 12.595884084701538
+Partial simulation consumes time: 13.11496353149414
+Partial simulation consumes time: 12.27882170677185
+Qdao runs:	657.1099388599396
+_initialize	16.3483567237854
+_preprocess	21.537742853164673
+_postprocess	32.840933084487915
+_run	640.7429602146149
+initialize	16.34831929206848
+load_sv	21.531859159469604
+store_sv	32.84022569656372
+Quafu runs:	658.1696572303772
+.
+
+================ 1 passed, 12 deselected in 1318.66s (0:21:58) =================
