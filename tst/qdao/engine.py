@@ -282,9 +282,19 @@ class TestEngine(QdaoBaseTest):
             NP: int,
             NL: int,
             mode: str="QDAO",
-            is_parallel: bool=True
+            is_parallel: bool=True,
+            is_diff: bool=True
         ):
-        """Run test from qiskit QuantumCircuit"""
+        """Run test from qiskit QuantumCircuit
+        Args:
+            circ: Qiskit quantum circuit
+            NQ: number of qubits,
+            NP: number of qubits in a compute unit
+            NL: number of qubits in a storage unit
+            mode: "QDAO" or "BASELINE"
+            is_parallel: Whether enable parallel load/store
+            is_diff: Whether run diff test, if set False, only run QDAO
+        """
         from quafu.circuits.quantum_circuit import QuantumCircuit
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
@@ -318,13 +328,14 @@ class TestEngine(QdaoBaseTest):
         engine.print_statistics()
         engine._manager.print_statistics()
 
-        from quafu.simulators.simulator import simulate
-        st = time()
-        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
-        init_sv[0] = 1
-        sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
-        print("Quafu runs:\t{}".format(time() - st))
-        #print(sv_org)
+        if is_diff:
+            from quafu.simulators.simulator import simulate
+            st = time()
+            init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+            init_sv[0] = 1
+            sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+            print("Quafu runs:\t{}".format(time() - st))
+            #print(sv_org)
 
         if NQ < 26:
             sv = retrieve_sv(NQ, num_local=NL)
@@ -344,7 +355,10 @@ class TestEngine(QdaoBaseTest):
 
 
     def test_run_quafu_random_basic(
-            self, nq, np, nl, mode, parallel):
+            self, nq, np, nl,
+            mode,
+            parallel,
+            diff):
         """
         Basic test to run random circuits and
         compare performance between
@@ -353,6 +367,7 @@ class TestEngine(QdaoBaseTest):
         """
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
         parallel = True if int(parallel) == 1 else False
+        diff = True if int(diff) == 1 else False
 
         D = NQ - 3 # depth
         #D = 2 # depth
@@ -379,7 +394,8 @@ class TestEngine(QdaoBaseTest):
         self.run_quafu_diff_test(
             circ, NQ, NP, NL,
             mode=mode,
-            is_parallel=parallel
+            is_parallel=parallel,
+            is_diff=diff
         )
 
     def test_run_quafu_any_qasm(

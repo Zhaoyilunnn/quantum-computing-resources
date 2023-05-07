@@ -1,0 +1,51 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	19
+NP::	17
+NL::	13
+D::	16
+
+::::::::::::::::::Config::::::::::::::::::
+
+Partial simulation consumes time: 0.031436920166015625
+Partial simulation consumes time: 0.03329920768737793
+Partial simulation consumes time: 0.028434276580810547
+Partial simulation consumes time: 0.03517508506774902
+Partial simulation consumes time: 0.024981260299682617
+Partial simulation consumes time: 0.025150775909423828
+Partial simulation consumes time: 0.02024245262145996
+Partial simulation consumes time: 0.01985001564025879
+Partial simulation consumes time: 0.009231805801391602
+Partial simulation consumes time: 0.011840343475341797
+Partial simulation consumes time: 0.010612964630126953
+Partial simulation consumes time: 0.011683225631713867
+Partial simulation consumes time: 0.023051023483276367
+Partial simulation consumes time: 0.0211336612701416
+Partial simulation consumes time: 0.022408723831176758
+Partial simulation consumes time: 0.020392656326293945
+Partial simulation consumes time: 0.02221536636352539
+Partial simulation consumes time: 0.022855520248413086
+Partial simulation consumes time: 0.022842884063720703
+Partial simulation consumes time: 0.023440837860107422
+Partial simulation consumes time: 0.01175546646118164
+Partial simulation consumes time: 0.010544300079345703
+Partial simulation consumes time: 0.010531425476074219
+Partial simulation consumes time: 0.01074981689453125
+Qdao runs:	0.8734447956085205
+_initialize	0.02378678321838379
+_preprocess	0.1847095489501953
+_postprocess	0.166123628616333
+_run	0.8355143070220947
+initialize	0.02377486228942871
+load_sv	0.17303061485290527
+store_sv	0.16543889045715332
+Quafu runs:	0.27428674697875977
+.
+
+======================= 1 passed, 12 deselected in 3.95s =======================

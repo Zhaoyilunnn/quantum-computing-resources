@@ -23,7 +23,7 @@ fi
 res_dir=logs/qdao/${system}/${mode}/fix_M_to_N/${version}/$(date +%s)
 mkdir -p $res_dir
 
-for i in $(seq 22 32); do
+for i in $(seq 12 28); do
     np=$((i-2))
     if [ $i -le 29 ]; then
         nl=$((i-6))
