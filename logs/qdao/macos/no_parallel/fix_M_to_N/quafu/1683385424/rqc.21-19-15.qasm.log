@@ -1,0 +1,58 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	21
+NP::	19
+NL::	15
+D::	18
+
+::::::::::::::::::Config::::::::::::::::::
+
+
+:::Reusing existing bench:::::/root/projects/qcs/qdao/benchmarks/qasm/random_21_18_max_operands_2_gen.qasm::::::::
+
+Partial simulation consumes time: 0.03735184669494629
+Partial simulation consumes time: 0.042345285415649414
+Partial simulation consumes time: 0.036278724670410156
+Partial simulation consumes time: 0.03662872314453125
+Partial simulation consumes time: 0.029129743576049805
+Partial simulation consumes time: 0.05004572868347168
+Partial simulation consumes time: 0.03853964805603027
+Partial simulation consumes time: 0.028664350509643555
+Partial simulation consumes time: 0.023099422454833984
+Partial simulation consumes time: 0.021880149841308594
+Partial simulation consumes time: 0.021772146224975586
+Partial simulation consumes time: 0.021936416625976562
+Partial simulation consumes time: 0.055837392807006836
+Partial simulation consumes time: 0.06116175651550293
+Partial simulation consumes time: 0.08121848106384277
+Partial simulation consumes time: 0.06042623519897461
+Partial simulation consumes time: 0.04484963417053223
+Partial simulation consumes time: 0.03583812713623047
+Partial simulation consumes time: 0.03313040733337402
+Partial simulation consumes time: 0.04321861267089844
+Partial simulation consumes time: 0.04675006866455078
+Partial simulation consumes time: 0.06421375274658203
+Partial simulation consumes time: 0.07177209854125977
+Partial simulation consumes time: 0.04647564888000488
+Partial simulation consumes time: 0.020079374313354492
+Partial simulation consumes time: 0.020171165466308594
+Partial simulation consumes time: 0.02410292625427246
+Partial simulation consumes time: 0.0203554630279541
+Qdao runs:	1.9183263778686523
+_initialize	0.053488969802856445
+_preprocess	0.2643911838531494
+_postprocess	0.46381044387817383
+_run	1.8462815284729004
+initialize	0.05347704887390137
+load_sv	0.25173234939575195
+store_sv	0.46332550048828125
+Quafu runs:	1.4068987369537354
+.
+
+======================= 1 passed, 12 deselected in 5.48s =======================

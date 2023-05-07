@@ -1,0 +1,81 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	16
+NP::	14
+NL::	10
+D::	13
+
+::::::::::::::::::Config::::::::::::::::::
+
+F
+
+=================================== FAILURES ===================================
+___________ TestEngine.test_run_quafu_random_basic[16-14-10-QDAO-0] ____________
+
+self = <engine.TestEngine object at 0x7f792a787280>, nq = '16', np = '14'
+nl = '10', mode = 'QDAO', parallel = False
+
+    def test_run_quafu_random_basic(
+            self, nq, np, nl, mode, parallel):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+        parallel = True if int(parallel) == 1 else False
+    
+        D = NQ - 3 # depth
+        #D = 2 # depth
+        MAX_OP = 2
+    
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("D::\t{}".format(D))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        from qdao.qiskit.utils import random_circuit
+        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+            circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
+            circ = transpile(circ, self._sv_sim)
+            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+                f.write(circ.qasm())
+        else:
+            print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
+    
+>       self.run_quafu_diff_test(
+            circ, NQ, NP, NL,
+            mode=mode,
+            is_parallel=parallel
+        )
+
+tst/qdao/engine.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qdao/engine.py:290: in run_quafu_diff_test
+    quafu_circ.from_openqasm(circ.qasm())
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/pyquafu-0.2.11-py3.10-linux-x86_64.egg/quafu/circuits/quantum_circuit.py:240: in from_openqasm
+    paras = [eval(parai, {"pi": pi}) for parai in parastr]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f7944774400>
+
+>   paras = [eval(parai, {"pi": pi}) for parai in parastr]
+E     File "<string>", line 1
+E       10/
+E   SyntaxError: invalid syntax
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/pyquafu-0.2.11-py3.10-linux-x86_64.egg/quafu/circuits/quantum_circuit.py:240: SyntaxError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_random_basic[16-14-10-QDAO-0]
+======================= 1 failed, 12 deselected in 2.82s =======================
