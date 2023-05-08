@@ -1,0 +1,11 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 5 items / 4 deselected / 1 selected
+
+tst/qdao/circuit.py Number of sub-circuits: 2
+Number operations in original circuit: 84
+.
+
+======================= 1 passed, 4 deselected in 1.89s ========================

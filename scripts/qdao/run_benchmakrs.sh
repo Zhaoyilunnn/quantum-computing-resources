@@ -76,7 +76,7 @@ mkdir -p $res_dir
 for i in $(seq 0 $((N-1))); do
     NQ=${n_list[${i}]}
     NP=$((NQ-2))
-    NL=22
+    NL=20
     bench_name=${bench_list[$i]}
     pytest -s -k test_run_${version}_any_qasm \
         tst/qdao/engine.py \
@@ -84,6 +84,7 @@ for i in $(seq 0 $((N-1))); do
         --np $NP \
         --nl $NL \
         --qasm ${bench_name} \
+        --diff 0 \
         --parallel ${parallel}|
         tee ${res_dir}/${bench_name}.log
 done
