@@ -1,0 +1,75 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 5 items / 4 deselected / 1 selected
+
+tst/qdao/circuit.py F
+
+=================================== FAILURES ===================================
+______ TestStaticPartitioner.test_run_any_qasm[a.rqc_30_0.qasm-30-28-28] _______
+
+self = <circuit.TestStaticPartitioner object at 0x7fbd6489eec0>, nq = '30'
+np = '28', nl = '28', qasm = 'a.rqc_30_0.qasm'
+
+    def test_run_any_qasm(self, nq, np, nl, qasm):
+        """Run for given qasm"""
+    
+        NQ = int(nq)
+        NP = int(np)
+        NL = int(nl)
+    
+        try:
+            circ = QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        except Exception as e:
+            print(f"Load from qasm file failed for {qasm}, error: {e}")
+            return
+        self._part = StaticPartitioner(np=NP, nl=NL)
+>       sub_circs = self._part.run(circ)
+
+tst/qdao/circuit.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+qdao/circuit.py:118: in run
+    sub_circ = self._circ_helper.gen_sub_circ(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qdao.qiskit.circuit.QiskitCircuitHelper object at 0x7fbd645d7280>
+instrs = [CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(Qubit(QuantumRegister(30, 'q'), 28), Qubit(QuantumRegister(30, 'q'), 24)), clbits=())]
+num_local = 28, num_primary = 28
+
+    def gen_sub_circ(
+            self,
+            instrs: List[CircuitInstruction],
+            num_local: int,
+            num_primary: int
+        ):
+        """Generate a sub circuit based on a list of circuit instructions
+        We assume there's no conditional instructions and no measurement
+        instructions
+    
+        Args:
+            instrs (List[CircuitInstruction]): A list of instructions
+        Return:
+            QdaoCircuit
+        """
+        if not isinstance(self._circ, QuantumCircuit):
+            raise ValueError("Please set self._circ")
+    
+        from qdao.circuit import QdaoCircuit
+        # 1. Get the set of qubits
+        qset = set(range(num_local))
+        for instr in instrs:
+            for q in instr.qubits:
+                qset.add(q._index)
+    
+        sub_circ = QuantumCircuit(num_primary)
+    
+        real_qubits = sorted(list(qset))
+    
+>       assert len(real_qubits) <= num_primary
+E       AssertionError
+
+qdao/qiskit/circuit.py:90: AssertionError
+=========================== short test summary info ============================
+FAILED tst/qdao/circuit.py::TestStaticPartitioner::test_run_any_qasm[a.rqc_30_0.qasm-30-28-28]
+======================= 1 failed, 4 deselected in 1.57s ========================
