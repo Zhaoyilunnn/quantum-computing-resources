@@ -15,6 +15,7 @@ class QdaoDataMoveParser(BaseParser):
         with open(file_path, 'r') as f:
             items = os.path.basename(file_path).split('.')
             bench_name = items[-3]
+            bench_conf = [int(c) for c in items[-2].split('-')[1:]]
             for line in f:
                 if line and "sub-circuits" in line:
                     num_sub_circ = int(line.strip().split()[-1])
@@ -22,6 +23,8 @@ class QdaoDataMoveParser(BaseParser):
                     num_ops = int(line.strip().split()[-1])
 
         if num_sub_circ and num_ops:
+            if bench_conf:
+                return [bench_name, *bench_conf, num_sub_circ, num_ops, num_ops/num_sub_circ]
             return [bench_name, num_sub_circ, num_ops, num_ops/num_sub_circ]
 
         return []

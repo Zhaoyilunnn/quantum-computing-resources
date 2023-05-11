@@ -25,6 +25,9 @@ class BaseParser(ABC):
         self.logs_path = logs_path
         self.parse_args = args
 
+        # Record each result returned by parse_one
+        self.results = []
+
     def run(self):
         avg = []
         cnt = 0
@@ -35,6 +38,7 @@ class BaseParser(ABC):
                 one_res = self.parse_one(file_path, *self.parse_args)
                 if not one_res:
                     continue
+                self.results.append(one_res)
                 print("\t".join([str(it) for it in one_res]))
                 cnt += 1
                 if not avg:

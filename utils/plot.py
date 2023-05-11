@@ -119,7 +119,7 @@ def plot_bar_3d(
 
     #plt.colorbar(mappable)
     plt.tight_layout()
-    plt.show()
+    #plt.show()
     if figname:
         if figname.endswith('.pdf'):
             plt.savefig(figname)
