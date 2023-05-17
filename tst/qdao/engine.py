@@ -69,7 +69,8 @@ class TestEngine(QdaoBaseTest):
             NP: int,
             NL: int,
             mode: str="QDAO",
-            is_parallel: bool=True
+            is_parallel: bool=True,
+            is_diff: bool=True
         ):
 
         if mode == "QDAO":
@@ -99,14 +100,15 @@ class TestEngine(QdaoBaseTest):
         engine.print_statistics()
         engine._manager.print_statistics()
 
-        circ.save_state()
-        st = time()
-        try:
-            self._sv_sim.set_options(method='statevector')
-            sv_org = self._sv_sim.run(circ).result().get_statevector().data
-        except Exception:
-            pass
-        print("Qiskit runs: {}".format(time() - st))
+        if is_diff:
+            circ.save_state()
+            st = time()
+            try:
+                self._sv_sim.set_options(method='statevector')
+                sv_org = self._sv_sim.run(circ).result().get_statevector().data
+            except Exception:
+                pass
+            print("Qiskit runs: {}".format(time() - st))
 
 
     def test_run_qiskit_any_qasm(
@@ -116,10 +118,12 @@ class TestEngine(QdaoBaseTest):
             nl,
             mode,
             qasm,
-            parallel
+            parallel,
+            diff
         ):
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
         parallel = True if int(parallel) == 1 else False
+        diff = True if int(diff) == 1 else False
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
         print("NQ::\t{}".format(NQ))
@@ -138,7 +142,8 @@ class TestEngine(QdaoBaseTest):
                 NP,
                 NL,
                 mode,
-                is_parallel=parallel
+                is_parallel=parallel,
+                is_diff=diff
             )
 
 
@@ -337,9 +342,9 @@ class TestEngine(QdaoBaseTest):
             print("Quafu runs:\t{}".format(time() - st))
             #print(sv_org)
 
-        if NQ < 26:
-            sv = retrieve_sv(NQ, num_local=NL)
-            assert Statevector(sv).equiv(Statevector(sv_org))
+            if NQ < 26:
+                sv = retrieve_sv(NQ, num_local=NL)
+                assert Statevector(sv).equiv(Statevector(sv_org))
 
 
     def get_qdao_params(self, nq, np, nl):
@@ -405,7 +410,8 @@ class TestEngine(QdaoBaseTest):
             nl,
             mode,
             qasm,
-            parallel
+            parallel,
+            diff
         ):
         """
         Basic test to run random circuits and
@@ -415,6 +421,7 @@ class TestEngine(QdaoBaseTest):
         """
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
         parallel = True if int(parallel) == 1 else False
+        diff = True if int(diff) == 1 else False
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
         print("NQ::\t{}".format(NQ))
@@ -434,7 +441,8 @@ class TestEngine(QdaoBaseTest):
                 NP,
                 NL,
                 mode=mode,
-                is_parallel=parallel
+                is_parallel=parallel,
+                is_diff=diff
             )
 
     def test_run_quafu_qasm_basic(self, bench, nq):
