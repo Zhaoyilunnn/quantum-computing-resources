@@ -1,10 +1,14 @@
 import sys
 import time
 
+sys.path.append('.')
+
+from utils.misc import profile
 from qiskit import *
 from mqt import ddsim
 
 
+@profile
 def main(qasm_file: str):
     circ = QuantumCircuit.from_qasm_file(qasm_file)
     backend = ddsim.DDSIMProvider().get_backend('statevector_simulator')

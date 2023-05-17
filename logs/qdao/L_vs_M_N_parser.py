@@ -40,7 +40,7 @@ class QdaoLVsMAndK(BaseParser):
         for b in res_dict:
             plot_bar_3d(
                 res_dict[b],
-                labels=(r'$K$', r'$M$', r'$L$'),
+                labels=(r'$t$', r'$m$', r'$l$'),
                 figname=f"L_vs_M_K_{b}.pdf",
                 normalize=False,
                 integer=True

@@ -43,7 +43,7 @@ class QdaoPerfVsMAndK(BaseParser):
         for q in res_dict:
             plot_bar_3d(
                 res_dict[q],
-                labels=(r'$K$', r'$M$', 'Normalized Overhead'),
+                labels=(r'$t$', r'$m$', 'Normalized Overhead'),
                 figname=f"params_rqc_{q}.pdf",
                 normalize=True,
                 integer=True

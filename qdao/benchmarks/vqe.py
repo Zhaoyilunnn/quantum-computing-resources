@@ -65,6 +65,6 @@ if __name__=='__main__':
     #vqe.generate_random_hamiltonian_matrix()
     if not os.path.isdir("qasm"):
         os.mkdir("qasm")
-    qasm_file = open(f"qasm/vqe_n{k}.qasm", "w")
+    qasm_file = open(f"qasm/vqe_n{k}_with_measure.qasm", "w")
     qasm_file.write(vqe.circuit.qasm())
     qasm_file.close()
