@@ -32,7 +32,14 @@ n_list=(\
     32
 )
 
-logs_path=logs/qdao/winpc/comparison/$(date +%s)/
+system=$1 # shuguang | macos | winpc
+
+if [ $# -ne 1 ]; then
+    echo "./$0 <system>"
+    exit 1
+fi
+
+logs_path=logs/qdao/${system}/comparison/$(date +%s)/
 mkdir -p ${logs_path}
 for b in ${bench_list_cirq[@]}; do
     python qdao/benchmarks/qsimcirq_test.py ${bench_path}${b} | tee ${logs_path}/qsimcirq.${b}.log
