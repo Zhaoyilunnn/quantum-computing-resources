@@ -9,7 +9,7 @@ from utils.misc import profile
 @profile
 def main(qasm_file: str):
     sim = Aer.get_backend('aer_simulator')
-    sim.set_options(fusion_enable=False)
+    #sim.set_options(fusion_enable=False)
     circ = QuantumCircuit.from_qasm_file(qasm_file)
     circ.save_state()
     sim.run(circ)

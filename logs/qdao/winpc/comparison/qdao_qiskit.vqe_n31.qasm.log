@@ -1,0 +1,108 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	31
+NP::	29
+NL::	23
+
+::::::::::::::::::Config::::::::::::::::::
+
+F
+
+=================================== FAILURES ===================================
+_____ TestEngine.test_run_qiskit_any_qasm[vqe_n31.qasm-31-29-23-QDAO-0-0] ______
+
+self = <engine.TestEngine object at 0x7f2141490af0>, nq = '31', np = '29'
+nl = '23', mode = 'QDAO', qasm = 'vqe_n31.qasm', parallel = False, diff = False
+
+    def test_run_qiskit_any_qasm(
+            self,
+            nq,
+            np,
+            nl,
+            mode,
+            qasm,
+            parallel,
+            diff
+        ):
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+        parallel = True if int(parallel) == 1 else False
+        diff = True if int(diff) == 1 else False
+    
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        try:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        except Exception as e:
+            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
+        circ = transpile(circ, self._sv_sim)
+>       self.run_qiskit_diff_test(
+                circ,
+                NQ,
+                NP,
+                NL,
+                mode,
+                is_parallel=parallel,
+                is_diff=diff
+            )
+
+tst/qdao/engine.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qdao/engine.py:97: in run_qiskit_diff_test
+    engine.run()
+qdao/engine.py:165: in run
+    sub_circs = self._part.run(self._circ)
+qdao/circuit.py:118: in run
+    sub_circ = self._circ_helper.gen_sub_circ(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qdao.qiskit.circuit.QiskitCircuitHelper object at 0x7f2140e343a0>
+instrs = [CircuitInstruction(operation=Instruction(name='barrier', num_qubits=31, num_clbits=0, params=[]), qubits=(Qubit(Quant...t(QuantumRegister(31, 'q'), 28), Qubit(QuantumRegister(31, 'q'), 29), Qubit(QuantumRegister(31, 'q'), 30)), clbits=())]
+num_local = 23, num_primary = 29
+
+    def gen_sub_circ(
+            self,
+            instrs: List[CircuitInstruction],
+            num_local: int,
+            num_primary: int
+        ):
+        """Generate a sub circuit based on a list of circuit instructions
+        We assume there's no conditional instructions and no measurement
+        instructions
+    
+        Args:
+            instrs (List[CircuitInstruction]): A list of instructions
+        Return:
+            QdaoCircuit
+        """
+        if not isinstance(self._circ, QuantumCircuit):
+            raise ValueError("Please set self._circ")
+    
+        from qdao.circuit import QdaoCircuit
+        # 1. Get the set of qubits
+        qset = set(range(num_local))
+        for instr in instrs:
+            for q in instr.qubits:
+                qset.add(q._index)
+    
+        sub_circ = QuantumCircuit(num_primary)
+    
+        real_qubits = sorted(list(qset))
+    
+>       assert len(real_qubits) <= num_primary
+E       AssertionError
+
+qdao/qiskit/circuit.py:90: AssertionError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_qiskit_any_qasm[vqe_n31.qasm-31-29-23-QDAO-0-0]
+======================= 1 failed, 12 deselected in 1.49s =======================

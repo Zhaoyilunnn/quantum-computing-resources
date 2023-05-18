@@ -1,0 +1,97 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 13 items / 12 deselected / 1 selected
+
+tst/qdao/engine.py 
+::::::::::::::::::Config::::::::::::::::::
+
+NQ::	32
+NP::	30
+NL::	24
+
+::::::::::::::::::Config::::::::::::::::::
+
+F
+
+=================================== FAILURES ===================================
+______ TestEngine.test_run_quafu_any_qasm[vqe_n32.qasm-32-30-24-QDAO-0-0] ______
+
+self = <engine.TestEngine object at 0x7f43cd649b70>, nq = '32', np = '30'
+nl = '24', mode = 'QDAO', qasm = 'vqe_n32.qasm', parallel = False, diff = False
+
+    def test_run_quafu_any_qasm(
+            self,
+            nq,
+            np,
+            nl,
+            mode,
+            qasm,
+            parallel,
+            diff
+        ):
+        """
+        Basic test to run random circuits and
+        compare performance between
+        1. Qdao on top of quafu
+        2. Quafu
+        """
+        NQ, NP, NL = self.get_qdao_params(nq, np, nl)
+        parallel = True if int(parallel) == 1 else False
+        diff = True if int(diff) == 1 else False
+    
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+        print("NQ::\t{}".format(NQ))
+        print("NP::\t{}".format(NP))
+        print("NL::\t{}".format(NL))
+        print("\n::::::::::::::::::Config::::::::::::::::::\n")
+    
+        try:
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+        except Exception as e:
+            raise ValueError(f"Cannot load qasm file {qasm}: {e}")
+        circ = transpile(circ, self._sv_sim)
+    
+>       self.run_quafu_diff_test(
+                circ,
+                NQ,
+                NP,
+                NL,
+                mode=mode,
+                is_parallel=parallel,
+                is_diff=diff
+            )
+
+tst/qdao/engine.py:438: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qdao/engine.py:310: in run_quafu_diff_test
+    engine = Engine(
+qdao/engine.py:52: in __init__
+    self._manager = SvManager(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qdao.manager.SvManager object at 0x7f43cd1c8250>, num_qubits = 32
+num_primary = 30, num_local = 24, is_parallel = False
+
+    def __init__(self,
+                 num_qubits: int=6,
+                 num_primary: int=4,
+                 num_local: int=2,
+                 is_parallel: bool=False) -> None:
+        """
+        Args:
+            num_qubits (int): Number of qubits in the target circuit
+            num_primary (int): Number of qubits that reside in primary storage (i.e., host memory)
+            num_local (int): Number of qubits that reside in secondary storage (i.e., disk).
+                Note that this defines the size of minimum storage unit.
+        """
+        self._nq, self._np, self._nl = num_qubits, num_primary, num_local
+        self._chunk_idx = 0
+>       self._chunk = np.zeros(1<<num_primary, dtype=np.complex128)
+E       numpy.core._exceptions._ArrayMemoryError: Unable to allocate 16.0 GiB for an array with shape (1073741824,) and data type complex128
+
+qdao/manager.py:32: MemoryError
+=========================== short test summary info ============================
+FAILED tst/qdao/engine.py::TestEngine::test_run_quafu_any_qasm[vqe_n32.qasm-32-30-24-QDAO-0-0]
+======================= 1 failed, 12 deselected in 1.44s =======================
