@@ -1,25 +1,19 @@
 import copy
-import numpy as np
-
 from typing import List, Optional
-from qiskit.circuit import \
-        QuantumCircuit, \
-        QuantumRegister, \
-        ClassicalRegister, \
-        Qubit, \
-        Clbit
 
+import numpy as np
+from qiskit.circuit import (ClassicalRegister, Clbit, QuantumCircuit,
+                            QuantumRegister, Qubit)
 from qiskit.compiler import transpile
 from qiskit.providers.fake_provider.fake_backend import circuit
 from qiskit.quantum_info import DensityMatrix, Statevector, state_fidelity
 from qiskit.result import Counts
 from qiskit.result.mitigation.utils import counts_to_vector
-
-from qiskit_aer import Aer 
+from qiskit_aer import Aer
+from scipy.stats import entropy
 
 from qvm.model.compute_unit import ComputeUnit
 
-from scipy.stats import entropy
 
 def kl_divergence(p, q):
     return np.sum(np.where(p != 0, p * np.log(p / q), 0))

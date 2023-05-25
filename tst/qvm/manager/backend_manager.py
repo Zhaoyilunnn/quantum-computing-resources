@@ -17,7 +17,7 @@ class TestBaseBackendManager(QvmBaseTest):
     def setup_class(self):
         self._manager = BaseBackendManager(self._backend)
         self._manager.init_helpers()
-        self._manager.init_compute_units()
+        self._manager.init_cus()
         self._conf = self._backend.configuration()
         self._props = self._backend.properties()
 
@@ -33,7 +33,7 @@ class TestBaseBackendManager(QvmBaseTest):
 
         sub_graph = [1, 2]
 
-        compute_unit = self._manager.extract_single_compute_unit(sub_graph)
+        compute_unit = self._manager.extract_one_cu(sub_graph)
 
         cu_conf = compute_unit.backend.configuration()
         cu_props = compute_unit.backend.properties()
@@ -69,7 +69,7 @@ class TestBaseBackendManager(QvmBaseTest):
         rq0, rq1 = sub_graph[vq0], sub_graph[vq1]
 
         # Extract a compute unit from backend
-        compute_unit = self._manager.extract_single_compute_unit(sub_graph)
+        compute_unit = self._manager.extract_one_cu(sub_graph)
 
         plot_error(self._backend, figname="backend.png")
         plot_error(compute_unit.backend, figname="compute_unit.png")
@@ -111,7 +111,7 @@ class TestKlBackendManager(QvmBaseTest):
     def setup_class(self):
         self._manager = KlBackendManager(self._backend)
         self._manager.init_helpers()
-        self._manager.init_compute_units()
+        self._manager.init_cus()
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
@@ -128,7 +128,7 @@ class TestBfsBackendManager(QvmBaseTest):
     def setup_class(self):
         self._manager = BfsBackendManager(self._backend)
         self._manager.init_helpers()
-        self._manager.init_compute_units()
+        self._manager.init_cus()
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
@@ -145,7 +145,7 @@ class TestFrpBackendManager(QvmBaseTest):
     def setup_class(self):
         self._manager = FrpBackendManager(self._backend)
         self._manager.init_helpers()
-        self._manager.init_compute_units()
+        self._manager.init_cus()
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))

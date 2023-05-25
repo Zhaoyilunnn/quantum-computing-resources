@@ -1,12 +1,12 @@
 import copy
-import matplotlib.pyplot as plt
-
 from typing import List
-from qiskit.providers.backend import * 
+
+import matplotlib.pyplot as plt
+from qiskit.providers.backend import *
 from qiskit.providers.models import *
 
-from qvm.util.graph import * 
 from qvm.util.backend import *
+from qvm.util.graph import *
 from qvm.util.misc import *
 from utils.misc import *
 

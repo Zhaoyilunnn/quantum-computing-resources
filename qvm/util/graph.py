@@ -1,16 +1,16 @@
 import copy
 import logging
-import numpy as np
 import sys
-
 from collections import OrderedDict
 from logging import warning
+from typing import Any, Dict, List, Optional
 from warnings import warn
+
+import numpy as np
 from networkx.algorithms.community import kernighan_lin_bisection
+
 from qvm.exceptions import *
 from qvm.util.misc import split_list
-
-from typing import Any, Dict, List, Optional
 
 # Logging configuration
 #logging.basicConfig(filename='qvm_util_graph.log', encoding='utf-8', level=logging.DEBUG,
@@ -43,7 +43,7 @@ def virtualize_coupling_map(
         virt_coupling_map.append([real_to_virtual[real] for real in edge])
     return virt_coupling_map
 
-def merge_sub_graphs_nodes(sub_graph_nodes: List[List[int]]) -> List[int]:
+def merge_graphs_nodes(sub_graph_nodes: List[List[int]]) -> List[int]:
     """
     Merge multiple subgraphs' nodes to a single node list
     """

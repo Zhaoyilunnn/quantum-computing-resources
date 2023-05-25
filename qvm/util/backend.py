@@ -1,9 +1,9 @@
+from typing import List
+
 import networkx as nx
 import numpy as np
-
 from qiskit.providers.backend import BackendV1
 
-from typing import List
 
 def coupling_map_to_graph(coupling_map: List[List]):
     """
