@@ -290,9 +290,6 @@ class BfsBackendManager(BaseBackendManager):
            units
     """
 
-    def __init__(self, backend: BackendV1) -> None:
-        super().__init__(backend)
-
     def init_helpers(self) -> None:
         self._partitioner = GraphPartitionProvider.get_partitioner("bfs")
         self._graph_extractor = BaseBackendGraphExtractor(self._backend)
@@ -304,10 +301,12 @@ class FrpBackendManager(BaseBackendManager):
         self._graph_extractor = BackendAdjMatGraphExtractor(self._backend)
         graph = self._graph_extractor.extract()
         rd_errs = self._graph_extractor.get_readout_errs()
-        self._partitioner = GraphPartitionProvider.get_partitioner(
-                                                "frp",
-                                                graph=graph,
-                                                errs=rd_errs)
+        self._partitioner =\
+            GraphPartitionProvider.get_partitioner(
+                "frp",
+                graph=graph,
+                errs=rd_errs
+            )
 
     def init_cus(self) -> List[ComputeUnit]:
         if not self._cu_size:
@@ -319,4 +318,51 @@ class FrpBackendManager(BaseBackendManager):
             cu = self.extract_one_cu(part)
             self._compute_units.append(cu)
             part = self._partitioner.partition(self._cu_size)
+        return self._compute_units
+
+
+class FrpBackendManagerV2(FrpBackendManager):
+    """Support allocating multiple connected cus to a large circuit"""
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+        self._map_q_cu = {} # Maintain the mapping between physical qubit id
+                            # and corresponding compute unit id
+        self._map_cus = {}  # Maintain the connection between cus,
+                            # a cu connects to another through one edge
+    @property
+    def map_cus(self):
+        """Mappings of connected compute units (through one edge)"""
+        return self._map_cus
+
+    def init_cus(self) -> List[ComputeUnit]:
+        if not self._cu_size:
+            raise ValueError("Please set compute unit size before init compute units")
+
+        self._compute_units = []
+        part = self._partitioner.partition(self._cu_size)
+        while part:
+            for i in part: # Record the mapping betwee physical qubit and compute unit id
+                self._map_q_cu[i] = len(self._compute_units) - 1
+            comp_unit = self.extract_one_cu(part)
+            self._compute_units.append(comp_unit)
+            part = self._partitioner.partition(self._cu_size)
+
+        # Get coupling map from backend
+        c_map = self._backend.configuration().coupling_map
+
+        # Traverse edges and update cu-to-cu mappings
+        for edge in c_map:
+            qubit0, qubit1 = edge
+            try:
+                cu0, cu1 = self._map_q_cu[qubit0], self._map_q_cu[qubit1]
+            except KeyError:
+                logging.debug(f"Current edge: {edge} has a vertex not in compute units")
+                continue
+            if cu0 != cu1:
+                self._map_cus.setdefault(cu0, [])
+                self._map_cus.setdefault(cu1, [])
+                self._map_cus[cu0].append(cu1)
+                self._map_cus[cu1].append(cu0)
+
         return self._compute_units

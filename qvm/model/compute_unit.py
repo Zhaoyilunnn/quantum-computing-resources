@@ -13,19 +13,22 @@ from utils.misc import *
 
 class ComputeUnit:
     """ The minimum resource unit for compilation """
-    
-    def __init__(self, 
-            backend: BackendV1,
-            real_n_qubits: int,
-            sub_coupling_graph: List[int],
-            real_to_virtual=None) -> None:
+
+    def __init__(
+        self,
+        backend: BackendV1,
+        real_n_qubits: int,
+        sub_coupling_graph: List[int],
+        real_to_virtual=None
+    ) -> None:
         """
-        `backend`: The real hardware model under the compute unit
-        `real_n_qubits`: The actual number of qubits in the real backend
-        `sub_coupling_graph`: The real qubit list of this compute unit
-        `real_to_virtual`: Each real qubit binds to a virtual qubit id
+        Args:
+            `backend`: The real hardware model under the compute unit
+            `real_n_qubits`: The actual number of qubits in the real backend
+            `sub_coupling_graph`: The real qubit list of this compute unit
+            `real_to_virtual`: Each real qubit binds to a virtual qubit id
         """
-        self._backend = copy.deepcopy(backend) 
+        self._backend = copy.deepcopy(backend)
         self._real_qubits = sub_coupling_graph
         self._real_n_qubits = real_n_qubits
 
@@ -55,7 +58,7 @@ class ComputeUnit:
         return self._real_to_virtual
 
     def draw_nx_cmap(self, figname=None):
-        """ Plot networkx format coupling map graph 
+        """ Plot networkx format coupling map graph
         """
         cmap = self._backend.configuration().coupling_map
         G = nx.Graph()

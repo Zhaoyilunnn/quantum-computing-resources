@@ -154,3 +154,19 @@ class TestFrpBackendManager(QvmBaseTest):
 
         for i, cu in enumerate(self._manager._compute_units):
             cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
+
+
+class TestFrpBackendManagerV2(QvmBaseTest):
+
+    def setup_class(self):
+        self._manager = FrpBackendManagerV2(self._backend)
+        self._manager.init_helpers()
+        self._manager.init_cus()
+
+    def test_allocate(self):
+        circ = self.create_dummy_bell_state((0,1))
+        cu = self._manager.allocate(circ)
+        plot_error(cu.backend, figname="compute_unit_frp.png")
+
+        for i, cu in enumerate(self._manager._compute_units):
+            cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
