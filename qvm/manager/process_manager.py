@@ -1,17 +1,15 @@
 import random
+from typing import List
 
 from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile
-from qiskit.pulse import Delay, MeasureChannel, Play, Schedule, Acquire
 from qiskit.providers import BackendV1
+from qiskit.pulse import Acquire, Delay, MeasureChannel, Play, Schedule
+
 from qvm.model.executable import BaseExecutable, Process
-
-from typing import List
 from qvm.util.backend import BackendAdjMatGraphExtractor
-
-from qvm.util.circuit import calc_cmr, \
-        circuit_virtual_to_real, \
-        merge_circuits, merge_circuits_v2
+from qvm.util.circuit import (calc_cmr, circuit_virtual_to_real,
+                              merge_circuits, merge_circuits_v2)
 from qvm.util.graph import FrpPartitioner
 
 

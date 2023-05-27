@@ -1,16 +1,16 @@
+from abc import abstractmethod
 import copy
 import logging
-import numpy as np
-import sys
-
 from collections import OrderedDict
 from logging import warning
+from typing import Any, Dict, List, Optional
 from warnings import warn
+
+import numpy as np
 from networkx.algorithms.community import kernighan_lin_bisection
+
 from qvm.exceptions import *
 from qvm.util.misc import split_list
-
-from typing import Any, Dict, List, Optional
 
 # Logging configuration
 #logging.basicConfig(filename='qvm_util_graph.log', encoding='utf-8', level=logging.DEBUG,
@@ -43,7 +43,7 @@ def virtualize_coupling_map(
         virt_coupling_map.append([real_to_virtual[real] for real in edge])
     return virt_coupling_map
 
-def merge_sub_graphs_nodes(sub_graph_nodes: List[List[int]]) -> List[int]:
+def merge_graphs_nodes(sub_graph_nodes: List[List[int]]) -> List[int]:
     """
     Merge multiple subgraphs' nodes to a single node list
     """
@@ -78,9 +78,11 @@ class BasePartitioner:
     def __init__(self) -> None:
         pass
 
-    def partition(self,
-            graph: Dict[int, List[int]],
-            k=4) -> List[List[int]]:
+    def partition(
+        self,
+        graph: Dict[int, List[int]],
+        k=4
+    ) -> List[List[int]]:
         return []
 
 
@@ -89,13 +91,15 @@ class NaivePartitioner(BasePartitioner):
     def __init__(self) -> None:
         super().__init__()
 
-    def _dfs(self,
-            node: int,
-            graph: Dict[int, List[int]],
-            visited: set,
-            cur_part: List[int],
-            partitions: List[List[int]],
-            k: int) -> None:
+    def _dfs(
+        self,
+        node: int,
+        graph: Dict[int, List[int]],
+        visited: set,
+        cur_part: List[int],
+        partitions: List[List[int]],
+        k: int
+    ) -> None:
 
         if len(cur_part) == k:
             partitions.append(copy.deepcopy(cur_part))
@@ -110,9 +114,11 @@ class NaivePartitioner(BasePartitioner):
         return
 
 
-    def partition(self,
-            graph: Dict[int, List[int]],
-            k=4) -> List[List[int]]:
+    def partition(
+        self,
+        graph: Dict[int, List[int]],
+        k=4
+    ) -> List[List[int]]:
         """
         Simple graph partition:
         DFS the graph, when visited k nodes, put these nodes to a sub graph
@@ -133,21 +139,20 @@ class KlPartitioner(BasePartitioner):
     def __init__(self) -> None:
         super().__init__()
 
-    def partition(self, graph) -> List[List[int]]:
+    def partition(self, graph, k=0) -> List[List[int]]:
 
         return list(kernighan_lin_bisection(graph))
 
 class BfsPartitioner(BasePartitioner):
 
-    def __init__(self) -> None:
-        super().__init__()
-
-    def _bfs_part(self,
-            node: int,
-            graph: Dict[int, List[int]],
-            visited: set,
-            partitions: List[List[int]],
-            k: int):
+    def _bfs_part(
+        self,
+        node: int,
+        graph: Dict[int, List[int]],
+        visited: set,
+        partitions: List[List[int]],
+        k: int
+    ):
         que = []
         que.append(node)
         count = 0
@@ -188,20 +193,23 @@ class BfsPartitioner(BasePartitioner):
 
 class FrpPartitioner(BasePartitioner):
 
-    """Implementation of MICRO-2019: A Case for Multi-Programming Quantum Computers
+    """
+    Implementation of MICRO-2019: A Case for Multi-Programming Quantum Computers
 
     Algorithm 1: Fair and Reliable Partitioning (FRP)
 
     Reference: https://dl.acm.org/doi/10.1145/3352460.3358287
     """
 
-    def __init__(self,
-                 graph: Optional[np.ndarray]=None,
-                 errs: Optional[List[float]]=None) -> None:
+    def __init__(
+        self,
+        graph: Optional[np.ndarray]=None,
+        errs: Optional[List[float]]=None
+    ) -> None:
         super().__init__()
 
         # Initialize some parameters for partitioning
-        self._NUM_LEVELS = 3
+        self._num_levels = 3
         #alpha (float): alpha percent of root's neighbors
         #    should have `high` utility
         #beta (float): beta percent of nodes including root
@@ -229,6 +237,7 @@ class FrpPartitioner(BasePartitioner):
 
     @property
     def is_low_cmr(self):
+        """Whether the compute measurement ratio of lower than threshold"""
         return self._is_low_cmr
 
     @is_low_cmr.setter
@@ -282,9 +291,7 @@ class FrpPartitioner(BasePartitioner):
             self._utilities.append(n_links / sum_err)
         return self._utilities
 
-    def _bfs_single_part(self,
-                         root: int,
-                         sub_size: int):
+    def _bfs_single_part(self, root: int, sub_size: int):
         """Start from root node and grow a graph satisfying sub_size
         Args:
             root (int): Root node id
@@ -329,7 +336,8 @@ class FrpPartitioner(BasePartitioner):
                 "current visited status: {}".format(part, self._visited))
         if count < sub_size:
             raise QvmError("Cannot grow a graph "\
-                    "that satisfy the subgraph size from current root: {}".format(root))
+                           "that satisfy the subgraph size "\
+                           "from current root: {}".format(root))
         return part
 
     def _get_ranks(self):
@@ -348,12 +356,12 @@ class FrpPartitioner(BasePartitioner):
             raise ValueError("Please calculate ranks first!")
 
         vertexes = list(self._ranks.keys())
-        self._levels = [set(l) for l in split_list(vertexes, self._NUM_LEVELS)]
+        self._levels = [set(l) for l in split_list(vertexes, self._num_levels)]
         return self._levels
 
-    def _filter_high_mer(self, v: int):
+    def _filter_high_mer(self, vertex: int):
         """Check if we need to filter a node with high measurement error"""
-        is_cur_high_rd = 1 if self._readout_errs[v] >= self._mean_rd_errs else 0
+        is_cur_high_rd = 1 if self._readout_errs[vertex] >= self._mean_rd_errs else 0
         return is_cur_high_rd and self._is_low_cmr, is_cur_high_rd
 
     def _get_root(self):
@@ -375,32 +383,32 @@ class FrpPartitioner(BasePartitioner):
             raise ValueError("Please first set graph!")
 
         root = -1
-        for v, _ in self._ranks.items():
-            if v not in self._visited:
+        for vertex, _ in self._ranks.items():
+            if vertex not in self._visited:
                 # See Alg. 1 >> line 14-15: If CMR is low, exclude nodes with large measurement
                 # errors. Here if CMR is low, we will not consider vertex with measurement error
                 # larger than average measurement error
-                need_filter_high_mer, is_cur_high_rd = self._filter_high_mer(v)
+                need_filter_high_mer, is_cur_high_rd = self._filter_high_mer(vertex)
                 if need_filter_high_mer:
                     logging.warning("Node:{} is not valid due to "\
-                            "high measurement error:{}".format(v, self._readout_errs[v]))
+                            "high measurement error:{}".format(vertex, self._readout_errs[vertex]))
                     continue
 
                 # See Alg. 1 >> line 5-6: A valid root should have alpha percent of neighbors
                 # with high utility, and beta percent of nodes have measurement errors lower
                 # than average measurement errors
-                num_neighbors = sum([1 for n in self._graph[v] if n > 0])
-                num_valid_nbs = sum([1 for n in self._graph[v] if n in self._levels[0]])
+                num_neighbors = sum([1 for n in self._graph[vertex] if n > 0])
+                num_valid_nbs = sum([1 for n in self._graph[vertex] if n in self._levels[0]])
                 if num_valid_nbs/num_neighbors < self._alpha:
                     continue
                 num_valid_rds = (1 - is_cur_high_rd) +\
-                                sum([1 for i,_ in enumerate(self._graph[v]) \
+                                sum([1 for i,_ in enumerate(self._graph[vertex]) \
                                         if self._readout_errs[i] < self._mean_rd_errs])
                 if num_valid_rds/(num_neighbors+1) < self._beta:
                     continue
 
                 # Root is found
-                root = v
+                root = vertex
                 break
         if root < 0:
             raise QvmError("FRP Partition: No root available!")
@@ -421,8 +429,7 @@ class FrpPartitioner(BasePartitioner):
         self._get_levels()
         self._init = True
 
-    def partition(self,
-                  sub_size: int) -> List[Any]:
+    def partition(self, sub_size: int) -> List[Any]:
         """Implementation of Fair and Reliable Partitioning
         See reference Algorithm. 1
         Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
@@ -440,9 +447,10 @@ class FrpPartitioner(BasePartitioner):
             try:
                 part = self._bfs_single_part(root, sub_size)
                 break
-            except QvmError:
+            except QvmError as e:
                 logging.warning("Failed to grow a subgraph from root: {}, "\
-                        "current visited status: {}".format(root, self._visited))
+                                "current visited status: {}, "\
+                                "error message is {}".format(root, self._visited, e))
                 self._visited = cur_visited # Reset visited status
                 self._visited.add(root) # But root should be visited
         return part

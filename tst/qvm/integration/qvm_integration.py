@@ -6,7 +6,7 @@ class TestQvm(QvmBaseTest):
     def setup_class(self):
         self._backend_manager = BfsBackendManager(self._backend)
         self._backend_manager.init_helpers()
-        self._backend_manager.init_compute_units()
+        self._backend_manager.init_cus()
 
     def test_qvm_run(self):
         proc_manager = QvmProcessManager(self._backend)

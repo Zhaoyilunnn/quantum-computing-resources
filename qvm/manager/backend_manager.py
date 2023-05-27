@@ -1,19 +1,20 @@
 import copy
 from logging import warning
-
 from typing import List
+
 from qiskit import transpile
+from qiskit.circuit import QuantumCircuit
 from qiskit.providers.backend import *
 from qiskit.providers.models import *
-from qiskit.circuit import QuantumCircuit
 from qiskit.pulse import Schedule
+from qiskit.quantum_info import random_density_matrix
 
 from qvm.exceptions import QvmError
 from qvm.model.compute_unit import ComputeUnit
 from qvm.model.executable import BaseExecutable, Process
-from qvm.util.graph import *
-from qvm.util.circuit import circuit_virtual_to_real
 from qvm.util.backend import *
+from qvm.util.circuit import circuit_virtual_to_real
+from qvm.util.graph import *
 from qvm.util.misc import *
 from utils.misc import *
 
@@ -30,11 +31,14 @@ class BaseBackendManager:
         self._backend = copy.deepcopy(backend)
         self._cu_size = 4
         self._compute_units = []
+        self._partitioner = None
+        self._graph_extractor = None
         # FIXME(zhaoyilun): is it ok to always explicitly init compute units?
         #self._compute_units = self.init_compute_units()
 
     @property
     def cu_size(self):
+        """# qubits in a compute unit"""
         return self._cu_size
 
     @cu_size.setter
@@ -46,8 +50,13 @@ class BaseBackendManager:
         self._partitioner = GraphPartitionProvider.get_partitioner("naive")
         self._graph_extractor = BaseBackendGraphExtractor(self._backend)
 
-    def init_compute_units(self) -> List[ComputeUnit]:
+    def init_cus(self) -> List[ComputeUnit]:
         """ Transform backend into a list of compute units based on some strategy """
+
+        if not self._partitioner or not self._graph_extractor:
+            raise ValueError("Please initialize helpers, "\
+                             "i.e., partitioner and graph extractor "\
+                             "frist.")
 
         if not self._cu_size:
             raise ValueError("Please set compute unit size before init compute units")
@@ -57,15 +66,18 @@ class BaseBackendManager:
         cm_graph = self._graph_extractor.extract()
         parts = self._partitioner.partition(cm_graph, self._cu_size)
         for part in parts:
-            cu = self.extract_single_compute_unit(part)
+            cu = self.extract_one_cu(part)
             self._compute_units.append(cu)
         return self._compute_units
 
-    def extract_compute_unit_props(self,
-            sub_coupling_graph: List[int],
-            real_to_virtual: Dict[int, int]):
+    def extract_cu_props(
+        self,
+        sub_coupling_graph: List[int],
+        real_to_virtual: Dict[int, int],
+    ):
         """
-        Extract new properties for compute unit given a subgraph of original coupling graph
+        Extract new properties for compute unit
+        given a subgraph of original coupling graph
         """
         cu_props = copy.deepcopy(self._backend.properties())
 
@@ -87,9 +99,11 @@ class BaseBackendManager:
 
         return BackendProperties.from_dict(cu_props.to_dict())
 
-    def extract_compute_unit_conf(self,
-            sub_coupling_graph: List[int],
-            real_to_virtual: Dict[int, int]):
+    def extract_cu_conf(
+        self,
+        sub_coupling_graph: List[int],
+        real_to_virtual: Dict[int, int]
+    ):
         """
         Extract a new configuration for compute unit given a subgraph of original coupling graph
         """
@@ -116,9 +130,10 @@ class BaseBackendManager:
 
         return cu_conf
 
-    def extract_single_compute_unit(self, sub_coupling_graph: List[int]):
+    def extract_one_cu(self, sub_coupling_graph: List[int]):
         """
-        Extract a new backend from original backend given a subgraph of original coupling graph
+        Extract a new backend (compute unit) from original backend
+        given a subgraph of original coupling graph
         """
 
         if not isinstance(self._backend, BackendV1):
@@ -127,8 +142,8 @@ class BaseBackendManager:
         # The real to virtual mapping
         real_to_virtual = {real: virtual for virtual, real in enumerate(sub_coupling_graph)}
 
-        compute_unit_conf = self.extract_compute_unit_conf(sub_coupling_graph, real_to_virtual)
-        compute_unit_props = self.extract_compute_unit_props(sub_coupling_graph, real_to_virtual)
+        compute_unit_conf = self.extract_cu_conf(sub_coupling_graph, real_to_virtual)
+        compute_unit_props = self.extract_cu_props(sub_coupling_graph, real_to_virtual)
 
         compute_unit = copy.deepcopy(self._backend)
         compute_unit._configuration = compute_unit_conf
@@ -139,26 +154,26 @@ class BaseBackendManager:
                 self._backend.configuration().n_qubits,
                 sub_coupling_graph)
 
-    def select_compute_units(self, circuit: QuantumCircuit):
+    def select_cus(self, circuit: QuantumCircuit):
         """ Select compute units for given quantum circuit """
         #TODO(zhaoyilun): implementation
         pass
 
-    def merge_compute_units(self, compute_units: List[ComputeUnit]) -> ComputeUnit:
+    def merge_cus(self, compute_units: List[ComputeUnit]) -> ComputeUnit:
         """ Merge allocated compute units to a single backend for compilation """
 
         # First get merged list of qubits
-        merged_qubits = self.merge_graph_nodes_from_cus(compute_units)
+        merged_qubits = self.merge_cus_nodes(compute_units)
 
-        return self.extract_single_compute_unit(merged_qubits)
+        return self.extract_one_cu(merged_qubits)
 
-    def merge_graph_nodes_from_cus(self, compute_units: List[ComputeUnit]) -> List[int]:
+    def merge_cus_nodes(self, compute_units: List[ComputeUnit]) -> List[int]:
         """
         Get coupling maps from each compute unit and merge them into a single list of
         coupling map nodes, i.e., the merged backend's qubit list
         """
         list_subgraph_nodes = [cu.real_qubits for cu in compute_units]
-        return merge_sub_graphs_nodes(list_subgraph_nodes)
+        return merge_graphs_nodes(list_subgraph_nodes)
 
     def circuit_virtual_to_real(self,
             circuit: QuantumCircuit,
@@ -176,8 +191,8 @@ class BaseBackendManager:
     def allocate(self, circuit: QuantumCircuit):
         """ Allocate compute units for a quantum circuit
         This is the naive impl
-        1. Get #qubits and then get #cus
-        2. Randomly select #cus cus
+        1. Get # qubits and then get # cus
+        2. Randomly select # cus compute units
         3. Merge these cus and return
 
         """
@@ -192,11 +207,12 @@ class BaseBackendManager:
         cu_list = [self._compute_units[i] for i in cu_ids]
 
         # Merge allocated cus
-        merged_nodes = self.merge_graph_nodes_from_cus(cu_list)
-        return self.extract_single_compute_unit(merged_nodes)
+        merged_nodes = self.merge_cus_nodes(cu_list)
+        return self.extract_one_cu(merged_nodes)
 
     def compile(self, circuit: QuantumCircuit) -> Process:
-        """ Implement a simple redundant compilation
+        """
+        Implement a simple redundant compilation
         In this version, we assume that compute unit size is the same as
         circuit size
         """
@@ -216,7 +232,8 @@ class BaseBackendManager:
         return proc
 
     def _do_compile(self, circuit: QuantumCircuit, cu: ComputeUnit) -> BaseExecutable:
-        """ Compilation on compute unit
+        """
+        Compilation on compute unit
         For exp on simulator, this just compile to circuit,
         For exp on real-device, this needs to compile to pulse
         """
@@ -253,12 +270,12 @@ class KlBackendManager(BaseBackendManager):
         self._partitioner = GraphPartitionProvider.get_partitioner("kl")
         self._graph_extractor = NormalBackendNxGraphExtractor(self._backend)
 
-    def init_compute_units(self) -> List[ComputeUnit]:
+    def init_cus(self) -> List[ComputeUnit]:
         self._compute_units = []
         cm_graph = self._graph_extractor.extract()
         parts = self._partitioner.partition(cm_graph)
         for part in parts:
-            cu = self.extract_single_compute_unit(part)
+            cu = self.extract_one_cu(part)
             self._compute_units.append(cu)
         return self._compute_units
 
@@ -273,9 +290,6 @@ class BfsBackendManager(BaseBackendManager):
            units
     """
 
-    def __init__(self, backend: BackendV1) -> None:
-        super().__init__(backend)
-
     def init_helpers(self) -> None:
         self._partitioner = GraphPartitionProvider.get_partitioner("bfs")
         self._graph_extractor = BaseBackendGraphExtractor(self._backend)
@@ -287,19 +301,68 @@ class FrpBackendManager(BaseBackendManager):
         self._graph_extractor = BackendAdjMatGraphExtractor(self._backend)
         graph = self._graph_extractor.extract()
         rd_errs = self._graph_extractor.get_readout_errs()
-        self._partitioner = GraphPartitionProvider.get_partitioner(
-                                                "frp",
-                                                graph=graph,
-                                                errs=rd_errs)
+        self._partitioner =\
+            GraphPartitionProvider.get_partitioner(
+                "frp",
+                graph=graph,
+                errs=rd_errs
+            )
 
-    def init_compute_units(self) -> List[ComputeUnit]:
+    def init_cus(self) -> List[ComputeUnit]:
         if not self._cu_size:
             raise ValueError("Please set compute unit size before init compute units")
 
         self._compute_units = []
         part = self._partitioner.partition(self._cu_size)
         while part:
-            cu = self.extract_single_compute_unit(part)
+            cu = self.extract_one_cu(part)
             self._compute_units.append(cu)
             part = self._partitioner.partition(self._cu_size)
+        return self._compute_units
+
+
+class FrpBackendManagerV2(FrpBackendManager):
+    """Support allocating multiple connected cus to a large circuit"""
+
+    def __init__(self, backend: BackendV1) -> None:
+        super().__init__(backend)
+        self._map_q_cu = {} # Maintain the mapping between physical qubit id
+                            # and corresponding compute unit id
+        self._map_cus = {}  # Maintain the connection between cus,
+                            # a cu connects to another through one edge
+    @property
+    def map_cus(self):
+        """Mappings of connected compute units (through one edge)"""
+        return self._map_cus
+
+    def init_cus(self) -> List[ComputeUnit]:
+        if not self._cu_size:
+            raise ValueError("Please set compute unit size before init compute units")
+
+        self._compute_units = []
+        part = self._partitioner.partition(self._cu_size)
+        while part:
+            for i in part: # Record the mapping betwee physical qubit and compute unit id
+                self._map_q_cu[i] = len(self._compute_units) - 1
+            comp_unit = self.extract_one_cu(part)
+            self._compute_units.append(comp_unit)
+            part = self._partitioner.partition(self._cu_size)
+
+        # Get coupling map from backend
+        c_map = self._backend.configuration().coupling_map
+
+        # Traverse edges and update cu-to-cu mappings
+        for edge in c_map:
+            qubit0, qubit1 = edge
+            try:
+                cu0, cu1 = self._map_q_cu[qubit0], self._map_q_cu[qubit1]
+            except KeyError:
+                logging.debug(f"Current edge: {edge} has a vertex not in compute units")
+                continue
+            if cu0 != cu1:
+                self._map_cus.setdefault(cu0, [])
+                self._map_cus.setdefault(cu1, [])
+                self._map_cus[cu0].append(cu1)
+                self._map_cus[cu1].append(cu0)
+
         return self._compute_units

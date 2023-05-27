@@ -1,22 +1,23 @@
 import os
+from test.base import BaseTest
 
 from qiskit.circuit import QuantumCircuit
 from qiskit.circuit.random import random_circuit
 from qiskit.compiler import transpile
 from qiskit.providers.fake_provider import *
 from qiskit.quantum_info import state_fidelity
-
-from qiskit_aer import Aer 
+from qiskit_aer import Aer
 from qiskit_aer.noise import NoiseModel
+
+from qvm.manager.backend_manager import *
+from qvm.manager.process_manager import *
+from qvm.util.backend import *
+from qvm.util.circuit import BaseReliabilityCalculator
+
 #from qiskit import Aer
 #from qiskit.providers.aer.noise import NoiseModel
 
-from qvm.manager.backend_manager import * 
-from qvm.manager.process_manager import *
-from qvm.util.circuit import BaseReliabilityCalculator
-from qvm.util.backend import *
 
-from test.base import BaseTest
 
 
 class QvmBaseTest(BaseTest):

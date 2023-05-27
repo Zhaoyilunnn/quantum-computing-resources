@@ -19,7 +19,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         self._backend_manager = BfsBackendManager(self._backend)
         self._backend_manager.init_helpers()
         #self._backend_manager.cu_size = 2
-        self._backend_manager.init_compute_units()
+        self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
 
     def test_single_bench(self, bench):
@@ -47,7 +47,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         qvm_proc = QvmProcessManager(self._backend)
         #qvm_res = qvm_proc.run([process0, process1]).result()
         exe0, exe1 = qvm_proc._select([process0, process1])
-        cu = self._backend_manager.merge_compute_units([exe0.resource, exe1.resource])
+        cu = self._backend_manager.merge_cus([exe0.resource, exe1.resource])
         #print(cu.real_qubits)
         #print(exe0.circ)
         #print(exe1.circ)
@@ -80,11 +80,11 @@ class TestBenchQvmBfs(QvmBaseTest):
             proc._partitioner.is_low_cmr = is_low_cmr
 
         part_list = [proc._gen_partition(circ) for circ in circ_list]
-        cu_list = [self._backend_manager.extract_single_compute_unit(part) \
+        cu_list = [self._backend_manager.extract_one_cu(part) \
                 for part in part_list]
         trans_list = [transpile(circ_list[i], cu_list[i].backend) \
                 for i in range(len(circ_list))]
-        cu = self._backend_manager.merge_compute_units(cu_list)
+        cu = self._backend_manager.merge_cus(cu_list)
         exe = proc._merge_circuits(trans_list)
         res = cu.backend.run(exe, **kwargs).result()
         return res
@@ -100,7 +100,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
         exes = qvm_proc._select(processes)
         cus = [exe.resource for exe in exes]
-        cu = self._backend_manager.merge_compute_units(cus)
+        cu = self._backend_manager.merge_cus(cus)
         circs = [exe.circ for exe in exes]
         circ = qvm_proc._merge_circuits(circs)
         res = cu.backend.run(circ, **kwargs).result()
@@ -202,5 +202,5 @@ class TestBenchQvmFrp(TestBenchQvmBfs):
     def setup_class(self):
         self._backend_manager = FrpBackendManager(self._backend)
         self._backend_manager.init_helpers()
-        self._backend_manager.init_compute_units()
+        self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
