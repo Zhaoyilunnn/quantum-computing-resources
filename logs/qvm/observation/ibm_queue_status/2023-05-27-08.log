@@ -1,0 +1,13 @@
+<bound method BackendV1.name of <IBMQSimulator('ibmq_qasm_simulator') from IBMQ(hub='ibm-q', group='open', project='main')>>	0
+<bound method BackendV1.name of <IBMQBackend('ibmq_lima') from IBMQ(hub='ibm-q', group='open', project='main')>>	16
+<bound method BackendV1.name of <IBMQBackend('ibmq_belem') from IBMQ(hub='ibm-q', group='open', project='main')>>	15
+<bound method BackendV1.name of <IBMQBackend('ibmq_quito') from IBMQ(hub='ibm-q', group='open', project='main')>>	13
+<bound method BackendV1.name of <IBMQSimulator('simulator_statevector') from IBMQ(hub='ibm-q', group='open', project='main')>>	0
+<bound method BackendV1.name of <IBMQSimulator('simulator_mps') from IBMQ(hub='ibm-q', group='open', project='main')>>	0
+<bound method BackendV1.name of <IBMQSimulator('simulator_extended_stabilizer') from IBMQ(hub='ibm-q', group='open', project='main')>>	0
+<bound method BackendV1.name of <IBMQSimulator('simulator_stabilizer') from IBMQ(hub='ibm-q', group='open', project='main')>>	0
+<bound method BackendV1.name of <IBMQBackend('ibmq_jakarta') from IBMQ(hub='ibm-q', group='open', project='main')>>	44
+<bound method BackendV1.name of <IBMQBackend('ibmq_manila') from IBMQ(hub='ibm-q', group='open', project='main')>>	86
+<bound method BackendV1.name of <IBMQBackend('ibm_lagos') from IBMQ(hub='ibm-q', group='open', project='main')>>	154
+<bound method BackendV1.name of <IBMQBackend('ibm_nairobi') from IBMQ(hub='ibm-q', group='open', project='main')>>	246
+<bound method BackendV1.name of <IBMQBackend('ibm_perth') from IBMQ(hub='ibm-q', group='open', project='main')>>	127
