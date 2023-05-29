@@ -88,9 +88,6 @@ class BasePartitioner:
 
 class NaivePartitioner(BasePartitioner):
 
-    def __init__(self) -> None:
-        super().__init__()
-
     def _dfs(
         self,
         node: int,
@@ -110,8 +107,6 @@ class NaivePartitioner(BasePartitioner):
         for neighbor in graph[node]:
             if neighbor not in visited:
                 self._dfs(neighbor, graph, visited, cur_part, partitions, k)
-
-        return
 
 
     def partition(

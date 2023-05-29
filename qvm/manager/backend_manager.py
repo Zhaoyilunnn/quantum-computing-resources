@@ -7,7 +7,6 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.providers.backend import *
 from qiskit.providers.models import *
 from qiskit.pulse import Schedule
-from qiskit.quantum_info import random_density_matrix
 
 from qvm.exceptions import QvmError
 from qvm.model.compute_unit import ComputeUnit
@@ -226,8 +225,8 @@ class BaseBackendManager:
             except Exception:
                 warning("Current circuit: {} cannot compile on compute unit: {}".format(circuit, cu))
                 continue
-            exe.resource_ids = cu_id
-            exe.num_resources = len(self._compute_units)
+            exe.comp_unit_ids = cu_id
+            exe.num_total_cus = len(self._compute_units)
             proc.append(exe)
         return proc
 
@@ -362,26 +361,26 @@ class FrpBackendManagerV2(FrpBackendManagerV1):
         if not self._compute_units or not self._map_cus:
             raise QvmError("Compute units should be initialized first")
 
-        proc = Process()
+        proc = Process(num_qubits=circuit.num_qubits)
 
         cu_ids_list = self._allocate(circuit)
 
         for cu_ids in cu_ids_list:
             # Allocate compute units (get IDs)
-            cus = [self._compute_units[i] for i in cu_ids]
+            comp_units = [self._compute_units[i] for i in cu_ids]
             # Get a single compute unit
-            cu = self.merge_cus(cus)
+            comp_unit = self.merge_cus(comp_units)
             # Do compilation
             try:
-                exe = self._do_compile(circuit, cu)
+                exe = self._do_compile(circuit, comp_unit)
             except Exception:
-                logging.warn(f"Current circuit: {circuit} \n"\
+                logging.warning(f"Current circuit: {circuit} \n"\
                               "cannot compile on compute unit {cu}")
                 continue
 
             # Create an executable and append to process
-            exe.resource_ids = cu_ids
-            exe.num_resources = len(self._compute_units)
+            exe.comp_unit_ids = set(cu_ids)
+            exe.num_total_cus = len(self._compute_units)
             proc.append(exe)
 
         return proc
@@ -393,8 +392,9 @@ class FrpBackendManagerV2(FrpBackendManagerV1):
         self._compute_units = []
         part = self._partitioner.partition(self._cu_size)
         while part:
+            logging.info(f"Get comp unit: {part}, index {len(self._compute_units)}")
             for i in part: # Record the mapping betwee physical qubit and compute unit id
-                self._map_q_cu[i] = len(self._compute_units) - 1
+                self._map_q_cu[i] = len(self._compute_units)
             comp_unit = self.extract_one_cu(part)
             self._compute_units.append(comp_unit)
             part = self._partitioner.partition(self._cu_size)
@@ -412,8 +412,6 @@ class FrpBackendManagerV2(FrpBackendManagerV1):
                 continue
             if cu0 != cu1:
                 self._map_cus.setdefault(cu0, [])
-                self._map_cus.setdefault(cu1, [])
                 self._map_cus[cu0].append(cu1)
-                self._map_cus[cu1].append(cu0)
 
         return self._compute_units

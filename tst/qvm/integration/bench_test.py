@@ -44,10 +44,10 @@ class TestBenchQvmBfs(QvmBaseTest):
         process0 = self._backend_manager.compile(circ0)
         process1 = self._backend_manager.compile(circ1)
 
-        qvm_proc = QvmProcessManager(self._backend)
+        qvm_proc = QvmProcessManagerV1(self._backend)
         #qvm_res = qvm_proc.run([process0, process1]).result()
         exe0, exe1 = qvm_proc._select([process0, process1])
-        cu = self._backend_manager.merge_cus([exe0.resource, exe1.resource])
+        cu = self._backend_manager.merge_cus([exe0.comp_unit, exe1.comp_unit])
         #print(cu.real_qubits)
         #print(exe0.circ)
         #print(exe1.circ)
@@ -93,13 +93,14 @@ class TestBenchQvmBfs(QvmBaseTest):
             circ_list: List[QuantumCircuit],
             **kwargs):
         """Run using qvm process manager
+
         Here we temporarily use backend manager to extract compute units and compile on
-        compute units, a better implementation should be in QvmProcessManager->run() method
-        """
-        qvm_proc = QvmProcessManager(self._backend)
+        compute units, a better implementation should be in QvmProcessManager->run() method"""
+
+        qvm_proc = QvmProcessManagerV1(self._backend)
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
         exes = qvm_proc._select(processes)
-        cus = [exe.resource for exe in exes]
+        cus = [exe.comp_unit for exe in exes]
         cu = self._backend_manager.merge_cus(cus)
         circs = [exe.circ for exe in exes]
         circ = qvm_proc._merge_circuits(circs)

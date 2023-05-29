@@ -1,5 +1,6 @@
 from qiskit.compiler import transpile, schedule
 from qiskit.providers.fake_provider import *
+from qiskit.pulse import num_qubits
 
 #from qiskit import Aer
 #from qiskit.providers.aer.noise import NoiseModel
@@ -70,7 +71,7 @@ class TestBaseBackendManager(QvmBaseTest):
         # Extract a compute unit from backend
         compute_unit = self._manager.extract_one_cu(sub_graph)
 
-        plot_error(self._backend, figname="backend.png")
+        plot_error(self._backend, figname="backend.svg")
         plot_error(compute_unit.backend, figname="compute_unit.png")
 
         dummy_circ = self.create_dummy_bell_state((vq0, vq1))
@@ -100,9 +101,12 @@ class TestBaseBackendManager(QvmBaseTest):
         circ = self.create_dummy_bell_state((0,1))
 
         res = self._manager.compile(circ)
-        for rid in res:
-            print(rid, res[rid].resource.real_qubits, res[rid].resource_ids)
-            print(res[rid].circ)
+        #for rid in res:
+        #    print(rid, res[rid].comp_unit.real_qubits, res[rid].comp_unit_ids)
+        #    print(res[rid].circ)
+        for exe in res:
+            print(exe.comp_unit_ids, exe.comp_unit.real_qubits)
+            print(exe.circ)
 
 
 class TestKlBackendManager(QvmBaseTest):
@@ -165,7 +169,12 @@ class TestFrpBackendManagerV2(QvmBaseTest):
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
         cu = self._manager._allocate(circ)
+        print(cu)
         #plot_error(cu.backend, figname="compute_unit_frp.png")
 
         #for i, cu in enumerate(self._manager._compute_units):
         #    cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
+
+    def test_compile(self):
+        circ = self.get_qiskit_circ("random", num_qubits=6, depth=10)
+        proc = self._manager.compile(circ)

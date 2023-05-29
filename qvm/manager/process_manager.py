@@ -14,11 +14,13 @@ from qvm.util.graph import FrpPartitioner
 
 
 class BaseProcessManager:
+    """Base process manager"""
 
     def __init__(self, backend: BackendV1) -> None:
         self._backend = backend
 
     def batch_execute(self, schedules: List[Schedule]):
+        """Merge multple schedules and execute"""
         schedule = self._merge_schedules(schedules)
         return self._backend.run(schedule)
 
@@ -31,35 +33,39 @@ class BaseProcessManager:
         """
         Combine a list of schedules to a single schedule
         """
-        sch = Schedule()
+        merged_sch = Schedule()
 
         acquire_time = 0
-        for s in schedules:
-            for [time, inst] in s.instructions:
+        for sch in schedules:
+            for [time, inst] in sch.instructions:
                 if isinstance(inst, Acquire):
                     acquire_time = max(time, acquire_time)
                     print("============ Acquire ===============")
         print(acquire_time)
 
-        for s in schedules:
-            for time, inst in s.instructions:
+        for sch in schedules:
+            for time, inst in sch.instructions:
                 if isinstance(inst, Acquire):
                     time = acquire_time
-                sch.insert(time, inst, inplace=True)
+                merged_sch.insert(time, inst, inplace=True)
 
         #sch = schedules[0]
 
         #for i in range(1, len(schedules)):
         #    sch = sch | schedules[i]
 
-        return sch
+        return merged_sch
+
+    def run(self, circ_list: List[QuantumCircuit], **kwargs):
+        """Run a list of circuits
+        Args:
+            circ_list: List of quantum circuits to run
+        """
+        pass
 
 
 class SimpleProcessManager(BaseProcessManager):
     """ This is just a dummy process manager for testing purpose """
-
-    def __init__(self, backend: BackendV1) -> None:
-        super().__init__(backend)
 
     def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
 
@@ -71,11 +77,8 @@ class SimpleProcessManager(BaseProcessManager):
         return schedule
 
 
-class QvmProcessManager(BaseProcessManager):
+class QvmProcessManagerV1(BaseProcessManager):
     """Naive version of QVM process manager"""
-
-    def __init__(self, backend: BackendV1) -> None:
-        super().__init__(backend)
 
     def _get_measure_times(self, schedules: List[Schedule]):
         """
@@ -85,8 +88,8 @@ class QvmProcessManager(BaseProcessManager):
         We need to reset all these instructions' start times to the latest one
         """
         acquire_time, play_time, delay_time = 0, 0, 0
-        for s in schedules:
-            for [time, inst] in s.instructions:
+        for sch in schedules:
+            for [time, inst] in sch.instructions:
                 if isinstance(inst, Acquire):
                     acquire_time = max(time, acquire_time)
                 if isinstance(inst, Play) and isinstance(inst.channel, MeasureChannel):
@@ -100,21 +103,21 @@ class QvmProcessManager(BaseProcessManager):
         """
         Combine a list of schedules to a single schedule
         """
-        sch = Schedule()
+        merged_sch = Schedule()
 
         acquire_time, play_time, delay_time = self._get_measure_times(schedules)
 
-        for s in schedules:
-            for time, inst in s.instructions:
+        for sch in schedules:
+            for time, inst in sch.instructions:
                 if isinstance(inst, Acquire):
                     time = acquire_time
                 if isinstance(inst, Play) and isinstance(inst.channel, MeasureChannel):
                     time = play_time
                 if isinstance(inst, Delay) and isinstance(inst.channel, MeasureChannel):
                     time = delay_time
-                sch.insert(time, inst, inplace=True)
+                merged_sch.insert(time, inst, inplace=True)
 
-        return sch
+        return merged_sch
 
     def _merge_executables(self, exes: List[BaseExecutable]) -> QuantumCircuit:
         """Merge multiple executables to one quantum circuit
@@ -123,8 +126,8 @@ class QvmProcessManager(BaseProcessManager):
         """
         circ = None
 
-        for i, e in enumerate(exes):
-            rcirc = circuit_virtual_to_real(e.circ, e.resource)
+        for i, exe in enumerate(exes):
+            rcirc = circuit_virtual_to_real(exe.circ, exe.comp_unit)
             if i == 0:
                 circ = rcirc
             else:
@@ -138,12 +141,12 @@ class QvmProcessManager(BaseProcessManager):
         # 1. Get all resources
         res = set()
         for proc in processes:
-            res |= proc.resources
+            res |= proc.comp_unit_ids
 
         exes = []
         # 2. Randomly select n different resources from n different process
         for proc in processes:
-            proc_res = res & proc.resources
+            proc_res = res & proc.comp_unit_ids
             rid = random.choice(list(proc_res))
             exes.append(proc[rid])
             res -= {rid}
@@ -165,33 +168,65 @@ class QvmProcessManager(BaseProcessManager):
         return self._backend.run(circ)
 
 
+class QvmProcessManagerV2(QvmProcessManagerV1):
+    """QVM process manager V2
+
+    Support large circuits that needs allocating
+    more than 1 comp_unit"""
+
+    def _select(self, processes: List[Process]) -> List[BaseExecutable]:
+        """Select executables from different processes
+
+        Each process may corresponds to circuit with different size,
+        randomly select different executable without confliction
+
+        Args:
+            processes: List of processes to be executed together
+                       on a single chip
+
+        Return:
+            List[BaseExecutable]: List of selected executables from each process
+        """
+
+        # Init a set to record IDs of allocated comp units
+        selected = set()
+
+        # Init the selected list of executables
+        exes = []
+        sorted(processes, key=lambda proc: proc.num_qubits)
+
+        for proc in processes:
+            for exe in proc:
+                if not selected & exe.comp_unit_ids:
+                    exes.append(exe)
+                    selected |= exe.comp_unit_ids
+                    # Find an executable, move on to next proc
+                    break
+
+        return exes
+
+
 
 class BaselineProcessManager(BaseProcessManager):
 
-    """
-    Runtime compilation
-    Merge multiple circuits into a single circuit using
-    qiskit compose and run
-    """
+    """Runtime compilation.
 
-    def __init__(self, backend: BackendV1) -> None:
-        super().__init__(backend)
+    Merge multiple circuits into a single circuit
+    using qiskit compose and run"""
 
-    def run(self,
-            circ_list: List[QuantumCircuit],
-            **kwargs):
+    def run(self, circ_list: List[QuantumCircuit], **kwargs):
         circ = self._merge_circuits(circ_list)
         trans = transpile(circ, self._backend)
         #print(trans)
         return self._backend.run(trans, **kwargs)
 
 class FrpProcessManager(BaselineProcessManager):
-    """
-    Fair and Reliable Partitioning (FRP) and compile
+    """Process manager using FRP algorithm
+
+    For each circuit, run Fair and Reliable Partitioning (FRP) and compile
     separately on different partitions
 
-    Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
-    """
+    Ref: https://dl.acm.org/doi/10.1145/3352460.3358287"""
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
         self._extractor = BackendAdjMatGraphExtractor(self._backend)
@@ -208,15 +243,10 @@ class FrpProcessManager(BaselineProcessManager):
         # TODO: set is_low_cmr flag
         return self._partitioner.partition(circ.num_qubits)
 
-    def run(self,
-            circ_list: List[QuantumCircuit],
-            **kwargs):
-        pass
-
 
 PROCESS_MANAGERS = {
     "baseline": BaselineProcessManager,
-    "qvm": QvmProcessManager
+    "qvm": QvmProcessManagerV1
 }
 
 class ProcessManagerFactory:
@@ -230,5 +260,3 @@ class ProcessManagerFactory:
             raise NotImplementedError("Please input the correct manager type")
 
         return manager
-
-

@@ -6,7 +6,9 @@ import time
 import matplotlib.pyplot as plt
 
 from qiskit.visualization.qcstyle import json
-from qiskit.visualization import plot_coupling_map, plot_gate_map, plot_error_map
+from qiskit.visualization import plot_coupling_map, plot_gate_map
+
+from utils.qiskit.gate_map import plot_error_map
 
 BARRIER_OP_LIST = [
     "measure",
@@ -125,8 +127,17 @@ def plot_topology(backend, figname=None):
     if figname:
         fig.savefig(figname)
 
-def plot_error(backend, figname=None):
-    fig = plot_error_map(backend)
+def plot_error(
+    backend,
+    figname=None,
+    figsize=(12,9),
+    show_title=False
+):
+    fig = plot_error_map(
+        backend,
+        figsize=figsize,
+        show_title=show_title
+    )
     if figname:
         fig.savefig(figname)
 

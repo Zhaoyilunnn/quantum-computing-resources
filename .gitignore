@@ -14,3 +14,4 @@ sim-beta/compile_commands.json
 *.png
 *.npy
 *.pdf
+*.svg
