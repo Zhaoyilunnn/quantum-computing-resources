@@ -188,7 +188,7 @@ class BaseBackendManager:
         return circuit_virtual_to_real(circuit, compute_unit)
 
 
-    def allocate(self, circuit: QuantumCircuit):
+    def _allocate(self, circuit: QuantumCircuit):
         """ Allocate compute units for a quantum circuit
         This is the naive impl
         1. Get # qubits and then get # cus
@@ -212,7 +212,7 @@ class BaseBackendManager:
 
     def compile(self, circuit: QuantumCircuit) -> Process:
         """
-        Implement a simple redundant compilation
+        Implement a simple multi-version compilation
         In this version, we assume that compute unit size is the same as
         circuit size
         """
@@ -226,7 +226,7 @@ class BaseBackendManager:
             except Exception:
                 warning("Current circuit: {} cannot compile on compute unit: {}".format(circuit, cu))
                 continue
-            exe.resource_id = cu_id
+            exe.resource_ids = cu_id
             exe.num_resources = len(self._compute_units)
             proc.append(exe)
         return proc
@@ -294,7 +294,7 @@ class BfsBackendManager(BaseBackendManager):
         self._partitioner = GraphPartitionProvider.get_partitioner("bfs")
         self._graph_extractor = BaseBackendGraphExtractor(self._backend)
 
-class FrpBackendManager(BaseBackendManager):
+class FrpBackendManagerV1(BaseBackendManager):
     """Using FRP to extract a compute unit"""
 
     def init_helpers(self) -> None:
@@ -321,7 +321,7 @@ class FrpBackendManager(BaseBackendManager):
         return self._compute_units
 
 
-class FrpBackendManagerV2(FrpBackendManager):
+class FrpBackendManagerV2(FrpBackendManagerV1):
     """Support allocating multiple connected cus to a large circuit"""
 
     def __init__(self, backend: BackendV1) -> None:
@@ -334,6 +334,57 @@ class FrpBackendManagerV2(FrpBackendManager):
     def map_cus(self):
         """Mappings of connected compute units (through one edge)"""
         return self._map_cus
+
+    def _allocate(self, circuit: QuantumCircuit) -> List[List[int]]:
+        """
+        Allocate compute units (only return IDs) for a quantum circuit
+        1. Randomly select a cu.
+        2. DFS and find enough cus for the circuit
+        3. Append cu_ids to result, repeat 1 & 2
+        """
+        if not self._map_cus:
+            raise QvmError("Compute units not initialized.")
+        # Number of qubits
+        nq = circuit.num_qubits
+        # Number of compute units
+        ncu = (nq//self._cu_size+1 if nq % self._cu_size > 0 else nq//self._cu_size)
+        partitioner = BfsPartitioner()
+        return partitioner.partition(self._map_cus, k=ncu)
+
+    def compile(self, circuit: QuantumCircuit) -> Process:
+        """
+        Multi-version compilation V2, supporting circuit larger than a single cu
+        1. Allocate cus to circuit
+        2. Compile on allocated cus
+        3. Repeat 1 & 2 till no cus left
+        Note: Can only allocate connected cus
+        """
+        if not self._compute_units or not self._map_cus:
+            raise QvmError("Compute units should be initialized first")
+
+        proc = Process()
+
+        cu_ids_list = self._allocate(circuit)
+
+        for cu_ids in cu_ids_list:
+            # Allocate compute units (get IDs)
+            cus = [self._compute_units[i] for i in cu_ids]
+            # Get a single compute unit
+            cu = self.merge_cus(cus)
+            # Do compilation
+            try:
+                exe = self._do_compile(circuit, cu)
+            except Exception:
+                logging.warn(f"Current circuit: {circuit} \n"\
+                              "cannot compile on compute unit {cu}")
+                continue
+
+            # Create an executable and append to process
+            exe.resource_ids = cu_ids
+            exe.num_resources = len(self._compute_units)
+            proc.append(exe)
+
+        return proc
 
     def init_cus(self) -> List[ComputeUnit]:
         if not self._cu_size:

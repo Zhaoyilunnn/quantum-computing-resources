@@ -26,7 +26,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         #circ = self.create_dummy_bell_state((0,1))
         self._fid_calculator = KlReliabilityCalculator()
         circ = self.get_qiskit_circ(bench)
-        cu = self._backend_manager.allocate(circ)
+        cu = self._backend_manager._allocate(circ)
         fid_qvm = self.run_on_backend_and_get_fid(circ, cu.backend)
         fid_org = self.run_on_backend_and_get_fid(circ, self._backend)
 
@@ -200,7 +200,7 @@ class TestBenchQvmBfs(QvmBaseTest):
 class TestBenchQvmFrp(TestBenchQvmBfs):
 
     def setup_class(self):
-        self._backend_manager = FrpBackendManager(self._backend)
+        self._backend_manager = FrpBackendManagerV1(self._backend)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)

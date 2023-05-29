@@ -1,32 +1,32 @@
 from collections.abc import MutableSequence
-from typing import Iterable
+from typing import Iterable, List
 
 from qiskit.circuit import QuantumCircuit
 
 
 class BaseExecutable:
 
-    def __init__(self, 
+    def __init__(self,
             circ: QuantumCircuit,
             resource) -> None:
-        self._circ = circ 
+        self._circ = circ
         self._resource = resource
 
     @property
     def circ(self):
         return self._circ
-    
+
     @property
     def resource(self):
         return self._resource
 
     @property
-    def resource_id(self):
-        return self._resource_id
+    def resource_ids(self):
+        return self._resource_ids
 
-    @resource_id.setter
-    def resource_id(self, rid: int):
-        self._resource_id = rid
+    @resource_ids.setter
+    def resource_ids(self, rid: int | List[int]):
+        self._resource_ids = rid
 
     @property
     def num_resources(self):
@@ -40,7 +40,7 @@ class BaseExecutable:
 class Process:
 
     def __init__(self) -> None:
-        self._resources = set() 
+        self._resources = set()
         self._data = {}
 
     @property
@@ -64,12 +64,12 @@ class Process:
             return
         if isinstance(data_input[0], BaseExecutable):
             for exe in data_input:
-                self.append(exe) 
+                self.append(exe)
 
     def append(self, exe: BaseExecutable):
         """Append executable to the end of the process"""
-        self._data[exe.resource_id] = exe
-        self._resources.add(exe.resource_id)
+        self._data[exe.resource_ids] = exe
+        self._resources.add(exe.resource_ids)
 
     def __iter__(self):
         return iter(self._data)

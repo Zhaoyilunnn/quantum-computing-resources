@@ -23,7 +23,7 @@ class TestBaseBackendManager(QvmBaseTest):
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state([(0,1),(2,3)], num_qubits=4)
-        cu = self._manager.allocate(circ)
+        cu = self._manager._allocate(circ)
         #virt_trans = transpile(circ, cu.backend)
         real_trans = transpile(circ, self._backend)
         #print(cu.backend.run(virt_trans).result().get_counts())
@@ -60,7 +60,6 @@ class TestBaseBackendManager(QvmBaseTest):
 
 
     def test_compilation_on_compute_unit(self, verify):
-
 
         # Defined the qubits in compute unit
         sub_graph = [1,4,7]
@@ -102,7 +101,7 @@ class TestBaseBackendManager(QvmBaseTest):
 
         res = self._manager.compile(circ)
         for rid in res:
-            print(rid, res[rid].resource.real_qubits, res[rid].resource_id)
+            print(rid, res[rid].resource.real_qubits, res[rid].resource_ids)
             print(res[rid].circ)
 
 
@@ -115,7 +114,7 @@ class TestKlBackendManager(QvmBaseTest):
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
-        cu = self._manager.allocate(circ)
+        cu = self._manager._allocate(circ)
         #print(cu.real_qubits, cu.real_to_virtual)
         plot_error(cu.backend, figname="compute_unit_kl.png")
 
@@ -132,7 +131,7 @@ class TestBfsBackendManager(QvmBaseTest):
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
-        cu = self._manager.allocate(circ)
+        cu = self._manager._allocate(circ)
         #print(cu.real_qubits, cu.real_to_virtual)
         plot_error(cu.backend, figname="compute_unit_bfs.png")
 
@@ -143,13 +142,13 @@ class TestBfsBackendManager(QvmBaseTest):
 class TestFrpBackendManager(QvmBaseTest):
 
     def setup_class(self):
-        self._manager = FrpBackendManager(self._backend)
+        self._manager = FrpBackendManagerV1(self._backend)
         self._manager.init_helpers()
         self._manager.init_cus()
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
-        cu = self._manager.allocate(circ)
+        cu = self._manager._allocate(circ)
         plot_error(cu.backend, figname="compute_unit_frp.png")
 
         for i, cu in enumerate(self._manager._compute_units):
@@ -165,8 +164,8 @@ class TestFrpBackendManagerV2(QvmBaseTest):
 
     def test_allocate(self):
         circ = self.create_dummy_bell_state((0,1))
-        cu = self._manager.allocate(circ)
-        plot_error(cu.backend, figname="compute_unit_frp.png")
+        cu = self._manager._allocate(circ)
+        #plot_error(cu.backend, figname="compute_unit_frp.png")
 
-        for i, cu in enumerate(self._manager._compute_units):
-            cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
+        #for i, cu in enumerate(self._manager._compute_units):
+        #    cu.draw_nx_cmap(figname="cu_nx_cmap_{}.png".format(i))
