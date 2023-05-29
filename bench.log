@@ -1,0 +1,9 @@
+2023-05-27 07:00:39,723 Starting new HTTPS connection (1): auth.quantum-computing.ibm.com:443
+2023-05-27 07:00:40,963 https://auth.quantum-computing.ibm.com:443 "GET /api/version HTTP/1.1" 200 None
+2023-05-27 07:00:40,967 Starting new HTTPS connection (1): auth.quantum-computing.ibm.com:443
+2023-05-27 07:00:42,717 https://auth.quantum-computing.ibm.com:443 "POST /api/users/loginWithToken HTTP/1.1" 200 None
+2023-05-27 07:00:43,974 https://auth.quantum-computing.ibm.com:443 "GET /api/users/me HTTP/1.1" 200 None
+2023-05-27 07:00:43,976 Starting new HTTPS connection (1): api.quantum-computing.ibm.com:443
+2023-05-27 07:00:46,171 https://api.quantum-computing.ibm.com:443 "GET /api/Network HTTP/1.1" 200 None
+2023-05-27 07:00:46,172 Starting new HTTPS connection (1): api.quantum-computing.ibm.com:443
+2023-05-27 07:00:47,487 https://api.quantum-computing.ibm.com:443 "GET /api/Network/ibm-q/Groups/open/Projects/main/devices/v/1 HTTP/1.1" 200 None

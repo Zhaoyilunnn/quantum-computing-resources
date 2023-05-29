@@ -1,3 +1,5 @@
+"""Script for `sim-beta` project to generate qobj json file and analyze reorder algorithms"""
+
 import argparse
 import json
 import logging
@@ -24,9 +26,9 @@ logging.basicConfig(filename='bench.log', encoding='utf-8', level=logging.DEBUG,
                 format='%(asctime)s %(message)s')
 
 
-#IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
+IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
 DEVICE_LIST = ['ibm_oslo', 'ibmq_manila', 'ibm_nairobi', 'ibmq_quito', 'ibmq_belem', 'ibmq_lima']
-#provider = IBMQ.load_account()
+provider = IBMQ.load_account()
 provider = None
 
 #### For json format
@@ -76,7 +78,7 @@ def do_analysis(qobj_dict,
         with open(qobj_file, 'w') as f:
             f.write(json.dumps(qobj_dict, sort_keys=True, indent=4, separators=(',', ':')))
 
-    op_lists = get_op_lists(qobj_dict) 
+    op_lists = get_op_lists(qobj_dict)
     reorder = Reorder.get_reorder(reorder_method)
     reorder.local_qubits = local_qubits
 
@@ -86,20 +88,20 @@ def do_analysis(qobj_dict,
     for op_list in op_lists:
         print_op_list(op_list)
         if not is_complete_prog:
-            op_list = get_op_list_without_measure(op_list) 
+            op_list = get_op_list_without_measure(op_list)
         print("Num ops before: {}".format(len(op_list)))
         reorder.run(op_list)
         reorder.print_res()
 
 
-def analysis(qobj, 
-        local_qubits=10, 
-        save_qobj=False, 
+def analysis(qobj,
+        local_qubits=10,
+        save_qobj=False,
         qobj_file=None,
         reorder_method='static-new-local',
         nl=2):
     qobj_dict = qobj.to_dict()
-    do_analysis(qobj_dict, 
+    do_analysis(qobj_dict,
             local_qubits=local_qubits,
             save_qobj=save_qobj,
             qobj_file=qobj_file,
@@ -108,7 +110,7 @@ def analysis(qobj,
 
 
 def construct_circuit(args):
-    circ = QuantumCircuit() 
+    circ = QuantumCircuit()
     if args.mode == 'qasm':
         if not args.qasm_file:
             raise Exception("Should set the qasm file path when using qasm mode")
@@ -149,7 +151,7 @@ def run_circ(args, circ):
         coupling_map = None
         basis_gates = None
         if args.noise == USE_BACKEND_NOISE:
-            # Use noise model from backend 
+            # Use noise model from backend
             noise_model = NoiseModel.from_backend(backend)
             coupling_map = backend.configuration().coupling_map
             basis_gates = noise_model.basis_gates
@@ -162,8 +164,8 @@ def run_circ(args, circ):
             coupling_map = noise_device.configuration().coupling_map
             basis_gates = noise_model.basis_gates
         else:
-            noise_model = Noise.get_noise_model(args.noise) 
-        
+            noise_model = Noise.get_noise_model(args.noise)
+
         #logging.info('zyl-qcs-running::NoiseModel:%s, Backend:%s, CouplingMap:%s', noise_model, backend, coupling_map)
         #qobj = compile_circ(circ, backend, coupling_map, basis_gates)
         transpiled = gate_compile(circ, backend, coupling_map, basis_gates)
@@ -181,9 +183,9 @@ def run_circ(args, circ):
                     qobj_file=args.qobj_file,
                     reorder_method=args.reorder_method,
                     nl=args.nl)
-        
+
         if args.run == 1:
-            run(qobj, backend, noise_model=noise_model, save_sv=args.save_sv) 
+            run(qobj, backend, noise_model=noise_model, save_sv=args.save_sv)
 
 @profile
 def compile_circ(circ, backend, coupling_map=None, basis_gates=None):
@@ -211,7 +213,7 @@ def run_analysis_only(args):
         raise ValueError("Please provide qobj_file")
     qobj_dict = load_qobj_from_path(args.qobj_file)
     do_analysis(qobj_dict)
-        
+
 
 @profile
 def run(qobj, backend,
@@ -235,7 +237,7 @@ def run(qobj, backend,
 
 def main():
     args = parse_args()
-    
+
     if args.mode in ('qasm', 'random'):
         circ = construct_circuit(args)
         if args.draw_circ == 1:
@@ -245,7 +247,7 @@ def main():
         run_analysis_only(args)
     else:
         raise NotImplementedError("Unsupported mode")
-        
+
 
 if __name__ == '__main__':
     main()
