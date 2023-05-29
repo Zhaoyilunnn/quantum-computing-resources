@@ -16,13 +16,13 @@ from qvm.util.graph import FrpPartitioner
 class BaseProcessManager:
 
     def __init__(self, backend: BackendV1) -> None:
-        self._backend = backend 
+        self._backend = backend
 
     def batch_execute(self, schedules: List[Schedule]):
         schedule = self._merge_schedules(schedules)
         return self._backend.run(schedule)
 
-    def _merge_circuits(self, 
+    def _merge_circuits(self,
             circuits: List[QuantumCircuit]) -> QuantumCircuit:
         #return merge_circuits_v2(circuits)
         return merge_circuits(circuits)
@@ -32,7 +32,7 @@ class BaseProcessManager:
         Combine a list of schedules to a single schedule
         """
         sch = Schedule()
-        
+
         acquire_time = 0
         for s in schedules:
             for [time, inst] in s.instructions:
@@ -67,12 +67,12 @@ class SimpleProcessManager(BaseProcessManager):
 
         for sch in schedules:
             schedule.insert(sch.start_time, sch, inplace=True)
-        
+
         return schedule
 
 
 class QvmProcessManager(BaseProcessManager):
-    """ This is the naive version of QVM process manager """
+    """Naive version of QVM process manager"""
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
@@ -84,7 +84,7 @@ class QvmProcessManager(BaseProcessManager):
         2. Delay on measurement channel
         We need to reset all these instructions' start times to the latest one
         """
-        acquire_time, play_time, delay_time = 0, 0, 0 
+        acquire_time, play_time, delay_time = 0, 0, 0
         for s in schedules:
             for [time, inst] in s.instructions:
                 if isinstance(inst, Acquire):
@@ -94,14 +94,14 @@ class QvmProcessManager(BaseProcessManager):
                 if isinstance(inst, Delay) and isinstance(inst.channel, MeasureChannel):
                     delay_time = max(time, delay_time)
 
-        return acquire_time, play_time, delay_time 
+        return acquire_time, play_time, delay_time
 
     def _merge_schedules(self, schedules: List[Schedule]) -> Schedule:
         """
         Combine a list of schedules to a single schedule
         """
         sch = Schedule()
-        
+
         acquire_time, play_time, delay_time = self._get_measure_times(schedules)
 
         for s in schedules:
@@ -134,12 +134,12 @@ class QvmProcessManager(BaseProcessManager):
 
     def _select(self, processes: List[Process]) -> List[BaseExecutable]:
         """Randomly select n different executables from n different processes """
-        # Here we assume that the backend partition is exactly the same for all applications 
+        # Here we assume that the backend partition is exactly the same for all applications
         # 1. Get all resources
         res = set()
         for proc in processes:
             res |= proc.resources
-        
+
         exes = []
         # 2. Randomly select n different resources from n different process
         for proc in processes:
@@ -147,13 +147,13 @@ class QvmProcessManager(BaseProcessManager):
             rid = random.choice(list(proc_res))
             exes.append(proc[rid])
             res -= {rid}
-        
+
         return exes
-    
+
     def run(self, processes: List[Process]):
         """Run multiple processes
         1. Merge all resources
-        2. Randomly select different executables compiled on different 
+        2. Randomly select different executables compiled on different
            resources from different processes
 
         Args:
@@ -170,14 +170,14 @@ class BaselineProcessManager(BaseProcessManager):
 
     """
     Runtime compilation
-    Merge multiple circuits into a single circuit using 
+    Merge multiple circuits into a single circuit using
     qiskit compose and run
     """
 
     def __init__(self, backend: BackendV1) -> None:
         super().__init__(backend)
 
-    def run(self, 
+    def run(self,
             circ_list: List[QuantumCircuit],
             **kwargs):
         circ = self._merge_circuits(circ_list)
@@ -187,7 +187,7 @@ class BaselineProcessManager(BaseProcessManager):
 
 class FrpProcessManager(BaselineProcessManager):
     """
-    Fair and Reliable Partitioning (FRP) and compile 
+    Fair and Reliable Partitioning (FRP) and compile
     separately on different partitions
 
     Ref: https://dl.acm.org/doi/10.1145/3352460.3358287
@@ -229,6 +229,6 @@ class ProcessManagerFactory:
         except KeyError:
             raise NotImplementedError("Please input the correct manager type")
 
-        return manager 
+        return manager
 
 
