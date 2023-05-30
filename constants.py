@@ -1,6 +1,9 @@
+"""Configurations"""
 
 
-SMALL_BENCH_PATH="/root/projects/QASMBench/small/"
+WORK_DIR = "/root/projects/"
+
+SMALL_BENCH_PATH = WORK_DIR + "QASMBench/small/"
 
 SMALL_BENCHES = [
     "adder_n4",
@@ -35,7 +38,7 @@ SMALL_BENCHES = [
     "wstate_n3"
 ]
 
-LARGE_BENCH_PATH="/root/projects/QASMBench/large/"
+LARGE_BENCH_PATH = WORK_DIR + "QASMBench/large/"
 
 LARGE_BENCHES = [
     "bigadder_n18",
@@ -57,4 +60,4 @@ LARGE_BENCHES = [
     "wstate_n27"
 ]
 
-QDAO_QASM_DIR = "/root/projects/qcs/benchmarks/qasm/"
+QDAO_QASM_DIR = WORK_DIR + "qcs/benchmarks/qasm/"
