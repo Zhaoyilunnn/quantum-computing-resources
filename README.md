@@ -21,8 +21,8 @@ Currently we use dev branch, see [pr11](https://github.com/ScQ-Cloud/pyquafu/pul
 
 ```SHELL
 git clone https://github.com/ScQ-Cloud/pyquafu.git
-git checkout dev
 cd pyquafu
+git checkout dev
 pip install -r requirements.txt
 python setup.py install
 cd -
