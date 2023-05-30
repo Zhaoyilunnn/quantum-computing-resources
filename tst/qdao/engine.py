@@ -11,7 +11,7 @@ from qiskit.quantum_info import Statevector, random_density_matrix
 from qdao.circuit import BaselinePartitioner
 from qdao.simulator import QdaoSimObj
 
-from qdao.test import QdaoBaseTest
+from test.qdao import QdaoBaseTest
 from qdao.engine import Engine
 from qdao.util import retrieve_sv
 

@@ -6,7 +6,7 @@ import numpy as np
 from qiskit.compiler import transpile
 
 from qdao.manager import SvManager
-from qdao.test import QdaoBaseTest
+from test.qdao import QdaoBaseTest
 
 
 class TestSvManager(QdaoBaseTest):
