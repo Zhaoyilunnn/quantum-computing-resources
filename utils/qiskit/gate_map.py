@@ -1103,4 +1103,6 @@ def plot_error_map(backend, figsize=(12, 9), show_title=True, qubit_coordinates=
     if show_title:
         fig.suptitle(f"{backend_name} Error Map", fontsize=24, y=0.9)
     matplotlib_close_if_inline(fig)
+
+    plt.tight_layout()
     return fig

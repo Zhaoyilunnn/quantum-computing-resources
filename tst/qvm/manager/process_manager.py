@@ -7,7 +7,7 @@ from qiskit.providers.fake_provider import *
 from qvm.manager.backend_manager import * 
 from qvm.util.backend import *
 from qvm.util.misc import *
-from qvm.test.base import *
+from test.qvm import *
 
 
 class TestProcessManager(QvmBaseTest):

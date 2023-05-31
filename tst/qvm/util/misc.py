@@ -1,5 +1,5 @@
 from qvm.util.misc import *
-from qvm.test.base import *
+from test.qvm import *
 
 
 class TestUtilMisc(QvmBaseTest):

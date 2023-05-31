@@ -1,4 +1,4 @@
-from qvm.test.base import *
+from test.qvm import *
 
 
 class TestQvm(QvmBaseTest):
@@ -37,7 +37,15 @@ class TestQvmV2(QvmBaseTest):
     def test_qvm_run_v2(self):
         proc_manager = QvmProcessManagerV2(self._backend)
         circ0 = self.create_dummy_bell_state((0,1))
+        circ0.draw(output="mpl")
+        plt.tight_layout()
+        plt.savefig("circ0.svg")
+        plt.close()
         circ1 = self.get_qiskit_circ("random", num_qubits=6)
+        circ1.draw(output="mpl")
+        plt.tight_layout()
+        plt.savefig("circ1.svg")
+        plt.close()
 
         process0 = self._backend_manager.compile(circ0)
         process1 = self._backend_manager.compile(circ1)

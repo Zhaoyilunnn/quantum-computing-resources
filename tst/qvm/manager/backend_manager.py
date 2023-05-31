@@ -8,7 +8,7 @@ from qiskit.pulse import num_qubits
 from qvm.manager.backend_manager import *
 from qvm.util.backend import *
 from qvm.util.misc import *
-from qvm.test.base import *
+from test.qvm import *
 
 from utils.misc import *
 

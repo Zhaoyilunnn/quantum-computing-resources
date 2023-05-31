@@ -4,7 +4,7 @@ from qvm.util.circuit import \
         calc_cmr, \
         merge_circuits_v2
 from constants import *
-from qvm.test.base import *
+from test.qvm import *
 from utils.plot import plot_bar
 
 

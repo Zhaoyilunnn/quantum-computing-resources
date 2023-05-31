@@ -5,7 +5,7 @@ from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.circuit import merge_circuits_v2, KlReliabilityCalculator
 from qvm.util.backend import *
-from qvm.test.base import *
+from test.qvm import *
 
 from utils.plot import plot_bar
 

@@ -1,7 +1,7 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit.compiler import transpile, schedule
 from qvm.util.backend import *
-from qvm.test.base import *
+from test.qvm import *
 
 class TestNormalBackendGraphExtractor(QvmBaseTest):
 
