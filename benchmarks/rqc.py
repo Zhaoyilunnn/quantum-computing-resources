@@ -8,7 +8,7 @@ from qiskit_aer import Aer
 #from qdao.test import QdaoBaseTest
 #from qdao.engine import Engine
 #
-#from utils.misc import profile
+#from qutils.misc import profile
 #
 #TEST_BASE = QdaoBaseTest()
 #

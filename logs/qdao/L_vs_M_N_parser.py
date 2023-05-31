@@ -4,8 +4,8 @@ import os
 sys.path.append('.')
 
 from typing import List, Any
-from utils.plot import plot_bar_3d
-from utils.results import BaseParser
+from qutils.plot import plot_bar_3d
+from qutils.results import BaseParser
 
 
 class QdaoLVsMAndK(BaseParser):

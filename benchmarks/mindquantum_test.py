@@ -2,7 +2,7 @@ import sys
 from mindquantum import Simulator
 sys.path.append('.')
 from mindquantum.io.qasm.openqasm import OpenQASM
-from utils.misc import profile
+from qutils.misc import profile
 
 
 @profile

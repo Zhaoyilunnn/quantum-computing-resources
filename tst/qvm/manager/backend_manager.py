@@ -10,7 +10,7 @@ from qvm.util.backend import *
 from qvm.util.misc import *
 from test.qvm import *
 
-from utils.misc import *
+from qutils.misc import *
 
 
 class TestBaseBackendManager(QvmBaseTest):

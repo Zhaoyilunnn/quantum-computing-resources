@@ -3,7 +3,7 @@ import time
 
 sys.path.append('.')
 
-from utils.misc import profile
+from qutils.misc import profile
 from qiskit import *
 from mqt import ddsim
 

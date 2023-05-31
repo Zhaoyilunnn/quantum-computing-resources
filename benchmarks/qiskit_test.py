@@ -3,7 +3,7 @@ sys.path.append('.')
 
 from qiskit.circuit import QuantumCircuit
 from qiskit_aer import Aer
-from utils.misc import profile
+from qutils.misc import profile
 
 
 @profile

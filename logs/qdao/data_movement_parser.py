@@ -2,7 +2,7 @@ import sys
 import os
 from typing import List, Any
 
-from utils.results import BaseParser
+from qutils.results import BaseParser
 
 
 class QdaoDataMoveParser(BaseParser):

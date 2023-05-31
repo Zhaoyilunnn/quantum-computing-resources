@@ -2,7 +2,7 @@ import sys
 sys.path.append('.')
 
 from quafu import simulate, QuantumCircuit
-from utils.misc import profile
+from qutils.misc import profile
 
 @profile
 def main(qasm_file: str):

@@ -7,7 +7,7 @@ import pickle
 
 from qiskit_aer.noise import NoiseModel
 
-from utils.misc import *
+from qutils.misc import *
 from reorder import Reorder
 from noise import Noise
 from qiskit import *

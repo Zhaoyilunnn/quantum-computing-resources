@@ -4,7 +4,7 @@ import cirq
 import qsimcirq
 
 from cirq.contrib.qasm_import.qasm import circuit_from_qasm
-from utils.misc import profile
+from qutils.misc import profile
 
 # Pick a qubit.
 #qubit = cirq.GridQubit(0, 0)
