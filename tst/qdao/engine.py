@@ -17,14 +17,13 @@ from qdao.util import retrieve_sv
 
 from constants import *
 
+
 class TestEngine(QdaoBaseTest):
-
-
     def test_pre_postprocessing(self):
         circ = self.get_qiskit_circ("random", num_qubits=8, depth=20, measure=False)
         circ = transpile(circ, self._sv_sim)
 
-        engine = Engine(circuit = circ, num_primary=6, num_local=2)
+        engine = Engine(circuit=circ, num_primary=6, num_local=2)
 
         sub_circs = engine._part.run(engine._circ)
 
@@ -63,40 +62,41 @@ class TestEngine(QdaoBaseTest):
         assert sv0.equiv(sv1)
 
     def run_qiskit_diff_test(
-            self,
-            circ: QuantumCircuit,
-            NQ: int,
-            NP: int,
-            NL: int,
-            mode: str="QDAO",
-            is_parallel: bool=True,
-            is_diff: bool=True
-        ):
-
+        self,
+        circ: QuantumCircuit,
+        NQ: int,
+        NP: int,
+        NL: int,
+        mode: str = "QDAO",
+        is_parallel: bool = True,
+        is_diff: bool = True,
+    ):
         if mode == "QDAO":
             engine = Engine(
-                    circuit=circ,
-                    num_primary=NP,
-                    num_local=NL,
-                    backend="qiskit",
-                    is_parallel=is_parallel
-                )
+                circuit=circ,
+                num_primary=NP,
+                num_local=NL,
+                backend="qiskit",
+                is_parallel=is_parallel,
+            )
         elif mode == "BASELINE":
             engine = Engine(
-                        circuit=circ,
-                        num_primary=NP,
-                        num_local=NL,
-                        backend="qiskit",
-                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="qiskit"),
-                        is_parallel=is_parallel
-                    )
+                circuit=circ,
+                num_primary=NP,
+                num_local=NL,
+                backend="qiskit",
+                partitioner=BaselinePartitioner(np=NP, nl=NL, backend="qiskit"),
+                is_parallel=is_parallel,
+            )
         else:
-            raise ValueError(f"Unsupported mode::{mode}, should be either QDAO or BASELINE")
+            raise ValueError(
+                f"Unsupported mode::{mode}, should be either QDAO or BASELINE"
+            )
 
         st = time()
         engine.run()
         print("Qdao runs:\t{}".format(time() - st))
-        #print(sv)
+        # print(sv)
         engine.print_statistics()
         engine._manager.print_statistics()
 
@@ -104,23 +104,13 @@ class TestEngine(QdaoBaseTest):
             circ.save_state()
             st = time()
             try:
-                self._sv_sim.set_options(method='statevector')
+                self._sv_sim.set_options(method="statevector")
                 sv_org = self._sv_sim.run(circ).result().get_statevector().data
             except Exception:
                 pass
             print("Qiskit runs: {}".format(time() - st))
 
-
-    def test_run_qiskit_any_qasm(
-            self,
-            nq,
-            np,
-            nl,
-            mode,
-            qasm,
-            parallel,
-            diff
-        ):
+    def test_run_qiskit_any_qasm(self, nq, np, nl, mode, qasm, parallel, diff):
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
         parallel = True if int(parallel) == 1 else False
         diff = True if int(diff) == 1 else False
@@ -137,20 +127,13 @@ class TestEngine(QdaoBaseTest):
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
         self.run_qiskit_diff_test(
-                circ,
-                NQ,
-                NP,
-                NL,
-                mode,
-                is_parallel=parallel,
-                is_diff=diff
-            )
-
+            circ, NQ, NP, NL, mode, is_parallel=parallel, is_diff=diff
+        )
 
     def test_run_qiskit_random_basic(self, nq, np, nl, mode):
         NQ, NP, NL = self.get_qdao_params(nq, np, nl)
 
-        D = NQ - 3 # depth
+        D = NQ - 3  # depth
         MAX_OP = 2
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
@@ -161,19 +144,27 @@ class TestEngine(QdaoBaseTest):
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         from qdao.qiskit.utils import random_circuit
-        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+
+        circ_name = "_".join(
+            ["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"]
+        )
         if not os.path.exists(QDAO_QASM_DIR + circ_name):
             circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
             circ = transpile(circ, self._sv_sim)
-            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+            with open(QDAO_QASM_DIR + circ_name, "w") as f:
                 f.write(circ.qasm())
         else:
-            print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
+            print(
+                "\n:::Reusing existing bench:::::{}::::::::\n".format(
+                    QDAO_QASM_DIR + circ_name
+                )
+            )
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(
+                QDAO_QASM_DIR + circ_name
+            )
 
         circ = transpile(circ, self._sv_sim)
         self.run_qiskit_diff_test(circ, NQ, NP, NL, mode)
-
 
     def test_run_qiskit_random(self, nq):
         NQ = int(nq)
@@ -208,13 +199,16 @@ class TestEngine(QdaoBaseTest):
         quafu_circ.from_openqasm(circ.qasm())
 
         from quafu.simulators.simulator import simulate
+
         st = time()
         sv_wo_init = simulate(quafu_circ, output="state_vector").get_statevector()
         print("Quafu runs: {}".format(time() - st))
 
-        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv = np.zeros(1 << NQ, dtype=np.complex128)
         init_sv[0] = 1
-        sv_with_init = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+        sv_with_init = simulate(
+            quafu_circ, psi=init_sv, output="state_vector"
+        ).get_statevector()
 
         print(sv_wo_init)
         print(sv_with_init)
@@ -231,35 +225,46 @@ class TestEngine(QdaoBaseTest):
         quafu_circ.from_openqasm(circ.qasm())
 
         from quafu.simulators.simulator import simulate
+
         st = time()
-        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv = np.zeros(1 << NQ, dtype=np.complex128)
         init_sv[0] = 1
-        sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+        sv_org = simulate(
+            quafu_circ, psi=init_sv, output="state_vector"
+        ).get_statevector()
         print("Quafu runs: {}".format(time() - st))
 
     def test_run_quafu_random_step_by_step(self, nq):
         NQ = int(nq)
         NP = NQ - 2
         NL = NQ - 4
-        D = NQ-3 # depth
+        D = NQ - 3  # depth
 
         from qdao.qiskit.utils import random_circuit
+
         circ = random_circuit(NQ, D, max_operands=2, measure=False)
         circ = transpile(circ, self._sv_sim)
 
         from quafu.circuits.quantum_circuit import QuantumCircuit
+
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
         print("\nOriginal Circ")
         quafu_circ.draw_circuit()
 
-        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=False)
+        engine = Engine(
+            circuit=quafu_circ,
+            num_primary=NP,
+            num_local=NL,
+            backend="quafu",
+            is_parallel=False,
+        )
 
         sub_circs = engine._part.run(engine._circ)
         engine._initialize()
 
         num_acc_ops = 0
-        input_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        input_sv = np.zeros(1 << NQ, dtype=np.complex128)
         input_sv[0] = 1
         for sub_circ in sub_circs:
             for ichunk in range(engine._num_chunks):
@@ -271,25 +276,24 @@ class TestEngine(QdaoBaseTest):
             print("\n:::::debugging sub-circ::::\n")
             sub_circ.circ.draw_circuit()
             self.debug_run_quafu_circ(
-                    quafu_circ,
-                    input_sv,
-                    sv_expected,
-                    (num_acc_ops, num_acc_ops+len(sub_circ.circ.gates))
-                )
+                quafu_circ,
+                input_sv,
+                sv_expected,
+                (num_acc_ops, num_acc_ops + len(sub_circ.circ.gates)),
+            )
             num_acc_ops += len(sub_circ.circ.gates)
             input_sv = sv_expected
 
-
     def run_quafu_diff_test(
-            self,
-            circ: QuantumCircuit,
-            NQ: int,
-            NP: int,
-            NL: int,
-            mode: str="QDAO",
-            is_parallel: bool=True,
-            is_diff: bool=True
-        ):
+        self,
+        circ: QuantumCircuit,
+        NQ: int,
+        NP: int,
+        NL: int,
+        mode: str = "QDAO",
+        is_parallel: bool = True,
+        is_diff: bool = True,
+    ):
         """Run test from qiskit QuantumCircuit
         Args:
             circ: Qiskit quantum circuit
@@ -301,51 +305,56 @@ class TestEngine(QdaoBaseTest):
             is_diff: Whether run diff test, if set False, only run QDAO
         """
         from quafu.circuits.quantum_circuit import QuantumCircuit
+
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        #print("\nOriginal Circ")
-        #quafu_circ.draw_circuit()
+        # print("\nOriginal Circ")
+        # quafu_circ.draw_circuit()
 
         if mode == "QDAO":
             engine = Engine(
-                    circuit=quafu_circ,
-                    num_primary=NP,
-                    num_local=NL,
-                    backend="quafu",
-                    is_parallel=is_parallel
-                )
+                circuit=quafu_circ,
+                num_primary=NP,
+                num_local=NL,
+                backend="quafu",
+                is_parallel=is_parallel,
+            )
         elif mode == "BASELINE":
             engine = Engine(
-                        circuit=quafu_circ,
-                        num_primary=NP,
-                        num_local=NL,
-                        backend="quafu",
-                        partitioner=BaselinePartitioner(np=NP, nl=NL, backend="quafu"),
-                        is_parallel=is_parallel
-                    )
+                circuit=quafu_circ,
+                num_primary=NP,
+                num_local=NL,
+                backend="quafu",
+                partitioner=BaselinePartitioner(np=NP, nl=NL, backend="quafu"),
+                is_parallel=is_parallel,
+            )
         else:
-            raise ValueError(f"Unsupported mode::{mode}, should be either QDAO or BASELINE")
+            raise ValueError(
+                f"Unsupported mode::{mode}, should be either QDAO or BASELINE"
+            )
 
         st = time()
         engine.run()
         print("Qdao runs:\t{}".format(time() - st))
-        #print(sv)
+        # print(sv)
         engine.print_statistics()
         engine._manager.print_statistics()
 
         if is_diff:
             from quafu.simulators.simulator import simulate
+
             st = time()
-            init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+            init_sv = np.zeros(1 << NQ, dtype=np.complex128)
             init_sv[0] = 1
-            sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+            sv_org = simulate(
+                quafu_circ, psi=init_sv, output="state_vector"
+            ).get_statevector()
             print("Quafu runs:\t{}".format(time() - st))
-            #print(sv_org)
+            # print(sv_org)
 
             if NQ < 26:
                 sv = retrieve_sv(NQ, num_local=NL)
                 assert Statevector(sv).equiv(Statevector(sv_org))
-
 
     def get_qdao_params(self, nq, np, nl):
         nq = int(nq)
@@ -353,17 +362,12 @@ class TestEngine(QdaoBaseTest):
         nl = int(nl)
 
         NQ = nq if nq > 0 else 12
-        NP = np if np > 0 else NQ - 2     # Normally set 2
-        NL = nl if nl > 0 else NQ - 10     # Normally set 10
+        NP = np if np > 0 else NQ - 2  # Normally set 2
+        NL = nl if nl > 0 else NQ - 10  # Normally set 10
 
         return NQ, NP, NL
 
-
-    def test_run_quafu_random_basic(
-            self, nq, np, nl,
-            mode,
-            parallel,
-            diff):
+    def test_run_quafu_random_basic(self, nq, np, nl, mode, parallel, diff):
         """
         Basic test to run random circuits and
         compare performance between
@@ -374,8 +378,8 @@ class TestEngine(QdaoBaseTest):
         parallel = True if int(parallel) == 1 else False
         diff = True if int(diff) == 1 else False
 
-        D = NQ - 3 # depth
-        #D = 2 # depth
+        D = NQ - 3  # depth
+        # D = 2 # depth
         MAX_OP = 2
 
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
@@ -386,33 +390,30 @@ class TestEngine(QdaoBaseTest):
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         from qdao.qiskit.utils import random_circuit
-        circ_name = '_'.join(["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"])
+
+        circ_name = "_".join(
+            ["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"]
+        )
         if not os.path.exists(QDAO_QASM_DIR + circ_name):
             circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
             circ = transpile(circ, self._sv_sim)
-            with open(QDAO_QASM_DIR + circ_name, 'w') as f:
+            with open(QDAO_QASM_DIR + circ_name, "w") as f:
                 f.write(circ.qasm())
         else:
-            print("\n:::Reusing existing bench:::::{}::::::::\n".format(QDAO_QASM_DIR + circ_name))
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + circ_name)
+            print(
+                "\n:::Reusing existing bench:::::{}::::::::\n".format(
+                    QDAO_QASM_DIR + circ_name
+                )
+            )
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(
+                QDAO_QASM_DIR + circ_name
+            )
 
         self.run_quafu_diff_test(
-            circ, NQ, NP, NL,
-            mode=mode,
-            is_parallel=parallel,
-            is_diff=diff
+            circ, NQ, NP, NL, mode=mode, is_parallel=parallel, is_diff=diff
         )
 
-    def test_run_quafu_any_qasm(
-            self,
-            nq,
-            np,
-            nl,
-            mode,
-            qasm,
-            parallel,
-            diff
-        ):
+    def test_run_quafu_any_qasm(self, nq, np, nl, mode, qasm, parallel, diff):
         """
         Basic test to run random circuits and
         compare performance between
@@ -436,14 +437,8 @@ class TestEngine(QdaoBaseTest):
         circ = transpile(circ, self._sv_sim)
 
         self.run_quafu_diff_test(
-                circ,
-                NQ,
-                NP,
-                NL,
-                mode=mode,
-                is_parallel=parallel,
-                is_diff=diff
-            )
+            circ, NQ, NP, NL, mode=mode, is_parallel=parallel, is_diff=diff
+        )
 
     def test_run_quafu_qasm_basic(self, bench, nq):
         """
@@ -462,34 +457,38 @@ class TestEngine(QdaoBaseTest):
         print("bench::\t".format(bench))
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
-        qasm_path = QDAO_QASM_DIR + bench + '-' + str(NQ) + '.qasm'
+        qasm_path = QDAO_QASM_DIR + bench + "-" + str(NQ) + ".qasm"
         if not os.path.exists(qasm_path):
             raise FileNotFoundError("qasm does not exists: ".format(qasm_path))
 
         circ = qiskit.circuit.QuantumCircuit.from_qasm_file(qasm_path)
         self.run_quafu_diff_test(circ, NQ, NP, NL)
 
-
     def test_run_quafu_random_single_vs_qiskit_with_init(self, nq):
         NQ = int(nq)
 
         from qdao.qiskit.utils import random_circuit
+
         circ = random_circuit(NQ, NQ, measure=False)
         circ = transpile(circ, self._sv_sim)
 
         from quafu.circuits.quantum_circuit import QuantumCircuit
+
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
 
         from quafu.simulators.simulator import simulate
+
         st = time()
-        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv = np.zeros(1 << NQ, dtype=np.complex128)
         init_sv[0] = 1
-        sv_quafu = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+        sv_quafu = simulate(
+            quafu_circ, psi=init_sv, output="state_vector"
+        ).get_statevector()
         print("Quafu runs: {}".format(time() - st))
 
         st = time()
-        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv = np.zeros(1 << NQ, dtype=np.complex128)
         init_sv[0] = 1
 
         init_circ = qiskit.circuit.QuantumCircuit(NQ)
@@ -500,27 +499,36 @@ class TestEngine(QdaoBaseTest):
         sv_qiskit = self._sv_sim.run(init_circ).result().get_statevector()
 
         # FIXME(zhaoyilun): when testing small circuits, uncomment this
-        #assert sv_qiskit.equiv(Statevector(sv_quafu))
-        #print(sv_quafu)
-        #print(sv_qiskit.data)
+        # assert sv_qiskit.equiv(Statevector(sv_quafu))
+        # print(sv_quafu)
+        # print(sv_qiskit.data)
 
         print("Qiskit runs: {}".format(time() - st))
 
     def test_run_quafu_bench(self, bench):
-        qasm_path = LARGE_BENCH_PATH + '/' + bench + '/' + bench + '.qasm'
+        qasm_path = LARGE_BENCH_PATH + "/" + bench + "/" + bench + ".qasm"
         quafu_circ = self.get_quafu_circ_from_qasm(qasm_path)
         NQ = quafu_circ.num
         NP = NQ - 2
         NL = NQ - 10
 
-        engine = Engine(circuit=quafu_circ, num_primary=NP, num_local=NL, backend="quafu", is_parallel=True)
+        engine = Engine(
+            circuit=quafu_circ,
+            num_primary=NP,
+            num_local=NL,
+            backend="quafu",
+            is_parallel=True,
+        )
         engine.run()
         sv = retrieve_sv(NQ, num_local=NL)
 
-        init_sv = np.zeros(1<<NQ, dtype=np.complex128)
+        init_sv = np.zeros(1 << NQ, dtype=np.complex128)
         init_sv[0] = 1
         from quafu.simulators.simulator import simulate
-        sv_org = simulate(quafu_circ, psi=init_sv, output="state_vector").get_statevector()
+
+        sv_org = simulate(
+            quafu_circ, psi=init_sv, output="state_vector"
+        ).get_statevector()
 
         assert Statevector(sv).equiv(Statevector(sv_org))
 

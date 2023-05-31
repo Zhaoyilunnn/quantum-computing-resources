@@ -5,7 +5,6 @@ from test.qdao import QdaoBaseTest
 
 
 class TestBasePartitioner(QdaoBaseTest):
-
     _part = BasePartitioner()
 
     def test_gen_sub_circ(self):
@@ -18,12 +17,10 @@ class TestBasePartitioner(QdaoBaseTest):
 
 
 class TestBaselinePartitioner(QdaoBaseTest):
-
     _part = BaselinePartitioner(np=6, nl=2)
 
     def test_run(self):
-        circ = self.get_qiskit_circ("random",
-                num_qubits=8, depth=20, measure=False)
+        circ = self.get_qiskit_circ("random", num_qubits=8, depth=20, measure=False)
         print(circ)
 
         sub_circs = self._part.run(circ)
@@ -37,14 +34,10 @@ class TestBaselinePartitioner(QdaoBaseTest):
 
 
 class TestStaticPartitioner(QdaoBaseTest):
-
     _part = StaticPartitioner(np=6, nl=2)
 
-
     def test_run(self):
-
-        circ = self.get_qiskit_circ("random",
-                num_qubits=8, depth=20, measure=False)
+        circ = self.get_qiskit_circ("random", num_qubits=8, depth=20, measure=False)
         print(circ)
 
         sub_circs = self._part.run(circ)
@@ -76,8 +69,7 @@ class TestStaticPartitioner(QdaoBaseTest):
 
     def test_run_same(self):
         """Testing when circuit size is equal to sub-circ size"""
-        circ = self.get_qiskit_circ("random",
-                num_qubits=6, depth=20, measure=False)
+        circ = self.get_qiskit_circ("random", num_qubits=6, depth=20, measure=False)
         print(circ)
 
         sub_circs = self._part.run(circ)
