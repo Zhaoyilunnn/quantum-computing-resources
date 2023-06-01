@@ -1,0 +1,45 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py .
+
+============================== 1 passed in 2.42s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py .
+
+============================== 1 passed in 2.38s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py .
+
+============================== 1 passed in 2.43s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py .
+
+============================== 1 passed in 2.38s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py .
+
+============================== 1 passed in 2.38s ===============================

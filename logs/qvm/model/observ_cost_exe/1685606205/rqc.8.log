@@ -1,0 +1,65 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	7.7727272727272725	110.0197651862171
+
+cost-res	8	7.7727272727272725	122.14017034028399
+.
+
+============================== 1 passed in 3.78s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	9.55	110.0197651862171
+
+cost-res	8	10.175	122.14017034028399
+.
+
+============================== 1 passed in 3.79s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	7.638297872340425	110.0197651862171
+
+cost-res	8	7.361702127659575	122.14017034028399
+.
+
+============================== 1 passed in 4.06s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	9.487804878048781	110.0197651862171
+
+cost-res	8	9.24390243902439	122.14017034028399
+.
+
+============================== 1 passed in 3.76s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	5.938775510204081	110.0197651862171
+
+cost-res	8	5.714285714285714	122.14017034028399
+.
+
+============================== 1 passed in 3.76s ===============================

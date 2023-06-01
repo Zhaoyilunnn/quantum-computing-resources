@@ -1,0 +1,65 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	0	8.880952380952381	110.0197651862171
+
+cost-res	8	1	8.166666666666666	122.14017034028399
+.
+
+============================== 1 passed in 3.78s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	0	9.609756097560975	110.0197651862171
+
+cost-res	8	1	9.853658536585366	122.14017034028399
+.
+
+============================== 1 passed in 3.80s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	0	7.681818181818182	110.0197651862171
+
+cost-res	8	1	7.409090909090909	122.14017034028399
+.
+
+============================== 1 passed in 3.80s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	0	7.558139534883721	110.0197651862171
+
+cost-res	8	1	8.023255813953488	122.14017034028399
+.
+
+============================== 1 passed in 3.94s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	8	0	7.8604651162790695	110.0197651862171
+
+cost-res	8	1	8.023255813953488	122.14017034028399
+.
+
+============================== 1 passed in 4.02s ===============================

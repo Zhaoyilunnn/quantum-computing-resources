@@ -1,0 +1,55 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 6	7.68	110.0197651862171
+6	8.28	122.14017034028399
+.
+
+============================== 1 passed in 3.56s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 6	6.8076923076923075	110.0197651862171
+6	6.8076923076923075	122.14017034028399
+.
+
+============================== 1 passed in 3.61s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 6	9.25	110.0197651862171
+6	10.375	122.14017034028399
+.
+
+============================== 1 passed in 3.60s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 6	7.884615384615385	110.0197651862171
+6	7.884615384615385	122.14017034028399
+.
+
+============================== 1 passed in 3.72s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 6	5.407407407407407	110.0197651862171
+6	5.481481481481482	122.14017034028399
+.
+
+============================== 1 passed in 3.55s ===============================

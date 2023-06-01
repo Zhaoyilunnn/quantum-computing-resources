@@ -1,0 +1,55 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 8	6.531914893617022	110.0197651862171
+8	6.659574468085107	122.14017034028399
+.
+
+============================== 1 passed in 3.79s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 8	9.341463414634147	110.0197651862171
+8	8.585365853658537	122.14017034028399
+.
+
+============================== 1 passed in 3.79s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 8	7.041666666666667	110.0197651862171
+8	6.666666666666667	122.14017034028399
+.
+
+============================== 1 passed in 3.69s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 8	8.285714285714286	110.0197651862171
+8	8.214285714285714	122.14017034028399
+.
+
+============================== 1 passed in 3.84s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 8	9.78048780487805	110.0197651862171
+8	8.804878048780488	122.14017034028399
+.
+
+============================== 1 passed in 3.86s ===============================

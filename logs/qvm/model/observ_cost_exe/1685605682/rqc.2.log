@@ -1,0 +1,93 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 2	2.0	56.33672661860048
+2	2.0	154.11822867574506
+2	2.0	108.73414354478791
+2	2.0	121.91880602006049
+2	2.0	177.7912160427677
+.
+
+============================== 1 passed in 4.55s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+_________________ ERROR collecting tst/qvm/model/executable.py _________________
+tst/qvm/model/executable.py:1: in <module>
+    from qvm.model.executable import *
+../qvm/qvm/model/executable.py:4: in <module>
+    from qiskit.circuit import QuantumCircuit
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/__init__.py:50: in <module>
+    from qiskit.circuit import ClassicalRegister
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/circuit/__init__.py:278: in <module>
+    from .quantumcircuit import QuantumCircuit
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/circuit/quantumcircuit.py:41: in <module>
+    from qiskit.utils.multiprocessing import is_main_process
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/utils/__init__.py:66: in <module>
+    from .quantum_instance import QuantumInstance
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/utils/quantum_instance.py:37: in <module>
+    from qiskit.utils.mitigation import (
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/utils/mitigation/__init__.py:53: in <module>
+    from .fitters import CompleteMeasFitter, TensoredMeasFitter
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/utils/mitigation/fitters.py:29: in <module>
+    from qiskit.utils.mitigation._filters import MeasurementFilter, TensoredFilter
+<frozen importlib._bootstrap>:1024: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:171: in __enter__
+    ???
+<frozen importlib._bootstrap>:111: in acquire
+    ???
+E   KeyboardInterrupt
+=========================== short test summary info ============================
+ERROR tst/qvm/model/executable.py - KeyboardInterrupt
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.23s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 2	1.0	56.33672661860048
+2	1.0	154.11822867574506
+2	1.0	108.73414354478791
+2	1.0	121.91880602006049
+2	1.0	177.7912160427677
+.
+
+============================== 1 passed in 4.53s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 2	1.6666666666666667	56.33672661860048
+2	1.6666666666666667	154.11822867574506
+2	1.6666666666666667	108.73414354478791
+2	1.6666666666666667	121.91880602006049
+2	1.6666666666666667	177.7912160427677
+.
+
+============================== 1 passed in 4.79s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 2	2.4	56.33672661860048
+2	2.4	154.11822867574506
+2	2.4	108.73414354478791
+2	2.4	121.91880602006049
+2	2.4	177.7912160427677
+.
+
+============================== 1 passed in 4.56s ===============================

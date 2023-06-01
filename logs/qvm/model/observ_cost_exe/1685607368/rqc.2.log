@@ -1,0 +1,95 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	2	0	1.8333333333333333	56.33672661860048
+
+cost-res	2	1	1.8333333333333333	154.11822867574506
+
+cost-res	2	2	1.8333333333333333	108.73414354478791
+
+cost-res	2	3	1.8333333333333333	121.91880602006049
+
+cost-res	2	4	1.8333333333333333	177.7912160427677
+.
+
+============================== 1 passed in 4.58s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	2	0	1.0	56.33672661860048
+
+cost-res	2	1	1.0	154.11822867574506
+
+cost-res	2	2	1.0	108.73414354478791
+
+cost-res	2	3	1.0	121.91880602006049
+
+cost-res	2	4	1.0	177.7912160427677
+.
+
+============================== 1 passed in 4.62s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	2	0	1.6666666666666667	56.33672661860048
+
+cost-res	2	1	1.6666666666666667	154.11822867574506
+
+cost-res	2	2	1.6666666666666667	108.73414354478791
+
+cost-res	2	3	1.6666666666666667	121.91880602006049
+
+cost-res	2	4	1.6666666666666667	177.7912160427677
+.
+
+============================== 1 passed in 4.57s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	2	0	1.0	56.33672661860048
+
+cost-res	2	1	1.0	154.11822867574506
+
+cost-res	2	2	1.0	108.73414354478791
+
+cost-res	2	3	1.0	121.91880602006049
+
+cost-res	2	4	1.0	177.7912160427677
+.
+
+============================== 1 passed in 4.61s ===============================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 1 item
+
+tst/qvm/model/executable.py 
+cost-res	2	0	2.2	56.33672661860048
+
+cost-res	2	1	2.2	154.11822867574506
+
+cost-res	2	2	2.2	108.73414354478791
+
+cost-res	2	3	2.2	121.91880602006049
+
+cost-res	2	4	2.2	177.7912160427677
+.
+
+============================== 1 passed in 4.63s ===============================

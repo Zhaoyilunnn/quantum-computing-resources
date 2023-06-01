@@ -50,4 +50,15 @@ class TestQvmV2(QvmBaseTest):
 
         assert len(process0) > len(process1)
 
+        data0 = copy.deepcopy(process0._data)
+        data0.sort(key=lambda exe: exe.cost)
+        data1 = copy.deepcopy(process1._data)
+        data1.sort(key=lambda exe: exe.cost)
+
+        # assert data0 == process0._data
+        for i, exe in enumerate(data0):
+            assert exe == data0[i]
+        for i, exe in enumerate(data1):
+            assert exe == data1[i]
+
         proc_manager.run([process0, process1])
