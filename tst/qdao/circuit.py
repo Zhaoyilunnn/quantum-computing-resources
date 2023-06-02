@@ -1,5 +1,5 @@
 from qiskit.circuit import QuantumCircuit
-from constants import QDAO_QASM_DIR
+from constants import QCS_BENCHMARKS_DIR
 from qdao.circuit import BasePartitioner, BaselinePartitioner, StaticPartitioner
 from test.qdao import QdaoBaseTest
 
@@ -55,7 +55,7 @@ class TestStaticPartitioner(QdaoBaseTest):
         NL = int(nl)
 
         try:
-            circ = QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+            circ = QuantumCircuit.from_qasm_file(QCS_BENCHMARKS_DIR + qasm)
         except Exception as e:
             print(f"Load from qasm file failed for {qasm}, error: {e}")
             return

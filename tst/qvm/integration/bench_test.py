@@ -141,7 +141,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         for b in SMALL_BENCHES:
             if b.endswith("_n4"):
                 try:
-                    b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                    b_file = QASMBENCH_SMALL_DIR + "/" + b + "/" + b + ".qasm"
                     circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
                     circ_merged = merge_circuits([circ, circ])
                 except Exception as e:
@@ -182,7 +182,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         for b in SMALL_BENCHES:
             if b.endswith("_n4"):
                 try:
-                    b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                    b_file = QASMBENCH_SMALL_DIR + "/" + b + "/" + b + ".qasm"
                     circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
                     # circ_merged = merge_circuits_v2([circ, circ])
                     circ_merged = merge_circuits([circ, circ])
@@ -217,7 +217,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         )
 
 
-class TestBenchQvmFrp(TestBenchQvmBfs):
+class TestBenchQvmFrpV1(TestBenchQvmBfs):
     def setup_class(self):
         self._backend_manager = FrpBackendManagerV1(self._backend)
         self._backend_manager.init_helpers()
@@ -251,3 +251,27 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         circ = qvm_proc._merge_circuits(circs)
         res = cu.backend.run(circ, **kwargs).result()
         return res
+
+    def test_two_bench_frp(self, bench, nq):
+        """Testing qvm vs. FRP (MICRO-2019)"""
+        shots = 2**20
+        nq = int(nq)
+
+        # circ0 = self.create_dummy_bell_state((0,1))
+        # circ1 = self.create_dummy_bell_state((0,1))
+        circ0 = self.get_qiskit_circ(bench, num_qubits=nq)
+        circ1 = self.get_qiskit_circ(bench, num_qubits=nq)
+        circ = merge_circuits([circ0, circ1])
+
+        qvm_res = self.run_qvm([circ0, circ1], shots=shots)
+        frp_res = self.run_frp([circ0, circ1], shots=shots)
+
+        # Calculate fidelity
+        self._fid_calculator = KlReliabilityCalculator()
+        fid_qvm = self._fid_calculator.calc_fidelity(
+            circ, qvm_res.get_counts(), shots=shots
+        )
+        fid_frp = self._fid_calculator.calc_fidelity(
+            circ, frp_res.get_counts(), shots=shots
+        )
+        print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")

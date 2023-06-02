@@ -30,7 +30,7 @@ class TestSvFidReliabilityCalculator(QvmBaseTest):
         is_trans = False
 
         b = "vqe_uccsd_n4"
-        b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+        b_file = QASMBENCH_SMALL_DIR + "/" + b + "/" + b + ".qasm"
         circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
         trans = circ
         if is_trans:
@@ -75,7 +75,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
         labels = []
         for b in SMALL_BENCHES:
             try:
-                b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                b_file = QASMBENCH_SMALL_DIR + "/" + b + "/" + b + ".qasm"
                 circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
             except Exception:
                 continue
@@ -90,7 +90,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
             if not b.endswith("_n4"):
                 continue
             try:
-                b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+                b_file = QASMBENCH_SMALL_DIR + "/" + b + "/" + b + ".qasm"
                 circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
             except Exception:
                 continue
@@ -100,7 +100,7 @@ class TestUtilCircuitMisc(QvmBaseTest):
 
     def test_merge_circuits_v2(self):
         b = "vqe_uccsd_n4"
-        b_file = SMALL_BENCH_PATH + "/" + b + "/" + b + ".qasm"
+        b_file = QASMBENCH_SMALL_DIR + "/" + b + "/" + b + ".qasm"
         circ = self.get_qiskit_circ("qasm", qasm_path=b_file)
         print("clbits: {}".format(circ.clbits))
         print("clbits: {}".format(circ.num_clbits))

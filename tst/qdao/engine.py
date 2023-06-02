@@ -122,7 +122,7 @@ class TestEngine(QdaoBaseTest):
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QCS_BENCHMARKS_DIR + qasm)
         except Exception as e:
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
@@ -148,19 +148,19 @@ class TestEngine(QdaoBaseTest):
         circ_name = "_".join(
             ["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"]
         )
-        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+        if not os.path.exists(QCS_BENCHMARKS_DIR + circ_name):
             circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
             circ = transpile(circ, self._sv_sim)
-            with open(QDAO_QASM_DIR + circ_name, "w") as f:
+            with open(QCS_BENCHMARKS_DIR + circ_name, "w") as f:
                 f.write(circ.qasm())
         else:
             print(
                 "\n:::Reusing existing bench:::::{}::::::::\n".format(
-                    QDAO_QASM_DIR + circ_name
+                    QCS_BENCHMARKS_DIR + circ_name
                 )
             )
             circ = qiskit.circuit.QuantumCircuit.from_qasm_file(
-                QDAO_QASM_DIR + circ_name
+                QCS_BENCHMARKS_DIR + circ_name
             )
 
         circ = transpile(circ, self._sv_sim)
@@ -394,19 +394,19 @@ class TestEngine(QdaoBaseTest):
         circ_name = "_".join(
             ["random", str(NQ), str(D), "max_operands", str(MAX_OP), "gen.qasm"]
         )
-        if not os.path.exists(QDAO_QASM_DIR + circ_name):
+        if not os.path.exists(QCS_BENCHMARKS_DIR + circ_name):
             circ = random_circuit(NQ, D, max_operands=MAX_OP, measure=False)
             circ = transpile(circ, self._sv_sim)
-            with open(QDAO_QASM_DIR + circ_name, "w") as f:
+            with open(QCS_BENCHMARKS_DIR + circ_name, "w") as f:
                 f.write(circ.qasm())
         else:
             print(
                 "\n:::Reusing existing bench:::::{}::::::::\n".format(
-                    QDAO_QASM_DIR + circ_name
+                    QCS_BENCHMARKS_DIR + circ_name
                 )
             )
             circ = qiskit.circuit.QuantumCircuit.from_qasm_file(
-                QDAO_QASM_DIR + circ_name
+                QCS_BENCHMARKS_DIR + circ_name
             )
 
         self.run_quafu_diff_test(
@@ -431,7 +431,7 @@ class TestEngine(QdaoBaseTest):
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QDAO_QASM_DIR + qasm)
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QCS_BENCHMARKS_DIR + qasm)
         except Exception as e:
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
@@ -457,7 +457,7 @@ class TestEngine(QdaoBaseTest):
         print("bench::\t".format(bench))
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
-        qasm_path = QDAO_QASM_DIR + bench + "-" + str(NQ) + ".qasm"
+        qasm_path = QCS_BENCHMARKS_DIR + bench + "-" + str(NQ) + ".qasm"
         if not os.path.exists(qasm_path):
             raise FileNotFoundError("qasm does not exists: ".format(qasm_path))
 
@@ -506,7 +506,7 @@ class TestEngine(QdaoBaseTest):
         print("Qiskit runs: {}".format(time() - st))
 
     def test_run_quafu_bench(self, bench):
-        qasm_path = LARGE_BENCH_PATH + "/" + bench + "/" + bench + ".qasm"
+        qasm_path = QASMBENCH_LARGE_DIR + "/" + bench + "/" + bench + ".qasm"
         quafu_circ = self.get_quafu_circ_from_qasm(qasm_path)
         NQ = quafu_circ.num
         NP = NQ - 2
