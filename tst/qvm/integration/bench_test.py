@@ -129,7 +129,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         fid_frp = self._fid_calculator.calc_fidelity(
             circ, frp_res.get_counts(), shots=shots
         )
-        print("Fid of qvm & frp\t{}\t{}".format(fid_qvm, fid_frp))
+        print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
 
     def test_two_n4_qasm_bench_wo_cmr(self):
         """Test two 4-qubit programs, compare qvm and frp"""
@@ -223,3 +223,31 @@ class TestBenchQvmFrp(TestBenchQvmBfs):
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+
+
+class TestBenchQvmFrpV2(TestBenchQvmBfs):
+    def setup_class(self):
+        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+
+    def test_single_bench(self, bench):
+        pass
+
+    def run_qvm(self, circ_list: List[QuantumCircuit], **kwargs):
+        """Run using qvm process manager
+
+        Here we temporarily use backend manager to extract compute units and compile on
+        compute units, a better implementation should be in QvmProcessManager->run() method
+        """
+
+        qvm_proc = QvmProcessManagerV2(self._backend)
+        processes = [self._backend_manager.compile(circ) for circ in circ_list]
+        exes = qvm_proc._select(processes)
+        cus = [exe.comp_unit for exe in exes]
+        cu = self._backend_manager.merge_cus(cus)
+        circs = [exe.circ for exe in exes]
+        circ = qvm_proc._merge_circuits(circs)
+        res = cu.backend.run(circ, **kwargs).result()
+        return res
