@@ -1,0 +1,56 @@
+Randomly selected files:
+/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 15 items / 14 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [0.00239849 0.00229073 0.00046825 0.00044155 0.00040913 0.00043774
+ 0.00225639 0.00226116 0.10194397 0.10198307 0.01927662 0.01908302
+ 0.0199213  0.02022743 0.10041237 0.09994125 0.00236416 0.00235939
+ 0.00046158 0.00042439 0.00049305 0.00048542 0.00236511 0.00235271
+ 0.10423756 0.10447025 0.019701   0.01949596 0.0205307  0.02056122
+ 0.10292816 0.10301685]
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.10678864 0.10636806 0.01821423 0.01851368
+ 0.01833916 0.01815414 0.10674286 0.10672379 0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.10659981 0.10693264 0.01843929 0.01842213 0.01835251 0.01832485
+ 0.10673046 0.10635376]
+[0.00240517 0.0024786  0.00045872 0.00048447 0.00047684 0.00049114
+ 0.00233364 0.00247574 0.10179138 0.1005888  0.01988983 0.01934528
+ 0.019907   0.01975441 0.10141468 0.10032845 0.00248241 0.00251579
+ 0.00050259 0.00048923 0.00052071 0.00047493 0.0024538  0.0024004
+ 0.10419846 0.10339069 0.01996517 0.01987076 0.02015781 0.02020741
+ 0.10315704 0.10258865]
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.1066761  0.1066227  0.01827049 0.01827812
+ 0.01805687 0.01820564 0.10621643 0.10665417 0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.10654831 0.10712719 0.01825714 0.01847649 0.01835251 0.0180521
+ 0.10694408 0.10726166]
+Fid of qvm & frp	0.023604971274503273	0.024887711174974646
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 1 passed, 14 deselected, 9 warnings in 19.13s =================

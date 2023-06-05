@@ -1,0 +1,81 @@
+Randomly selected files:
+/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 15 items / 14 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [1.74331665e-02 8.37802887e-03 8.16249847e-03 1.75390244e-02
+ 3.57913971e-03 1.07746124e-02 1.11494064e-02 3.38554382e-03
+ 1.62229538e-02 7.37762451e-03 7.56072998e-03 1.64060593e-02
+ 3.23104858e-03 1.01032257e-02 1.01747513e-02 3.08513641e-03
+ 7.17163086e-04 3.40461731e-04 3.32832336e-04 7.40051270e-04
+ 1.39236450e-04 4.16755676e-04 4.59671021e-04 1.38282776e-04
+ 6.61849976e-04 3.14712524e-04 2.92778015e-04 6.06536865e-04
+ 1.35421753e-04 4.18663025e-04 4.07218933e-04 1.34468079e-04
+ 1.70901299e-01 7.89899826e-02 8.02202225e-02 1.70293808e-01
+ 3.39422226e-02 1.06098175e-01 1.08995438e-01 3.30076218e-02
+ 7.50827789e-03 3.36456299e-03 3.53813171e-03 7.41386414e-03
+ 1.50108337e-03 4.57572937e-03 4.81414795e-03 1.40094757e-03
+ 3.61156464e-03 1.69754028e-03 1.71184540e-03 3.59916687e-03
+ 7.06672668e-04 2.19345093e-03 2.31361389e-03 7.07626343e-04
+ 1.31130219e-03 6.36100769e-04 6.23703003e-04 1.28364563e-03
+ 2.60353088e-04 8.41140747e-04 8.45909119e-04 2.71797180e-04]
+[0.01698971 0.00727272 0.00729275 0.01677608 0.00280666 0.01064777
+ 0.01065445 0.00278568 0.01723862 0.00733757 0.00745678 0.01710129
+ 0.0027895  0.01051521 0.01060009 0.00281334 0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.19097042 0.08162785 0.08120441 0.19035149
+ 0.0311203  0.11849689 0.11804867 0.03055    0.0015049  0.00064468
+ 0.00062275 0.0014782  0.00024223 0.00089073 0.00092316 0.00024509
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.        ]
+[0.02149868 0.01012039 0.01021671 0.02143002 0.00443077 0.01341915
+ 0.01367569 0.00435638 0.01586056 0.00726414 0.00751781 0.01568794
+ 0.00320339 0.00993824 0.00995064 0.00313663 0.00092888 0.00041962
+ 0.00042248 0.00091076 0.00017929 0.00057983 0.00058079 0.00018501
+ 0.0008812  0.00038433 0.00043297 0.00086498 0.00015831 0.00053215
+ 0.00054359 0.00019455 0.15275478 0.07054234 0.07172871 0.15118217
+ 0.03102303 0.09477711 0.09657192 0.0303688  0.0202837  0.00934219
+ 0.00945187 0.02027512 0.00411224 0.01256752 0.01267624 0.00406075
+ 0.0045948  0.00217819 0.00205898 0.00440979 0.00096607 0.00290394
+ 0.00292492 0.00086689 0.00165653 0.00076294 0.00077248 0.00156975
+ 0.00033283 0.00100327 0.00103188 0.00034237]
+[0.01699829 0.007164   0.00719833 0.01711559 0.00279045 0.01051521
+ 0.01049519 0.00275135 0.01709461 0.00724316 0.00713539 0.01695251
+ 0.00281525 0.01056671 0.01052189 0.00272369 0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.19101906 0.08154488 0.08118725 0.19048595
+ 0.03140068 0.11802197 0.11860943 0.03100681 0.00149345 0.00069427
+ 0.00064182 0.00143433 0.00024128 0.00092125 0.00096798 0.00024796
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.        ]
+Fid of qvm & frp	0.04964885232450632	0.12434271627659349
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 1 passed, 14 deselected, 9 warnings in 19.94s =================

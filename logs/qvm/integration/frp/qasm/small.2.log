@@ -1,0 +1,38 @@
+Randomly selected files:
+/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 15 items / 14 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [5.72204590e-06 3.70979309e-04 6.19888306e-05 ... 0.00000000e+00
+ 0.00000000e+00 9.53674316e-07]
+[0. 0. 0. ... 0. 0. 0.]
+[1.33514404e-05 2.78472900e-04 9.25064087e-05 ... 0.00000000e+00
+ 0.00000000e+00 0.00000000e+00]
+[0. 0. 0. ... 0. 0. 0.]
+Fid of qvm & frp	0.1304351387043716	0.10405994093531179
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/bb84_n8/bb84_n8.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 14 deselected, 9 warnings in 380.37s (0:06:20) ===========

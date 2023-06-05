@@ -1,0 +1,9 @@
+Randomly selected files:
+/root/projects/QASMBench/small/shor_n5/shor_n5.qasm,/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 15 items / 14 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 

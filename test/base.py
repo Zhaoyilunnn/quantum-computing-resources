@@ -59,6 +59,7 @@ class BaseTest:
         qubits: Union[List[Tuple[int, int]], Tuple[int, int]],
         num_qubits=None,
         is_measure=True,
+        save_state=False,
     ) -> QuantumCircuit:
         """
         Create a bell state circuit for test
@@ -96,5 +97,8 @@ class BaseTest:
                         "num_qubits must be larger than all involved qubits"
                     )
                 do_bell_state(dummy_circ, q0, q1)
+
+        if save_state:
+            dummy_circ.save_state()
 
         return dummy_circ

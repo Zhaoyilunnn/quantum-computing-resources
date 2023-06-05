@@ -122,7 +122,9 @@ class TestEngine(QdaoBaseTest):
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QCS_BENCHMARKS_DIR + qasm)
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(
+                QCS_BENCHMARKS_DIR + qasm
+            )
         except Exception as e:
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)
@@ -431,7 +433,9 @@ class TestEngine(QdaoBaseTest):
         print("\n::::::::::::::::::Config::::::::::::::::::\n")
 
         try:
-            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(QCS_BENCHMARKS_DIR + qasm)
+            circ = qiskit.circuit.QuantumCircuit.from_qasm_file(
+                QCS_BENCHMARKS_DIR + qasm
+            )
         except Exception as e:
             raise ValueError(f"Cannot load qasm file {qasm}: {e}")
         circ = transpile(circ, self._sv_sim)

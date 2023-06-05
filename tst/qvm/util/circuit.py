@@ -112,3 +112,20 @@ class TestUtilCircuitMisc(QvmBaseTest):
         res = sim.run(circ_merged, shots=2**20).result()
         print(res.get_counts())
         print(res.get_statevector())
+
+        # Test correctness
+        # 1. Create two bell state circuit and merge them
+        bs = self.create_dummy_bell_state((0, 1), is_measure=False)
+        bs_4_merged = merge_circuits_v2([bs, bs], save_state=True)
+        bs_4_orig = self.create_dummy_bell_state(
+            [(0, 1), (2, 3)], num_qubits=4, is_measure=False, save_state=True
+        )
+        sim = Aer.get_backend("aer_simulator")
+        sim.set_options(method="statevector")
+        res_merged = sim.run(bs_4_merged).result()
+        res_orig = sim.run(bs_4_orig).result()
+        sv_merged = res_merged.get_statevector()
+        sv_orig = res_orig.get_statevector()
+        assert sv_merged.equiv(sv_orig)
+        print(sv_merged)
+        print(sv_orig)
