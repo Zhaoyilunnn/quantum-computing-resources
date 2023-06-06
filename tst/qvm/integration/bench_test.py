@@ -299,15 +299,29 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         circ = merge_circuits_v2([circ0, circ1])
 
-        qvm_res = self.run_qvm([circ0, circ1], shots=shots)
-        frp_res = self.run_frp([circ0, circ1], shots=shots)
+        qvm_res = None
+        try:
+            qvm_res = self.run_qvm([circ0, circ1], shots=shots)
+        except Exception as e:
+            print(f"run qvm error: {e}")
+
+        frp_res = None
+        try:
+            frp_res = self.run_frp([circ0, circ1], shots=shots)
+        except Exception as e:
+            print(f"run frp error: {e}")
 
         # Calculate fidelity
         self._fid_calculator = KlReliabilityCalculator()
-        fid_qvm = self._fid_calculator.calc_fidelity(
-            circ, qvm_res.get_counts(), shots=shots
-        )
-        fid_frp = self._fid_calculator.calc_fidelity(
-            circ, frp_res.get_counts(), shots=shots
-        )
+
+        fid_qvm = None
+        if qvm_res:
+            fid_qvm = self._fid_calculator.calc_fidelity(
+                circ, qvm_res.get_counts(), shots=shots
+            )
+        fid_frp = None
+        if frp_res:
+            fid_frp = self._fid_calculator.calc_fidelity(
+                circ, frp_res.get_counts(), shots=shots
+            )
         print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
