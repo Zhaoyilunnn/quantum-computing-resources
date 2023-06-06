@@ -1,0 +1,46 @@
+Randomly selected files:
+/root/projects/QASMBench/small/dnn_n8/dnn_n8.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects
+plugins: anyio-3.6.2
+collected 15 items / 14 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py F
+
+=================================== FAILURES ===================================
+_ TestBenchQvmFrpV2.test_two_bench_frp[qasm-/root/projects/QASMBench/small/dnn_n8/dnn_n8.qasm-10] _
+
+self = <bench_test.TestBenchQvmFrpV2 object at 0x7f5418033a00>, bench = 'qasm'
+nq = 10, qasm = '/root/projects/QASMBench/small/dnn_n8/dnn_n8.qasm'
+
+    def test_two_bench_frp(self, bench, nq, qasm):
+        """Testing qvm vs. FRP (MICRO-2019)
+    
+        Args:
+            bench (str): `qasm` or `random`. If `qasm`, construct circuit
+                from qasm file, otherwise create random circuit
+            nq (str): int(nq) is the number of qubits, this is only useful when
+                getting random circuit
+            qasm (str): QASM files, should be <qasm-0>;<qasm-1> format
+        """
+        shots = 2**20
+        nq = int(nq)
+        if qasm:
+            items = qasm.split(",")
+>           assert len(items) == 2 and bench == "qasm"
+E           AssertionError: assert (1 == 2)
+E            +  where 1 = len(['/root/projects/QASMBench/small/dnn_n8/dnn_n8.qasm'])
+
+tst/qvm/integration/bench_test.py:291: AssertionError
+------------------------------ Captured log setup ------------------------------
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 9, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 19}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 20, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 20'
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 17, current visited status: {2, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 25, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 25'
+WARNING  root:graph.py:449 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/dnn_n8/dnn_n8.qasm-10]
+======================= 1 failed, 14 deselected in 1.65s =======================

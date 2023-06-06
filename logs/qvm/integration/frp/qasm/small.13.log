@@ -1,0 +1,86 @@
+Randomly selected files:
+/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 15 items / 14 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [1.35421753e-04 2.05993652e-03 7.74383545e-04 1.26466751e-02
+ 4.97817993e-04 5.84030151e-03 7.72476196e-03 1.69625282e-01
+ 6.38961792e-05 1.14154816e-03 4.07218933e-04 6.82640076e-03
+ 3.06129456e-04 3.14807892e-03 4.29058075e-03 9.33799744e-02
+ 7.53402710e-05 1.14345551e-03 3.97682190e-04 6.56032562e-03
+ 2.72750854e-04 3.08704376e-03 4.10366058e-03 8.86192322e-02
+ 1.32560730e-04 2.18772888e-03 7.94410706e-04 1.25293732e-02
+ 4.96864319e-04 5.84697723e-03 7.85064697e-03 1.71342850e-01
+ 3.52859497e-05 6.25610352e-04 2.38418579e-04 3.84044647e-03
+ 1.74522400e-04 1.74236298e-03 2.33936310e-03 5.04360199e-02
+ 7.43865967e-05 1.44386292e-03 4.94956970e-04 8.28838348e-03
+ 3.52859497e-04 3.91960144e-03 5.18703461e-03 1.13802910e-01
+ 8.01086426e-05 1.45339966e-03 4.99725342e-04 8.28552246e-03
+ 3.30924988e-04 3.80706787e-03 5.07831573e-03 1.12225533e-01
+ 3.71932983e-05 6.48498535e-04 2.31742859e-04 3.75938416e-03
+ 1.58309937e-04 1.74617767e-03 2.30503082e-03 5.20477295e-02]
+[0.         0.         0.         0.         0.         0.
+ 0.         0.22594929 0.         0.         0.         0.
+ 0.         0.         0.         0.09693432 0.         0.
+ 0.         0.         0.         0.         0.         0.09706211
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.22540474 0.         0.         0.         0.
+ 0.         0.         0.         0.03653908 0.         0.
+ 0.         0.         0.         0.         0.         0.14066505
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.14084625 0.         0.         0.         0.
+ 0.         0.         0.         0.03659916]
+[7.72476196e-05 1.84822083e-03 6.89506531e-04 3.78036499e-03
+ 7.75337219e-04 3.67736816e-03 4.07600403e-03 1.85148239e-01
+ 2.95639038e-05 1.09004974e-03 3.96728516e-04 2.32791901e-03
+ 4.45365906e-04 2.17437744e-03 2.40993500e-03 1.11200333e-01
+ 4.76837158e-05 1.03378296e-03 3.82423401e-04 2.14767456e-03
+ 4.31060791e-04 1.98268890e-03 2.26020813e-03 1.03922844e-01
+ 6.48498535e-05 1.86824799e-03 6.43730164e-04 3.82995605e-03
+ 8.01086426e-04 3.50952148e-03 4.03022766e-03 1.84585571e-01
+ 1.71661377e-05 5.20706177e-04 2.06947327e-04 1.12056732e-03
+ 2.24113464e-04 1.03282928e-03 1.22070312e-03 5.45511246e-02
+ 4.19616699e-05 1.15680695e-03 4.15802002e-04 2.49004364e-03
+ 4.70161438e-04 2.19058990e-03 2.65216827e-03 1.17698669e-01
+ 3.91006470e-05 1.15013123e-03 3.97682190e-04 2.41756439e-03
+ 5.18798828e-04 2.24113464e-03 2.59780884e-03 1.15206718e-01
+ 2.19345093e-05 5.90324402e-04 1.89781189e-04 1.09291077e-03
+ 2.24113464e-04 1.02233887e-03 1.17397308e-03 5.34172058e-02]
+[0.         0.         0.         0.         0.         0.
+ 0.         0.22598362 0.         0.         0.         0.
+ 0.         0.         0.         0.0965414  0.         0.
+ 0.         0.         0.         0.         0.         0.09632874
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.22549629 0.         0.         0.         0.
+ 0.         0.         0.         0.03652668 0.         0.
+ 0.         0.         0.         0.         0.         0.1406126
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.14147854 0.         0.         0.         0.
+ 0.         0.         0.         0.03703213]
+Fid of qvm & frp	0.176188861436615	0.09508272511390115
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+tst/qvm/integration/bench_test.py::TestBenchQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 1 passed, 14 deselected, 9 warnings in 20.15s =================
