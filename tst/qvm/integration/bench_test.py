@@ -325,3 +325,20 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
                 circ, frp_res.get_counts(), shots=shots
             )
         print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
+
+
+class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
+    def setup_class(self):
+        pass
+
+    def prepare_for_test(self, backend, cu_size):
+        self._backend = globals().get(backend)()
+        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self.cu_size = int(cu_size)
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+
+    def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
+        self.prepare_for_test(backend, cu_size)
+        super().test_two_bench_frp(bench, nq, qasm)

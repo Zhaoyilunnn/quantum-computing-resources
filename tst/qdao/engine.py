@@ -200,7 +200,7 @@ class TestEngine(QdaoBaseTest):
 
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        #quafu_circ = qasm_to_circuit(circ.qasm())
+        # quafu_circ = qasm_to_circuit(circ.qasm())
 
         from quafu.simulators.simulator import simulate
 
@@ -227,7 +227,7 @@ class TestEngine(QdaoBaseTest):
 
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        #quafu_circ = qasm_to_circuit(circ.qasm())
+        # quafu_circ = qasm_to_circuit(circ.qasm())
 
         from quafu.simulators.simulator import simulate
 
@@ -254,7 +254,7 @@ class TestEngine(QdaoBaseTest):
 
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        #quafu_circ = qasm_to_circuit(circ.qasm())
+        # quafu_circ = qasm_to_circuit(circ.qasm())
         print("\nOriginal Circ")
         quafu_circ.draw_circuit()
 
@@ -314,7 +314,7 @@ class TestEngine(QdaoBaseTest):
 
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        #quafu_circ = qasm_to_circuit(circ.qasm())
+        # quafu_circ = qasm_to_circuit(circ.qasm())
         # print("\nOriginal Circ")
         # quafu_circ.draw_circuit()
 
@@ -485,7 +485,7 @@ class TestEngine(QdaoBaseTest):
 
         quafu_circ = QuantumCircuit(1)
         quafu_circ.from_openqasm(circ.qasm())
-        #quafu_circ = qasm_to_circuit(circ.qasm())
+        # quafu_circ = qasm_to_circuit(circ.qasm())
 
         from quafu.simulators.simulator import simulate
 

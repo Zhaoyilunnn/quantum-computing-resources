@@ -8,22 +8,31 @@ import logging
 
 
 def pytest_addoption(parser):
+    # Params for QVM
     parser.addoption("--verify", action="store", default="pulse")
     parser.addoption("--bench", action="store", default="random")
     parser.addoption("--qasm", action="store", default="")
     parser.addoption("--alpha", action="store", default=0)
     parser.addoption("--beta", action="store", default=0)
+    parser.addoption("--backend", action="store", default="FakeCairo")
+    parser.addoption("--cu_size", action="store", default=4)
+    # Params for QVM
+
+    # Params for QDAO
     parser.addoption("--nq", action="store", default=10)
     parser.addoption("--np", action="store", default=0)
     parser.addoption("--nl", action="store", default=0)
     parser.addoption("--mode", action="store", default="QDAO")
     parser.addoption("--parallel", action="store", default=1)
     parser.addoption("--diff", action="store", default=1)
+    # Params for QDAO
 
 
 def pytest_generate_tests(metafunc):
     # This is called for every test. Only get/set command line arguments
     # if the argument is specified in the list of test "fixturenames".
+
+    ############## Params for QVM ##############
     option_value = metafunc.config.option.verify
     if 'verify' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("verify", [option_value])
@@ -46,6 +55,16 @@ def pytest_generate_tests(metafunc):
     if 'beta' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("beta", [option_value])
 
+    option_value = metafunc.config.option.backend
+    if 'backend' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("backend", [option_value])
+
+    option_value = metafunc.config.option.cu_size
+    if 'cu_size' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("cu_size", [option_value])
+    ############## Params for QVM ##############
+
+    ############## Params for QDAO ##############
     option_value = metafunc.config.option.nq
     if 'nq' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("nq", [option_value])
@@ -69,3 +88,4 @@ def pytest_generate_tests(metafunc):
     option_value = metafunc.config.option.diff
     if 'diff' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("diff", [option_value])
+    ############## Params for QDAO ##############
