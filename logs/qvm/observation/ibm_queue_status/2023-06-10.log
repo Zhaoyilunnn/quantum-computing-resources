@@ -1,0 +1,13 @@
+ibmq_qasm_simulator	0
+ibmq_lima	18
+ibmq_belem	24
+ibmq_quito	28
+simulator_statevector	0
+simulator_mps	0
+simulator_extended_stabilizer	0
+simulator_stabilizer	0
+ibmq_jakarta	143
+ibmq_manila	27
+ibm_lagos	123
+ibm_nairobi	176
+ibm_perth	269

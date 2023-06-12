@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-    echo "Usage: ./$0 <QASMBench-directory> <number-of-benches>"
+if [ $# -ne 4 ]; then
+    echo "Usage: ./$0 <QASMBench-directory> <number-of-benches> <BackendName> <comp_unit_size>"
+    echo "FakeBrooklyn: 65-q"
+    echo "FakeCairo: 27-q"
     exit 1
 fi
 
@@ -49,4 +51,4 @@ files_string=$(IFS=,; echo "${files[*]}")
 echo "Randomly selected files:"
 echo "$files_string"
 
-pytest -s -k "TestBenchQvmFrpV2 and test_two_bench_frp" tst/qvm/integration/bench_test.py --bench qasm --qasm ${files_string}
+pytest -s -k "TestBenchDiffBackendQvmFrpV2 and test_two_bench_frp" tst/qvm/integration/bench_test.py --bench qasm --qasm ${files_string} --backend $3 --cu_size $4
