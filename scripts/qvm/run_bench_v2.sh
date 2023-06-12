@@ -12,7 +12,7 @@ search_dir=$1
 num_select=$2
 
 # Get the list of all subdirectories
-sub_dirs=$(ls -d -l $search_dir/*/ | awk '{print $NF}')
+sub_dirs=$(ls -d -l $search_dir/*/ | awk '{print $NF}' | grep -v vqe)
 
 # Count the number of subdirectories
 num_dirs=$(echo "$sub_dirs" | wc -l)
