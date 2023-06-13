@@ -1,2 +1,63 @@
 Randomly selected files:
-/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//bell_n4/bell_n4.qasm
+/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 20 items / 19 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [0.00046253 0.00176334 0.00229454 0.06246758 0.0004406  0.00162029
+ 0.0021534  0.06049347 0.00044346 0.00169849 0.00210667 0.06114578
+ 0.00042248 0.00167656 0.00206757 0.05848026 0.00041389 0.00175476
+ 0.00214577 0.06008625 0.00039673 0.00165939 0.00209999 0.05771065
+ 0.00038815 0.00161648 0.00214005 0.05826855 0.00039577 0.00165558
+ 0.00203228 0.05635738 0.00047398 0.00169373 0.00216103 0.0603447
+ 0.00038147 0.00169086 0.00216007 0.05862713 0.00041199 0.00160503
+ 0.00211716 0.05859566 0.00040817 0.00169277 0.002038   0.05675983
+ 0.00042343 0.00161362 0.00204945 0.0579958  0.00036812 0.00160217
+ 0.00196457 0.05588436 0.00039101 0.00156784 0.0019722  0.05630112
+ 0.00037193 0.00151062 0.00191021 0.05405331]
+[0.         0.         0.         0.06278992 0.         0.
+ 0.         0.06230068 0.         0.         0.         0.06258678
+ 0.         0.         0.         0.06263924 0.         0.
+ 0.         0.06256771 0.         0.         0.         0.06240463
+ 0.         0.         0.         0.0624361  0.         0.
+ 0.         0.06247807 0.         0.         0.         0.06222534
+ 0.         0.         0.         0.06251335 0.         0.
+ 0.         0.0625639  0.         0.         0.         0.06239796
+ 0.         0.         0.         0.06266499 0.         0.
+ 0.         0.06259632 0.         0.         0.         0.06275654
+ 0.         0.         0.         0.06207848]
+[0.00041294 0.00487328 0.00192928 0.05887604 0.00039005 0.00472832
+ 0.00185108 0.05685234 0.00043774 0.00488377 0.00191689 0.05847454
+ 0.0004282  0.00475883 0.00184441 0.05624485 0.00043774 0.0046339
+ 0.0019455  0.0568943  0.0004034  0.00462151 0.00183868 0.0551815
+ 0.00042057 0.00466824 0.00190163 0.05686378 0.00041103 0.00458145
+ 0.00172901 0.05507183 0.00042439 0.00468731 0.00190639 0.0561142
+ 0.00039482 0.00461292 0.00175095 0.05463982 0.00042343 0.00471497
+ 0.00185204 0.05606556 0.00044632 0.00445747 0.00179958 0.05434704
+ 0.0004034  0.00459099 0.00178719 0.05487061 0.00038433 0.00444126
+ 0.00176048 0.05285931 0.0004158  0.00451374 0.0018816  0.05401421
+ 0.0003643  0.00434017 0.00174236 0.05248642]
+[0.         0.         0.         0.06271362 0.         0.
+ 0.         0.06276321 0.         0.         0.         0.06255436
+ 0.         0.         0.         0.06197739 0.         0.
+ 0.         0.06282139 0.         0.         0.         0.06262684
+ 0.         0.         0.         0.06250572 0.         0.
+ 0.         0.06266117 0.         0.         0.         0.062356
+ 0.         0.         0.         0.06223583 0.         0.
+ 0.         0.06274128 0.         0.         0.         0.0624752
+ 0.         0.         0.         0.06232548 0.         0.
+ 0.         0.06260872 0.         0.         0.         0.06210709
+ 0.         0.         0.         0.0625267 ]
+Fid of qvm & frp	0.0693737070557758	0.11715416423928804
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm-FakeBrooklyn-6-10]
+tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm-FakeBrooklyn-6-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 19 deselected, 2 warnings in 61.72s (0:01:01) ============

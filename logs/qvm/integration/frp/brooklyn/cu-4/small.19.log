@@ -1,2 +1,33 @@
 Randomly selected files:
-/root/projects/QASMBench/small//teleportation_n3/teleportation_n3.qasm,/root/projects/QASMBench/small//qft_n4/qft_n4.qasm
+/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 20 items / 19 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [1.53446198e-02 4.66961861e-01 1.49841309e-02 4.52923775e-01
+ 3.20434570e-04 1.01585388e-02 3.32832336e-04 9.77706909e-03
+ 2.80380249e-04 9.37652588e-03 2.96592712e-04 9.29355621e-03
+ 1.79290771e-04 4.86850739e-03 1.54495239e-04 4.74739075e-03]
+[0.         0.49634171 0.         0.49606609 0.         0.0012846
+ 0.         0.00123978 0.         0.00128365 0.         0.00125694
+ 0.         0.00129509 0.         0.00123215]
+[1.47638321e-02 4.67943192e-01 1.41468048e-02 4.51251030e-01
+ 3.32832336e-04 1.02357864e-02 3.04222107e-04 1.03578568e-02
+ 3.61442566e-04 1.13868713e-02 3.49044800e-04 1.09930038e-02
+ 1.10626221e-04 3.74031067e-03 1.03950500e-04 3.61919403e-03]
+[0.         0.49706268 0.         0.49538231 0.         0.00120544
+ 0.         0.00127316 0.         0.0012722  0.         0.00117588
+ 0.         0.00135517 0.         0.00127316]
+Fid of qvm & frp	0.0617592183764415	0.06285946537918576
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm-FakeBrooklyn-4-10]
+tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm-FakeBrooklyn-4-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 1 passed, 19 deselected, 2 warnings in 59.27s =================

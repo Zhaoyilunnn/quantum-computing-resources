@@ -1,2 +1,25 @@
 Randomly selected files:
-/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm
+/root/projects/QASMBench/small//bb84_n8/bb84_n8.qasm,/root/projects/QASMBench/small//qft_n4/qft_n4.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 20 items / 19 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py [2.47859955e-03 2.50720978e-03 1.71661377e-05 ... 0.00000000e+00
+ 0.00000000e+00 0.00000000e+00]
+[0.00186539 0.00195217 0.         ... 0.         0.         0.        ]
+[2.67410278e-03 2.53200531e-03 2.47955322e-05 ... 0.00000000e+00
+ 0.00000000e+00 0.00000000e+00]
+[0.00195789 0.00197983 0.         ... 0.         0.         0.        ]
+Fid of qvm & frp	0.043432006483261135	0.0441749591031972
+.
+
+=============================== warnings summary ===============================
+tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small//bb84_n8/bb84_n8.qasm,/root/projects/QASMBench/small//qft_n4/qft_n4.qasm-FakeBrooklyn-6-10]
+tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_two_bench_frp[qasm-/root/projects/QASMBench/small//bb84_n8/bb84_n8.qasm,/root/projects/QASMBench/small//qft_n4/qft_n4.qasm-FakeBrooklyn-6-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 19 deselected, 2 warnings in 936.09s (0:15:36) ===========
