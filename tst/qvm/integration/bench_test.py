@@ -235,7 +235,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
     def test_single_bench(self, bench):
         pass
 
-    def run_qvm(self, circ_list: List[QuantumCircuit], **kwargs):
+    def run_qvm(self, circ_list: List[QuantumCircuit], is_run=True, **kwargs):
         """Run using qvm process manager
 
         Here we temporarily use backend manager to extract compute units and compile on
@@ -244,16 +244,19 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         qvm_proc = QvmProcessManagerV2(self._backend)
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
+        start = time.time()
         exes = qvm_proc._select(processes)
+        print(f"QVM::selection::costs::\t{time.time() - start}")
         cus = [exe.comp_unit for exe in exes]
         cu = self._backend_manager.merge_cus(cus)
         circs = [exe.circ for exe in exes]
         # circ = qvm_proc._merge_circuits(circs)
         circ = merge_circuits_v2(circs)
-        res = cu.backend.run(circ, **kwargs).result()
-        return res
+        if is_run:
+            res = cu.backend.run(circ, **kwargs).result()
+            return res
 
-    def run_frp(self, circ_list: List[QuantumCircuit], **kwargs):
+    def run_frp(self, circ_list: List[QuantumCircuit], is_run=True, **kwargs):
         """Run using FRP process manager
         Here we temporarily use backend manager to extract compute units and compile on
         compute units, a better implementation should be in FrpProcessManager->run() method
@@ -263,16 +266,19 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             is_low_cmr = kwargs["is_low_cmr"]
             proc._partitioner.is_low_cmr = is_low_cmr
 
+        start = time.time()
         part_list = [proc._gen_partition(circ) for circ in circ_list]
         cu_list = [self._backend_manager.extract_one_cu(part) for part in part_list]
         trans_list = [
             transpile(circ_list[i], cu_list[i].backend) for i in range(len(circ_list))
         ]
+        print(f"FRP::online_compilation::costs::\t{time.time() - start}")
         cu = self._backend_manager.merge_cus(cu_list)
         # exe = proc._merge_circuits(trans_list)
         exe = merge_circuits_v2(trans_list)
-        res = cu.backend.run(exe, **kwargs).result()
-        return res
+        if is_run:
+            res = cu.backend.run(exe, **kwargs).result()
+            return res
 
     def test_two_bench_frp(self, bench, nq, qasm):
         """Testing qvm vs. FRP (MICRO-2019)
@@ -338,6 +344,35 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+
+    def test_two_bench_runtime_overhead(self, bench, nq, qasm, backend, cu_size):
+        self.prepare_for_test(backend, cu_size)
+        shots = 2**20
+        nq = int(nq)
+        if qasm:
+            items = qasm.split(",")
+            assert len(items) == 2 and bench == "qasm"
+            qasm0 = items[0]
+            qasm1 = items[1]
+            circ0 = self.get_qiskit_circ(bench, qasm_path=qasm0)
+            circ1 = self.get_qiskit_circ(bench, qasm_path=qasm1)
+        else:
+            circ0 = self.get_qiskit_circ(bench, num_qubits=nq)
+            circ1 = self.get_qiskit_circ(bench, num_qubits=nq)
+
+        circ = merge_circuits_v2([circ0, circ1])
+
+        qvm_res = None
+        try:
+            qvm_res = self.run_qvm([circ0, circ1], is_run=False, shots=shots)
+        except Exception as e:
+            print(f"run qvm error: {e}")
+
+        frp_res = None
+        try:
+            frp_res = self.run_frp([circ0, circ1], is_run=False, shots=shots)
+        except Exception as e:
+            print(f"run frp error: {e}")
 
     def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)

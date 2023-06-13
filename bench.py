@@ -26,9 +26,9 @@ logging.basicConfig(filename='bench.log', encoding='utf-8', level=logging.DEBUG,
                 format='%(asctime)s %(message)s')
 
 
-IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
+#IBMQ.save_account("036d2bca315b21dc9525cd05217943de9eab08326f37d652ac23aed075ea3e32ea3a983602b728e1b7c3e5e2a157959dcd0b834eb34ce607b3ec1d6401e9594d", overwrite=True)
 DEVICE_LIST = ['ibm_oslo', 'ibmq_manila', 'ibm_nairobi', 'ibmq_quito', 'ibmq_belem', 'ibmq_lima']
-provider = IBMQ.load_account()
+#provider = IBMQ.load_account()
 provider = None
 
 #### For json format
@@ -130,8 +130,8 @@ def get_backend_list(args):
             backend = provider.get_backend(backend_name)
         elif backend_name == FAKE_BACKEND:
             #backend = FakeWashingtonV2()
-            #backend = FakeWashington()
-            backend = FakeCairo()
+            backend = FakeWashington()
+            #backend = FakeCairo()
         else:
             backend = Aer.get_backend(backend_name)
             backend.set_options(fusion_enable=(False if args.fusion == 0 else True))

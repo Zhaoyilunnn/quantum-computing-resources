@@ -1,0 +1,220 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1444091796875e-05
+FRP::online_compilation::costs::	2.812422275543213
+.
+
+====================== 1 passed, 20 deselected in 50.59s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1682510375976562e-05
+FRP::online_compilation::costs::	3.045468330383301
+.
+
+====================== 1 passed, 20 deselected in 42.49s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.0967254638671875e-05
+FRP::online_compilation::costs::	2.8912978172302246
+.
+
+====================== 1 passed, 20 deselected in 42.50s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1444091796875e-05
+FRP::online_compilation::costs::	2.9361839294433594
+.
+
+====================== 1 passed, 20 deselected in 41.80s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	3.552436828613281e-05
+FRP::online_compilation::costs::	114.33683443069458
+.
+
+================= 1 passed, 20 deselected in 622.34s (0:10:22) =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.0967254638671875e-05
+FRP::online_compilation::costs::	3.393538475036621
+.
+
+====================== 1 passed, 20 deselected in 45.21s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1682510375976562e-05
+FRP::online_compilation::costs::	2.8678672313690186
+.
+
+====================== 1 passed, 20 deselected in 41.29s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.0967254638671875e-05
+FRP::online_compilation::costs::	2.916165590286255
+.
+
+====================== 1 passed, 20 deselected in 37.17s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.430511474609375e-05
+FRP::online_compilation::costs::	3.465120553970337
+.
+
+====================== 1 passed, 20 deselected in 46.22s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.4543533325195312e-05
+FRP::online_compilation::costs::	2.8493950366973877
+.
+
+====================== 1 passed, 20 deselected in 41.35s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1444091796875e-05
+FRP::online_compilation::costs::	2.8005082607269287
+.
+
+====================== 1 passed, 20 deselected in 50.14s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1920928955078125e-05
+FRP::online_compilation::costs::	2.887388229370117
+.
+
+====================== 1 passed, 20 deselected in 51.68s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.4066696166992188e-05
+FRP::online_compilation::costs::	2.756202220916748
+.
+
+====================== 1 passed, 20 deselected in 49.86s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	3.5762786865234375e-05
+FRP::online_compilation::costs::	122.90869235992432
+.
+
+================= 1 passed, 20 deselected in 610.86s (0:10:10) =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1920928955078125e-05
+FRP::online_compilation::costs::	2.8352155685424805
+.
+
+====================== 1 passed, 20 deselected in 40.97s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.5020370483398438e-05
+FRP::online_compilation::costs::	2.7866358757019043
+.
+
+====================== 1 passed, 20 deselected in 49.93s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.049041748046875e-05
+FRP::online_compilation::costs::	2.7842063903808594
+.
+
+====================== 1 passed, 20 deselected in 50.54s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.2159347534179688e-05
+FRP::online_compilation::costs::	2.847083806991577
+.
+
+====================== 1 passed, 20 deselected in 50.87s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	2.4318695068359375e-05
+FRP::online_compilation::costs::	4.448465824127197
+.
+
+====================== 1 passed, 20 deselected in 58.82s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qcs
+plugins: anyio-3.6.2
+collected 21 items / 20 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.4543533325195312e-05
+FRP::online_compilation::costs::	4.301549434661865
+.
+
+====================== 1 passed, 20 deselected in 35.51s =======================

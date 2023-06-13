@@ -16,3 +16,4 @@ sim-beta/compile_commands.json
 *.pdf
 *.svg
 *.err
+bench.log
