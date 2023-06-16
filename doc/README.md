@@ -1,6 +1,6 @@
 [This gist](https://gist.github.com/Zhaoyilunnn/788c9eac3d8af18b3e3258e982505d40#resources) records more resources and papers.
 
-If you find some interesting papers, please add an bibtex entry in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (Use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy)
+If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (Use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy)
 
 # Foundation
 
@@ -17,4 +17,3 @@ If you find some interesting papers, please add an bibtex entry in [references.b
 
 - QVM: https://www.overleaf.com/read/kfpqgwjyghdn
 - QDAO: https://www.overleaf.com/read/jxfbxtbgztbb
-
