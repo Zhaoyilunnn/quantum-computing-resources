@@ -1,5 +1,6 @@
 from qiskit import IBMQ
 from test.qvm import *
+from qvm.util.quafu_helper import get_quafu_backend
 
 
 class TestQvm(QvmBaseTest):
@@ -102,3 +103,13 @@ class TestRealMachine(QvmBaseTest):
         #    assert exe == data1[i]
 
         self.proc_manager.run([process0, process1])
+
+
+class TestQuafu(QvmBaseTest):
+    def test_run_on_quafu(self):
+        quafu_backend_10 = get_quafu_backend("ScQ-P10")
+        self._backend_manager = FrpBackendManagerV2(quafu_backend_10)
+        self._backend_manager.cu_size = 2
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self.proc_manager = QvmProcessManagerV2(quafu_backend_10)
