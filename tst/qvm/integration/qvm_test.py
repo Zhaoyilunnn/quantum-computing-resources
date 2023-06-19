@@ -107,9 +107,18 @@ class TestRealMachine(QvmBaseTest):
 
 class TestQuafu(QvmBaseTest):
     def test_run_on_quafu(self):
+        # P10
         quafu_backend_10 = get_quafu_backend("ScQ-P10")
         self._backend_manager = FrpBackendManagerV2(quafu_backend_10)
         self._backend_manager.cu_size = 2
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self.proc_manager = QvmProcessManagerV2(quafu_backend_10)
+
+        # P18
+        quafu_backend_18 = get_quafu_backend("ScQ-P18")
+        self._backend_manager = FrpBackendManagerV2(quafu_backend_18)
+        self._backend_manager.cu_size = 2
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self.proc_manager = QvmProcessManagerV2(quafu_backend_18)

@@ -1,0 +1,199 @@
+system_name     qubits         status    
+ScQ-P10        10             Online    
+ScQ-P18        18             Online    
+ScQ-P136       136            Online    
+{
+    "mapping": {
+        "0": "Q1",
+        "1": "Q2",
+        "2": "Q3",
+        "3": "Q4",
+        "4": "Q5",
+        "5": "Q6",
+        "6": "Q7",
+        "7": "Q8",
+        "8": "Q9",
+        "9": "Q10"
+    },
+    "topology_diagram": "A matplotlib figure",
+    "full_info": {
+        "basis_gates": "['cz','rx','ry','rz','h']",
+        "calibration_id": 61,
+        "calibration_time": "2023-03-25 19:04:31",
+        "qubits_info": {
+            "Q1": {
+                "T1": 26.79,
+                "T2": 2.33,
+                "anharmonicity": 0.25,
+                "qubit_frequency": 5.31,
+                "readout_frequency": 6.6636,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q10": {
+                "T1": 23.43,
+                "T2": 3.56,
+                "anharmonicity": 0.208,
+                "qubit_frequency": 4.687,
+                "readout_frequency": 6.4905,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q2": {
+                "T1": 29.38,
+                "T2": 1.82,
+                "anharmonicity": 0.207,
+                "qubit_frequency": 4.681,
+                "readout_frequency": 6.6461,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q3": {
+                "T1": 58.96,
+                "T2": 2.31,
+                "anharmonicity": 0.246,
+                "qubit_frequency": 5.367,
+                "readout_frequency": 6.6277,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q4": {
+                "T1": 18.92,
+                "T2": 1.61,
+                "anharmonicity": 0.206,
+                "qubit_frequency": 4.702,
+                "readout_frequency": 6.608,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q5": {
+                "T1": 43.38,
+                "T2": 2.49,
+                "anharmonicity": 0.250682,
+                "qubit_frequency": 5.299,
+                "readout_frequency": 6.5933,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q6": {
+                "T1": 47.37,
+                "T2": 2.14,
+                "anharmonicity": 0.203,
+                "qubit_frequency": 4.531,
+                "readout_frequency": 6.5706,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q7": {
+                "T1": 37.88,
+                "T2": 1.97,
+                "anharmonicity": 0.2515,
+                "qubit_frequency": 5.255,
+                "readout_frequency": 6.5541,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q8": {
+                "T1": 19.5,
+                "T2": 1.33,
+                "anharmonicity": 0.2035,
+                "qubit_frequency": 4.627,
+                "readout_frequency": 6.5318,
+                "single_qubit_gate_duration": 40.0
+            },
+            "Q9": {
+                "T1": 31.51,
+                "T2": 1.72,
+                "anharmonicity": 0.2462,
+                "qubit_frequency": 5.275,
+                "readout_frequency": 6.5109,
+                "single_qubit_gate_duration": 60.0
+            }
+        },
+        "system_id": 0,
+        "topological_structure": {
+            "Q10_Q9": {
+                "cz": {
+                    "fidelity": 0.9909
+                }
+            },
+            "Q1_Q2": {
+                "cz": {
+                    "fidelity": 0.9787
+                }
+            },
+            "Q2_Q1": {
+                "cz": {
+                    "fidelity": 0.9787
+                }
+            },
+            "Q2_Q3": {
+                "cz": {
+                    "fidelity": 0.9564
+                }
+            },
+            "Q3_Q2": {
+                "cz": {
+                    "fidelity": 0.9564
+                }
+            },
+            "Q3_Q4": {
+                "cz": {
+                    "fidelity": 0.949
+                }
+            },
+            "Q4_Q3": {
+                "cz": {
+                    "fidelity": 0.949
+                }
+            },
+            "Q4_Q5": {
+                "cz": {
+                    "fidelity": 0.963
+                }
+            },
+            "Q5_Q4": {
+                "cz": {
+                    "fidelity": 0.963
+                }
+            },
+            "Q5_Q6": {
+                "cz": {
+                    "fidelity": 0.9669
+                }
+            },
+            "Q6_Q5": {
+                "cz": {
+                    "fidelity": 0.9669
+                }
+            },
+            "Q6_Q7": {
+                "cz": {
+                    "fidelity": 0.9663
+                }
+            },
+            "Q7_Q6": {
+                "cz": {
+                    "fidelity": 0.9663
+                }
+            },
+            "Q7_Q8": {
+                "cz": {
+                    "fidelity": 0.956
+                }
+            },
+            "Q8_Q7": {
+                "cz": {
+                    "fidelity": 0.956
+                }
+            },
+            "Q8_Q9": {
+                "cz": {
+                    "fidelity": 0.9741
+                }
+            },
+            "Q9_Q10": {
+                "cz": {
+                    "fidelity": 0.9909
+                }
+            },
+            "Q9_Q8": {
+                "cz": {
+                    "fidelity": 0.9741
+                }
+            }
+        }
+    }
+}
