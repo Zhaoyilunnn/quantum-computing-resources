@@ -1,4 +1,5 @@
 from qiskit.providers.fake_provider import *
+from qvm.util.quafu_helper import to_qiskit_backend_v1
 
 from constants import *
 from qvm.manager.backend_manager import *
@@ -377,3 +378,25 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
     def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
         super().test_two_bench_frp(bench, nq, qasm)
+
+
+class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
+    def setup_class(self):
+        pass
+
+    def prepare_for_test(self, backend, cu_size):
+        from quafu.users.userapi import User
+        user = User()
+        user.get_backends_info()
+        BACKENDS = user.get_available_backends()
+        try:
+            quafu_backend = BACKENDS[backend]
+        except KeyError as ex:
+            print("Backend not found in quafu backend")
+            exit(1)
+        self._backend = to_qiskit_backend_v1(quafu_backend.get_chip_info())
+        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self.cu_size = int(cu_size)
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
