@@ -3,6 +3,7 @@ from qvm.util.circuit import (
     SvFidReliabilityCalculator,
     calc_cmr,
     merge_circuits_v2,
+    reset_circuit_layout,
 )
 from constants import *
 from test.qvm import *
@@ -129,3 +130,8 @@ class TestUtilCircuitMisc(QvmBaseTest):
         assert sv_merged.equiv(sv_orig)
         print(sv_merged)
         print(sv_orig)
+
+    def test_set_circuit_layout(self):
+        circ = self.get_qiskit_circ("random", depth=4)
+        trans = transpile(circ, FakeCairo())
+        reset_circuit_layout(circ, [2,3,4,7])

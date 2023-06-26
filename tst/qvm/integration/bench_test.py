@@ -400,3 +400,32 @@ class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+
+
+# FIXME(): directly using QvmProcessManagerV2.run cannot calculate fidelity
+class TestBenchDiffBackendUseNativeQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
+    """Use native QvmProcessManagerV2.run method to execute multiple circuits"""
+
+    def run_qvm(self, circ_list: List[QuantumCircuit], is_run=True, **kwargs):
+        """Run using qvm process manager
+
+        Here we temporarily use backend manager to extract compute units and compile on
+        compute units, a better implementation should be in QvmProcessManager->run() method
+        """
+
+        qvm_proc = QvmProcessManagerV2(self._backend)
+        processes = [self._backend_manager.compile(circ) for circ in circ_list]
+        # start = time.time()
+        # exes = qvm_proc._select(processes)
+        # print(f"QVM::selection::costs::\t{time.time() - start}")
+        # cus = [exe.comp_unit for exe in exes]
+        # cu = self._backend_manager.merge_cus(cus)
+        # circs = [exe.circ for exe in exes]
+        # # circ = qvm_proc._merge_circuits(circs)
+        # circ = merge_circuits_v2(circs)
+        # if is_run:
+        #     res = cu.backend.run(circ, **kwargs).result()
+        #     return res
+        if is_run:
+            res = qvm_proc.run(processes)
+            return res
