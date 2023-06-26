@@ -17,8 +17,8 @@ from qiskit.providers.jobstatus import JobStatus
 from qiskit.providers.fake_provider import *
 from qiskit.transpiler import CouplingMap
 
-from qvm.util import *
-from qvm.manager.backend_manager import *
+# from qvm.util import *
+# from qvm.manager.backend_manager import *
 
 
 # Logging configuration
