@@ -134,4 +134,4 @@ class TestUtilCircuitMisc(QvmBaseTest):
     def test_set_circuit_layout(self):
         circ = self.get_qiskit_circ("random", depth=4)
         trans = transpile(circ, FakeCairo())
-        reset_circuit_layout(circ, [2,3,4,7])
+        reset_circuit_layout(circ, [2, 3, 4, 7])

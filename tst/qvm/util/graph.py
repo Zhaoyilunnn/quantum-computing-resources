@@ -55,12 +55,12 @@ class TestFrpPartitioner(QvmBaseTest):
         # print(readout_errs)
         self._partitioner.readout_errs = readout_errs
 
-    def test_get_utilities(self):
-        utility = self._partitioner._get_utilities()
+    def testget_utilities(self):
+        utility = self._partitioner.get_utilities()
         print(utility)
 
     def test_get_levels(self):
-        utility = self._partitioner._get_utilities()
+        utility = self._partitioner.get_utilities()
         ranks = self._partitioner._get_ranks()
         levels = self._partitioner._get_levels()
         print(ranks)
@@ -97,3 +97,83 @@ class TestUtilMisc(QvmBaseTest):
         lst = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         res = split_list(lst, 3)
         assert res == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
+
+    def test_get_subgraph_num_v1(self):
+        graph = [[0, 1, 0, 1], [1, 0, 1, 0], [0, 1, 0, 1], [1, 0, 1, 0]]
+
+        # num, _ = get_subgraph_num(np.array(graph), 2)
+        # assert num == 4
+
+        # backend = FakeCairo()
+        # extractor = BackendAdjMatGraphExtractor(backend)
+        # graph = extractor.extract()
+        # num, _ = get_subgraph_num(graph, 2)
+        # assert num == 28
+        # num, _ = get_subgraph_num(graph, 3)
+        # assert num == 37
+        # num, subgraphs = get_subgraph_num(graph, 4)
+        # assert num == 28
+
+        subgraphs = find_all_connected_subgraphs(np.array(graph), 2)
+        assert len(subgraphs) == 4
+
+        backend = FakeCairo()
+        extractor = BackendAdjMatGraphExtractor(backend)
+        graph = extractor.extract()
+        subgraphs = find_all_connected_subgraphs(np.array(graph), 2)
+        assert len(subgraphs) == 28
+        subgraphs = find_all_connected_subgraphs(np.array(graph), 3)
+        assert len(subgraphs) == 37
+        subgraphs = find_all_connected_subgraphs(np.array(graph), 4)
+        assert len(subgraphs) == 48
+
+    def test_get_subgraph_num_v2(self):
+        graph = [[0, 1, 0, 1], [1, 0, 1, 0], [0, 1, 0, 1], [1, 0, 1, 0]]
+
+        subgraphs = find_all_connected_subgraphs_v2(np.array(graph), 2)
+        assert len(subgraphs) == 4
+
+        backend = FakeCairo()
+        extractor = BackendAdjMatGraphExtractor(backend)
+        graph = extractor.extract()
+        subgraphs = find_all_connected_subgraphs_v2(np.array(graph), 2)
+        assert len(subgraphs) == 28
+        subgraphs = find_all_connected_subgraphs_v2(np.array(graph), 3)
+        assert len(subgraphs) == 37
+        subgraphs = find_all_connected_subgraphs_v2(np.array(graph), 4)
+        assert len(subgraphs) == 48
+
+    def test_fake_backend_subgraph_num(self):
+        k_lst = [2, 3, 4, 5, 6, 7, 8]
+
+        backend = FakeMelbourne()
+        extractor = BackendAdjMatGraphExtractor(backend)
+        graph = extractor.extract()
+        print("\n========= test_fake_backend_subgraph_num ===========\n")
+        for i in k_lst:
+            subgraphs = find_all_connected_subgraphs_v2(graph, i)
+            print(f"FakeMelbourne\t{i}\t{len(subgraphs)}")
+
+        backend = FakeCairo()
+        extractor = BackendAdjMatGraphExtractor(backend)
+        graph = extractor.extract()
+        print("\n========= test_fake_backend_subgraph_num ===========\n")
+        for i in k_lst:
+            subgraphs = find_all_connected_subgraphs_v2(graph, i)
+            print(f"FakeCairo\t{i}\t{len(subgraphs)}")
+
+        backend = FakeBrooklyn()
+        extractor = BackendAdjMatGraphExtractor(backend)
+        graph = extractor.extract()
+        print("\n========= test_fake_backend_subgraph_num ===========\n")
+        for i in k_lst:
+            subgraphs = find_all_connected_subgraphs_v2(graph, i)
+            print(f"FakeBrooklyn\t{i}\t{len(subgraphs)}")
+
+        backend = FakeWashington()
+        extractor = BackendAdjMatGraphExtractor(backend)
+        graph = extractor.extract()
+        print("\n========= test_fake_backend_subgraph_num ===========\n")
+        for i in k_lst:
+            subgraphs = find_all_connected_subgraphs_v2(graph, i)
+            print(f"FakeWashington\t{i}\t{len(subgraphs)}")

@@ -386,6 +386,7 @@ class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
 
     def prepare_for_test(self, backend, cu_size):
         from quafu.users.userapi import User
+
         user = User()
         user.get_backends_info()
         BACKENDS = user.get_available_backends()
