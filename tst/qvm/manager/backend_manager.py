@@ -12,8 +12,6 @@ from qvm.util.misc import *
 # from qiskit.providers.aer.noise import NoiseModel
 
 
-
-
 class TestBaseBackendManager(QvmBaseTest):
     def setup_class(self):
         self._manager = BaseBackendManager(self._backend)

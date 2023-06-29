@@ -126,13 +126,15 @@ class TestQuafu(QvmBaseTest):
 
     def test_run_on_quafu_machine(self):
         # P10
-        quafu_backend_str = "ScQ-P136"
+        quafu_backend_str = "ScQ-P18"
         quafu_backend = get_quafu_backend(quafu_backend_str)
         self._backend_manager = FrpBackendManagerV2(quafu_backend)
         self._backend_manager.cu_size = 4
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
-        self.proc_manager = QuafuProcessManager(quafu_backend, name=quafu_backend_str)
+        self.proc_manager = QuafuQvmProcessManager(
+            quafu_backend, name=quafu_backend_str
+        )
 
         circ0 = self.create_dummy_bell_state((0, 1))
         circ1 = self.create_dummy_bell_state((0, 1))
@@ -140,4 +142,5 @@ class TestQuafu(QvmBaseTest):
         process0 = self._backend_manager.compile(circ0)
         process1 = self._backend_manager.compile(circ1)
 
-        self.proc_manager.run([process0, process1])
+        res = self.proc_manager.run([process0, process1])
+        print(res.counts)

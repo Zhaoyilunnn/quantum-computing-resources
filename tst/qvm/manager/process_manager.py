@@ -10,7 +10,6 @@ from qvm.util.misc import *
 # from qiskit.providers.aer.noise import NoiseModel
 
 
-
 class TestProcessManager(QvmBaseTest):
     def test_qvm_manager(self):
         manager = ProcessManagerFactory.get_manager("qvm", FakeManila())

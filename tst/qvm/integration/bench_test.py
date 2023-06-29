@@ -6,7 +6,7 @@ from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.backend import *
 from qvm.util.circuit import KlReliabilityCalculator, merge_circuits_v2
-from qvm.util.quafu_helper import to_qiskit_backend_v1
+from qvm.util.quafu_helper import get_quafu_backend, to_qiskit_backend_v1
 
 from constants import *
 
@@ -82,7 +82,7 @@ class TestBenchQvmBfs(QvmBaseTest):
             is_low_cmr = kwargs["is_low_cmr"]
             proc._partitioner.is_low_cmr = is_low_cmr
 
-        part_list = [proc._gen_partition(circ) for circ in circ_list]
+        part_list = [proc.gen_partition(circ) for circ in circ_list]
         cu_list = [self._backend_manager.extract_one_cu(part) for part in part_list]
         trans_list = [
             transpile(circ_list[i], cu_list[i].backend) for i in range(len(circ_list))
@@ -268,7 +268,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             proc._partitioner.is_low_cmr = is_low_cmr
 
         start = time.time()
-        part_list = [proc._gen_partition(circ) for circ in circ_list]
+        part_list = [proc.gen_partition(circ) for circ in circ_list]
         cu_list = [self._backend_manager.extract_one_cu(part) for part in part_list]
         trans_list = [
             transpile(circ_list[i], cu_list[i].backend) for i in range(len(circ_list))
@@ -401,6 +401,67 @@ class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+
+
+class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
+    def setup_class(self):
+        pass
+
+    def prepare_for_test(self, backend, cu_size):
+        quafu_backend_str = backend
+        quafu_backend = get_quafu_backend(quafu_backend_str)
+        self._backend_manager = FrpBackendManagerV2(quafu_backend)
+        self._backend_manager.cu_size = int(cu_size)
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self.qvm_proc_manager = QuafuQvmProcessManager(
+            quafu_backend, name=quafu_backend_str
+        )
+        self.frp_proc_manager = QuafuFrpProcessManager(
+            quafu_backend, name=quafu_backend_str
+        )
+
+    def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
+        self.prepare_for_test(backend, cu_size)
+
+        shots = 2**20
+        nq = int(nq)
+        if qasm:
+            items = qasm.split(",")
+            assert len(items) == 2 and bench == "qasm"
+            qasm0 = items[0]
+            qasm1 = items[1]
+            circ0 = self.get_qiskit_circ(bench, qasm_path=qasm0)
+            circ1 = self.get_qiskit_circ(bench, qasm_path=qasm1)
+        else:
+            circ0 = self.get_qiskit_circ(bench, num_qubits=nq)
+            circ1 = self.get_qiskit_circ(bench, num_qubits=nq)
+
+        # FIXME() test purpose
+        # circ0 = self.create_dummy_bell_state((0,1))
+        # circ1 = self.create_dummy_bell_state((0,1))
+        # FIXME() test purpose
+
+        circ = merge_circuits_v2([circ0, circ1])
+
+        # run qvm
+        processes = [
+            self._backend_manager.compile(circ0),
+            self._backend_manager.compile(circ1),
+        ]
+        qvm_res = self.qvm_proc_manager.run(processes)
+        qvm_counts = qvm_res.counts
+
+        # run online compilation
+        frp_res = self.frp_proc_manager.run([circ0, circ1])
+        frp_counts = frp_res.counts
+
+        # Calculate fidelity
+        self._fid_calculator = KlReliabilityCalculator()
+
+        fid_qvm = self._fid_calculator.calc_fidelity(circ, qvm_counts, shots=shots)
+        fid_frp = self._fid_calculator.calc_fidelity(circ, frp_counts, shots=shots)
+        print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
 
 
 # FIXME(): directly using QvmProcessManagerV2.run cannot calculate fidelity
