@@ -1,14 +1,14 @@
+from test.qvm import *
+
 from qiskit.providers.fake_provider import *
+from qutils.plot import plot_bar
+from qvm.manager.backend_manager import *
+from qvm.manager.process_manager import *
+from qvm.util.backend import *
+from qvm.util.circuit import KlReliabilityCalculator, merge_circuits_v2
 from qvm.util.quafu_helper import to_qiskit_backend_v1
 
 from constants import *
-from qvm.manager.backend_manager import *
-from qvm.manager.process_manager import *
-from qvm.util.circuit import merge_circuits_v2, KlReliabilityCalculator
-from qvm.util.backend import *
-from test.qvm import *
-
-from qutils.plot import plot_bar
 
 
 class TestBenchQvmBfs(QvmBaseTest):

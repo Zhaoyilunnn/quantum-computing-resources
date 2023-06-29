@@ -1,13 +1,9 @@
 from test.qvm import QvmBaseTest
 
-from qvm.util.quafu_helper import (
-    FakeCairo,
-    extract_quafu_qubit_mapping,
-    to_qiskit_backend_v1,
-)
 from qiskit import transpile
-
 from quafu.users.userapi import User
+from qvm.util.quafu_helper import (FakeCairo, extract_quafu_qubit_mapping,
+                                   to_qiskit_backend_v1)
 
 user = User()
 user.get_backends_info()

@@ -9,8 +9,7 @@ from qiskit.quantum_info import state_fidelity
 from qiskit_aer import Aer
 from qiskit_aer.noise import NoiseModel
 
-from qvm.manager.backend_manager import *
-from qvm.manager.process_manager import *
+from qvm.manager import *
 from qvm.util.backend import *
 from qvm.util.circuit import BaseReliabilityCalculator
 

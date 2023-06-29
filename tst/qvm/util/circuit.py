@@ -1,13 +1,11 @@
-from qvm.util.circuit import (
-    BaseReliabilityCalculator,
-    SvFidReliabilityCalculator,
-    calc_cmr,
-    merge_circuits_v2,
-    reset_circuit_layout,
-)
-from constants import *
 from test.qvm import *
+
 from qutils.plot import plot_bar
+from qvm.util.circuit import (BaseReliabilityCalculator,
+                              SvFidReliabilityCalculator, calc_cmr,
+                              merge_circuits_v2, reset_circuit_layout)
+
+from constants import *
 
 
 class TestBaseReliabilityCalculator(QvmBaseTest):

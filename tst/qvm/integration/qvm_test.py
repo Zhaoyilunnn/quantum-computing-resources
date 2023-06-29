@@ -1,5 +1,6 @@
-from qiskit import IBMQ
 from test.qvm import *
+
+from qiskit import IBMQ
 from qvm.util.quafu_helper import get_quafu_backend
 
 
@@ -106,7 +107,7 @@ class TestRealMachine(QvmBaseTest):
 
 
 class TestQuafu(QvmBaseTest):
-    def test_run_on_quafu(self):
+    def test_run_using_quafu_model(self):
         # P10
         quafu_backend_10 = get_quafu_backend("ScQ-P10")
         self._backend_manager = FrpBackendManagerV2(quafu_backend_10)
@@ -122,3 +123,21 @@ class TestQuafu(QvmBaseTest):
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self.proc_manager = QvmProcessManagerV2(quafu_backend_18)
+
+    def test_run_on_quafu_machine(self):
+        # P10
+        quafu_backend_str = "ScQ-P136"
+        quafu_backend = get_quafu_backend(quafu_backend_str)
+        self._backend_manager = FrpBackendManagerV2(quafu_backend)
+        self._backend_manager.cu_size = 4
+        self._backend_manager.init_helpers()
+        self._backend_manager.init_cus()
+        self.proc_manager = QuafuProcessManager(quafu_backend, name=quafu_backend_str)
+
+        circ0 = self.create_dummy_bell_state((0, 1))
+        circ1 = self.create_dummy_bell_state((0, 1))
+
+        process0 = self._backend_manager.compile(circ0)
+        process1 = self._backend_manager.compile(circ1)
+
+        self.proc_manager.run([process0, process1])

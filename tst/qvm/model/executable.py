@@ -1,6 +1,7 @@
-from qvm.model.executable import *
-from qvm.manager.backend_manager import FrpBackendManagerV2
 from test.qvm import *
+
+from qvm.manager.backend_manager import FrpBackendManagerV2
+from qvm.model.executable import *
 
 
 class TestCostExecutable(QvmBaseTest):

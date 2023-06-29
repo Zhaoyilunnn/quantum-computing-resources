@@ -1,7 +1,7 @@
 import logging
+from test.qvm import *
 
 from qvm.util.backend import *
-from test.qvm import *
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 

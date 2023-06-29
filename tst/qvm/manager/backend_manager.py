@@ -1,16 +1,17 @@
-from qiskit.compiler import transpile, schedule
+from test.qvm import *
+
+from qiskit.compiler import schedule, transpile
 from qiskit.providers.fake_provider import *
 from qiskit.pulse import num_qubits
+from qutils.misc import *
+from qvm.manager.backend_manager import *
+from qvm.util.backend import *
+from qvm.util.misc import *
 
 # from qiskit import Aer
 # from qiskit.providers.aer.noise import NoiseModel
 
-from qvm.manager.backend_manager import *
-from qvm.util.backend import *
-from qvm.util.misc import *
-from test.qvm import *
 
-from qutils.misc import *
 
 
 class TestBaseBackendManager(QvmBaseTest):
