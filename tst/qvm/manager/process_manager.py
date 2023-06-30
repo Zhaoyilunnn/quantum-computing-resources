@@ -6,8 +6,40 @@ from qvm.manager.backend_manager import *
 from qvm.util.backend import *
 from qvm.util.misc import *
 
+from constants import QCS_BENCHMARKS_DIR
+
 # from qiskit import Aer
 # from qiskit.providers.aer.noise import NoiseModel
+
+
+BENCHES = ["random_8_5_max_operands_2_gen.qasm", "random_5_2_max_operands_2_gen.qasm"]
+
+BENCH_PATHS = [
+    os.path.join(os.path.curdir, QCS_BENCHMARKS_DIR, bench) for bench in BENCHES
+]
+
+
+class TestQvmProcManagerV2(QvmBaseTest):
+    def brute_force_on_specific_backend(self, backend_obj):
+        proc_manager = QvmProcessManagerV2(backend_obj, method="brute_force")
+        back_manager = FrpBackendManagerV2(backend_obj)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        circuits = [
+            QuantumCircuit.from_qasm_file(bench_path) for bench_path in BENCH_PATHS
+        ]
+        processes = [back_manager.compile(circ) for circ in circuits]
+        exes = proc_manager._select(processes)
+        for i, exe in enumerate(exes):
+            print(f"exe:{i}, compute_unit_ids:{exe.comp_unit_ids}")
+
+        lists = [proc.resource_list for proc in processes]
+        best_combination = min_sum_indices_sets(*lists)
+        assert best_combination == [exe.comp_unit_ids for exe in exes]
+
+    def test_select_brute_force(self):
+        # self.brute_force_on_specific_backend(FakeCairo())
+        self.brute_force_on_specific_backend(FakeBrooklyn())
 
 
 class TestProcessManager(QvmBaseTest):
