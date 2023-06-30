@@ -1,5 +1,5 @@
 # qcs
-Research repo for Quantum Computer System
+Research repo for quantum computer system
 
 - sim-beta: C++ version of qdao
 - qdao: https://www.overleaf.com/read/jxfbxtbgztbb
