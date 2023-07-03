@@ -9,7 +9,7 @@ from qvm.util.quafu_helper import (
 )
 
 user = User()
-user.get_backends_info()
+# user.get_backends_info()
 BACKENDS = user.get_available_backends()
 
 

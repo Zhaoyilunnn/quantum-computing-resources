@@ -1,3 +1,5 @@
+from numpy import average
+from qvm.util.circuit import KlReliabilityCalculator
 from test.qvm import *
 
 from qiskit import IBMQ
@@ -144,3 +146,60 @@ class TestQuafu(QvmBaseTest):
 
         res = self.proc_manager.run([process0, process1])
         print(res.counts)
+
+
+class TestSelectMethods(QvmBaseTest):
+    """Test the runtime of different select methods in qvm process manager"""
+
+    def get_fidelity(self, circuit_list, executables):
+        """Run simulation on each executable and calculate fidelity"""
+        shots = 2**20
+        fid_calculator = KlReliabilityCalculator()
+        results = []
+        for exe in executables:
+            res = exe.comp_unit.backend.run(exe.circ, shots=shots).result().get_counts()
+            results.append(res)
+
+        assert len(results) == len(circuit_list)
+        fidelities = []
+        for i, circ in enumerate(circuit_list):
+            fid = fid_calculator.calc_fidelity(circ, results[i], shots=shots)
+            fidelities.append(fid)
+        return average(fidelities)
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+
+        qasm_list = qasm.split(",")
+        circuit_list = [
+            self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        ]
+        process_list = [back_manager.compile(circ) for circ in circuit_list]
+
+        print("\n === Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+
+        # Naive
+        st_time = time.time()
+        executables = proc_manager._select_naive(process_list)
+        print(f"naive selection time\t{time.time() - st_time}")
+        fid = self.get_fidelity(circuit_list, executables)
+        print(f"naive selection result\t{fid}")
+
+        # Brute-force
+        st_time = time.time()
+        executables = proc_manager._select_brute_force(process_list)
+        print(f"brute_force selection time\t{time.time() - st_time}")
+        fid = self.get_fidelity(circuit_list, executables)
+        print(f"brute_force selection result\t{fid}")
