@@ -1,0 +1,542 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+ === Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm
+naive selection time	1.7881393432617188e-05
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4] _
+
+self = <qvm_test.TestSelectMethods object at 0x7f91563ed150>
+qasm = '/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm'
+backend = 'FakeCairo', cu_size = '4'
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+    
+        qasm_list = qasm.split(",")
+        circuit_list = [
+            self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        ]
+        process_list = [back_manager.compile(circ) for circ in circuit_list]
+    
+        print("\n === Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+    
+        # Naive
+        st_time = time.time()
+        executables = proc_manager._select_naive(process_list)
+        print(f"naive selection time\t{time.time() - st_time}")
+>       fid = self.get_fidelity(circuit_list, executables)
+
+tst/qvm/integration/qvm_test.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm_test.TestSelectMethods object at 0x7f91563ed150>
+circuit_list = [<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9156596920>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f9155f1fa60>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9155e2c2e0>]
+executables = [<qvm.model.executable.CostExecutable object at 0x7f9155a15900>, <qvm.model.executable.CostExecutable object at 0x7f9149c94c40>, <qvm.model.executable.CostExecutable object at 0x7f91080cd3f0>]
+
+    def get_fidelity(self, circuit_list, executables):
+        """Run simulation on each executable and calculate fidelity"""
+        shots = 2**20
+        fid_calculator = KlReliabilityCalculator()
+        results = []
+        for exe in executables:
+            res = exe.comp_unit.backend.run(exe.circ, shots=shots).result().get_counts()
+            results.append(res)
+    
+>       assert len(results) == len(circuit_list)
+E       AssertionError: assert 3 == 4
+E        +  where 3 = len([{'11010': 5191, '00011': 7410, '11000': 18996, '10100': 25723, '10111': 51151, '10010': 42527, '10101': 14366, '11100... 943039}, {'110': 7293, '101': 5667, '001': 29259, '111': 535, '011': 6630, '100': 23741, '010': 29750, '000': 945701}])
+E        +  and   4 = len([<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9156596920>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f9155f1fa60>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9155e2c2e0>])
+
+tst/qvm/integration/qvm_test.py:163: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 19}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 20, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 20'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {2, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 25, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 25'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f9151863e20>, error: 'Number of qubits (10) in circuit-96 is greater than maximum (8) in the coupling_map'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f910a591db0>, error: 'Number of qubits (5) in circuit-130 is greater than maximum (4) in the coupling_map'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small/adder_n10/adder_n10.qasm,/root/projects/QASMBench/small/toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small/pea_n5/pea_n5.qasm,/root/projects/QASMBench/small/basis_change_n3/basis_change_n3.qasm-FakeCairo-4]
+================ 1 failed, 6 deselected, 10 warnings in 29.69s =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+ === Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm
+naive selection time	1.7642974853515625e-05
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4] _
+
+self = <qvm_test.TestSelectMethods object at 0x7f9b5bd61f60>
+qasm = '/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm'
+backend = 'FakeCairo', cu_size = '4'
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+    
+        qasm_list = qasm.split(",")
+        circuit_list = [
+            self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        ]
+        process_list = [back_manager.compile(circ) for circ in circuit_list]
+    
+        print("\n === Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+    
+        # Naive
+        st_time = time.time()
+        executables = proc_manager._select_naive(process_list)
+        print(f"naive selection time\t{time.time() - st_time}")
+>       fid = self.get_fidelity(circuit_list, executables)
+
+tst/qvm/integration/qvm_test.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm_test.TestSelectMethods object at 0x7f9b5bd61f60>
+circuit_list = [<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9b5bb85510>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f9b5b894ac0>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9b5b8949d0>]
+executables = [<qvm.model.executable.CostExecutable object at 0x7f9b2af13070>, <qvm.model.executable.CostExecutable object at 0x7f9b16c9c5e0>, <qvm.model.executable.CostExecutable object at 0x7f9b147a3bb0>]
+
+    def get_fidelity(self, circuit_list, executables):
+        """Run simulation on each executable and calculate fidelity"""
+        shots = 2**20
+        fid_calculator = KlReliabilityCalculator()
+        results = []
+        for exe in executables:
+            res = exe.comp_unit.backend.run(exe.circ, shots=shots).result().get_counts()
+            results.append(res)
+    
+>       assert len(results) == len(circuit_list)
+E       AssertionError: assert 3 == 4
+E        +  where 3 = len([{'100101': 14771, '111110': 11967, '101101': 22781, '110101': 11741, '000010': 13683, '010100': 10843, '010111': 1492...0': 1743, '11101': 1700, '00011': 24, '00111': 50, '11100': 20, '10101': 29, '10010': 8, '00001': 4114, '01111': 3059}])
+E        +  and   4 = len([<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9b5bb85510>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f9b5b894ac0>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f9b5b8949d0>])
+
+tst/qvm/integration/qvm_test.py:163: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 19}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 20, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 20'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {2, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 25, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 25'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f9b2830ffa0>, error: 'Number of qubits (6) in circuit-88 is greater than maximum (4) in the coupling_map'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f9aff5a2050>, error: 'Number of qubits (5) in circuit-92 is greater than maximum (4) in the coupling_map'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small/qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small/lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small/grover_n2/grover_n2.qasm-FakeCairo-4]
+================ 1 failed, 6 deselected, 10 warnings in 21.18s =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+ === Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm
+naive selection time	1.71661376953125e-05
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4] _
+
+self = <qvm_test.TestSelectMethods object at 0x7fbf0a6de080>
+qasm = '/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm'
+backend = 'FakeCairo', cu_size = '4'
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+    
+        qasm_list = qasm.split(",")
+        circuit_list = [
+            self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        ]
+        process_list = [back_manager.compile(circ) for circ in circuit_list]
+    
+        print("\n === Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+    
+        # Naive
+        st_time = time.time()
+        executables = proc_manager._select_naive(process_list)
+        print(f"naive selection time\t{time.time() - st_time}")
+>       fid = self.get_fidelity(circuit_list, executables)
+
+tst/qvm/integration/qvm_test.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm_test.TestSelectMethods object at 0x7fbf0a6de080>
+circuit_list = [<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7fbf0a500bb0>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7fbf0a5018a0>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7fbf0a100970>]
+executables = [<qvm.model.executable.CostExecutable object at 0x7fbf04179cc0>, <qvm.model.executable.CostExecutable object at 0x7fbedf0c1750>, <qvm.model.executable.CostExecutable object at 0x7fbedd01dc90>]
+
+    def get_fidelity(self, circuit_list, executables):
+        """Run simulation on each executable and calculate fidelity"""
+        shots = 2**20
+        fid_calculator = KlReliabilityCalculator()
+        results = []
+        for exe in executables:
+            res = exe.comp_unit.backend.run(exe.circ, shots=shots).result().get_counts()
+            results.append(res)
+    
+>       assert len(results) == len(circuit_list)
+E       AssertionError: assert 3 == 4
+E        +  where 3 = len([{'110': 22082, '101': 24405, '111': 9287, '011': 25711, '100': 301960, '000': 29287, '010': 308497, '001': 327347}, {..., '1110': 5849, '1111': 41786, '0001': 59806, '1010': 7282, '0010': 41598, '0000': 7866, '1101': 14525, '0100': 24197}])
+E        +  and   4 = len([<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7fbf0a500bb0>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7fbf0a5018a0>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7fbf0a100970>])
+
+tst/qvm/integration/qvm_test.py:163: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 19}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 20, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 20'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {2, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 25, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 25'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fbecfc4b3a0>, error: 'Number of qubits (5) in circuit-123 is greater than maximum (4) in the coupling_map'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fbece6b49d0>, error: 'Number of qubits (5) in circuit-125 is greater than maximum (4) in the coupling_map'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small/wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small/iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small/pea_n5/pea_n5.qasm,/root/projects/QASMBench/small/qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+================ 1 failed, 6 deselected, 10 warnings in 18.82s =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+ === Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm
+naive selection time	1.8596649169921875e-05
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4] _
+
+self = <qvm_test.TestSelectMethods object at 0x7f64e551d1b0>
+qasm = '/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm'
+backend = 'FakeCairo', cu_size = '4'
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+    
+        qasm_list = qasm.split(",")
+        circuit_list = [
+            self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        ]
+        process_list = [back_manager.compile(circ) for circ in circuit_list]
+    
+        print("\n === Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+    
+        # Naive
+        st_time = time.time()
+        executables = proc_manager._select_naive(process_list)
+        print(f"naive selection time\t{time.time() - st_time}")
+>       fid = self.get_fidelity(circuit_list, executables)
+
+tst/qvm/integration/qvm_test.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm_test.TestSelectMethods object at 0x7f64e551d1b0>
+circuit_list = [<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f64e5339270>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f64e5339510>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f64e4e045e0>]
+executables = [<qvm.model.executable.CostExecutable object at 0x7f64d9b60c10>, <qvm.model.executable.CostExecutable object at 0x7f649b693a90>]
+
+    def get_fidelity(self, circuit_list, executables):
+        """Run simulation on each executable and calculate fidelity"""
+        shots = 2**20
+        fid_calculator = KlReliabilityCalculator()
+        results = []
+        for exe in executables:
+            res = exe.comp_unit.backend.run(exe.circ, shots=shots).result().get_counts()
+            results.append(res)
+    
+>       assert len(results) == len(circuit_list)
+E       AssertionError: assert 2 == 4
+E        +  where 2 = len([{'00': 12644, '10': 12819, '01': 504956, '11': 518157}, {'001001': 8537, '000111': 12937, '101101': 12216, '111111': ... '101011': 12113, '011001': 12960, '101000': 17500, '110110': 14593, '100011': 9213, '001110': 19002, '111010': 17693}])
+E        +  and   4 = len([<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f64e5339270>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f64e5339510>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f64e4e045e0>])
+
+tst/qvm/integration/qvm_test.py:163: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 19}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 20, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 20'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {2, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 25, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 25'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f649ad6b1f0>, error: 'Number of qubits (9) in circuit-90 is greater than maximum (8) in the coupling_map'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f649965e920>, error: 'Number of qubits (6) in circuit-92 is greater than maximum (4) in the coupling_map'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f6498088fa0>, error: 'Number of qubits (5) in circuit-94 is greater than maximum (4) in the coupling_map'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small/qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small/qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small/qec_en_n5/qec_en_n5.qasm-FakeCairo-4]
+================= 1 failed, 6 deselected, 9 warnings in 19.37s =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+ === Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm
+naive selection time	1.6689300537109375e-05
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4] _
+
+self = <qvm_test.TestSelectMethods object at 0x7f16b3b560e0>
+qasm = '/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm'
+backend = 'FakeCairo', cu_size = '4'
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+    
+        qasm_list = qasm.split(",")
+        circuit_list = [
+            self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        ]
+        process_list = [back_manager.compile(circ) for circ in circuit_list]
+    
+        print("\n === Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+    
+        # Naive
+        st_time = time.time()
+        executables = proc_manager._select_naive(process_list)
+        print(f"naive selection time\t{time.time() - st_time}")
+>       fid = self.get_fidelity(circuit_list, executables)
+
+tst/qvm/integration/qvm_test.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm_test.TestSelectMethods object at 0x7f16b3b560e0>
+circuit_list = [<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f16b394bc70>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f16b3b56b30>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f16b3b54550>]
+executables = [<qvm.model.executable.CostExecutable object at 0x7f16b314e8c0>, <qvm.model.executable.CostExecutable object at 0x7f16a34ad870>, <qvm.model.executable.CostExecutable object at 0x7f167a550a30>]
+
+    def get_fidelity(self, circuit_list, executables):
+        """Run simulation on each executable and calculate fidelity"""
+        shots = 2**20
+        fid_calculator = KlReliabilityCalculator()
+        results = []
+        for exe in executables:
+            res = exe.comp_unit.backend.run(exe.circ, shots=shots).result().get_counts()
+            results.append(res)
+    
+>       assert len(results) == len(circuit_list)
+E       AssertionError: assert 3 == 4
+E        +  where 3 = len([{'00100': 7073, '00101': 3573, '00010': 3653, '11000': 37114, '01101': 13015, '10101': 21234, '10010': 26740, '11100'...': 3326, '1101': 11531, '1000': 4171, '0110': 327, '1110': 7608}, {'01': 21053, '00': 2848, '10': 24965, '11': 999710}])
+E        +  and   4 = len([<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f16b394bc70>, <qiskit.circuit.quantumcircuit.QuantumCircui...cuit.QuantumCircuit object at 0x7f16b3b56b30>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7f16b3b54550>])
+
+tst/qvm/integration/qvm_test.py:163: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 19}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 20, current visited status: {2, 3, 5, 8, 9, 11, 14, 16, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 20'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {2, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 25, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 25'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f16aaf57ee0>, error: 'Number of qubits (10) in circuit-96 is greater than maximum (8) in the coupling_map'
+WARNING  root:backend_manager.py:407 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7f16a08a7f40>, error: 'Number of qubits (9) in circuit-100 is greater than maximum (8) in the coupling_map'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm-FakeCairo-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small/adder_n10/adder_n10.qasm,/root/projects/QASMBench/small/cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small/qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small/grover_n2/grover_n2.qasm-FakeCairo-4]
+================ 1 failed, 6 deselected, 10 warnings in 20.51s =================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 

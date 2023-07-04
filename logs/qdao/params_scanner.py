@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append('.')
+sys.path.append(".")
 
 from typing import List, Any
 from qutils.plot import plot_bar_3d
@@ -9,13 +9,11 @@ from qutils.results import BaseParser
 
 
 class QdaoPerfVsMAndK(BaseParser):
-
     def parse_one(self, file_path, *args) -> List[Any]:
-
         res_qdao, res_quafu = None, None
-        with open(file_path, 'r') as f:
-            items = os.path.basename(file_path).split('.')
-            NQ = int(items[1].split('-')[0])
+        with open(file_path, "r") as f:
+            items = os.path.basename(file_path).split(".")
+            NQ = int(items[1].split("-")[0])
             NP = NQ - int(items[2])
             NL = NP - int(items[3])
             for line in f:
@@ -26,8 +24,20 @@ class QdaoPerfVsMAndK(BaseParser):
 
         if res_qdao and res_quafu:
             runtime = float(res_qdao) / float(res_quafu)
-            memory = 2**(NQ-NP)
-            print("\t".join([str(NQ), str(NP), str(NL), res_qdao, res_quafu, str(memory), str(runtime)]))
+            memory = 2 ** (NQ - NP)
+            print(
+                "\t".join(
+                    [
+                        str(NQ),
+                        str(NP),
+                        str(NL),
+                        res_qdao,
+                        res_quafu,
+                        str(memory),
+                        str(runtime),
+                    ]
+                )
+            )
 
             return [NQ, NL, NP, runtime]
 
@@ -43,14 +53,14 @@ class QdaoPerfVsMAndK(BaseParser):
         for q in res_dict:
             plot_bar_3d(
                 res_dict[q],
-                labels=(r'$t$', r'$m$', 'Normalized Overhead'),
+                labels=(r"$t$", r"$m$", "Normalized Overhead"),
                 figname=f"params_rqc_{q}.pdf",
                 normalize=True,
-                integer=True
+                integer=True,
             )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logs_path = sys.argv[1]
     version = sys.argv[2]
 

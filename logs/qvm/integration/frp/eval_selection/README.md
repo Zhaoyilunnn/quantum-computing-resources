@@ -1,0 +1,2 @@
+- logs/qvm/integration/frp/eval_selection
+    - logs/qvm/integration/frp/eval_selection/brooklyn_naive_bug: `_select_naive` has a bug, `sorted` process takes no effect

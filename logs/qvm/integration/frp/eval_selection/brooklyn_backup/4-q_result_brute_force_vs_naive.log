@@ -1,0 +1,136 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm
+[{1, 12, 7}, {2}, {3, 6}, {5}]
+[{1, 12, 7}, {2}, {3, 6}, {5}]
+.
+
+======================= 1 passed, 6 deselected in 33.91s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm
+[{3, 6}, {2}, {1, 12}, {5}]
+[{3, 6}, {2}, {1, 12}, {5}]
+.
+
+======================= 1 passed, 6 deselected in 40.86s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm
+[{2}, {3}, {8, 11}, {0, 10}]
+[{0}, {2}, {8, 11}, {3, 6}]
+.
+
+======================= 1 passed, 6 deselected in 37.25s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm
+[{2}, {0, 10, 4}, {3, 6}, {1, 12}]
+[{2}, {0, 10, 4}, {1, 12}, {3, 6}]
+.
+
+======================= 1 passed, 6 deselected in 27.63s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm
+[{1, 12, 7}, {2}, {0, 10, 4}, {3}]
+[{1, 12, 7}, {2}, {0, 10, 4}, {3}]
+.
+
+======================= 1 passed, 6 deselected in 33.49s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm,/root/projects/QASMBench/small//error_correctiond3_n5/error_correctiond3_n5.qasm
+[{0, 10, 4}, {3, 6}, {2}, {8, 11}]
+[{0, 10, 4}, {3, 6}, {2}, {8, 11}]
+.
+
+======================= 1 passed, 6 deselected in 27.26s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm
+[{3, 6}, {8, 11}, {2}, {5}]
+[{3, 6}, {8, 11}, {0}, {2}]
+.
+
+======================= 1 passed, 6 deselected in 40.96s =======================
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm
+[{2}, {3, 6}, {0, 10, 4}, {5}]
+[{5}, {3, 6}, {0, 10, 4}, {2}]
+.
+
+======================= 1 passed, 6 deselected in 50.97s =======================

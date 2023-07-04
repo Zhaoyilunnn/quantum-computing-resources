@@ -1,0 +1,40 @@
+/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm
+naive selection time	1.6450881958007812e-05
+naive selection result	0.5807888224208582
+brute_force selection time	0.003551006317138672
+brute_force selection result	0.5814809750526295
+/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm
+naive selection time	2.09808349609375e-05
+naive selection result	0.07291991655587794
+brute_force selection time	0.010334253311157227
+brute_force selection result	0.07268675408409249
+/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm
+naive selection time	3.6716461181640625e-05
+naive selection result	0.2569789668269813
+brute_force selection time	0.011110782623291016
+brute_force selection result	0.2563791638524301
+/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm
+naive selection time	5.0067901611328125e-05
+naive selection result	0.12314698505482975
+brute_force selection time	0.002163410186767578
+brute_force selection result	0.11080347991321891
+/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm
+naive selection time	1.8596649169921875e-05
+naive selection result	0.5037366710164206
+brute_force selection time	0.0023734569549560547
+brute_force selection result	0.504058242891784
+/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm,/root/projects/QASMBench/small//error_correctiond3_n5/error_correctiond3_n5.qasm
+naive selection time	3.528594970703125e-05
+naive selection result	0.2543475483838264
+brute_force selection time	0.0019545555114746094
+brute_force selection result	0.2799953989683267
+/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm
+naive selection time	1.5974044799804688e-05
+naive selection result	0.15345981467655287
+brute_force selection time	0.014782190322875977
+brute_force selection result	0.15346949407696733
+/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm
+naive selection time	1.7404556274414062e-05
+naive selection result	0.10554143813070631
+brute_force selection time	0.006884336471557617
+brute_force selection result	0.10204810207723167
