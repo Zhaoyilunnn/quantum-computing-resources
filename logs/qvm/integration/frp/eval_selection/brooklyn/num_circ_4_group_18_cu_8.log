@@ -1,0 +1,32 @@
+Randomly selected files:
+/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm
+compute_unit_list	[{4}, {2}, {6}, {3}]
+naive selection time	0.0001418590545654297
+naive selection result	0.1786861798645665
+compute_unit_list	[{2}, {6}, {4}, {3}]
+brute_force selection time	0.006319761276245117
+brute_force selection result	0.1785187614925238
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm-FakeBrooklyn-8]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm-FakeBrooklyn-8]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm-FakeBrooklyn-8]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//toffoli_n3/toffoli_n3.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm-FakeBrooklyn-8]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 6 deselected, 4 warnings in 150.18s (0:02:30) ============

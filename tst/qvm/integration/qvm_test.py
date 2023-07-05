@@ -176,36 +176,27 @@ class TestSelectMethods(QvmBaseTest):
                     recons_exes.append(exe)
         return recons_exes
 
-    def test_select_methods(self, qasm, backend, cu_size):
-        """
-        Args:
-            bench: List of qasm file paths
-            backend: Backend name
-        """
+    def prepare_for_test(self, qasm, backend, cu_size):
+        """Preparation before running selection"""
         self._backend = globals().get(backend)()
-        back_manager = FrpBackendManagerV2(self._backend)
-        back_manager.cu_size = int(cu_size)
-        back_manager.init_helpers()
-        back_manager.init_cus()
-        proc_manager = QvmProcessManagerV2(self._backend)
+        self.back_manager = FrpBackendManagerV2(self._backend)
+        self.back_manager.cu_size = int(cu_size)
+        self.back_manager.init_helpers()
+        self.back_manager.init_cus()
+        self.proc_manager = QvmProcessManagerV2(self._backend)
 
         qasm_list = qasm.split(",")
-        # circuit_list = [
-        #     self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
-        # ]
-        # process_list = [back_manager.compile(circ) for circ in circuit_list]
-
-        process_list = []
-        circuit_list = []
+        self.process_list = []
+        self.circuit_list = []
         for qasm_path in qasm_list:
             # The format is "/path/to/the/qasm/file/name.qasm"
             qasm_name = qasm_path.split("/")[-1].split(".")[0]
             file_name = "_".join([backend, qasm_name, str(cu_size)]) + ".pkl"
             compilation_obj = os.path.join(self.data_dir, file_name)
             circ = self.get_qiskit_circ("qasm", qasm_path=qasm_path)
-            circuit_list.append(circ)
+            self.circuit_list.append(circ)
             if not os.path.exists(compilation_obj):
-                proc = back_manager.compile(circ)
+                proc = self.back_manager.compile(circ)
                 self.save_compilation_outcome(
                     self.data_dir, proc, qasm_name, backend, int(cu_size)
                 )
@@ -213,25 +204,57 @@ class TestSelectMethods(QvmBaseTest):
                 proc = self.load_compilation_outcome(
                     self.data_dir, qasm_name, backend, int(cu_size)
                 )
-            process_list.append(proc)
+            self.process_list.append(proc)
 
         print("\n==== Testing ===")
         print("\n==== qasm_list ===\n")
         print(qasm)
 
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Test brute_force and naive method
+
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+
+        self.prepare_for_test(qasm, backend, cu_size)
+
         # Naive
         st_time = time.time()
-        naive_exes = proc_manager._select_naive(process_list)
+        naive_exes = self.proc_manager._select_naive(self.process_list)
         self.debug_exes(naive_exes)
         print(f"naive selection time\t{time.time() - st_time}")
-        naive_exes = self.reconstruct_exes(naive_exes, process_list)
-        fid = self.get_fidelity(circuit_list, naive_exes)
+        naive_exes = self.reconstruct_exes(naive_exes, self.process_list)
+        fid = self.get_fidelity(self.circuit_list, naive_exes)
         print(f"naive selection result\t{fid}")
 
         # Brute-force
         st_time = time.time()
-        brute_force_exes = proc_manager._select_brute_force(process_list)
+        brute_force_exes = self.proc_manager._select_brute_force(self.process_list)
         self.debug_exes(brute_force_exes)
         print(f"brute_force selection time\t{time.time() - st_time}")
-        fid = self.get_fidelity(circuit_list, brute_force_exes)
+        fid = self.get_fidelity(self.circuit_list, brute_force_exes)
         print(f"brute_force selection result\t{fid}")
+
+
+    def test_naive_reverse_select(self, qasm, backend, cu_size):
+        """
+        Test brute_force and naive method
+
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+
+        self.prepare_for_test(qasm, backend, cu_size)
+
+        # Naive reverse
+        st_time = time.time()
+        naive_exes = self.proc_manager._select_naive(self.process_list, reverse=True)
+        self.debug_exes(naive_exes)
+        print(f"naive selection time\t{time.time() - st_time}")
+        naive_exes = self.reconstruct_exes(naive_exes, self.process_list)
+        fid = self.get_fidelity(self.circuit_list, naive_exes)
+        print(f"naive selection result\t{fid}")

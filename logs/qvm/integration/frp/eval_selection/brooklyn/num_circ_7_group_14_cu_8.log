@@ -1,0 +1,114 @@
+Randomly selected files:
+/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//bell_n4/bell_n4.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 7 items / 6 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//bell_n4/bell_n4.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_select_methods[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//bell_n4/bell_n4.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-8] _
+
+self = <qvm_test.TestSelectMethods object at 0x7fabb8785e70>
+qasm = '/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/p.../qpe_n9.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm'
+backend = 'FakeBrooklyn', cu_size = '8'
+
+    def test_select_methods(self, qasm, backend, cu_size):
+        """
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        self._backend = globals().get(backend)()
+        back_manager = FrpBackendManagerV2(self._backend)
+        back_manager.cu_size = int(cu_size)
+        back_manager.init_helpers()
+        back_manager.init_cus()
+        proc_manager = QvmProcessManagerV2(self._backend)
+    
+        qasm_list = qasm.split(",")
+        # circuit_list = [
+        #     self.get_qiskit_circ("qasm", qasm_path=qasm_path) for qasm_path in qasm_list
+        # ]
+        # process_list = [back_manager.compile(circ) for circ in circuit_list]
+    
+        process_list = []
+        circuit_list = []
+        for qasm_path in qasm_list:
+            # The format is "/path/to/the/qasm/file/name.qasm"
+            qasm_name = qasm_path.split("/")[-1].split(".")[0]
+            file_name = "_".join([backend, qasm_name, str(cu_size)]) + ".pkl"
+            compilation_obj = os.path.join(self.data_dir, file_name)
+            circ = self.get_qiskit_circ("qasm", qasm_path=qasm_path)
+            circuit_list.append(circ)
+            if not os.path.exists(compilation_obj):
+                proc = back_manager.compile(circ)
+                self.save_compilation_outcome(
+                    self.data_dir, proc, qasm_name, backend, int(cu_size)
+                )
+            else:
+                proc = self.load_compilation_outcome(
+                    self.data_dir, qasm_name, backend, int(cu_size)
+                )
+            process_list.append(proc)
+    
+        print("\n==== Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+    
+        # Naive
+        st_time = time.time()
+>       naive_exes = proc_manager._select_naive(process_list)
+
+tst/qvm/integration/qvm_test.py:224: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm.manager.process_manager.QvmProcessManagerV2 object at 0x7fabb877c7c0>
+processes = [<qvm.model.executable.Process object at 0x7fabb78d9600>, <qvm.model.executable.Process object at 0x7fab8662dea0>, <qv... <qvm.model.executable.Process object at 0x7fab51afec20>, <qvm.model.executable.Process object at 0x7fabb78ec160>, ...]
+reverse = False
+
+    def _select_naive(
+        self, processes: List[Process], reverse=False
+    ) -> List[BaseExecutable]:
+        """Traverse each of the process and add non-conflict exes"""
+        # Init a set to record IDs of allocated comp units
+        selected = set()
+    
+        # Init the selected list of executables
+        exes = []
+        processes = sorted(processes, key=lambda proc: proc.num_qubits, reverse=reverse)
+    
+        for proc in processes:
+            for exe in proc:
+                if not selected & exe.comp_unit_ids:
+                    exes.append(exe)
+                    selected |= exe.comp_unit_ids
+                    # Find an executable, move on to next proc
+                    break
+    
+        if len(exes) != len(processes):
+>           raise ProcessError("Cannot select executables from all processes.")
+E           qvm.manager.exceptions.ProcessError: 'Cannot select executables from all processes.'
+
+../qvm/manager/process_manager.py:249: ProcessError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 5, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 26, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 51, 52, 54, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 5'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 4, current visited status: {0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 26, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 51, 52, 54, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 4'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 26, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 51, 52, 54, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 26, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 57, 58, 59, 60, 61, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {0, 1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 57, 58, 59, 60, 61, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 8, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 57, 58, 59, 60, 61, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 8'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 7, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 57, 58, 59, 60, 61, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 7'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 62, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 62'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 55, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 55'
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_select_methods[/root/projects/QASMBench/small/dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small/deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small/bell_n4/bell_n4.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm,/root/projects/QASMBench/small/qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small/simon_n6/simon_n6.qasm,/root/projects/QASMBench/small/hs4_n4/hs4_n4.qasm-FakeBrooklyn-8]
+======================= 1 failed, 6 deselected in 49.31s =======================
