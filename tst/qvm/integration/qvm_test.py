@@ -1,5 +1,6 @@
 from numpy import average
-from qvm.util.circuit import KlReliabilityCalculator
+from constants import QVM_SHOTS
+from qvm.util.circuit import KlReliabilityCalculator, KlReliabilityCalculatorForOracle
 from test.qvm import *
 
 from qiskit import IBMQ
@@ -153,7 +154,7 @@ class TestSelectMethods(QvmBaseTest):
 
     def get_fidelity(self, circuit_list, executables):
         """Run simulation on each executable and calculate fidelity"""
-        shots = 2**20
+        shots = QVM_SHOTS
         fid_calculator = KlReliabilityCalculator()
         results = []
         for exe in executables:
@@ -238,7 +239,6 @@ class TestSelectMethods(QvmBaseTest):
         fid = self.get_fidelity(self.circuit_list, brute_force_exes)
         print(f"brute_force selection result\t{fid}")
 
-
     def test_naive_reverse_select(self, qasm, backend, cu_size):
         """
         Test brute_force and naive method
@@ -258,3 +258,122 @@ class TestSelectMethods(QvmBaseTest):
         naive_exes = self.reconstruct_exes(naive_exes, self.process_list)
         fid = self.get_fidelity(self.circuit_list, naive_exes)
         print(f"naive selection result\t{fid}")
+
+
+class TestOracle(QvmBaseTest):
+    def run_oracle(self, circ, backend):
+        """Run circuit on aer_simulator and get fidelity"""
+        shots = QVM_SHOTS
+        fid_calculator = KlReliabilityCalculatorForOracle()
+        backend = globals().get(backend)()
+        circ = transpile(circ, backend)
+        counts = backend.run(circ, shots=shots).result().get_counts()
+        return fid_calculator.calc_fidelity(circ, counts, shots=shots)
+
+    def test_oracle(self, qasm, backend):
+        """Test sequential run result
+        Use native qiskit transpile and run
+
+        Args:
+            qasm (str): qasm_file_list
+            backend (str): backend name
+        """
+        print("\n ================ test_oracle ================ \n")
+        with open(qasm, "r") as f:
+            for line in f:
+                qasm_path = line.strip()
+                bench_name = os.path.basename(qasm_path)
+                bench_name = bench_name.split(".")[0]
+                circ = self.get_qiskit_circ("qasm", qasm_path=qasm_path)
+                fid = self.run_oracle(circ, backend)
+                print(f"{bench_name}\t{fid}")
+
+
+class TestFrpOracle(TestOracle):
+    def run_oracle(self, circ, backend):
+        """Run circuit on aer_simulator and get fidelity"""
+        shots = QVM_SHOTS
+        fid_calculator = KlReliabilityCalculatorForOracle()
+
+        # First find a partition
+        proc_manager = FrpProcessManager(backend)
+        part = proc_manager.gen_partition(circ)
+        # Then generate a compute unit
+        cu = self.back_manager.extract_one_cu(part)
+        # Run on cu
+        circ = transpile(circ, cu.backend)
+        counts = cu.backend.run(circ, shots=shots).result().get_counts()
+        return fid_calculator.calc_fidelity(circ, counts, shots=shots)
+
+    def test_oracle(self, qasm, backend):
+        """Test sequential run result
+        Use native qiskit transpile and run
+
+        Args:
+            qasm (str): qasm_file_list
+            backend (str): backend name
+        """
+        backend = globals().get(backend)()
+        self.back_manager = FrpBackendManagerV2(backend)
+        self.back_manager.init_helpers()
+        super().test_oracle(qasm, backend)
+
+
+class TestFrpBaseline(QvmBaseTest):
+    def prepare_for_test(self, qasm, backend, cu_size):
+        """Preparation before running selection"""
+        self._backend = globals().get(backend)()
+        self.back_manager = FrpBackendManagerV2(self._backend)
+        self.back_manager.init_helpers()
+        self.proc_manager = FrpProcessManager(self._backend)
+
+        qasm_list = qasm.split(",")
+        self.process_list = []
+        self.circuit_list = []
+        for qasm_path in qasm_list:
+            # The format is "/path/to/the/qasm/file/name.qasm"
+            qasm_name = qasm_path.split("/")[-1].split(".")[0]
+            circ = self.get_qiskit_circ("qasm", qasm_path=qasm_path)
+            self.circuit_list.append(circ)
+
+        print("\n==== Testing ===")
+        print("\n==== qasm_list ===\n")
+        print(qasm)
+
+    def test_frp_baseline(self, qasm, backend, cu_size):
+        """
+        Test brute_force and naive method
+
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+        shots = QVM_SHOTS
+
+        self.prepare_for_test(qasm, backend, cu_size)
+
+        # Naive
+        st_time = time.time()
+        st_time = time.time()
+        # Find reliable locations
+        parts = [self.proc_manager.gen_partition(circ) for circ in self.circuit_list]
+        # Gen comp units
+        cus = [self.back_manager.extract_one_cu(part) for part in parts]
+        # Compilation
+        circs = [
+            transpile(circ, cu.backend) for circ, cu in zip(self.circuit_list, cus)
+        ]
+        print(f"baseline selection time\t{time.time() - st_time}")
+        # Execution
+        counts_list = [
+            cu.backend.run(c, shots=shots).result().get_counts()
+            for c, cu in zip(circs, cus)
+        ]
+        # Calculate fidelity
+        fid_calculator = KlReliabilityCalculator()
+        fids = [
+            fid_calculator.calc_fidelity(circ, counts, shots=shots)
+            for circ, counts in zip(circs, counts_list)
+        ]
+        fid = average(fids)
+        print(f"baseline selection result\t{fid}")

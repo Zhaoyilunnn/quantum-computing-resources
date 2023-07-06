@@ -1,0 +1,1 @@
+cat logs/qvm/integration/frp/eval_selection/benchmark_groups.lst | while read log_name qasm cu; do pytest -s -k test_frp_baseline tst/qvm/integration/qvm_test.py --qasm $qasm --backend FakeBrooklyn | tee logs/qvm/baseline/frp/brooklyn/${log_name}.log; done

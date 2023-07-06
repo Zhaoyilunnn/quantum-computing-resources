@@ -61,3 +61,5 @@ LARGE_BENCHES = [
 ]
 
 QCS_BENCHMARKS_DIR = WORK_DIR + "qcs/benchmarks/qasm/"
+
+QVM_SHOTS = 2**20
