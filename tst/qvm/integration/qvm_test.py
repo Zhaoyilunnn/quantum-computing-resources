@@ -370,7 +370,8 @@ class TestFrpBaseline(QvmBaseTest):
             for c, cu in zip(circs, cus)
         ]
         # Calculate fidelity
-        fid_calculator = KlReliabilityCalculator()
+        # fid_calculator = KlReliabilityCalculator()
+        fid_calculator = KlReliabilityCalculatorForOracle()
         fids = [
             fid_calculator.calc_fidelity(circ, counts, shots=shots)
             for circ, counts in zip(circs, counts_list)

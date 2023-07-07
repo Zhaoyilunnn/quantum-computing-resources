@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 11 items / 10 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm
+baseline selection time	4.916301965713501
+baseline selection result	1.2607650435493816
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestFrpBaseline::test_frp_baseline[/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4]
+qcs/tst/qvm/integration/qvm_test.py::TestFrpBaseline::test_frp_baseline[/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 1 passed, 10 deselected, 2 warnings in 17.82s =================

@@ -1,0 +1,87 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 11 items / 10 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+==== Testing ===
+
+==== qasm_list ===
+
+/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm
+compute_unit_list	[{2}, {3}]
+naive selection time	5.7220458984375e-05
+F
+
+=================================== FAILURES ===================================
+_ TestSelectMethods.test_naive_reverse_select[/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm-FakeBrooklyn-4] _
+
+self = <qvm_test.TestSelectMethods object at 0x7fd9518f9600>
+qasm = '/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm'
+backend = 'FakeBrooklyn', cu_size = '4'
+
+    def test_naive_reverse_select(self, qasm, backend, cu_size):
+        """
+        Test brute_force and naive method
+    
+        Args:
+            bench: List of qasm file paths
+            backend: Backend name
+        """
+    
+        self.prepare_for_test(qasm, backend, cu_size)
+    
+        # Naive reverse
+        st_time = time.time()
+        naive_exes = self.proc_manager._select_naive(self.process_list, reverse=True)
+        self.debug_exes(naive_exes)
+        print(f"naive selection time\t{time.time() - st_time}")
+        naive_exes = self.reconstruct_exes(naive_exes, self.process_list)
+>       fid = self.get_fidelity(self.circuit_list, naive_exes)
+
+tst/qvm/integration/qvm_test.py:259: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qvm/integration/qvm_test.py:167: in get_fidelity
+    fid = fid_calculator.calc_fidelity(circ, results[i], shots=shots)
+../qvm/util/circuit.py:247: in calc_fidelity
+    pv_noise, _ = counts_to_vector(counts, num_qubits)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+counts = {'1 0 0': 50531, '0 0 1': 113288, '1 0 1': 137411, '1 1 0': 141623, '0 0 0': 229543, '0 1 0': 111575, '1 1 1': 43837, '0 1 1': 220768}
+num_qubits = 3
+
+    def counts_to_vector(counts: Counts, num_qubits: int) -> Tuple[np.ndarray, int]:
+        """Transforms Counts to a probability vector"""
+        vec = np.zeros(2**num_qubits, dtype=float)
+        shots = 0
+        for key, val in counts.items():
+            shots += val
+>           vec[int(key, 2)] = val
+E           ValueError: invalid literal for int() with base 2: '1 0 0'
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/result/mitigation/utils.py:93: ValueError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 3, 4, 5, 6, 8, 10, 12, 13, 18, 19, 20, 21, 22, 23, 25, 26, 34, 35, 36, 37, 42, 43, 44, 45, 49, 50, 51, 54}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 40, current visited status: {0, 1, 3, 4, 5, 6, 8, 10, 12, 13, 18, 19, 20, 21, 22, 25, 26, 34, 35, 36, 37, 40, 42, 43, 44, 45, 49, 50, 51, 54}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 40'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {0, 1, 3, 4, 5, 6, 8, 9, 10, 12, 13, 18, 19, 20, 21, 22, 25, 26, 27, 28, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 49, 50, 51, 52, 54, 55, 56, 57}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 7, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 7'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 62, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 62'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 16, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 16'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 23, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 23'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 63, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 63'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 64, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 64'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 11, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 11'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 33, current visited status: {0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 33'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 2, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 2'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_naive_reverse_select[/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm-FakeBrooklyn-4]
+qcs/tst/qvm/integration/qvm_test.py::TestSelectMethods::test_naive_reverse_select[/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm-FakeBrooklyn-4]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/qvm_test.py::TestSelectMethods::test_naive_reverse_select[/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-FakeBrooklyn-4]
+================ 1 failed, 10 deselected, 2 warnings in 33.25s =================

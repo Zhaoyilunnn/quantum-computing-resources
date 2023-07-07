@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 
 
 def main():
@@ -15,6 +16,7 @@ def main():
             oracle_res[b_name] = fid
 
     naive_reverse_file = sys.argv[1]
+    fids_1, fids_2 = [], []
     with open(naive_reverse_file, 'r') as f:
         for line in f:
             items = line.strip().split('\t')
@@ -29,7 +31,12 @@ def main():
                 oracle_fid /= len(b_names)
             except KeyError as ex:
                 raise KeyError("Some benches not found in oracle result") from ex
+            fids_1.append(fid)
+            fids_2.append(oracle_fid)
             print(f"{','.join(b_names)}\t{fid}\t{oracle_fid}")
+    avg_fid_1 = np.average(fids_1)
+    avg_fid_2 = np.average(fids_2)
+    print(f"avg\t{avg_fid_1}\t{avg_fid_2}")
 
 
 if __name__ == '__main__':

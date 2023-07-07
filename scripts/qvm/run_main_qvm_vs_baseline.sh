@@ -1,0 +1,1 @@
+cat logs/qvm/two_bench_list.lst | while read id qasm; do pytest -s -k "TestBenchDiffBackendQvmFrpV2 and test_independent_two_bench_frp" tst/qvm/integration/bench_test.py --bench qasm --qasm $qasm --backend FakeBrooklyn | tee logs/qvm/main/naive_reverse/brooklyn/${id}.log; done

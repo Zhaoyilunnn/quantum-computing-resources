@@ -236,7 +236,34 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
     def test_single_bench(self, bench):
         pass
 
-    def run_qvm(self, circ_list: List[QuantumCircuit], is_run=True, **kwargs):
+    def run_exes_independent(self, exes: List[BaseExecutable], **kwargs):
+        """Run each exe on its own backend
+        This is used for run_qvm"""
+        counts_list = [
+            exe.comp_unit.backend.run(exe.circ, **kwargs).result().get_counts()
+            for exe in exes
+        ]
+        return counts_list
+
+    def run_exes_merge(self, exes: List[BaseExecutable], **kwargs):
+        """Merge each exe and run on merged cu
+        Used for run_qvm"""
+        cus = [exe.comp_unit for exe in exes]
+        cu = self._backend_manager.merge_cus(cus)
+        circs = [exe.circ for exe in exes]
+        # circ = qvm_proc._merge_circuits(circs)
+        circ = merge_circuits_v2(circs)
+        res = cu.backend.run(circ, **kwargs).result()
+        return res.get_counts()
+
+    def run_qvm(
+        self,
+        circ_list: List[QuantumCircuit],
+        is_run=True,
+        independent=False,
+        method="random",
+        **kwargs,
+    ):
         """Run using qvm process manager
 
         Here we temporarily use backend manager to extract compute units and compile on
@@ -244,20 +271,46 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         """
 
         qvm_proc = QvmProcessManagerV2(self._backend)
+        qvm_proc.method = method
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
         start = time.time()
         exes = qvm_proc._select(processes)
         print(f"QVM::selection::costs::\t{time.time() - start}")
-        cus = [exe.comp_unit for exe in exes]
-        cu = self._backend_manager.merge_cus(cus)
-        circs = [exe.circ for exe in exes]
-        # circ = qvm_proc._merge_circuits(circs)
-        circ = merge_circuits_v2(circs)
-        if is_run:
-            res = cu.backend.run(circ, **kwargs).result()
-            return res
 
-    def run_frp(self, circ_list: List[QuantumCircuit], is_run=True, **kwargs):
+        if not is_run:
+            # We just want to test the online compilation time
+            return None
+
+        if independent:
+            return self.run_exes_independent(exes, **kwargs)
+        return self.run_exes_merge(exes, **kwargs)
+
+    def run_frp_exes(self, trans_list, cu_list, independent=False, **kwargs):
+        """merge and run on merged backend, or run independently
+        Used for run_frp
+
+        Args:
+            trans_list: transpiled quantum circuits
+            cu_list: allocated compute units from frp manager
+            independent: whether run independently
+        """
+        if independent:
+            return [
+                cu.backend.run(c).result().get_counts()
+                for c, cu in zip(trans_list, cu_list)
+            ]
+
+        # Merge each comp_unit and run
+        cu = self._backend_manager.merge_cus(cu_list)
+        # exe = proc._merge_circuits(trans_list)
+        exe = merge_circuits_v2(trans_list)
+
+        res = cu.backend.run(exe, **kwargs).result()
+        return res.get_counts()
+
+    def run_frp(
+        self, circ_list: List[QuantumCircuit], is_run=True, independent=False, **kwargs
+    ):
         """Run using FRP process manager
         Here we temporarily use backend manager to extract compute units and compile on
         compute units, a better implementation should be in FrpProcessManager->run() method
@@ -274,14 +327,17 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             transpile(circ_list[i], cu_list[i].backend) for i in range(len(circ_list))
         ]
         print(f"FRP::online_compilation::costs::\t{time.time() - start}")
-        cu = self._backend_manager.merge_cus(cu_list)
-        # exe = proc._merge_circuits(trans_list)
-        exe = merge_circuits_v2(trans_list)
-        if is_run:
-            res = cu.backend.run(exe, **kwargs).result()
-            return res
 
-    def test_two_bench_frp(self, bench, nq, qasm):
+        if not is_run:
+            # We just want to test the online compilation time
+            return None
+
+        return self.run_frp_exes(trans_list, cu_list, independent=independent, **kwargs)
+
+    # def eval_results(self, circ, counts):
+    #     """Calculate fidelity compared to ideal simulation"""
+
+    def test_two_bench_frp(self, bench, nq, qasm, independent=False):
         """Testing qvm vs. FRP (MICRO-2019)
 
         Args:
@@ -308,28 +364,33 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         qvm_res = None
         try:
-            qvm_res = self.run_qvm([circ0, circ1], shots=shots)
+            qvm_res = self.run_qvm([circ0, circ1], independent=independent, shots=shots)
         except Exception as e:
             print(f"run qvm error: {e}")
 
         frp_res = None
         try:
-            frp_res = self.run_frp([circ0, circ1], shots=shots)
+            frp_res = self.run_frp([circ0, circ1], independent=independent, shots=shots)
         except Exception as e:
             print(f"run frp error: {e}")
 
         # Calculate fidelity
         self._fid_calculator = KlReliabilityCalculator()
 
+        if independent:
+            circ_list = [circ0, circ1]
+        else:
+            circ_list = circ
+
         fid_qvm = None
         if qvm_res:
             fid_qvm = self._fid_calculator.calc_fidelity(
-                circ, qvm_res.get_counts(), shots=shots
+                circ_list, qvm_res, shots=shots
             )
         fid_frp = None
         if frp_res:
             fid_frp = self._fid_calculator.calc_fidelity(
-                circ, frp_res.get_counts(), shots=shots
+                circ_list, frp_res, shots=shots
             )
         print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
 
@@ -378,6 +439,11 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
     def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
         super().test_two_bench_frp(bench, nq, qasm)
+
+    def test_independent_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
+        """Execute qvm/frp exes on their own backend"""
+        self.prepare_for_test(backend, cu_size)
+        super().test_two_bench_frp(bench, nq, qasm, independent=True)
 
 
 class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):

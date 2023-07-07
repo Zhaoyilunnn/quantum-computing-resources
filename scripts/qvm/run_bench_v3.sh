@@ -1,0 +1,1 @@
+cat logs/qvm/two_bench_list.lst | while read id qasm; do pytest -s -k test_naive_reverse_select tst/qvm/integration/qvm_test.py --qasm $qasm --backend FakeBrooklyn --cu_size 4 | tee logs/qvm/main/naive_reverse/brooklyn/${id}.log; done
