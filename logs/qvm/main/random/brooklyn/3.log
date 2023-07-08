@@ -2,11 +2,11 @@
 platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
 rootdir: /root/projects/qvm
 plugins: anyio-3.6.2
-collected 43 items / 42 deselected / 1 selected
+collected 47 items / 46 deselected / 1 selected
 
-tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1205673217773438e-05
-FRP::online_compilation::costs::	3.3145740032196045
-Fid of qvm & frp	0.8792286631211365	0.8620398576810913
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1682510375976562e-05
+FRP::online_compilation::costs::	3.306584119796753
+Fid of qvm & frp	0.8815362461908177	0.8304588651642043
 .
 
 =============================== warnings summary ===============================
@@ -31,4 +31,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_indepe
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 42 deselected, 11 warnings in 82.00s (0:01:21) ===========
+=========== 1 passed, 46 deselected, 11 warnings in 87.47s (0:01:27) ===========

@@ -10,8 +10,8 @@ tst/qvm/integration/qvm_test.py
 ==== qasm_list ===
 
 /root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm
-baseline selection time	4.421971559524536
-baseline selection result	0.16795881723426442
+baseline selection time	4.400834560394287
+baseline selection result	0.17116726234543855
 .
 
 =============================== warnings summary ===============================
@@ -21,4 +21,4 @@ qcs/tst/qvm/integration/qvm_test.py::TestFrpBaseline::test_frp_baseline[/root/pr
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-================ 1 passed, 10 deselected, 2 warnings in 16.08s =================
+================ 1 passed, 10 deselected, 2 warnings in 16.07s =================

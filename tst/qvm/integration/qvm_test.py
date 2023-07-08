@@ -1,6 +1,10 @@
 from numpy import average
 from constants import QVM_SHOTS
-from qvm.util.circuit import KlReliabilityCalculator, KlReliabilityCalculatorForOracle
+from qvm.util.circuit import (
+    KlReliabilityCalculator,
+    KlReliabilityCalculatorForOracle,
+    PSTCalculator,
+)
 from test.qvm import *
 
 from qiskit import IBMQ
@@ -279,6 +283,11 @@ class TestOracle(QvmBaseTest):
             backend (str): backend name
         """
         print("\n ================ test_oracle ================ \n")
+        if qasm.endswith(".qasm"):
+            circ = self.get_qiskit_circ("qasm", qasm_path=qasm)
+            fid = self.run_oracle(circ, backend)
+            return
+
         with open(qasm, "r") as f:
             for line in f:
                 qasm_path = line.strip()
@@ -290,10 +299,11 @@ class TestOracle(QvmBaseTest):
 
 
 class TestFrpOracle(TestOracle):
+    calculator = KlReliabilityCalculatorForOracle()
+
     def run_oracle(self, circ, backend):
         """Run circuit on aer_simulator and get fidelity"""
         shots = QVM_SHOTS
-        fid_calculator = KlReliabilityCalculatorForOracle()
 
         # First find a partition
         proc_manager = FrpProcessManager(backend)
@@ -303,7 +313,7 @@ class TestFrpOracle(TestOracle):
         # Run on cu
         circ = transpile(circ, cu.backend)
         counts = cu.backend.run(circ, shots=shots).result().get_counts()
-        return fid_calculator.calc_fidelity(circ, counts, shots=shots)
+        return self.calculator.calc_fidelity(circ, counts, shots=shots)
 
     def test_oracle(self, qasm, backend):
         """Test sequential run result
@@ -316,6 +326,20 @@ class TestFrpOracle(TestOracle):
         backend = globals().get(backend)()
         self.back_manager = FrpBackendManagerV2(backend)
         self.back_manager.init_helpers()
+        super().test_oracle(qasm, backend)
+
+    def test_pst_oracle(self, qasm, backend):
+        """Test sequential run result
+        Use native qiskit transpile and run
+
+        Args:
+            qasm (str): qasm_file_list
+            backend (str): backend name
+        """
+        backend = globals().get(backend)()
+        self.back_manager = FrpBackendManagerV2(backend)
+        self.back_manager.init_helpers()
+        self.calculator = PSTCalculator()
         super().test_oracle(qasm, backend)
 
 

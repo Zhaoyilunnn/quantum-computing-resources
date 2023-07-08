@@ -2,11 +2,11 @@
 platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
 rootdir: /root/projects/qvm
 plugins: anyio-3.6.2
-collected 43 items / 42 deselected / 1 selected
+collected 47 items / 46 deselected / 1 selected
 
-tst/qvm/integration/bench_test.py QVM::selection::costs::	1.0967254638671875e-05
-FRP::online_compilation::costs::	2.8229002952575684
-Fid of qvm & frp	0.09460453406184499	0.10846829587390446
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.33514404296875e-05
+FRP::online_compilation::costs::	2.7966530323028564
+Fid of qvm & frp	0.07849905303474997	0.09161435837660561
 .
 
 =============================== warnings summary ===============================
@@ -18,4 +18,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_indepe
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 42 deselected, 4 warnings in 63.06s (0:01:03) ============
+=========== 1 passed, 46 deselected, 4 warnings in 68.86s (0:01:08) ============

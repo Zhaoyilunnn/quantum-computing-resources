@@ -2,16 +2,16 @@
 platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
 rootdir: /root/projects/qvm
 plugins: anyio-3.6.2
-collected 43 items / 42 deselected / 1 selected
+collected 47 items / 46 deselected / 1 selected
 
-tst/qvm/integration/bench_test.py QVM::selection::costs::	1.2874603271484375e-05
-FRP::online_compilation::costs::	4.273625135421753
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.1920928955078125e-05
+FRP::online_compilation::costs::	4.080776214599609
 F
 
 =================================== FAILURES ===================================
 _ TestBenchDiffBackendQvmFrpV2.test_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//ipea_n2/ipea_n2.qasm,/root/projects/QASMBench/small//teleportation_n3/teleportation_n3.qasm-FakeBrooklyn-4-10] _
 
-self = <bench_test.TestBenchDiffBackendQvmFrpV2 object at 0x7fc2ee479f00>
+self = <bench_test.TestBenchDiffBackendQvmFrpV2 object at 0x7f86de69e770>
 bench = 'qasm', nq = 10
 qasm = '/root/projects/QASMBench/small//ipea_n2/ipea_n2.qasm,/root/projects/QASMBench/small//teleportation_n3/teleportation_n3.qasm'
 backend = 'FakeBrooklyn', cu_size = 4
@@ -21,19 +21,19 @@ backend = 'FakeBrooklyn', cu_size = 4
         self.prepare_for_test(backend, cu_size)
 >       super().test_two_bench_frp(bench, nq, qasm, independent=True)
 
-tst/qvm/integration/bench_test.py:446: 
+tst/qvm/integration/bench_test.py:447: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-tst/qvm/integration/bench_test.py:387: in test_two_bench_frp
-    fid_qvm = self._fid_calculator.calc_fidelity(
-../qvm/util/circuit.py:266: in calc_fidelity
-    fids = [self._calc_single_fidelity(c, cnts, **kwargs) for c, cnts in zip(circ, counts)]
-../qvm/util/circuit.py:266: in <listcomp>
-    fids = [self._calc_single_fidelity(c, cnts, **kwargs) for c, cnts in zip(circ, counts)]
-../qvm/util/circuit.py:246: in _calc_single_fidelity
+tst/qvm/integration/bench_test.py:386: in test_two_bench_frp
+    fid_qvm = self.fid_calculator.calc_fidelity(
+../qvm/util/circuit.py:274: in calc_fidelity
+    fids = [
+../qvm/util/circuit.py:275: in <listcomp>
+    self._calc_single_fidelity(c, cnts, **kwargs)
+../qvm/util/circuit.py:251: in _calc_single_fidelity
     pv_noise, _ = counts_to_vector(counts, num_qubits)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-counts = {'1100': 15401, '0111': 16917, '0011': 743900, '1011': 39426, '0100': 32794, '0010': 31803, '0000': 8238, '1110': 14822, '1101': 44456, '0101': 26943, '1001': 6626, '0110': 5990, '1000': 3817, '1111': 25709, '0001': 27100, '1010': 4634}
+counts = {'1110': 14710, '1000': 3833, '0110': 5954, '1011': 39418, '0011': 742708, '0111': 16979, '1100': 15539, '0010': 32055, '0000': 8236, '0100': 33066, '1001': 6804, '0101': 26855, '0001': 27583, '1111': 25689, '1101': 44498, '1010': 4649}
 num_qubits = 2
 
     def counts_to_vector(counts: Counts, num_qubits: int) -> Tuple[np.ndarray, int]:
@@ -43,7 +43,7 @@ num_qubits = 2
         for key, val in counts.items():
             shots += val
 >           vec[int(key, 2)] = val
-E           IndexError: index 12 is out of bounds for axis 0 with size 4
+E           IndexError: index 14 is out of bounds for axis 0 with size 4
 
 /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/result/mitigation/utils.py:93: IndexError
 ------------------------------ Captured log call -------------------------------
@@ -71,4 +71,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_indepe
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 =========================== short test summary info ============================
 FAILED tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_independent_two_bench_frp[qasm-/root/projects/QASMBench/small/ipea_n2/ipea_n2.qasm,/root/projects/QASMBench/small/teleportation_n3/teleportation_n3.qasm-FakeBrooklyn-4-10]
-=========== 1 failed, 42 deselected, 4 warnings in 93.66s (0:01:33) ============
+=========== 1 failed, 46 deselected, 4 warnings in 124.06s (0:02:04) ===========

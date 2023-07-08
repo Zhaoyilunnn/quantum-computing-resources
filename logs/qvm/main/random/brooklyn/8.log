@@ -2,16 +2,16 @@
 platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
 rootdir: /root/projects/qvm
 plugins: anyio-3.6.2
-collected 43 items / 42 deselected / 1 selected
+collected 47 items / 46 deselected / 1 selected
 
-tst/qvm/integration/bench_test.py QVM::selection::costs::	1.4781951904296875e-05
-FRP::online_compilation::costs::	3.882960081100464
+tst/qvm/integration/bench_test.py QVM::selection::costs::	1.7642974853515625e-05
+FRP::online_compilation::costs::	4.303873538970947
 F
 
 =================================== FAILURES ===================================
 _ TestBenchDiffBackendQvmFrpV2.test_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm-FakeBrooklyn-4-10] _
 
-self = <bench_test.TestBenchDiffBackendQvmFrpV2 object at 0x7fa18efb66b0>
+self = <bench_test.TestBenchDiffBackendQvmFrpV2 object at 0x7fa5502ddc90>
 bench = 'qasm', nq = 10
 qasm = '/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small//qaoa_n3/qaoa_n3.qasm'
 backend = 'FakeBrooklyn', cu_size = 4
@@ -21,19 +21,19 @@ backend = 'FakeBrooklyn', cu_size = 4
         self.prepare_for_test(backend, cu_size)
 >       super().test_two_bench_frp(bench, nq, qasm, independent=True)
 
-tst/qvm/integration/bench_test.py:446: 
+tst/qvm/integration/bench_test.py:447: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-tst/qvm/integration/bench_test.py:387: in test_two_bench_frp
-    fid_qvm = self._fid_calculator.calc_fidelity(
-../qvm/util/circuit.py:266: in calc_fidelity
-    fids = [self._calc_single_fidelity(c, cnts, **kwargs) for c, cnts in zip(circ, counts)]
-../qvm/util/circuit.py:266: in <listcomp>
-    fids = [self._calc_single_fidelity(c, cnts, **kwargs) for c, cnts in zip(circ, counts)]
-../qvm/util/circuit.py:246: in _calc_single_fidelity
+tst/qvm/integration/bench_test.py:386: in test_two_bench_frp
+    fid_qvm = self.fid_calculator.calc_fidelity(
+../qvm/util/circuit.py:274: in calc_fidelity
+    fids = [
+../qvm/util/circuit.py:275: in <listcomp>
+    self._calc_single_fidelity(c, cnts, **kwargs)
+../qvm/util/circuit.py:251: in _calc_single_fidelity
     pv_noise, _ = counts_to_vector(counts, num_qubits)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-counts = {'1 0 0': 50073, '1 1 1': 43476, '0 1 1': 220993, '1 0 1': 137622, '1 1 0': 141676, '0 0 1': 113065, '0 1 0': 111597, '0 0 0': 230074}
+counts = {'0 0 1': 112881, '1 0 1': 138808, '1 0 0': 50124, '1 1 0': 141422, '1 1 1': 43924, '0 1 1': 219793, '0 0 0': 230158, '0 1 0': 111466}
 num_qubits = 3
 
     def counts_to_vector(counts: Counts, num_qubits: int) -> Tuple[np.ndarray, int]:
@@ -43,7 +43,7 @@ num_qubits = 3
         for key, val in counts.items():
             shots += val
 >           vec[int(key, 2)] = val
-E           ValueError: invalid literal for int() with base 2: '1 0 0'
+E           ValueError: invalid literal for int() with base 2: '0 0 1'
 
 /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/result/mitigation/utils.py:93: ValueError
 ------------------------------ Captured log call -------------------------------
@@ -71,4 +71,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_indepe
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 =========================== short test summary info ============================
 FAILED tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_independent_two_bench_frp[qasm-/root/projects/QASMBench/small/linearsolver_n3/linearsolver_n3.qasm,/root/projects/QASMBench/small/qaoa_n3/qaoa_n3.qasm-FakeBrooklyn-4-10]
-=========== 1 failed, 42 deselected, 4 warnings in 64.50s (0:01:04) ============
+=========== 1 failed, 46 deselected, 4 warnings in 69.06s (0:01:09) ============

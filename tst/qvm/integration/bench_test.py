@@ -5,7 +5,7 @@ from qutils.plot import plot_bar
 from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.backend import *
-from qvm.util.circuit import KlReliabilityCalculator, merge_circuits_v2
+from qvm.util.circuit import KlReliabilityCalculator, PSTCalculator, merge_circuits_v2
 from qvm.util.quafu_helper import get_quafu_backend, to_qiskit_backend_v1
 
 from constants import *
@@ -232,6 +232,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+        self.fid_calculator = KlReliabilityCalculator()
 
     def test_single_bench(self, bench):
         pass
@@ -296,7 +297,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         """
         if independent:
             return [
-                cu.backend.run(c).result().get_counts()
+                cu.backend.run(c, **kwargs).result().get_counts()
                 for c, cu in zip(trans_list, cu_list)
             ]
 
@@ -375,8 +376,6 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             print(f"run frp error: {e}")
 
         # Calculate fidelity
-        self._fid_calculator = KlReliabilityCalculator()
-
         if independent:
             circ_list = [circ0, circ1]
         else:
@@ -384,18 +383,16 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         fid_qvm = None
         if qvm_res:
-            fid_qvm = self._fid_calculator.calc_fidelity(
-                circ_list, qvm_res, shots=shots
-            )
+            fid_qvm = self.fid_calculator.calc_fidelity(circ_list, qvm_res, shots=shots)
         fid_frp = None
         if frp_res:
-            fid_frp = self._fid_calculator.calc_fidelity(
-                circ_list, frp_res, shots=shots
-            )
+            fid_frp = self.fid_calculator.calc_fidelity(circ_list, frp_res, shots=shots)
         print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
 
 
 class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
+    fid_calculator = KlReliabilityCalculator()
+
     def setup_class(self):
         pass
 
@@ -440,9 +437,17 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self.prepare_for_test(backend, cu_size)
         super().test_two_bench_frp(bench, nq, qasm)
 
-    def test_independent_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
+    def test_kl_independent_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
         """Execute qvm/frp exes on their own backend"""
         self.prepare_for_test(backend, cu_size)
+        super().test_two_bench_frp(bench, nq, qasm, independent=True)
+
+    def test_pst_independent_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
+        """Execute qvm/frp exes on their own backend
+
+        Use PST as reliability metric"""
+        self.prepare_for_test(backend, cu_size)
+        self.fid_calculator = PSTCalculator()
         super().test_two_bench_frp(bench, nq, qasm, independent=True)
 
 

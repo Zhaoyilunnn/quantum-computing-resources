@@ -2,11 +2,11 @@
 platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
 rootdir: /root/projects/qvm
 plugins: anyio-3.6.2
-collected 43 items / 42 deselected / 1 selected
+collected 47 items / 46 deselected / 1 selected
 
-tst/qvm/integration/bench_test.py QVM::selection::costs::	2.8133392333984375e-05
+tst/qvm/integration/bench_test.py QVM::selection::costs::	2.7894973754882812e-05
 run qvm error: 'No counts for experiment "0"'
-FRP::online_compilation::costs::	106.93980574607849
+FRP::online_compilation::costs::	107.07191777229309
 run frp error: 'No counts for experiment "0"'
 Fid of qvm & frp	None	None
 .
@@ -18,4 +18,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_indepe
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 42 deselected, 2 warnings in 402.66s (0:06:42) ===========
+=========== 1 passed, 46 deselected, 2 warnings in 404.55s (0:06:44) ===========

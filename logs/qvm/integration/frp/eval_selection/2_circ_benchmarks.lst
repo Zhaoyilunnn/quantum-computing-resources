@@ -17,7 +17,6 @@
 17	/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//teleportation_n3/teleportation_n3.qasm	grover_n2,teleportation_n3
 18	/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm	hhl_n7,hs4_n4
 19	/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm	lpn_n5,grover_n2
-20	/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//qec_en_n5/qec_en_n5.qasm	qaoa_n6,qec_en_n5
 21	/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm	qaoa_n6,simon_n6
 22	/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm	qpe_n9,hhl_n7
 23	/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm	qpe_n9,simon_n6

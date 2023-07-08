@@ -10,8 +10,8 @@ tst/qvm/integration/qvm_test.py
 ==== qasm_list ===
 
 /root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm
-baseline selection time	4.869417667388916
-baseline selection result	1.464501168207493
+baseline selection time	4.916301965713501
+baseline selection result	1.2607650435493816
 .
 
 =============================== warnings summary ===============================
