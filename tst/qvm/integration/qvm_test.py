@@ -9,6 +9,9 @@ from test.qvm import *
 
 from qiskit import IBMQ
 from qvm.util.quafu_helper import get_quafu_backend
+from qvm.model import BaseExecutable, Process
+
+from typing import List
 
 
 class TestQvm(QvmBaseTest):
@@ -171,15 +174,6 @@ class TestSelectMethods(QvmBaseTest):
             fid = fid_calculator.calc_fidelity(circ, results[i], shots=shots)
             fidelities.append(fid)
         return average(fidelities)
-
-    def reconstruct_exes(self, exes, processes):
-        """Reset selected exes to the original position is process list"""
-        recons_exes = []
-        for proc in processes:
-            for exe in proc:
-                if exe in exes:
-                    recons_exes.append(exe)
-        return recons_exes
 
     def prepare_for_test(self, qasm, backend, cu_size):
         """Preparation before running selection"""

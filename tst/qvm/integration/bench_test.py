@@ -257,34 +257,63 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         res = cu.backend.run(circ, **kwargs).result()
         return res.get_counts()
 
-    def _do_run_qvm_ochestration(
+    def _do_run_qvm_ochestration_method(
         self,
         processes: List[Process],
         is_run=True,
         independent=False,
-        method: str | List[str]="random",
-        **kwargs
+        method: str = "random",
+        **kwargs,
     ):
         self.qvm_proc.method = method
         start = time.time()
         exes = self.qvm_proc._select(processes)
-        print(f"QVM::selection::costs::\t{time.time() - start}")
+        print(f"QVM::selection::costs::\t{method}\t{time.time() - start}")
 
+        exes = self.reconstruct_exes(exes, processes)
+        self.debug_exes(exes)
         if not is_run:
             # If we just want to test the online compilation time
             return None
 
         if independent:
-            return self.run_exes_independent(exes, **kwargs)
-        return self.run_exes_merge(exes, **kwargs)
+            res = self.run_exes_independent(exes, **kwargs)
+        else:
+            res = self.run_exes_merge(exes, **kwargs)
+        return res
+
+    def _do_run_qvm_ochestration(
+        self,
+        processes: List[Process],
+        is_run=True,
+        independent=False,
+        method: str | List[str] = "random",
+        **kwargs,
+    ):
+        if isinstance(method, str):
+            return self._do_run_qvm_ochestration_method(
+                processes,
+                is_run=is_run,
+                independent=independent,
+                method=method,
+                **kwargs,
+            )
+
+        results = []
+        for m in method:
+            res = self._do_run_qvm_ochestration_method(
+                processes, is_run=is_run, independent=independent, method=m, **kwargs
+            )
+            results.append(res)
+        return results
 
     def run_qvm(
         self,
         circ_list: List[QuantumCircuit],
         is_run=True,
         independent=False,
-        method: str | List[str]="random",
-        **kwargs
+        method: str | List[str] = "random",
+        **kwargs,
     ):
         """Run using qvm process manager
 
@@ -301,18 +330,9 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         self.qvm_proc = QvmProcessManagerV2(self._backend)
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
-        self.qvm_proc.method = method
-        start = time.time()
-        exes = self.qvm_proc._select(processes)
-        print(f"QVM::selection::costs::\t{time.time() - start}")
-
-        if not is_run:
-            # If we just want to test the online compilation time
-            return None
-
-        if independent:
-            return self.run_exes_independent(exes, **kwargs)
-        return self.run_exes_merge(exes, **kwargs)
+        return self._do_run_qvm_ochestration(
+            processes, is_run=is_run, independent=independent, method=method, **kwargs
+        )
 
     def run_frp_exes(self, trans_list, cu_list, independent=False, **kwargs):
         """merge and run on merged backend, or run independently
@@ -497,6 +517,8 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         - kl: KL divergence
         - pst: Percentage of successful trials
         """
+        print("\n------------------- Testing --------------\n")
+
         self.prepare_for_test(backend, cu_size, vs=qvm_version)
 
         if metric == "pst":

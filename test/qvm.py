@@ -83,6 +83,15 @@ class QvmBaseTest(BaseTest):
         compute_unit_lists = [exe.comp_unit_ids for exe in executables]
         print(f"compute_unit_list\t{compute_unit_lists}")
 
+    def reconstruct_exes(self, exes: List[BaseExecutable], processes: List[Process]):
+        """Reset selected exes to the original position is process list"""
+        recons_exes = []
+        for proc in processes:
+            for exe in proc:
+                if exe in exes:
+                    recons_exes.append(exe)
+        return recons_exes
+
     def save_compilation_outcome(
         self, data_dir, process: Process, qasm_name: str, backend: str, cu_size: int = 4
     ):
