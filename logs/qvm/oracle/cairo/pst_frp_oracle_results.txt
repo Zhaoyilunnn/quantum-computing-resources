@@ -1,0 +1,48 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 12 items / 11 deselected / 1 selected
+
+tst/qvm/integration/qvm_test.py 
+ ================ test_oracle ================ 
+
+adder_n10	0.2560701370239258
+adder_n4	0.8584299087524414
+basis_change_n3	0.9195518493652344
+basis_trotter_n4	0.14763641357421875
+cat_state_n4	0.9458541870117188
+deutsch_n2	0.9889583587646484
+dnn_n2	1.0
+dnn_n8	1.0
+error_correctiond3_n5	0.7862253189086914
+fredkin_n3	0.8986215591430664
+grover_n2	0.9706268310546875
+hhl_n7	0.6461391448974609
+hs4_n4	0.9303169250488281
+ising_n10	0.9933500289916992
+iswap_n2	0.9719028472900391
+linearsolver_n3	0.9836645126342773
+lpn_n5	0.928828239440918
+pea_n5	0.7007684707641602
+qaoa_n6	1.0
+qec_en_n5	0.8555727005004883
+qft_n4	1.0
+qpe_n9	1.0
+qrng_n4	1.0
+quantumwalks_n2	1.0
+shor_n5	0.9901599884033203
+simon_n6	0.868443489074707
+teleportation_n3	1.0
+toffoli_n3	0.9264736175537109
+variational_n4	0.8929014205932617
+wstate_n3	0.9206771850585938
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/qvm_test.py: 30 warnings
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========== 1 passed, 11 deselected, 30 warnings in 245.95s (0:04:05) ===========

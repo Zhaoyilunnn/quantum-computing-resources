@@ -1,6 +1,6 @@
 from test.qvm import *
 
-from qvm.manager.backend_manager import FrpBackendManagerV2
+from qvm.manager.backend_manager import QvmFrpBackendManagerV2
 from qvm.model.executable import *
 
 
@@ -10,7 +10,7 @@ class TestCostExecutable(QvmBaseTest):
         circ = self.get_qiskit_circ("random", num_qubits=nq, depth=nq)
 
         # Create backend manager
-        bm = FrpBackendManagerV2(self._backend)
+        bm = QvmFrpBackendManagerV2(self._backend)
         bm.init_helpers()
         bm.init_cus()
 

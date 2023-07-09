@@ -38,7 +38,7 @@ class TestQvm(QvmBaseTest):
 
 class TestQvmV2(QvmBaseTest):
     def setup_class(self):
-        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
 
@@ -78,7 +78,7 @@ class TestRealMachine(QvmBaseTest):
     def setup_class(self):
         provider = IBMQ.load_account()
         backend = provider.get_backend("ibmq_belem")
-        self._backend_manager = FrpBackendManagerV2(backend)
+        self._backend_manager = QvmFrpBackendManagerV2(backend)
         self._backend_manager.cu_size = 2
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
@@ -117,7 +117,7 @@ class TestQuafu(QvmBaseTest):
     def test_run_using_quafu_model(self):
         # P10
         quafu_backend_10 = get_quafu_backend("ScQ-P10")
-        self._backend_manager = FrpBackendManagerV2(quafu_backend_10)
+        self._backend_manager = QvmFrpBackendManagerV2(quafu_backend_10)
         self._backend_manager.cu_size = 2
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
@@ -125,7 +125,7 @@ class TestQuafu(QvmBaseTest):
 
         # P18
         quafu_backend_18 = get_quafu_backend("ScQ-P18")
-        self._backend_manager = FrpBackendManagerV2(quafu_backend_18)
+        self._backend_manager = QvmFrpBackendManagerV2(quafu_backend_18)
         self._backend_manager.cu_size = 2
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
@@ -135,7 +135,7 @@ class TestQuafu(QvmBaseTest):
         # P10
         quafu_backend_str = "ScQ-P18"
         quafu_backend = get_quafu_backend(quafu_backend_str)
-        self._backend_manager = FrpBackendManagerV2(quafu_backend)
+        self._backend_manager = QvmFrpBackendManagerV2(quafu_backend)
         self._backend_manager.cu_size = 4
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
@@ -184,7 +184,7 @@ class TestSelectMethods(QvmBaseTest):
     def prepare_for_test(self, qasm, backend, cu_size):
         """Preparation before running selection"""
         self._backend = globals().get(backend)()
-        self.back_manager = FrpBackendManagerV2(self._backend)
+        self.back_manager = QvmFrpBackendManagerV2(self._backend)
         self.back_manager.cu_size = int(cu_size)
         self.back_manager.init_helpers()
         self.back_manager.init_cus()
@@ -265,16 +265,19 @@ class TestSelectMethods(QvmBaseTest):
 
 
 class TestOracle(QvmBaseTest):
-    def run_oracle(self, circ, backend):
+    fid_calculator = KlReliabilityCalculatorForOracle()
+
+    def run_oracle(self, circ, backend, metric):
         """Run circuit on aer_simulator and get fidelity"""
         shots = QVM_SHOTS
-        fid_calculator = KlReliabilityCalculatorForOracle()
         backend = globals().get(backend)()
         circ = transpile(circ, backend)
         counts = backend.run(circ, shots=shots).result().get_counts()
-        return fid_calculator.calc_fidelity(circ, counts, shots=shots)
+        if metric == "pst":
+            self.fid_calculator = PSTCalculator()
+        return self.fid_calculator.calc_fidelity(circ, counts, shots=shots)
 
-    def test_oracle(self, qasm, backend):
+    def test_oracle(self, qasm, backend, metric):
         """Test sequential run result
         Use native qiskit transpile and run
 
@@ -294,14 +297,14 @@ class TestOracle(QvmBaseTest):
                 bench_name = os.path.basename(qasm_path)
                 bench_name = bench_name.split(".")[0]
                 circ = self.get_qiskit_circ("qasm", qasm_path=qasm_path)
-                fid = self.run_oracle(circ, backend)
+                fid = self.run_oracle(circ, backend, metric)
                 print(f"{bench_name}\t{fid}")
 
 
 class TestFrpOracle(TestOracle):
     calculator = KlReliabilityCalculatorForOracle()
 
-    def run_oracle(self, circ, backend):
+    def run_oracle(self, circ, backend, metric):
         """Run circuit on aer_simulator and get fidelity"""
         shots = QVM_SHOTS
 
@@ -315,7 +318,7 @@ class TestFrpOracle(TestOracle):
         counts = cu.backend.run(circ, shots=shots).result().get_counts()
         return self.calculator.calc_fidelity(circ, counts, shots=shots)
 
-    def test_oracle(self, qasm, backend):
+    def test_oracle(self, qasm, backend, metric):
         """Test sequential run result
         Use native qiskit transpile and run
 
@@ -324,11 +327,11 @@ class TestFrpOracle(TestOracle):
             backend (str): backend name
         """
         backend = globals().get(backend)()
-        self.back_manager = FrpBackendManagerV2(backend)
+        self.back_manager = QvmFrpBackendManagerV2(backend)
         self.back_manager.init_helpers()
-        super().test_oracle(qasm, backend)
+        super().test_oracle(qasm, backend, metric)
 
-    def test_pst_oracle(self, qasm, backend):
+    def test_pst_oracle(self, qasm, backend, metric):
         """Test sequential run result
         Use native qiskit transpile and run
 
@@ -337,17 +340,17 @@ class TestFrpOracle(TestOracle):
             backend (str): backend name
         """
         backend = globals().get(backend)()
-        self.back_manager = FrpBackendManagerV2(backend)
+        self.back_manager = QvmFrpBackendManagerV2(backend)
         self.back_manager.init_helpers()
         self.calculator = PSTCalculator()
-        super().test_oracle(qasm, backend)
+        super().test_oracle(qasm, backend, metric)
 
 
 class TestFrpBaseline(QvmBaseTest):
     def prepare_for_test(self, qasm, backend, cu_size):
         """Preparation before running selection"""
         self._backend = globals().get(backend)()
-        self.back_manager = FrpBackendManagerV2(self._backend)
+        self.back_manager = QvmFrpBackendManagerV2(self._backend)
         self.back_manager.init_helpers()
         self.proc_manager = FrpProcessManager(self._backend)
 

@@ -22,7 +22,7 @@ BENCH_PATHS = [
 class TestQvmProcManagerV2(QvmBaseTest):
     def brute_force_on_specific_backend(self, backend_obj):
         proc_manager = QvmProcessManagerV2(backend_obj, method="brute_force")
-        back_manager = FrpBackendManagerV2(backend_obj)
+        back_manager = QvmFrpBackendManagerV2(backend_obj)
         back_manager.init_helpers()
         back_manager.init_cus()
         circuits = [

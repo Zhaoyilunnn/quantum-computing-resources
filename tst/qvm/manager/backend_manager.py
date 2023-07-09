@@ -139,7 +139,7 @@ class TestBfsBackendManager(QvmBaseTest):
 
 class TestFrpBackendManager(QvmBaseTest):
     def setup_class(self):
-        self._manager = FrpBackendManagerV1(self._backend)
+        self._manager = QvmFrpBackendManagerV1(self._backend)
         self._manager.init_helpers()
         self._manager.init_cus()
 
@@ -154,7 +154,7 @@ class TestFrpBackendManager(QvmBaseTest):
 
 class TestFrpBackendManagerV2(QvmBaseTest):
     def setup_class(self):
-        self._manager = FrpBackendManagerV2(self._backend)
+        self._manager = QvmFrpBackendManagerV2(self._backend)
         self._manager.init_helpers()
         self._manager.init_cus()
 

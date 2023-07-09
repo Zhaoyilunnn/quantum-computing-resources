@@ -16,6 +16,8 @@ def pytest_addoption(parser):
     parser.addoption("--beta", action="store", default=0)
     parser.addoption("--backend", action="store", default="FakeCairo")
     parser.addoption("--cu_size", action="store", default=4)
+    parser.addoption("--qvm_version", action="store", default="random")
+    parser.addoption("--metric", action="store", default="kl")
     # Params for QVM
 
     # Params for QDAO
@@ -62,6 +64,14 @@ def pytest_generate_tests(metafunc):
     option_value = metafunc.config.option.cu_size
     if 'cu_size' in metafunc.fixturenames and option_value is not None:
         metafunc.parametrize("cu_size", [option_value])
+
+    option_value = metafunc.config.option.qvm_version
+    if 'qvm_version' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("qvm_version", [option_value])
+
+    option_value = metafunc.config.option.metric
+    if 'metric' in metafunc.fixturenames and option_value is not None:
+        metafunc.parametrize("metric", [option_value])
     ############## Params for QVM ##############
 
     ############## Params for QDAO ##############

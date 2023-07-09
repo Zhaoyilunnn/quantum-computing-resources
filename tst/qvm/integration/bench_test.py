@@ -35,7 +35,7 @@ class TestBenchQvmBfs(QvmBaseTest):
 
     def test_two_bench_native(self, bench):
         """Testing qvm vs. baseline (native QISKIT)"""
-        shots = 2**20
+        shots = QVM_SHOTS
 
         # circ0 = self.create_dummy_bell_state((0,1))
         # circ1 = self.create_dummy_bell_state((0,1))
@@ -111,7 +111,7 @@ class TestBenchQvmBfs(QvmBaseTest):
 
     def test_two_bench_frp(self, bench):
         """Testing qvm vs. FRP (MICRO-2019)"""
-        shots = 2**20
+        shots = QVM_SHOTS
 
         # circ0 = self.create_dummy_bell_state((0,1))
         # circ1 = self.create_dummy_bell_state((0,1))
@@ -134,7 +134,7 @@ class TestBenchQvmBfs(QvmBaseTest):
 
     def test_two_n4_qasm_bench_wo_cmr(self):
         """Test two 4-qubit programs, compare qvm and frp"""
-        shots = 2**20
+        shots = QVM_SHOTS
         fids_qvm = []
         fids_frp = []
         labels = []
@@ -175,7 +175,7 @@ class TestBenchQvmBfs(QvmBaseTest):
         """Test two 4-qubit programs, compare qvm and frp
         Here we introduce CMR to graph partition in FRP
         """
-        shots = 2**20
+        shots = QVM_SHOTS
         fids_qvm = []
         fids_frp = []
         labels = []
@@ -220,7 +220,7 @@ class TestBenchQvmBfs(QvmBaseTest):
 
 class TestBenchQvmFrpV1(TestBenchQvmBfs):
     def setup_class(self):
-        self._backend_manager = FrpBackendManagerV1(self._backend)
+        self._backend_manager = QvmFrpBackendManagerV1(self._backend)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
@@ -228,7 +228,7 @@ class TestBenchQvmFrpV1(TestBenchQvmBfs):
 
 class TestBenchQvmFrpV2(TestBenchQvmBfs):
     def setup_class(self):
-        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
@@ -279,7 +279,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         print(f"QVM::selection::costs::\t{time.time() - start}")
 
         if not is_run:
-            # We just want to test the online compilation time
+            # If we just want to test the online compilation time
             return None
 
         if independent:
@@ -335,9 +335,6 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         return self.run_frp_exes(trans_list, cu_list, independent=independent, **kwargs)
 
-    # def eval_results(self, circ, counts):
-    #     """Calculate fidelity compared to ideal simulation"""
-
     def test_two_bench_frp(self, bench, nq, qasm, independent=False):
         """Testing qvm vs. FRP (MICRO-2019)
 
@@ -348,7 +345,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
                 getting random circuit
             qasm (str): QASM files, should be <qasm-0>;<qasm-1> format
         """
-        shots = 2**20
+        shots = QVM_SHOTS
         nq = int(nq)
         if qasm:
             items = qasm.split(",")
@@ -396,17 +393,21 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
     def setup_class(self):
         pass
 
-    def prepare_for_test(self, backend, cu_size):
+    def prepare_for_test(self, backend, cu_size, vs="random"):
         self._backend = globals().get(backend)()
-        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self._backend_manager = QvmFrpBackendManagerV2(self._backend)
+        if vs == "vanilla":
+            self._backend_manager.method = "vanilla"
         self.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
+
+        # FIXME(): self._process_manager may have no use
         self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
 
     def test_two_bench_runtime_overhead(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
-        shots = 2**20
+        shots = QVM_SHOTS
         nq = int(nq)
         if qasm:
             items = qasm.split(",")
@@ -450,6 +451,55 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self.fid_calculator = PSTCalculator()
         super().test_two_bench_frp(bench, nq, qasm, independent=True)
 
+    def test_bench_diff_methods_diff_metric(self, qasm, backend, cu_size, qvm_version, metric):
+        """Given a list of qasm benchmarks, run on QvmFrpBackendManagerV2
+        and QvmProcessManagerV2.
+
+        Support setting qvm versions or baseline
+        - vanilla: randomly select exe
+        - random: sort exes, greedily select without sorting processes
+        - small_first: sort exes, sort processes (small circ first) and greedily select
+        - large_first: sort exes, sort processes (large circ first) and greedily select
+        - brute_force: sort exes, sort processes, and find optimal solution minimizing sum of idxes
+        - baseline: online compilation
+
+        Support different metric:
+        - kl: KL divergence
+        - pst: Percentage of successful trials
+        """
+        self.prepare_for_test(backend, cu_size, vs=qvm_version)
+
+        if metric == "pst":
+            self.fid_calculator = PSTCalculator()
+
+        shots = QVM_SHOTS
+        qasms = qasm.split(",")
+        circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasms]
+        if qvm_version in ["random", "vanilla"]:
+            res = self.run_qvm(
+                circ_list, independent=True, method="random", shots=shots
+            )
+        elif qvm_version == "small_first":
+            res = self.run_qvm(circ_list, independent=True, method="naive", shots=shots)
+        elif qvm_version == "large_first":
+            res = self.run_qvm(
+                circ_list, independent=True, method="naive_reverse", shots=shots
+            )
+        elif qvm_version == "brute_force":
+            res = self.run_qvm(
+                circ_list, independent=True, method="brute_force", shots=shots
+            )
+        elif qvm_version == "baseline":
+            res = self.run_frp(circ_list, independent=True, shots=shots)
+        else:
+            raise ValueError(
+                "Unsupported version, should be in one of "\
+                "[vanilla, random, small_first, large_first, brute_force, baseline]"
+            )
+
+        fid = self.fid_calculator.calc_fidelity(circ_list, res, shots=shots)
+        print(f"Fid of {qvm_version}\t{fid}")
+
 
 class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
     def setup_class(self):
@@ -467,7 +517,7 @@ class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
             print("Backend not found in quafu backend")
             exit(1)
         self._backend = to_qiskit_backend_v1(quafu_backend.get_chip_info())
-        self._backend_manager = FrpBackendManagerV2(self._backend)
+        self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         self.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
@@ -481,7 +531,7 @@ class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
     def prepare_for_test(self, backend, cu_size):
         quafu_backend_str = backend
         quafu_backend = get_quafu_backend(quafu_backend_str)
-        self._backend_manager = FrpBackendManagerV2(quafu_backend)
+        self._backend_manager = QvmFrpBackendManagerV2(quafu_backend)
         self._backend_manager.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
@@ -495,7 +545,7 @@ class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
     def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
 
-        shots = 2**20
+        shots = QVM_SHOTS
         nq = int(nq)
         if qasm:
             items = qasm.split(",")
