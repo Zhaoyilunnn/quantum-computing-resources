@@ -3,7 +3,7 @@ from constants import QVM_SHOTS
 from qvm.util.circuit import (
     KlReliabilityCalculator,
     KlReliabilityCalculatorForOracle,
-    PSTCalculator,
+    PstCalculator,
 )
 from test.qvm import *
 
@@ -274,7 +274,7 @@ class TestOracle(QvmBaseTest):
         circ = transpile(circ, backend)
         counts = backend.run(circ, shots=shots).result().get_counts()
         if metric == "pst":
-            self.fid_calculator = PSTCalculator()
+            self.fid_calculator = PstCalculator()
         return self.fid_calculator.calc_fidelity(circ, counts, shots=shots)
 
     def test_oracle(self, qasm, backend, metric):
@@ -342,7 +342,7 @@ class TestFrpOracle(TestOracle):
         backend = globals().get(backend)()
         self.back_manager = QvmFrpBackendManagerV2(backend)
         self.back_manager.init_helpers()
-        self.calculator = PSTCalculator()
+        self.calculator = PstCalculator()
         super().test_oracle(qasm, backend, metric)
 
 

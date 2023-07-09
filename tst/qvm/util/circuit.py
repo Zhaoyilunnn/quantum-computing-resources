@@ -3,7 +3,8 @@ from test.qvm import *
 from qutils.plot import plot_bar
 from qvm.util.circuit import (
     BaseReliabilityCalculator,
-    PSTCalculator,
+    PstCalculator,
+    QvmFidCalculator,
     SvFidReliabilityCalculator,
     calc_cmr,
     merge_circuits_v2,
@@ -25,8 +26,16 @@ class TestBaseReliabilityCalculator(QvmBaseTest):
         print("Test fidelity: {}".format(fidelity))
 
 
-class TestPSTCalculator(TestBaseReliabilityCalculator):
-    _calculator = PSTCalculator()
+class TestPstCalculator(TestBaseReliabilityCalculator):
+    _calculator = PstCalculator()
+
+
+class TestQvmFidCalculator(TestBaseReliabilityCalculator):
+    _calculator = QvmFidCalculator()
+
+    def test_calc_fidelity_diff_metric(self, metric):
+        self._calculator.metric = metric
+        super().test_calc_fidelity()
 
 
 class TestSvFidReliabilityCalculator(QvmBaseTest):

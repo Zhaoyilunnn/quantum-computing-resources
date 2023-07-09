@@ -5,7 +5,7 @@ from qutils.plot import plot_bar
 from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.backend import *
-from qvm.util.circuit import KlReliabilityCalculator, PSTCalculator, merge_circuits_v2
+from qvm.util.circuit import KlReliabilityCalculator, PstCalculator, merge_circuits_v2
 from qvm.util.quafu_helper import get_quafu_backend, to_qiskit_backend_v1
 
 from constants import *
@@ -257,25 +257,53 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         res = cu.backend.run(circ, **kwargs).result()
         return res.get_counts()
 
+    def _do_run_qvm_ochestration(
+        self,
+        processes: List[Process],
+        is_run=True,
+        independent=False,
+        method: str | List[str]="random",
+        **kwargs
+    ):
+        self.qvm_proc.method = method
+        start = time.time()
+        exes = self.qvm_proc._select(processes)
+        print(f"QVM::selection::costs::\t{time.time() - start}")
+
+        if not is_run:
+            # If we just want to test the online compilation time
+            return None
+
+        if independent:
+            return self.run_exes_independent(exes, **kwargs)
+        return self.run_exes_merge(exes, **kwargs)
+
     def run_qvm(
         self,
         circ_list: List[QuantumCircuit],
         is_run=True,
         independent=False,
-        method="random",
-        **kwargs,
+        method: str | List[str]="random",
+        **kwargs
     ):
         """Run using qvm process manager
 
         Here we temporarily use backend manager to extract compute units and compile on
         compute units, a better implementation should be in QvmProcessManager->run() method
+
+        Args:
+            circ_list: List of quantum circuits (without transpilation)
+            is_run: Whether run simulation/experiment
+            independent: Whether merge each exe and run on merged backend
+            method: Method of ochestration (selection) in QVM process manager
+            **kwargs: Other options
         """
 
-        qvm_proc = QvmProcessManagerV2(self._backend)
-        qvm_proc.method = method
+        self.qvm_proc = QvmProcessManagerV2(self._backend)
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
+        self.qvm_proc.method = method
         start = time.time()
-        exes = qvm_proc._select(processes)
+        exes = self.qvm_proc._select(processes)
         print(f"QVM::selection::costs::\t{time.time() - start}")
 
         if not is_run:
@@ -448,10 +476,12 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
 
         Use PST as reliability metric"""
         self.prepare_for_test(backend, cu_size)
-        self.fid_calculator = PSTCalculator()
+        self.fid_calculator = PstCalculator()
         super().test_two_bench_frp(bench, nq, qasm, independent=True)
 
-    def test_bench_diff_methods_diff_metric(self, qasm, backend, cu_size, qvm_version, metric):
+    def test_bench_diff_methods_diff_metric(
+        self, qasm, backend, cu_size, qvm_version, metric
+    ):
         """Given a list of qasm benchmarks, run on QvmFrpBackendManagerV2
         and QvmProcessManagerV2.
 
@@ -470,7 +500,7 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self.prepare_for_test(backend, cu_size, vs=qvm_version)
 
         if metric == "pst":
-            self.fid_calculator = PSTCalculator()
+            self.fid_calculator = PstCalculator()
 
         shots = QVM_SHOTS
         qasms = qasm.split(",")
@@ -493,7 +523,7 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
             res = self.run_frp(circ_list, independent=True, shots=shots)
         else:
             raise ValueError(
-                "Unsupported version, should be in one of "\
+                "Unsupported version, should be in one of "
                 "[vanilla, random, small_first, large_first, brute_force, baseline]"
             )
 
