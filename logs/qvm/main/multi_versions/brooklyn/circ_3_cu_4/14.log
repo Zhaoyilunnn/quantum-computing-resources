@@ -1,0 +1,29 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	naive	2.6702880859375e-05
+compute_unit_list	[{0, 10, 4}, {3}, {1, 12, 7}]
+QVM::selection::costs::	naive_reverse	0.00011587142944335938
+compute_unit_list	[{0, 10, 4}, {3}, {1, 12, 7}]
+QVM::selection::costs::	brute_force	0.0005161762237548828
+compute_unit_list	[{0, 10, 4}, {3}, {1, 12, 7}]
+small_first	2.6702880859375e-05	0.6365759176812614	0.7060375213623047
+large_first	0.00011587142944335938	0.6377902557202968	0.7056986490885416
+brute_force	0.0005161762237548828	0.6365722483197712	0.7061122258504232
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//adder_n10/adder_n10.qasm-FakeBrooklyn-4-small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//adder_n10/adder_n10.qasm-FakeBrooklyn-4-small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm,/root/projects/QASMBench/small//adder_n10/adder_n10.qasm-FakeBrooklyn-4-small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 3 warnings in 110.44s (0:01:50) ===========

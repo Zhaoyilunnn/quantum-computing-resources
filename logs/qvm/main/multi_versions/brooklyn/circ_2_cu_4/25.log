@@ -1,0 +1,28 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	naive	2.4318695068359375e-05
+compute_unit_list	[{2}, {3, 6}]
+QVM::selection::costs::	naive_reverse	0.000102996826171875
+compute_unit_list	[{2}, {3, 6}]
+QVM::selection::costs::	brute_force	0.0002281665802001953
+compute_unit_list	[{2}, {3, 6}]
+small_first	2.4318695068359375e-05	0.003534512291181062	0.9970927238464355
+large_first	0.000102996826171875	0.0035397531466429826	0.9971017837524414
+brute_force	0.0002281665802001953	0.003561899808061344	0.9970850944519043
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm-FakeBrooklyn-4-small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm-FakeBrooklyn-4-small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 2 warnings in 192.71s (0:03:12) ===========

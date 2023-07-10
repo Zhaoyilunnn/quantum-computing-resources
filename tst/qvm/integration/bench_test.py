@@ -1,14 +1,30 @@
 from test.qvm import *
 
+from qiskit.result import Counts
 from qiskit.providers.fake_provider import *
 from qutils.plot import plot_bar
 from qvm.manager.backend_manager import *
 from qvm.manager.process_manager import *
 from qvm.util.backend import *
-from qvm.util.circuit import KlReliabilityCalculator, PstCalculator, merge_circuits_v2
+from qvm.util.circuit import (
+    KlReliabilityCalculator,
+    PstCalculator,
+    merge_circuits_v2,
+    QvmFidCalculator,
+)
 from qvm.util.quafu_helper import get_quafu_backend, to_qiskit_backend_v1
 
 from constants import *
+
+
+# qvm_version to ochestration method mappings
+V2M = {
+    "random": "random",
+    "vanilla": "random",
+    "small_first": "naive",
+    "large_first": "naive_reverse",
+    "brute_force": "brute_force",
+}
 
 
 class TestBenchQvmBfs(QvmBaseTest):
@@ -231,8 +247,9 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
-        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
         self.fid_calculator = KlReliabilityCalculator()
+        self.qvm_proc = QvmProcessManagerV2(self._backend)
+        self.frp_proc = FrpProcessManager(self._backend)
 
     def test_single_bench(self, bench):
         pass
@@ -240,10 +257,11 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
     def run_exes_independent(self, exes: List[BaseExecutable], **kwargs):
         """Run each exe on its own backend
         This is used for run_qvm"""
-        counts_list = [
-            exe.comp_unit.backend.run(exe.circ, **kwargs).result().get_counts()
-            for exe in exes
-        ]
+        counts_list = []
+        for exe in exes:
+            res = exe.comp_unit.backend.run(exe.circ, **kwargs).result()
+            cnts = Counts(res.get_counts())
+            counts_list.append(cnts)
         return counts_list
 
     def run_exes_merge(self, exes: List[BaseExecutable], **kwargs):
@@ -255,9 +273,9 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         # circ = qvm_proc._merge_circuits(circs)
         circ = merge_circuits_v2(circs)
         res = cu.backend.run(circ, **kwargs).result()
-        return res.get_counts()
+        return Counts(res.get_counts())
 
-    def _do_run_qvm_ochestration_method(
+    def _do_run_qvm_orch_method(
         self,
         processes: List[Process],
         is_run=True,
@@ -268,7 +286,9 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         self.qvm_proc.method = method
         start = time.time()
         exes = self.qvm_proc._select(processes)
-        print(f"QVM::selection::costs::\t{method}\t{time.time() - start}")
+        end = time.time()
+        consumed = end - start
+        print(f"QVM::selection::costs::\t{method}\t{consumed}")
 
         exes = self.reconstruct_exes(exes, processes)
         self.debug_exes(exes)
@@ -280,9 +300,9 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             res = self.run_exes_independent(exes, **kwargs)
         else:
             res = self.run_exes_merge(exes, **kwargs)
-        return res
+        return res, consumed
 
-    def _do_run_qvm_ochestration(
+    def _do_run_qvm_orch(
         self,
         processes: List[Process],
         is_run=True,
@@ -291,20 +311,22 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         **kwargs,
     ):
         if isinstance(method, str):
-            return self._do_run_qvm_ochestration_method(
+            res, _ = self._do_run_qvm_orch_method(
                 processes,
                 is_run=is_run,
                 independent=independent,
                 method=method,
                 **kwargs,
             )
+            return res
 
+        # If we run multiple methods together, record the consumed times
         results = []
         for m in method:
-            res = self._do_run_qvm_ochestration_method(
+            res, consumed = self._do_run_qvm_orch_method(
                 processes, is_run=is_run, independent=independent, method=m, **kwargs
             )
-            results.append(res)
+            results.append((res, consumed))
         return results
 
     def run_qvm(
@@ -328,9 +350,8 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             **kwargs: Other options
         """
 
-        self.qvm_proc = QvmProcessManagerV2(self._backend)
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
-        return self._do_run_qvm_ochestration(
+        return self._do_run_qvm_orch(
             processes, is_run=is_run, independent=independent, method=method, **kwargs
         )
 
@@ -344,10 +365,11 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             independent: whether run independently
         """
         if independent:
-            return [
-                cu.backend.run(c, **kwargs).result().get_counts()
-                for c, cu in zip(trans_list, cu_list)
-            ]
+            res = []
+            for c, cu in zip(trans_list, cu_list):
+                cnts = cu.backend.run(c, **kwargs).result().get_counts()
+                res.append(Counts(cnts))
+            return res
 
         # Merge each comp_unit and run
         cu = self._backend_manager.merge_cus(cu_list)
@@ -355,7 +377,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         exe = merge_circuits_v2(trans_list)
 
         res = cu.backend.run(exe, **kwargs).result()
-        return res.get_counts()
+        return Counts(res.get_counts())
 
     def run_frp(
         self, circ_list: List[QuantumCircuit], is_run=True, independent=False, **kwargs
@@ -364,13 +386,12 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         Here we temporarily use backend manager to extract compute units and compile on
         compute units, a better implementation should be in FrpProcessManager->run() method
         """
-        proc = FrpProcessManager(self._backend)
         if "is_low_cmr" in kwargs:
             is_low_cmr = kwargs["is_low_cmr"]
-            proc._partitioner.is_low_cmr = is_low_cmr
+            self.frp_proc._partitioner.is_low_cmr = is_low_cmr
 
         start = time.time()
-        part_list = [proc.gen_partition(circ) for circ in circ_list]
+        part_list = [self.frp_proc.gen_partition(circ) for circ in circ_list]
         cu_list = [self._backend_manager.extract_one_cu(part) for part in part_list]
         trans_list = [
             transpile(circ_list[i], cu_list[i].backend) for i in range(len(circ_list))
@@ -442,6 +463,8 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         pass
 
     def prepare_for_test(self, backend, cu_size, vs="random"):
+        """Create backend manager, should be run at the begining of each single test,
+        this is used to replace `setup_class`"""
         self._backend = globals().get(backend)()
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         if vs == "vanilla":
@@ -449,9 +472,8 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
-
-        # FIXME(): self._process_manager may have no use
-        self._process_manager = ProcessManagerFactory.get_manager("qvm", self._backend)
+        self.qvm_proc = QvmProcessManagerV2(self._backend)
+        self.frp_proc = FrpProcessManager(self._backend)
 
     def test_two_bench_runtime_overhead(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
@@ -524,22 +546,15 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         if metric == "pst":
             self.fid_calculator = PstCalculator()
 
+        # Prepare circuits
         shots = QVM_SHOTS
         qasms = qasm.split(",")
         circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasms]
-        if qvm_version in ["random", "vanilla"]:
+
+        # Execution
+        if qvm_version in V2M:
             res = self.run_qvm(
-                circ_list, independent=True, method="random", shots=shots
-            )
-        elif qvm_version == "small_first":
-            res = self.run_qvm(circ_list, independent=True, method="naive", shots=shots)
-        elif qvm_version == "large_first":
-            res = self.run_qvm(
-                circ_list, independent=True, method="naive_reverse", shots=shots
-            )
-        elif qvm_version == "brute_force":
-            res = self.run_qvm(
-                circ_list, independent=True, method="brute_force", shots=shots
+                circ_list, independent=True, method=V2M[qvm_version], shots=shots
             )
         elif qvm_version == "baseline":
             res = self.run_frp(circ_list, independent=True, shots=shots)
@@ -551,6 +566,47 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
 
         fid = self.fid_calculator.calc_fidelity(circ_list, res, shots=shots)
         print(f"Fid of {qvm_version}\t{fid}")
+
+    def test_bench_multi_methods_multi_metrics(
+        self, qasm, backend, cu_size, qvm_version
+    ):
+        """Test a bench group using different qvm ochestration methods"""
+
+        print("\n------------------- Testing --------------\n")
+
+        self.prepare_for_test(backend, cu_size, vs=qvm_version)
+
+        # Prepare circuits
+        shots = QVM_SHOTS
+        qasms = qasm.split(",")
+        circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasms]
+
+        # Parse versions
+        versions = qvm_version.split(",")
+        methods = [V2M[v] for v in versions]
+
+        # Execution
+        results = self.run_qvm(circ_list, independent=True, method=methods, shots=shots)
+
+        # Calc fidelity for each circuit, reuse ideal simulation results
+        calculator = QvmFidCalculator()
+        counts_ideal_list = [
+            calculator.get_ideal_counts(circ, shots=shots) for circ in circ_list
+        ]
+
+        for idx_method, (counts, consumed) in enumerate(results):
+            kls = []
+            psts = []
+            for idx_circ, counts_ideal in enumerate(counts_ideal_list):
+                kl = calculator.calc_kl(
+                    counts_ideal, counts[idx_circ], circ_list[idx_circ].num_qubits
+                )
+                kls.append(kl)
+                pst = calculator.calc_pst(counts_ideal, counts[idx_circ])
+                psts.append(pst)
+            avg_kl = np.average(kls)
+            avg_pst = np.average(psts)
+            print(f"{versions[idx_method]}\t{consumed}\t{avg_kl}\t{avg_pst}")
 
 
 class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
@@ -587,54 +643,36 @@ class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
         self._backend_manager.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
-        self.qvm_proc_manager = QuafuQvmProcessManager(
-            quafu_backend, name=quafu_backend_str
+        self.qvm_proc = QuafuQvmProcessManager(
+            quafu_backend, name=quafu_backend_str, method="random"
         )
-        self.frp_proc_manager = QuafuFrpProcessManager(
-            quafu_backend, name=quafu_backend_str
-        )
+        self.frp_proc = QuafuFrpProcessManager(quafu_backend, name=quafu_backend_str)
 
-    def test_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
-        self.prepare_for_test(backend, cu_size)
+    def _do_run_qvm_orch_method(
+        self,
+        processes: List[Process],
+        is_run=True,
+        independent=False,
+        method: str = "random",
+        **kwargs,
+    ):
+        self.qvm_proc.method = method
+        qvm_res = self.qvm_proc.run(processes)
+        qvm_counts = Counts(qvm_res.counts)
+        return qvm_counts, 0
 
-        shots = QVM_SHOTS
-        nq = int(nq)
-        if qasm:
-            items = qasm.split(",")
-            assert len(items) == 2 and bench == "qasm"
-            qasm0 = items[0]
-            qasm1 = items[1]
-            circ0 = self.get_qiskit_circ(bench, qasm_path=qasm0)
-            circ1 = self.get_qiskit_circ(bench, qasm_path=qasm1)
-        else:
-            circ0 = self.get_qiskit_circ(bench, num_qubits=nq)
-            circ1 = self.get_qiskit_circ(bench, num_qubits=nq)
+    def run_frp_exes(self, trans_list, cu_list, independent=False, **kwargs):
+        """merge and run on merged backend
+        Used for run_frp
 
-        # FIXME() test purpose
-        # circ0 = self.create_dummy_bell_state((0,1))
-        # circ1 = self.create_dummy_bell_state((0,1))
-        # FIXME() test purpose
-
-        circ = merge_circuits_v2([circ0, circ1])
-
-        # run qvm
-        processes = [
-            self._backend_manager.compile(circ0),
-            self._backend_manager.compile(circ1),
-        ]
-        qvm_res = self.qvm_proc_manager.run(processes)
-        qvm_counts = qvm_res.counts
-
-        # run online compilation
-        frp_res = self.frp_proc_manager.run([circ0, circ1])
-        frp_counts = frp_res.counts
-
-        # Calculate fidelity
-        self._fid_calculator = KlReliabilityCalculator()
-
-        fid_qvm = self._fid_calculator.calc_fidelity(circ, qvm_counts, shots=shots)
-        fid_frp = self._fid_calculator.calc_fidelity(circ, frp_counts, shots=shots)
-        print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
+        Args:
+            trans_list: transpiled quantum circuits
+            cu_list: allocated compute units from frp manager
+            independent: whether run independently
+        """
+        frp_res = self.frp_proc.run_transpiled(trans_list)
+        frp_counts = Counts(frp_res.counts)
+        return frp_counts
 
 
 # FIXME(): directly using QvmProcessManagerV2.run cannot calculate fidelity
