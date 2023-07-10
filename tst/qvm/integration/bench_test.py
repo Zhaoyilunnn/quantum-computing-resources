@@ -243,6 +243,8 @@ class TestBenchQvmFrpV1(TestBenchQvmBfs):
 
 
 class TestBenchQvmFrpV2(TestBenchQvmBfs):
+    shots = QVM_SHOTS
+
     def setup_class(self):
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         self._backend_manager.init_helpers()
@@ -275,7 +277,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         res = cu.backend.run(circ, **kwargs).result()
         return Counts(res.get_counts())
 
-    def _do_run_qvm_orch_method(
+    def do_run_qvm_orch_method(
         self,
         processes: List[Process],
         is_run=True,
@@ -302,7 +304,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             res = self.run_exes_merge(exes, **kwargs)
         return res, consumed
 
-    def _do_run_qvm_orch(
+    def do_run_qvm_orch(
         self,
         processes: List[Process],
         is_run=True,
@@ -311,7 +313,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         **kwargs,
     ):
         if isinstance(method, str):
-            res, _ = self._do_run_qvm_orch_method(
+            res, _ = self.do_run_qvm_orch_method(
                 processes,
                 is_run=is_run,
                 independent=independent,
@@ -323,7 +325,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         # If we run multiple methods together, record the consumed times
         results = []
         for m in method:
-            res, consumed = self._do_run_qvm_orch_method(
+            res, consumed = self.do_run_qvm_orch_method(
                 processes, is_run=is_run, independent=independent, method=m, **kwargs
             )
             results.append((res, consumed))
@@ -351,7 +353,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         """
 
         processes = [self._backend_manager.compile(circ) for circ in circ_list]
-        return self._do_run_qvm_orch(
+        return self.do_run_qvm_orch(
             processes, is_run=is_run, independent=independent, method=method, **kwargs
         )
 
@@ -431,13 +433,17 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         qvm_res = None
         try:
-            qvm_res = self.run_qvm([circ0, circ1], independent=independent, shots=shots)
+            qvm_res = self.run_qvm(
+                [circ0, circ1], independent=independent, shots=self.shots
+            )
         except Exception as e:
             print(f"run qvm error: {e}")
 
         frp_res = None
         try:
-            frp_res = self.run_frp([circ0, circ1], independent=independent, shots=shots)
+            frp_res = self.run_frp(
+                [circ0, circ1], independent=independent, shots=self.shots
+            )
         except Exception as e:
             print(f"run frp error: {e}")
 
@@ -449,10 +455,14 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
         fid_qvm = None
         if qvm_res:
-            fid_qvm = self.fid_calculator.calc_fidelity(circ_list, qvm_res, shots=shots)
+            fid_qvm = self.fid_calculator.calc_fidelity(
+                circ_list, qvm_res, shots=self.shots
+            )
         fid_frp = None
         if frp_res:
-            fid_frp = self.fid_calculator.calc_fidelity(circ_list, frp_res, shots=shots)
+            fid_frp = self.fid_calculator.calc_fidelity(
+                circ_list, frp_res, shots=self.shots
+            )
         print(f"Fid of qvm & frp\t{fid_qvm}\t{fid_frp}")
 
 
@@ -462,18 +472,36 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
     def setup_class(self):
         pass
 
-    def prepare_for_test(self, backend, cu_size, vs="random"):
-        """Create backend manager, should be run at the begining of each single test,
-        this is used to replace `setup_class`"""
-        self._backend = globals().get(backend)()
+    def init_back_manager(self, cu_size, vs="random"):
+        """Initialize backend manager"""
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         if vs == "vanilla":
             self._backend_manager.method = "vanilla"
         self.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
+
+    def init_proc_managers(self):
+        """Initialize process managers"""
         self.qvm_proc = QvmProcessManagerV2(self._backend)
         self.frp_proc = FrpProcessManager(self._backend)
+
+    def init_backend(self, backend):
+        """Initialize backend"""
+        self._backend = globals().get(backend)()
+
+    def prepare_for_test(self, backend, cu_size, vs="random"):
+        """Create backend manager, should be run at the begining of each single test,
+        this is used to replace `setup_class`
+
+        Must call in following order,
+        1. init_backend
+        2. init_back_manager
+        3. init_proc_managers
+        """
+        self.init_backend(backend)
+        self.init_back_manager(cu_size, vs=vs)
+        self.init_proc_managers()
 
     def test_two_bench_runtime_overhead(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
@@ -494,13 +522,13 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
 
         qvm_res = None
         try:
-            qvm_res = self.run_qvm([circ0, circ1], is_run=False, shots=shots)
+            qvm_res = self.run_qvm([circ0, circ1], is_run=False, shots=self.shots)
         except Exception as e:
             print(f"run qvm error: {e}")
 
         frp_res = None
         try:
-            frp_res = self.run_frp([circ0, circ1], is_run=False, shots=shots)
+            frp_res = self.run_frp([circ0, circ1], is_run=False, shots=self.shots)
         except Exception as e:
             print(f"run frp error: {e}")
 
@@ -554,17 +582,17 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         # Execution
         if qvm_version in V2M:
             res = self.run_qvm(
-                circ_list, independent=True, method=V2M[qvm_version], shots=shots
+                circ_list, independent=True, method=V2M[qvm_version], shots=self.shots
             )
         elif qvm_version == "baseline":
-            res = self.run_frp(circ_list, independent=True, shots=shots)
+            res = self.run_frp(circ_list, independent=True, shots=self.shots)
         else:
             raise ValueError(
                 "Unsupported version, should be in one of "
                 "[vanilla, random, small_first, large_first, brute_force, baseline]"
             )
 
-        fid = self.fid_calculator.calc_fidelity(circ_list, res, shots=shots)
+        fid = self.fid_calculator.calc_fidelity(circ_list, res, shots=self.shots)
         print(f"Fid of {qvm_version}\t{fid}")
 
     def test_bench_multi_methods_multi_metrics(
@@ -586,12 +614,14 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         methods = [V2M[v] for v in versions]
 
         # Execution
-        results = self.run_qvm(circ_list, independent=True, method=methods, shots=shots)
+        results = self.run_qvm(
+            circ_list, independent=True, method=methods, shots=self.shots
+        )
 
         # Calc fidelity for each circuit, reuse ideal simulation results
         calculator = QvmFidCalculator()
         counts_ideal_list = [
-            calculator.get_ideal_counts(circ, shots=shots) for circ in circ_list
+            calculator.get_ideal_counts(circ, shots=self.shots) for circ in circ_list
         ]
 
         for idx_method, (counts, consumed) in enumerate(results):
@@ -610,9 +640,6 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
 
 
 class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
-    def setup_class(self):
-        pass
-
     def prepare_for_test(self, backend, cu_size):
         from quafu.users.userapi import User
 
@@ -633,22 +660,24 @@ class TestQuafuBackendQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
 
 
 class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
-    def setup_class(self):
-        pass
+    shots = 1000
 
-    def prepare_for_test(self, backend, cu_size):
-        quafu_backend_str = backend
-        quafu_backend = get_quafu_backend(quafu_backend_str)
-        self._backend_manager = QvmFrpBackendManagerV2(quafu_backend)
-        self._backend_manager.cu_size = int(cu_size)
-        self._backend_manager.init_helpers()
-        self._backend_manager.init_cus()
+    def init_backend(self, backend):
+        self._backend_name = backend
+        self._backend = get_quafu_backend(backend)
+
+    def init_proc_managers(self):
         self.qvm_proc = QuafuQvmProcessManager(
-            quafu_backend, name=quafu_backend_str, method="random"
+            self._backend, name=self._backend_name, method="random"
         )
-        self.frp_proc = QuafuFrpProcessManager(quafu_backend, name=quafu_backend_str)
+        self.frp_proc = QuafuFrpProcessManager(self._backend, name=self._backend_name)
 
-    def _do_run_qvm_orch_method(
+    def prepare_for_test(self, backend, cu_size, vs="random"):
+        self.init_backend(backend)
+        self.init_back_manager(cu_size, vs=vs)
+        self.init_proc_managers()
+
+    def do_run_qvm_orch_method(
         self,
         processes: List[Process],
         is_run=True,

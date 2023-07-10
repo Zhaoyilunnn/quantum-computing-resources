@@ -35,6 +35,8 @@ class BaseTest:
             if not os.path.isfile(qasm_path):
                 raise ValueError("Please specify qasm file path!")
             circ = QuantumCircuit().from_qasm_file(qasm_path)
+        elif bench_name == "bell":
+            circ = self.create_dummy_bell_state((0,1))
         else:
             raise NotImplementedError("Unsupported bench type!")
 
