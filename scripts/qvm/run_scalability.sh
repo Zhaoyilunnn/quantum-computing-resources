@@ -1,0 +1,1 @@
+for n in 2 3 4 5 6 7 8 9 10; do bash scripts/qvm/run_main_multi_versions.sh FakeBrooklyn random,small_first,large_first,brute_force $n; bash scripts/qvm/run_main_single_version.sh FakeBrooklyn kl baseline $n; done

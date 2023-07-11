@@ -9,22 +9,22 @@ def main():
 
     oracle_res = {}
     oracle_res_file = sys.argv[2]
-    with open(oracle_res_file, 'r') as f:
+    with open(oracle_res_file, "r") as f:
         for line in f:
-            items = line.strip().split('\t')
+            items = line.strip().split("\t")
             b_name, fid = items[0], float(items[1])
             oracle_res[b_name] = fid
 
     naive_reverse_file = sys.argv[1]
     fids_1, fids_2 = [], []
-    with open(naive_reverse_file, 'r') as f:
+    with open(naive_reverse_file, "r") as f:
         for line in f:
-            items = line.strip().split('\t')
-            if items[0] == 'avg':
+            items = line.strip().split("\t")
+            if items[0] == "avg":
                 continue
-            b_names = items[0].split(',')
+            b_names = items[0].split(",")
             fid = float(items[-1])
-            oracle_fid = 0.
+            oracle_fid = 0.0
             try:
                 for b in b_names:
                     oracle_fid += oracle_res[b]
@@ -39,5 +39,5 @@ def main():
     print(f"avg\t{avg_fid_1}\t{avg_fid_2}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
