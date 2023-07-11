@@ -1,0 +1,85 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+system_name     qubits         status    
+ScQ-P10        10             Online    
+ScQ-P18        18             Online    
+ScQ-P136       136            Online    
+FRP::online_compilation::costs::	1.6478078365325928
+F
+
+=================================== FAILURES ===================================
+_ TestQuafuBackendRealMachineQvmFrpV2.test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm-ScQ-P18-4-baseline-kl] _
+
+self = <bench_test.TestQuafuBackendRealMachineQvmFrpV2 object at 0x7f067692dd80>
+qasm = '/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm'
+backend = 'ScQ-P18', cu_size = 4, qvm_version = 'baseline', metric = 'kl'
+
+    def test_bench_diff_methods_diff_metric(
+        self, qasm, backend, cu_size, qvm_version, metric
+    ):
+        """Given a list of qasm benchmarks, run on QvmFrpBackendManagerV2
+        and QvmProcessManagerV2.
+    
+        Support setting qvm versions or baseline
+        - vanilla: randomly select exe
+        - random: sort exes, greedily select without sorting processes
+        - small_first: sort exes, sort processes (small circ first) and greedily select
+        - large_first: sort exes, sort processes (large circ first) and greedily select
+        - brute_force: sort exes, sort processes, and find optimal solution minimizing sum of idxes
+        - baseline: online compilation
+    
+        Support different metric:
+        - kl: KL divergence
+        - pst: Percentage of successful trials
+        """
+        print("\n------------------- Testing --------------\n")
+    
+        self.prepare_for_test(backend, cu_size, vs=qvm_version)
+    
+        if metric == "pst":
+            self.fid_calculator = PstCalculator()
+    
+        # Prepare circuits
+        shots = QVM_SHOTS
+        qasms = qasm.split(",")
+        circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasms]
+    
+        # Execution
+        if qvm_version in V2M:
+            res = self.run_qvm(
+                circ_list, independent=True, method=V2M[qvm_version], shots=self.shots
+            )
+        elif qvm_version == "baseline":
+>           res = self.run_frp(circ_list, independent=True, shots=self.shots)
+
+tst/qvm/integration/bench_test.py:588: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qvm/integration/bench_test.py:407: in run_frp
+    return self.run_frp_exes(trans_list, cu_list, independent=independent, **kwargs)
+tst/qvm/integration/bench_test.py:702: in run_frp_exes
+    frp_res = self.frp_proc.run_transpiled(trans_list)
+../qvm/manager/quafu_process_manager.py:60: in run_transpiled
+    quafu_circ.from_openqasm(merged_circ.qasm())
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/pyquafu-0.2.11-py3.10-linux-x86_64.egg/quafu/circuits/quantum_circuit.py:242: in from_openqasm
+    paras = [eval(parai, {"pi": pi}) for parai in parastr]
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/pyquafu-0.2.11-py3.10-linux-x86_64.egg/quafu/circuits/quantum_circuit.py:242: in <listcomp>
+    paras = [eval(parai, {"pi": pi}) for parai in parastr]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'c' is not defined
+
+<string>:1: NameError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 8, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 8'
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/bench_test.py::TestQuafuBackendRealMachineQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small/qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small/shor_n5/shor_n5.qasm-ScQ-P18-4-baseline-kl]
+======================= 1 failed, 54 deselected in 4.58s =======================

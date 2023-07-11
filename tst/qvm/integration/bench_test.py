@@ -376,6 +376,7 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
         # Merge each comp_unit and run
         cu = self._backend_manager.merge_cus(cu_list)
         # exe = proc._merge_circuits(trans_list)
+        # FIXME(): here the layout should be merged
         exe = merge_circuits_v2(trans_list)
 
         res = cu.backend.run(exe, **kwargs).result()
@@ -690,17 +691,11 @@ class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
         qvm_counts = Counts(qvm_res.counts)
         return qvm_counts, 0
 
-    def run_frp_exes(self, trans_list, cu_list, independent=False, **kwargs):
-        """merge and run on merged backend
-        Used for run_frp
-
-        Args:
-            trans_list: transpiled quantum circuits
-            cu_list: allocated compute units from frp manager
-            independent: whether run independently
-        """
-        frp_res = self.frp_proc.run_transpiled(trans_list)
-        frp_counts = Counts(frp_res.counts)
+    def run_frp(
+        self, circ_list: List[QuantumCircuit], is_run=True, independent=False, **kwargs
+    ):
+        res = self.frp_proc.run(circ_list)
+        frp_counts = Counts(res.counts)
         return frp_counts
 
 

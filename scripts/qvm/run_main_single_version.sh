@@ -19,8 +19,14 @@ elif [ ${backend} = "FakeBrooklyn" ]; then
 elif [ ${backend} = "FakeManhattan" ]; then
     log_backend="manhattan"
 elif [[ "${quafu_backend_list[*]}" == *"${backend}"* ]]; then
-    log_backend="quafu"
     test_class=TestQuafuBackendRealMachineQvmFrpV2
+    if [ ${backend} = "ScQ-P136" ]; then
+        log_backend=quafu_136
+    elif [ ${backend} = "ScQ-P18" ]; then
+        log_backend=quafu_18
+    elif [ ${backend} = "ScQ-P10" ]; then
+        log_backend=quafu_10
+    fi
 fi
 
 log_dir=logs/qvm/main/${version}/${log_backend}/circ_${num_circ}_cu_4/${metric}

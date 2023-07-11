@@ -1,0 +1,110 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+system_name     qubits         status    
+ScQ-P10        10             Online    
+ScQ-P18        18             Online    
+ScQ-P136       136            Online    
+F
+
+=================================== FAILURES ===================================
+_ TestQuafuBackendRealMachineQvmFrpV2.test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm-ScQ-P18-4-random-pst] _
+
+self = <bench_test.TestQuafuBackendRealMachineQvmFrpV2 object at 0x7fbc9ffd2770>
+qasm = '/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//qpe_n9/qpe_n9.qasm'
+backend = 'ScQ-P18', cu_size = 4, qvm_version = 'random', metric = 'pst'
+
+    def test_bench_diff_methods_diff_metric(
+        self, qasm, backend, cu_size, qvm_version, metric
+    ):
+        """Given a list of qasm benchmarks, run on QvmFrpBackendManagerV2
+        and QvmProcessManagerV2.
+    
+        Support setting qvm versions or baseline
+        - vanilla: randomly select exe
+        - random: sort exes, greedily select without sorting processes
+        - small_first: sort exes, sort processes (small circ first) and greedily select
+        - large_first: sort exes, sort processes (large circ first) and greedily select
+        - brute_force: sort exes, sort processes, and find optimal solution minimizing sum of idxes
+        - baseline: online compilation
+    
+        Support different metric:
+        - kl: KL divergence
+        - pst: Percentage of successful trials
+        """
+        print("\n------------------- Testing --------------\n")
+    
+        self.prepare_for_test(backend, cu_size, vs=qvm_version)
+    
+        if metric == "pst":
+            self.fid_calculator = PstCalculator()
+    
+        # Prepare circuits
+        shots = QVM_SHOTS
+        qasms = qasm.split(",")
+        circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasms]
+    
+        # Execution
+        if qvm_version in V2M:
+>           res = self.run_qvm(
+                circ_list, independent=True, method=V2M[qvm_version], shots=self.shots
+
+tst/qvm/integration/bench_test.py:584: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qvm/integration/bench_test.py:356: in run_qvm
+    return self.do_run_qvm_orch(
+tst/qvm/integration/bench_test.py:316: in do_run_qvm_orch
+    res, _ = self.do_run_qvm_orch_method(
+tst/qvm/integration/bench_test.py:689: in do_run_qvm_orch_method
+    qvm_res = self.qvm_proc.run(processes)
+../qvm/manager/quafu_process_manager.py:32: in run
+    exes = self._select(processes)
+../qvm/manager/process_manager.py:317: in _select
+    return self._select_naive(processes, sort=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm.manager.quafu_process_manager.QuafuQvmProcessManager object at 0x7fbc9f466770>
+processes = [<qvm.model.executable.Process object at 0x7fbc9ec44640>, <qvm.model.executable.Process object at 0x7fbc9ec47070>]
+sort = False, reverse = False
+
+    def _select_naive(
+        self, processes: List[Process], sort=True, reverse=False
+    ) -> List[BaseExecutable]:
+        """Traverse each of the process and add non-conflict exes"""
+        # Init a set to record IDs of allocated comp units
+        selected = set()
+    
+        # Init the selected list of executables
+        exes = []
+        if sort:
+            processes = sorted(
+                processes, key=lambda proc: proc.num_qubits, reverse=reverse
+            )
+    
+        for proc in processes:
+            for exe in proc:
+                if not selected & exe.comp_unit_ids:
+                    exes.append(exe)
+                    selected |= exe.comp_unit_ids
+                    # Find an executable, move on to next proc
+                    break
+    
+        if len(exes) != len(processes):
+>           raise ProcessError("Cannot select executables from all processes.")
+E           qvm.manager.exceptions.ProcessError: 'Cannot select executables from all processes.'
+
+../qvm/manager/process_manager.py:262: ProcessError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 9, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 9'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 8, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 8'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fbc55e21ed0>, error: 'Number of qubits (9) in circuit-90 is greater than maximum (8) in the coupling_map'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fbc55316c80>, error: 'Number of qubits (9) in circuit-90 is greater than maximum (8) in the coupling_map'
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/bench_test.py::TestQuafuBackendRealMachineQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small/cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small/qpe_n9/qpe_n9.qasm-ScQ-P18-4-random-pst]
+======================= 1 failed, 54 deselected in 6.57s =======================

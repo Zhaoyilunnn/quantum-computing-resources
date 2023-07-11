@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+system_name     qubits         status    
+ScQ-P10        10             Online    
+ScQ-P18        18             Online    
+ScQ-P136       136            Online    
+FRP::online_compilation::costs::	1.4932067394256592
+Fid of baseline	inf
+.
+
+======================= 1 passed, 54 deselected in 9.33s =======================
