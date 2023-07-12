@@ -1,0 +1,47 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	1.52587890625e-05
+compute_unit_list	[{1, 12}, {2}, {5}]
+QVM::selection::costs::	naive	8.678436279296875e-05
+compute_unit_list	[{1, 12}, {2}, {5}]
+QVM::selection::costs::	naive_reverse	0.00011467933654785156
+compute_unit_list	[{1, 12}, {3}, {2}]
+QVM::selection::costs::	brute_force	0.0027756690979003906
+compute_unit_list	[{1, 12}, {2}, {5}]
+random	1.52587890625e-05	0.3324489950832709	0.932458241780599
+small_first	8.678436279296875e-05	0.3306188066540112	0.9326518376668295
+large_first	0.00011467933654785156	0.32820030156366786	0.9357713063557943
+brute_force	0.0027756690979003906	0.33170870061717533	0.9326457977294922
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (96966.20180926041 > 2 * 40591.82230473617). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (9.696620180926042e-05 > 2 * 4.059182230473617e-05). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========== 1 passed, 54 deselected, 12 warnings in 148.40s (0:02:28) ===========

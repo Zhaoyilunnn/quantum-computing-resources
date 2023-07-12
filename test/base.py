@@ -1,4 +1,5 @@
 import os
+import pickle
 
 from qiskit.circuit import QuantumCircuit
 
@@ -104,3 +105,18 @@ class BaseTest:
             dummy_circ.save_state()
 
         return dummy_circ
+
+    def load_pkl_obj(self, file_name):
+        """load pickle obj"""
+        serialized_obj = None
+        with open(file_name, "rb") as f:
+            serialized_obj = f.read()
+        if serialized_obj:
+            return pickle.loads(serialized_obj)
+        return None
+
+    def save_pkl_obj(self, obj, file_name):
+        """save pickle obj"""
+        serialized_obj = pickle.dumps(obj)
+        with open(file_name, "wb") as f:
+            f.write(serialized_obj)

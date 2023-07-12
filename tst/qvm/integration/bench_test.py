@@ -13,6 +13,7 @@ from qvm.util.circuit import (
     QvmFidCalculator,
 )
 from qvm.util.quafu_helper import get_quafu_backend, to_qiskit_backend_v1
+from qvm.manager.exceptions import ResourceConflictError
 
 from constants import *
 
@@ -244,6 +245,7 @@ class TestBenchQvmFrpV1(TestBenchQvmBfs):
 
 class TestBenchQvmFrpV2(TestBenchQvmBfs):
     shots = QVM_SHOTS
+    proc_obj_file_list = []
 
     def setup_class(self):
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
@@ -287,7 +289,10 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
     ):
         self.qvm_proc.method = method
         start = time.time()
-        exes = self.qvm_proc._select(processes)
+        try:
+            exes = self.qvm_proc._select(processes)
+        except Exception as ex:
+            return ex, None
         end = time.time()
         consumed = end - start
         print(f"QVM::selection::costs::\t{method}\t{consumed}")
@@ -351,8 +356,19 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
             method: Method of ochestration (selection) in QVM process manager
             **kwargs: Other options
         """
-
-        processes = [self._backend_manager.compile(circ) for circ in circ_list]
+        processes = []
+        if self.proc_obj_file_list:
+            # If proc list is not empty, we want to save and reuse cached proc obj
+            for i, f in enumerate(self.proc_obj_file_list):
+                if os.path.exists(f):
+                    processes.append(self.load_pkl_obj(f))
+                else:
+                    proc = self._backend_manager.compile(circ_list[i])
+                    processes.append(proc)
+                    self.save_pkl_obj(proc, f)
+        else:
+            # Otherwise we do compilation
+            processes = [self._backend_manager.compile(circ) for circ in circ_list]
         return self.do_run_qvm_orch(
             processes, is_run=is_run, independent=independent, method=method, **kwargs
         )
@@ -504,6 +520,23 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self.init_back_manager(cu_size, vs=vs)
         self.init_proc_managers()
 
+    def init_proc_cache(self, qasm, backend, cu_size):
+        """We write compiled obj on QVM backend manager to disk and reuse them,
+        this func is used to init cached obj name and paths"""
+        qasm_path_list = qasm.split(",")
+        self.qasm_name_list = [
+            qasm_path.split("/")[-1].split(".")[0]
+            for qasm_path in qasm_path_list
+        ]
+        proc_obj_name_list = [
+            "_".join([backend, qasm_name, str(cu_size)]) + ".pkl"
+            for qasm_name in self.qasm_name_list
+        ]
+        self.proc_obj_file_list = [
+            os.path.join(self.data_dir, obj_name)
+            for obj_name in proc_obj_name_list
+        ]
+
     def test_two_bench_runtime_overhead(self, bench, nq, qasm, backend, cu_size):
         self.prepare_for_test(backend, cu_size)
         shots = QVM_SHOTS
@@ -604,11 +637,11 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         print("\n------------------- Testing --------------\n")
 
         self.prepare_for_test(backend, cu_size, vs=qvm_version)
+        self.init_proc_cache(qasm, backend, cu_size)
 
         # Prepare circuits
-        shots = QVM_SHOTS
-        qasms = qasm.split(",")
-        circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasms]
+        qasm_path_list = qasm.split(",")
+        circ_list = [self.get_qiskit_circ("qasm", qasm_path=q) for q in qasm_path_list]
 
         # Parse versions
         versions = qvm_version.split(",")
@@ -626,17 +659,28 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         ]
 
         for idx_method, (counts, consumed) in enumerate(results):
-            kls = []
-            psts = []
+            if consumed is None:
+                # This version failed
+                # Classify the detailed reason
+                if isinstance(counts, TimeoutError):
+                    print(f"{versions[idx_method]}\ttime_out\tfailed\tfailed")
+                elif isinstance(counts, ResourceConflictError):
+                    print(f"{versions[idx_method]}\tconflict\tfailed\tfailed")
+                else:
+                    print(f"{versions[idx_method]}\tunknown\tfailed\tfailed")
+                continue
+
+            kl_list = []
+            pst_list = []
             for idx_circ, counts_ideal in enumerate(counts_ideal_list):
                 kl = calculator.calc_kl(
                     counts_ideal, counts[idx_circ], circ_list[idx_circ].num_qubits
                 )
-                kls.append(kl)
+                kl_list.append(kl)
                 pst = calculator.calc_pst(counts_ideal, counts[idx_circ])
-                psts.append(pst)
-            avg_kl = np.average(kls)
-            avg_pst = np.average(psts)
+                pst_list.append(pst)
+            avg_kl = np.average(kl_list)
+            avg_pst = np.average(pst_list)
             print(f"{versions[idx_method]}\t{consumed}\t{avg_kl}\t{avg_pst}")
 
 

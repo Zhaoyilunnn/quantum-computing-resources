@@ -106,10 +106,7 @@ class QvmBaseTest(BaseTest):
         """
         file_name = "_".join([backend, qasm_name, str(cu_size)]) + ".pkl"
         file_name = os.path.join(data_dir, file_name)
-
-        serialized_obj = pickle.dumps(process)
-        with open(file_name, "wb") as f:
-            f.write(serialized_obj)
+        self.save_pkl_obj(process, file_name)
 
     def load_compilation_outcome(
         self, data_dir, qasm_name: str, backend: str, cu_size: int = 4
@@ -124,10 +121,4 @@ class QvmBaseTest(BaseTest):
         """
         file_name = "_".join([backend, qasm_name, str(cu_size)]) + ".pkl"
         file_name = os.path.join(data_dir, file_name)
-
-        serialized_obj = None
-        with open(file_name, "rb") as f:
-            serialized_obj = f.read()
-        if serialized_obj:
-            return pickle.loads(serialized_obj)
-        return None
+        return self.load_pkl_obj(file_name)

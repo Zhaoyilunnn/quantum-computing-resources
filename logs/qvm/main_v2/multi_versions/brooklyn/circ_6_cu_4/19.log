@@ -1,0 +1,41 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	3.6716461181640625e-05
+compute_unit_list	[{2}, {3}, {5}, {0, 10}, {6}, {8, 11}]
+QVM::selection::costs::	naive	0.00021505355834960938
+compute_unit_list	[{0}, {2}, {3}, {1, 12}, {5}, {8, 11}]
+QVM::selection::costs::	naive_reverse	0.00021982192993164062
+compute_unit_list	[{2}, {5}, {0}, {3, 6}, {4}, {8, 11}]
+QVM::selection::costs::	brute_force	2.411857843399048
+compute_unit_list	[{5}, {2}, {3}, {0, 10}, {6}, {8, 11}]
+random	3.6716461181640625e-05	0.7905711926633923	0.7707928021748861
+small_first	0.00021505355834960938	0.7661961726193535	0.7519512176513672
+large_first	0.00021982192993164062	0.5782186386232342	0.7839101155598959
+brute_force	2.411857843399048	0.8779479376305818	0.7464731534322103
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py: 16 warnings
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/bench_test.py: 24 warnings
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (96966.20180926041 > 2 * 40591.82230473617). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//basis_trotter_n4/basis_trotter_n4.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//basis_trotter_n4/basis_trotter_n4.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//basis_trotter_n4/basis_trotter_n4.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//basis_trotter_n4/basis_trotter_n4.qasm,/root/projects/QASMBench/small//deutsch_n2/deutsch_n2.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//quantumwalks_n2/quantumwalks_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (9.696620180926042e-05 > 2 * 4.059182230473617e-05). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========== 1 passed, 54 deselected, 44 warnings in 223.53s (0:03:43) ===========
