@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	1.3828277587890625e-05
-compute_unit_list	[{2}, {0, 10}, {3}, {5}]
-QVM::selection::costs::	naive	8.535385131835938e-05
-compute_unit_list	[{5}, {3, 6}, {2}, {0}]
-QVM::selection::costs::	naive_reverse	8.726119995117188e-05
-compute_unit_list	[{2}, {0, 10}, {3}, {5}]
-QVM::selection::costs::	brute_force	0.06690454483032227
-compute_unit_list	[{2}, {0, 10}, {3}, {5}]
-random	1.3828277587890625e-05	0.9232019717861693	0.8006153106689453
-small_first	8.535385131835938e-05	0.682572963342168	0.8069837093353271
-large_first	8.726119995117188e-05	0.9220982514606869	0.8006806373596191
-brute_force	0.06690454483032227	0.9247827543487944	0.8007874488830566
+QVM::selection::costs::	random	0.00010228157043457031
+compute_unit_list	[{2}, {3, 6}, {5}, {0}]
+QVM::selection::costs::	naive	0.00019669532775878906
+compute_unit_list	[{0}, {3, 6}, {2}, {5}]
+QVM::selection::costs::	naive_reverse	0.00015544891357421875
+compute_unit_list	[{2}, {3, 6}, {0}, {5}]
+QVM::selection::costs::	brute_force	0.030460357666015625
+compute_unit_list	[{0}, {3, 6}, {2}, {5}]
+random	0.00010228157043457031	0.6602453987420182	0.8144700527191162
+small_first	0.00019669532775878906	0.6648303602347855	0.8102579116821289
+large_first	0.00015544891357421875	0.6654861047241237	0.8115513324737549
+brute_force	0.030460357666015625	0.6655041031581918	0.8100109100341797
 .
 
 =============================== warnings summary ===============================
@@ -43,4 +43,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 22 warnings in 150.44s (0:02:30) ===========
+=========== 1 passed, 54 deselected, 22 warnings in 96.67s (0:01:36) ===========

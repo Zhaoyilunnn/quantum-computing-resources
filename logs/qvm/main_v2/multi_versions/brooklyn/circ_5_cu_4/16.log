@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.002716064453125e-05
-compute_unit_list	[{2}, {3, 6}, {4, 7}, {5}, {0}]
-QVM::selection::costs::	naive	9.751319885253906e-05
-compute_unit_list	[{2}, {0, 10}, {4, 7}, {3}, {5}]
-QVM::selection::costs::	naive_reverse	0.00011324882507324219
-compute_unit_list	[{0}, {3, 6}, {4, 7}, {5}, {2}]
-QVM::selection::costs::	brute_force	0.15415263175964355
-compute_unit_list	[{2}, {0, 10}, {4, 7}, {3}, {5}]
-random	2.002716064453125e-05	0.11785282404956063	0.9033491134643554
-small_first	9.751319885253906e-05	0.1347965017688695	0.8994958877563477
-large_first	0.00011324882507324219	0.12418686247170493	0.900750732421875
-brute_force	0.15415263175964355	0.13474977156915444	0.8994852066040039
+QVM::selection::costs::	random	9.417533874511719e-05
+compute_unit_list	[{2}, {3, 6}, {0, 10}, {5}, {4}]
+QVM::selection::costs::	naive	9.989738464355469e-05
+compute_unit_list	[{2}, {1, 12}, {0, 10}, {3}, {5}]
+QVM::selection::costs::	naive_reverse	0.00015163421630859375
+compute_unit_list	[{4}, {3, 6}, {0, 10}, {5}, {2}]
+QVM::selection::costs::	brute_force	0.15290236473083496
+compute_unit_list	[{2}, {1, 12}, {0, 10}, {3}, {5}]
+random	9.417533874511719e-05	0.12739382460738402	0.8969350814819336
+small_first	9.989738464355469e-05	0.12517880206974202	0.8990274429321289
+large_first	0.00015163421630859375	0.1281019395582077	0.895326042175293
+brute_force	0.15290236473083496	0.1251239393378775	0.8991220474243165
 .
 
 =============================== warnings summary ===============================
@@ -36,4 +36,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 24 warnings in 173.40s (0:02:53) ===========
+========== 1 passed, 54 deselected, 24 warnings in 114.43s (0:01:54) ===========

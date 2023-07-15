@@ -7,21 +7,24 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	3.075599670410156e-05
-compute_unit_list	[{0, 10, 4}, {8, 11}, {2}, {3, 6}]
-QVM::selection::costs::	naive	9.751319885253906e-05
-compute_unit_list	[{0, 10, 4}, {8, 11}, {2}, {3, 6}]
-QVM::selection::costs::	naive_reverse	0.00015616416931152344
-compute_unit_list	[{0, 10, 4}, {8, 11}, {2}, {3, 6}]
-QVM::selection::costs::	brute_force	0.003560304641723633
-compute_unit_list	[{0, 10, 4}, {8, 11}, {2}, {3, 6}]
-random	3.075599670410156e-05	0.615021482123593	0.7906603813171387
-small_first	9.751319885253906e-05	0.614671810555171	0.7907018661499023
-large_first	0.00015616416931152344	0.6148428339977249	0.7906510829925537
-brute_force	0.003560304641723633	0.6155901486446446	0.790736198425293
+QVM::selection::costs::	random	0.00010585784912109375
+compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {1, 12}]
+QVM::selection::costs::	naive	0.0001888275146484375
+compute_unit_list	[{1, 12, 7}, {0, 10}, {2}, {3, 6}]
+QVM::selection::costs::	naive_reverse	0.00029850006103515625
+compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {1, 12}]
+QVM::selection::costs::	brute_force	0.0028581619262695312
+compute_unit_list	[{1, 12, 7}, {0, 10}, {2}, {3, 6}]
+random	0.00010585784912109375	0.5590256615800069	0.7886323928833008
+small_first	0.0001888275146484375	0.7387174697018364	0.7699306011199951
+large_first	0.00029850006103515625	0.5595820674375157	0.7885968685150146
+brute_force	0.0028581619262695312	0.7389313777191454	0.769939661026001
 .
 
 =============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//adder_n10/adder_n10.qasm,/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
@@ -30,4 +33,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 54 deselected, 4 warnings in 188.28s (0:03:08) ===========
+=========== 1 passed, 54 deselected, 7 warnings in 126.79s (0:02:06) ===========

@@ -7,10 +7,10 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-random	failed	failed	failed
-small_first	failed	failed	failed
-large_first	failed	failed	failed
-brute_force	failed	failed	failed
+random	conflict	failed	failed
+small_first	conflict	failed	failed
+large_first	conflict	failed	failed
+brute_force	unknown	failed	failed
 .
 
-================= 1 passed, 54 deselected in 398.73s (0:06:38) =================
+================= 1 passed, 54 deselected in 114.17s (0:01:54) =================

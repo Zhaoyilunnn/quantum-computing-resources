@@ -1,0 +1,16 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+random	conflict	failed	failed
+small_first	conflict	failed	failed
+large_first	conflict	failed	failed
+brute_force	unknown	failed	failed
+.
+
+================= 1 passed, 54 deselected in 108.72s (0:01:48) =================

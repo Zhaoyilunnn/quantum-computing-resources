@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	1.1444091796875e-05
+compute_unit_list	[{3, 6}, {0, 10}, {2}]
+QVM::selection::costs::	naive	6.318092346191406e-05
+compute_unit_list	[{3, 6}, {0, 10}, {2}]
+QVM::selection::costs::	naive_reverse	0.00012874603271484375
+compute_unit_list	[{3, 6}, {0, 10}, {2}]
+QVM::selection::costs::	brute_force	0.0021905899047851562
+compute_unit_list	[{3, 6}, {0, 10}, {2}]
+random	1.1444091796875e-05	0.5806761871041116	0.7442204157511393
+small_first	6.318092346191406e-05	0.5817566032880993	0.7441473007202148
+large_first	0.00012874603271484375	0.581504912212493	0.7441142400105795
+brute_force	0.0021905899047851562	0.5821189339999312	0.7439908981323242
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//dnn_n8/dnn_n8.qasm,/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 3 warnings in 141.62s (0:02:21) ===========

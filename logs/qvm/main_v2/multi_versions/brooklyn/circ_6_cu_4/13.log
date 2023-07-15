@@ -7,22 +7,22 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.86102294921875e-05
-compute_unit_list	[{2}, {3}, {4, 7}, {1, 12}, {10}, {5}]
-QVM::selection::costs::	naive	8.630752563476562e-05
-compute_unit_list	[{3}, {2}, {4, 7}, {1, 12}, {10}, {5}]
-QVM::selection::costs::	naive_reverse	0.00016498565673828125
-compute_unit_list	[{5}, {0}, {3, 6}, {1, 12}, {10}, {2}]
-QVM::selection::costs::	brute_force	2.3116672039031982
-compute_unit_list	[{2}, {3}, {4, 7}, {1, 12}, {10}, {5}]
-random	2.86102294921875e-05	0.18019419227800781	0.8679251670837402
-small_first	8.630752563476562e-05	0.17569492330185324	0.8707202275594076
-large_first	0.00016498565673828125	0.12045077011118598	0.9013168017069498
-brute_force	2.3116672039031982	0.18029797253882085	0.8679038683573405
+QVM::selection::costs::	random	9.632110595703125e-05
+compute_unit_list	[{2}, {3}, {8, 11}, {0, 10}, {9}, {5}]
+QVM::selection::costs::	naive	0.0001938343048095703
+compute_unit_list	[{3}, {2}, {8, 11}, {1, 12}, {10}, {5}]
+QVM::selection::costs::	naive_reverse	0.0001583099365234375
+compute_unit_list	[{5}, {4}, {3, 6}, {0, 10}, {9}, {2}]
+QVM::selection::costs::	brute_force	2.31672739982605
+compute_unit_list	[{2}, {3}, {8, 11}, {0, 10}, {9}, {5}]
+random	9.632110595703125e-05	0.17779675912521078	0.8651361465454102
+small_first	0.0001938343048095703	0.1589266281414841	0.8780293464660645
+large_first	0.0001583099365234375	0.1538163796792421	0.8804265658060709
+brute_force	2.31672739982605	0.1779057436446068	0.8651278813680013
 .
 
 =============================== warnings summary ===============================
-qcs/tst/qvm/integration/bench_test.py: 12 warnings
+qcs/tst/qvm/integration/bench_test.py: 14 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
@@ -36,4 +36,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 26 warnings in 212.07s (0:03:32) ===========
+========== 1 passed, 54 deselected, 28 warnings in 139.51s (0:02:19) ===========

@@ -525,16 +525,14 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         this func is used to init cached obj name and paths"""
         qasm_path_list = qasm.split(",")
         self.qasm_name_list = [
-            qasm_path.split("/")[-1].split(".")[0]
-            for qasm_path in qasm_path_list
+            qasm_path.split("/")[-1].split(".")[0] for qasm_path in qasm_path_list
         ]
         proc_obj_name_list = [
             "_".join([backend, qasm_name, str(cu_size)]) + ".pkl"
             for qasm_name in self.qasm_name_list
         ]
         self.proc_obj_file_list = [
-            os.path.join(self.data_dir, obj_name)
-            for obj_name in proc_obj_name_list
+            os.path.join(self.data_dir, obj_name) for obj_name in proc_obj_name_list
         ]
 
     def test_two_bench_runtime_overhead(self, bench, nq, qasm, backend, cu_size):
@@ -604,6 +602,8 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         print("\n------------------- Testing --------------\n")
 
         self.prepare_for_test(backend, cu_size, vs=qvm_version)
+        if qvm_version != "vanilla":
+            self.init_proc_cache(qasm, backend, cu_size)
 
         if metric == "pst":
             self.fid_calculator = PstCalculator()

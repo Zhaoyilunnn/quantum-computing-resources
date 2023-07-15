@@ -7,29 +7,24 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.5033950805664062e-05
-compute_unit_list	[{3, 6}, {8, 11}, {4, 7}, {1, 12}]
-QVM::selection::costs::	naive	0.00012969970703125
-compute_unit_list	[{3, 6}, {8, 11}, {4, 7}, {1, 12}]
-QVM::selection::costs::	naive_reverse	0.00020074844360351562
-compute_unit_list	[{1, 12}, {8, 11}, {4, 7}, {3, 6}]
-QVM::selection::costs::	brute_force	0.0022339820861816406
-compute_unit_list	[{3, 6}, {8, 11}, {4, 7}, {1, 12}]
-random	2.5033950805664062e-05	0.1714665548395103	0.8688468933105469
-small_first	0.00012969970703125	0.17115809955942035	0.8690085411071777
-large_first	0.00020074844360351562	0.18756749326997585	0.8592331409454346
-brute_force	0.0022339820861816406	0.1711769475002258	0.8689849376678467
+QVM::selection::costs::	random	9.369850158691406e-05
+compute_unit_list	[{3, 6}, {1, 12}, {8, 11}, {4, 7}]
+QVM::selection::costs::	naive	0.00021386146545410156
+compute_unit_list	[{3, 6}, {4, 7}, {1, 12}, {0, 10}]
+QVM::selection::costs::	naive_reverse	0.0001678466796875
+compute_unit_list	[{8, 11}, {3, 6}, {4, 7}, {1, 12}]
+QVM::selection::costs::	brute_force	0.0019583702087402344
+compute_unit_list	[{8, 11}, {3, 6}, {1, 12}, {4, 7}]
+random	9.369850158691406e-05	0.1759114036932108	0.8620290756225586
+small_first	0.00021386146545410156	0.1809505539085316	0.8629939556121826
+large_first	0.0001678466796875	0.20526155408718347	0.8431854248046875
+brute_force	0.0019583702087402344	0.20565954641648	0.8426766395568848
 .
 
 =============================== warnings summary ===============================
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//pea_n5/pea_n5.qasm,/root/projects/QASMBench/small//qaoa_n6/qaoa_n6.qasm,/root/projects/QASMBench/small//shor_n5/shor_n5.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py: 11 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 54 deselected, 6 warnings in 298.17s (0:04:58) ===========
+========== 1 passed, 54 deselected, 11 warnings in 251.11s (0:04:11) ===========

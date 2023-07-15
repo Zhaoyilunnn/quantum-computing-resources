@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	1.3589859008789062e-05
-compute_unit_list	[{0, 10, 4}, {1, 12}, {3, 6}, {2}]
-QVM::selection::costs::	naive	7.963180541992188e-05
-compute_unit_list	[{1, 12, 7}, {0, 10}, {3, 6}, {2}]
-QVM::selection::costs::	naive_reverse	0.0001270771026611328
-compute_unit_list	[{0, 10, 4}, {1, 12}, {3, 6}, {2}]
-QVM::selection::costs::	brute_force	0.0033788681030273438
-compute_unit_list	[{0, 10, 4}, {1, 12}, {3, 6}, {2}]
-random	1.3589859008789062e-05	0.565808020929633	0.6738033294677734
-small_first	7.963180541992188e-05	0.6632986297919146	0.643496036529541
-large_first	0.0001270771026611328	0.5664205177703155	0.6735622882843018
-brute_force	0.0033788681030273438	0.5660274524965176	0.6735937595367432
+QVM::selection::costs::	random	0.000102996826171875
+compute_unit_list	[{0, 10, 4}, {3, 6}, {8, 11}, {2}]
+QVM::selection::costs::	naive	9.34600830078125e-05
+compute_unit_list	[{1, 12, 7}, {3, 6}, {0, 10}, {2}]
+QVM::selection::costs::	naive_reverse	0.00023746490478515625
+compute_unit_list	[{0, 10, 4}, {3, 6}, {8, 11}, {2}]
+QVM::selection::costs::	brute_force	0.003533601760864258
+compute_unit_list	[{0, 10, 4}, {3, 6}, {8, 11}, {2}]
+random	0.000102996826171875	0.5233120575188323	0.6870050430297852
+small_first	9.34600830078125e-05	0.638166706276046	0.6558878421783447
+large_first	0.00023746490478515625	0.5224628959162306	0.6870880126953125
+brute_force	0.003533601760864258	0.521728614782323	0.6873574256896973
 .
 
 =============================== warnings summary ===============================
@@ -32,4 +32,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 54 deselected, 6 warnings in 135.21s (0:02:15) ===========
+=========== 1 passed, 54 deselected, 6 warnings in 88.94s (0:01:28) ============

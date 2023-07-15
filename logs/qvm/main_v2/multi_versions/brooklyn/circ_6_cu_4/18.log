@@ -7,22 +7,22 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.8371810913085938e-05
-compute_unit_list	[{2}, {3}, {1, 12}, {0, 10, 4}, {8, 11}, {5}]
-QVM::selection::costs::	naive	8.392333984375e-05
+QVM::selection::costs::	random	0.00010657310485839844
+compute_unit_list	[{2}, {3}, {8, 11}, {0, 10, 4}, {1, 12}, {5}]
+QVM::selection::costs::	naive	0.00018310546875
 compute_unit_list	[{5}, {2}, {1, 12}, {0, 10, 4}, {8, 11}, {3}]
-QVM::selection::costs::	naive_reverse	0.00015354156494140625
+QVM::selection::costs::	naive_reverse	0.000213623046875
 compute_unit_list	[{2}, {5}, {3, 6}, {0, 10, 4}, {8, 11}, {1}]
-QVM::selection::costs::	brute_force	0.30200791358947754
+QVM::selection::costs::	brute_force	0.30513644218444824
 compute_unit_list	[{5}, {2}, {1, 12}, {0, 10, 4}, {8, 11}, {3}]
-random	2.8371810913085938e-05	0.6121253104761336	0.8412791887919108
-small_first	8.392333984375e-05	0.6088938740409598	0.8440017700195312
-large_first	0.00015354156494140625	0.531119476586882	0.8469446500142416
-brute_force	0.30200791358947754	0.6098872600250661	0.8441716829935709
+random	0.00010657310485839844	0.6474599706233676	0.8454437255859375
+small_first	0.00018310546875	0.6134071558461005	0.8452547391255697
+large_first	0.000213623046875	0.5540087037180829	0.8463811874389648
+brute_force	0.30513644218444824	0.6125855553572302	0.845307191212972
 .
 
 =============================== warnings summary ===============================
-qcs/tst/qvm/integration/bench_test.py: 12 warnings
+qcs/tst/qvm/integration/bench_test.py: 14 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
@@ -37,4 +37,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 33 warnings in 227.38s (0:03:47) ===========
+========== 1 passed, 54 deselected, 35 warnings in 150.40s (0:02:30) ===========

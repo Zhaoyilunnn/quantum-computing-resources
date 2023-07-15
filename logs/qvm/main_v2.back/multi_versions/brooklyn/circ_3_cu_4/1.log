@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	1.0728836059570312e-05
+compute_unit_list	[{8, 11}, {0, 10, 4}, {2}]
+QVM::selection::costs::	naive	8.606910705566406e-05
+compute_unit_list	[{8, 11}, {0, 10, 4}, {2}]
+QVM::selection::costs::	naive_reverse	0.0001404285430908203
+compute_unit_list	[{8, 11}, {0, 10, 4}, {2}]
+QVM::selection::costs::	brute_force	0.0009489059448242188
+compute_unit_list	[{8, 11}, {0, 10, 4}, {2}]
+random	1.0728836059570312e-05	1.0605027037708081	0.8338489532470703
+small_first	8.606910705566406e-05	1.0608529120208574	0.833537737528483
+large_first	0.0001404285430908203	1.0593321989659321	0.833643913269043
+brute_force	0.0009489059448242188	1.059958607840167	0.8337742487589518
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//hhl_n7/hhl_n7.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 3 warnings in 123.45s (0:02:03) ===========

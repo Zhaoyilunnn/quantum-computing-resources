@@ -7,22 +7,20 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	3.528594970703125e-05
+QVM::selection::costs::	random	0.00011205673217773438
 compute_unit_list	[{2}, {5}, {0, 10}, {3}, {6}, {1, 12}, {4}, {11}]
-QVM::selection::costs::	naive	0.00020623207092285156
+QVM::selection::costs::	naive	0.00018334388732910156
 compute_unit_list	[{2}, {0}, {8, 11}, {6}, {3}, {1, 12}, {5}, {4}]
-QVM::selection::costs::	naive_reverse	0.00014853477478027344
+QVM::selection::costs::	naive_reverse	0.00021386146545410156
 compute_unit_list	[{4}, {2}, {0, 10}, {3}, {11}, {1, 12}, {6}, {5}]
-QVM::selection::costs::	brute_force	440.0981070995331
-compute_unit_list	[{2}, {5}, {8, 11}, {3}, {0}, {1, 12}, {6}, {4}]
-random	3.528594970703125e-05	0.11219222702869411	0.9116154909133911
-small_first	0.00020623207092285156	0.10095819525999317	0.920040488243103
-large_first	0.00014853477478027344	0.11383114142229428	0.9121652841567993
-brute_force	440.0981070995331	0.10120694721564033	0.9194953441619873
+random	0.00011205673217773438	0.11173459868816632	0.9115214347839355
+small_first	0.00018334388732910156	0.10148893935596123	0.9201360940933228
+large_first	0.00021386146545410156	0.11394556808210854	0.9119975566864014
+brute_force	unknown	failed	failed
 .
 
 =============================== warnings summary ===============================
-qcs/tst/qvm/integration/bench_test.py: 20 warnings
+qcs/tst/qvm/integration/bench_test.py: 19 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
@@ -37,4 +35,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 41 warnings in 740.02s (0:12:20) ===========
+========== 1 passed, 54 deselected, 40 warnings in 177.69s (0:02:57) ===========

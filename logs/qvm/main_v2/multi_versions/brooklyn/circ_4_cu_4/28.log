@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	1.5974044799804688e-05
-compute_unit_list	[{1, 12, 7}, {2}, {0, 10, 4}, {5}]
-QVM::selection::costs::	naive	7.843971252441406e-05
-compute_unit_list	[{1, 12, 7}, {2}, {0, 10, 4}, {5}]
-QVM::selection::costs::	naive_reverse	0.0001811981201171875
-compute_unit_list	[{1, 12, 7}, {3}, {0, 10, 4}, {2}]
-QVM::selection::costs::	brute_force	0.001474618911743164
-compute_unit_list	[{1, 12, 7}, {2}, {0, 10, 4}, {5}]
-random	1.5974044799804688e-05	0.5673005465309323	0.7287688255310059
-small_first	7.843971252441406e-05	0.5649280499631518	0.7293972969055176
-large_first	0.0001811981201171875	0.5696438990627232	0.7261533737182617
-brute_force	0.001474618911743164	0.5653861578951741	0.7294154167175293
+QVM::selection::costs::	random	0.00016498565673828125
+compute_unit_list	[{0, 10, 4}, {2}, {1, 12, 7}, {5}]
+QVM::selection::costs::	naive	0.00020074844360351562
+compute_unit_list	[{0, 10, 4}, {2}, {1, 12, 7}, {5}]
+QVM::selection::costs::	naive_reverse	0.0003154277801513672
+compute_unit_list	[{0, 10, 4}, {3}, {1, 12, 7}, {2}]
+QVM::selection::costs::	brute_force	0.002146482467651367
+compute_unit_list	[{0, 10, 4}, {2}, {1, 12, 7}, {5}]
+random	0.00016498565673828125	0.5332083243501317	0.7352139949798584
+small_first	0.00020074844360351562	0.5334744172599568	0.73533034324646
+large_first	0.0003154277801513672	0.538336033659843	0.7320492267608643
+brute_force	0.002146482467651367	0.5335484552060611	0.7351198196411133
 .
 
 =============================== warnings summary ===============================
@@ -45,4 +45,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 13 warnings in 161.26s (0:02:41) ===========
+========== 1 passed, 54 deselected, 13 warnings in 113.77s (0:01:53) ===========

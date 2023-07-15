@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.002716064453125e-05
-compute_unit_list	[{2}, {3, 6}, {0, 10}, {5}, {4}]
-QVM::selection::costs::	naive	0.00017118453979492188
-compute_unit_list	[{2}, {8, 11}, {0, 10}, {3}, {5}]
-QVM::selection::costs::	naive_reverse	0.00015687942504882812
-compute_unit_list	[{4}, {3, 6}, {0, 10}, {5}, {2}]
-QVM::selection::costs::	brute_force	0.15465712547302246
-compute_unit_list	[{2}, {8, 11}, {0, 10}, {3}, {5}]
-random	2.002716064453125e-05	0.06614231247678559	0.9504236221313477
-small_first	0.00017118453979492188	0.06881553997982451	0.9507490158081054
-large_first	0.00015687942504882812	0.06657538020192733	0.9489274978637695
-brute_force	0.15465712547302246	0.06879873965689902	0.9507333755493164
+QVM::selection::costs::	random	0.0001010894775390625
+compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}, {0}]
+QVM::selection::costs::	naive	0.00016641616821289062
+compute_unit_list	[{2}, {4, 7}, {1, 12}, {3}, {5}]
+QVM::selection::costs::	naive_reverse	0.0001735687255859375
+compute_unit_list	[{0}, {3, 6}, {1, 12}, {5}, {2}]
+QVM::selection::costs::	brute_force	0.15850520133972168
+compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}, {0}]
+random	0.0001010894775390625	0.05428628671075677	0.9581897735595704
+small_first	0.00016641616821289062	0.06730459809887476	0.9543024063110351
+large_first	0.0001735687255859375	0.06154835106464811	0.9534439086914063
+brute_force	0.15850520133972168	0.05416188192373543	0.958277702331543
 .
 
 =============================== warnings summary ===============================
@@ -36,4 +36,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 24 warnings in 345.68s (0:05:45) ===========
+========== 1 passed, 54 deselected, 24 warnings in 282.97s (0:04:42) ===========

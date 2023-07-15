@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	4.649162292480469e-05
+compute_unit_list	[{12}, {5}]
+Fid of vanilla	0.20429974368093445
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (96966.20180926041 > 2 * 40591.82230473617). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_diff_methods_diff_metric[/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-vanilla-kl]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (9.696620180926042e-05 > 2 * 4.059182230473617e-05). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 9 warnings in 64.89s (0:01:04) ============

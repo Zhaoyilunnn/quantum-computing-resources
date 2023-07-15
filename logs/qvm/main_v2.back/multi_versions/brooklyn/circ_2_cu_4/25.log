@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	2.5033950805664062e-05
+compute_unit_list	[{2}, {0, 10, 4}]
+QVM::selection::costs::	naive	8.225440979003906e-05
+compute_unit_list	[{2}, {0, 10, 4}]
+QVM::selection::costs::	naive_reverse	6.318092346191406e-05
+compute_unit_list	[{2}, {0, 10, 4}]
+QVM::selection::costs::	brute_force	0.0003349781036376953
+compute_unit_list	[{2}, {0, 10, 4}]
+random	2.5033950805664062e-05	0.23172013800283964	0.9390506744384766
+small_first	8.225440979003906e-05	0.23193151309947985	0.9386944770812988
+large_first	6.318092346191406e-05	0.23236298187855897	0.938835620880127
+brute_force	0.0003349781036376953	0.23187622699706878	0.9386615753173828
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 2 warnings in 91.83s (0:01:31) ============

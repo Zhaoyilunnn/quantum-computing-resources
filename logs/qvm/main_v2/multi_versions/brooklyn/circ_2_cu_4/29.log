@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.0742416381835938e-05
+QVM::selection::costs::	random	0.00010418891906738281
 compute_unit_list	[{3}, {0, 10, 4}]
-QVM::selection::costs::	naive	6.961822509765625e-05
+QVM::selection::costs::	naive	0.0002536773681640625
 compute_unit_list	[{3}, {0, 10, 4}]
-QVM::selection::costs::	naive_reverse	3.647804260253906e-05
+QVM::selection::costs::	naive_reverse	0.0002334117889404297
 compute_unit_list	[{3}, {0, 10, 4}]
-QVM::selection::costs::	brute_force	0.00035190582275390625
+QVM::selection::costs::	brute_force	0.0003743171691894531
 compute_unit_list	[{3}, {0, 10, 4}]
-random	2.0742416381835938e-05	0.10791178180796158	1.0
-small_first	6.961822509765625e-05	0.10778268016146902	1.0
-large_first	3.647804260253906e-05	0.10811913138439941	1.0
-brute_force	0.00035190582275390625	0.10826005913499152	1.0
+random	0.00010418891906738281	0.114791255691772	1.0
+small_first	0.0002536773681640625	0.11534230373593814	1.0
+large_first	0.0002334117889404297	0.1151210297476943	1.0
+brute_force	0.0003743171691894531	0.11509040732400984	1.0
 .
 
 =============================== warnings summary ===============================
@@ -28,4 +28,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 54 deselected, 2 warnings in 76.59s (0:01:16) ============
+================ 1 passed, 54 deselected, 2 warnings in 50.26s =================

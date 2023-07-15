@@ -7,30 +7,27 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	7.987022399902344e-05
-compute_unit_list	[{3, 6}, {2}, {5}, {0}, {4}, {8, 11}, {1}, {12}]
-QVM::selection::costs::	naive	0.00022673606872558594
+QVM::selection::costs::	random	0.00012159347534179688
+compute_unit_list	[{3, 6}, {2}, {5}, {0}, {4}, {1, 12}, {11}, {8}]
+QVM::selection::costs::	naive	0.0003223419189453125
 compute_unit_list	[{1, 12}, {5}, {2}, {6}, {3}, {8, 11}, {4}, {0}]
-QVM::selection::costs::	naive_reverse	0.0002899169921875
-compute_unit_list	[{3, 6}, {0}, {1}, {2}, {12}, {8, 11}, {5}, {4}]
-QVM::selection::costs::	brute_force	372.62535548210144
-compute_unit_list	[{1, 12}, {2}, {3}, {5}, {0}, {8, 11}, {4}, {6}]
-random	7.987022399902344e-05	0.17474208658089002	0.8463231325149536
-small_first	0.00022673606872558594	0.16928144020888475	0.8515636920928955
-large_first	0.0002899169921875	0.17517820243362642	0.8448817729949951
-brute_force	372.62535548210144	0.16960722113750443	0.8518143892288208
+QVM::selection::costs::	naive_reverse	0.0002994537353515625
+compute_unit_list	[{3, 6}, {0}, {4}, {2}, {11}, {1, 12}, {5}, {8}]
+random	0.00012159347534179688	0.18187519911632438	0.8412187099456787
+small_first	0.0003223419189453125	0.17102570014261625	0.8501685857772827
+large_first	0.0002994537353515625	0.17986468141281842	0.8419095277786255
+brute_force	unknown	failed	failed
 .
 
 =============================== warnings summary ===============================
-qcs/tst/qvm/integration/bench_test.py: 25 warnings
+qcs/tst/qvm/integration/bench_test.py: 21 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
-qcs/tst/qvm/integration/bench_test.py: 24 warnings
+qcs/tst/qvm/integration/bench_test.py: 18 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (96966.20180926041 > 2 * 40591.82230473617). Truncating to maximum value.
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
-qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//error_correctiond3_n5/error_correctiond3_n5.qasm,/root/projects/QASMBench/small//fredkin_n3/fredkin_n3.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//error_correctiond3_n5/error_correctiond3_n5.qasm,/root/projects/QASMBench/small//fredkin_n3/fredkin_n3.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//error_correctiond3_n5/error_correctiond3_n5.qasm,/root/projects/QASMBench/small//fredkin_n3/fredkin_n3.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//error_correctiond3_n5/error_correctiond3_n5.qasm,/root/projects/QASMBench/small//fredkin_n3/fredkin_n3.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//hs4_n4/hs4_n4.qasm,/root/projects/QASMBench/small//iswap_n2/iswap_n2.qasm,/root/projects/QASMBench/small//simon_n6/simon_n6.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
@@ -38,4 +35,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 53 warnings in 656.80s (0:10:56) ===========
+========== 1 passed, 54 deselected, 42 warnings in 176.70s (0:02:56) ===========

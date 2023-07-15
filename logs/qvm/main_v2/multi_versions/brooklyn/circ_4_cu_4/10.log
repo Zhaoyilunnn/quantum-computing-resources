@@ -7,21 +7,25 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	1.71661376953125e-05
-compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {5}]
-QVM::selection::costs::	naive	5.412101745605469e-05
-compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {5}]
-QVM::selection::costs::	naive_reverse	0.00016117095947265625
-compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {5}]
-QVM::selection::costs::	brute_force	0.008664131164550781
-compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {5}]
-random	1.71661376953125e-05	0.1331511599523662	0.9530394077301025
-small_first	5.412101745605469e-05	0.1333608358373219	0.9529778957366943
-large_first	0.00016117095947265625	0.1331530319960773	0.953005313873291
-brute_force	0.008664131164550781	0.13340825131591147	0.9529895782470703
+QVM::selection::costs::	random	9.512901306152344e-05
+compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {8}]
+QVM::selection::costs::	naive	0.00014257431030273438
+compute_unit_list	[{0, 10, 4}, {1, 12}, {3}, {2}]
+QVM::selection::costs::	naive_reverse	0.00014400482177734375
+compute_unit_list	[{0, 10, 4}, {3, 6}, {2}, {8}]
+QVM::selection::costs::	brute_force	0.005436897277832031
+compute_unit_list	[{0, 10, 4}, {3, 6}, {5}, {2}]
+random	9.512901306152344e-05	0.155473016964195	0.9349138736724854
+small_first	0.00014257431030273438	0.14365416002040032	0.9436752796173096
+large_first	0.00014400482177734375	0.1561637680250973	0.9347352981567383
+brute_force	0.005436897277832031	0.1388485713749293	0.9485626220703125
 .
 
 =============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
 qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm,/root/projects/QASMBench/small//qrng_n4/qrng_n4.qasm,/root/projects/QASMBench/small//wstate_n3/wstate_n3.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
@@ -43,4 +47,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 11 warnings in 154.94s (0:02:34) ===========
+========== 1 passed, 54 deselected, 15 warnings in 107.03s (0:01:47) ===========

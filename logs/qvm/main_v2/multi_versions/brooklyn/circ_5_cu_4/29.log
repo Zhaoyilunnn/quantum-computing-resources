@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	3.0279159545898438e-05
-compute_unit_list	[{1, 12, 7}, {2}, {8, 11}, {3}, {5}]
-QVM::selection::costs::	naive	0.00010323524475097656
+QVM::selection::costs::	random	0.00010824203491210938
+compute_unit_list	[{0, 10, 4}, {2}, {3, 6}, {5}, {1}]
+QVM::selection::costs::	naive	0.00020074844360351562
 compute_unit_list	[{0, 10, 4}, {3}, {1, 12}, {5}, {2}]
-QVM::selection::costs::	naive_reverse	0.00013637542724609375
-compute_unit_list	[{1, 12, 7}, {2}, {8, 11}, {3}, {5}]
-QVM::selection::costs::	brute_force	0.09137415885925293
-compute_unit_list	[{1, 12, 7}, {2}, {8, 11}, {3}, {5}]
-random	3.0279159545898438e-05	0.48510131430654707	0.703793716430664
-small_first	0.00010323524475097656	0.4494168069642891	0.7144922256469727
-large_first	0.00013637542724609375	0.4852609851302619	0.7038537979125976
-brute_force	0.09137415885925293	0.48510218913015074	0.7038417816162109
+QVM::selection::costs::	naive_reverse	0.0003142356872558594
+compute_unit_list	[{0, 10, 4}, {2}, {3, 6}, {5}, {1}]
+QVM::selection::costs::	brute_force	0.09353876113891602
+compute_unit_list	[{0, 10, 4}, {2}, {1, 12}, {3}, {5}]
+random	0.00010824203491210938	0.4512817397816148	0.7079963684082031
+small_first	0.00020074844360351562	0.4432210013069299	0.7157886505126954
+large_first	0.0003142356872558594	0.4514924684050404	0.707822036743164
+brute_force	0.09353876113891602	0.43923678818220957	0.7191278457641601
 .
 
 =============================== warnings summary ===============================
@@ -36,4 +36,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 24 warnings in 180.46s (0:03:00) ===========
+========== 1 passed, 54 deselected, 24 warnings in 119.45s (0:01:59) ===========

@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py 
+------------------- Testing --------------
+
+QVM::selection::costs::	random	3.075599670410156e-05
+compute_unit_list	[{2}, {3}, {5}, {0, 10, 4}, {1, 12}]
+QVM::selection::costs::	naive	0.00016617774963378906
+compute_unit_list	[{3}, {5}, {2}, {0, 10, 4}, {1, 12}]
+QVM::selection::costs::	naive_reverse	0.00018715858459472656
+compute_unit_list	[{2}, {5}, {1}, {0, 10, 4}, {3, 6}]
+QVM::selection::costs::	brute_force	0.0687248706817627
+compute_unit_list	[{2}, {3}, {5}, {0, 10, 4}, {1, 12}]
+random	3.075599670410156e-05	0.16471852452869	0.9081058502197266
+small_first	0.00016617774963378906	0.17007943001807174	0.9034528732299805
+large_first	0.00018715858459472656	0.17270480444989555	0.9013816833496093
+brute_force	0.0687248706817627	0.16500901486794053	0.9079198837280273
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py: 10 warnings
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/bench_test.py: 12 warnings
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (96966.20180926041 > 2 * 40591.82230473617). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//fredkin_n3/fredkin_n3.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_multi_methods_multi_metrics[/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//fredkin_n3/fredkin_n3.qasm,/root/projects/QASMBench/small//grover_n2/grover_n2.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm,/root/projects/QASMBench/small//lpn_n5/lpn_n5.qasm-FakeBrooklyn-4-random,small_first,large_first,brute_force]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (9.696620180926042e-05 > 2 * 4.059182230473617e-05). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========== 1 passed, 54 deselected, 24 warnings in 192.06s (0:03:12) ===========

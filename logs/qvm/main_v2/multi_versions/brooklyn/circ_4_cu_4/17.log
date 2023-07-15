@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	1.3828277587890625e-05
-compute_unit_list	[{2}, {8, 11}, {4, 7}, {5}]
-QVM::selection::costs::	naive	0.00011730194091796875
-compute_unit_list	[{2}, {8, 11}, {4, 7}, {5}]
-QVM::selection::costs::	naive_reverse	7.128715515136719e-05
-compute_unit_list	[{2}, {8, 11}, {4, 7}, {5}]
-QVM::selection::costs::	brute_force	0.027683496475219727
-compute_unit_list	[{2}, {8, 11}, {4, 7}, {5}]
-random	1.3828277587890625e-05	0.16566701889836138	0.8672878742218018
-small_first	0.00011730194091796875	0.1661582601983252	0.8669440746307373
-large_first	7.128715515136719e-05	0.16572535510069183	0.8671448230743408
-brute_force	0.027683496475219727	0.16559032254382705	0.8673546314239502
+QVM::selection::costs::	random	0.00015163421630859375
+compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}]
+QVM::selection::costs::	naive	0.00010561943054199219
+compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}]
+QVM::selection::costs::	naive_reverse	0.00028228759765625
+compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}]
+QVM::selection::costs::	brute_force	0.028332233428955078
+compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}]
+random	0.00015163421630859375	0.15859306296280773	0.8676414489746094
+small_first	0.00010561943054199219	0.15817819322610566	0.8679828643798828
+large_first	0.00028228759765625	0.15838479088037363	0.8678123950958252
+brute_force	0.028332233428955078	0.15838637021099894	0.8678276538848877
 .
 
 =============================== warnings summary ===============================
@@ -43,4 +43,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 11 warnings in 143.63s (0:02:23) ===========
+=========== 1 passed, 54 deselected, 11 warnings in 92.40s (0:01:32) ===========

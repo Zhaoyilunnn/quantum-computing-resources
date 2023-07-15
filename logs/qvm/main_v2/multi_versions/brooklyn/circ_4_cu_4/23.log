@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	1.5497207641601562e-05
-compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}]
-QVM::selection::costs::	naive	0.00012755393981933594
-compute_unit_list	[{2}, {4, 7}, {1, 12}, {3}]
-QVM::selection::costs::	naive_reverse	0.000141143798828125
-compute_unit_list	[{5}, {3, 6}, {1, 12}, {2}]
-QVM::selection::costs::	brute_force	0.01263570785522461
-compute_unit_list	[{2}, {3, 6}, {1, 12}, {5}]
-random	1.5497207641601562e-05	0.6612568279332156	0.8450562953948975
-small_first	0.00012755393981933594	0.8039403647891736	0.844219446182251
-large_first	0.000141143798828125	0.6539989350418032	0.8507614135742188
-brute_force	0.01263570785522461	0.6609145967313659	0.8450376987457275
+QVM::selection::costs::	random	0.00013113021850585938
+compute_unit_list	[{2}, {3, 6}, {0, 10}, {5}]
+QVM::selection::costs::	naive	0.0001270771026611328
+compute_unit_list	[{2}, {8, 11}, {0, 10}, {3}]
+QVM::selection::costs::	naive_reverse	0.0001404285430908203
+compute_unit_list	[{5}, {3, 6}, {0, 10}, {2}]
+QVM::selection::costs::	brute_force	0.01241612434387207
+compute_unit_list	[{2}, {3, 6}, {0, 10}, {5}]
+random	0.00013113021850585938	0.6322537671191297	0.836702823638916
+small_first	0.0001270771026611328	0.7772879312740677	0.8308825492858887
+large_first	0.0001404285430908203	0.6274087676342279	0.8424804210662842
+brute_force	0.01241612434387207	0.6329824203626339	0.8369879722595215
 .
 
 =============================== warnings summary ===============================
@@ -43,4 +43,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 22 warnings in 147.49s (0:02:27) ===========
+=========== 1 passed, 54 deselected, 22 warnings in 90.07s (0:01:30) ===========

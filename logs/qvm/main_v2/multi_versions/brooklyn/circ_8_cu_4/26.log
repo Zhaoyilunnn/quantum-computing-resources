@@ -7,18 +7,16 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	5.221366882324219e-05
-compute_unit_list	[{2}, {3}, {5}, {0}, {1, 12}, {10}, {4, 7}, {6}]
-QVM::selection::costs::	naive	0.00023174285888671875
-compute_unit_list	[{5}, {2}, {0}, {3}, {1, 12}, {10}, {4, 7}, {6}]
-QVM::selection::costs::	naive_reverse	0.00048732757568359375
-compute_unit_list	[{4}, {1}, {2}, {11}, {0, 10}, {9}, {3, 6}, {5}]
-QVM::selection::costs::	brute_force	462.00712180137634
-compute_unit_list	[{2}, {3}, {5}, {0}, {1, 12}, {10}, {4, 7}, {6}]
-random	5.221366882324219e-05	0.09468066936147104	0.9214311838150024
-small_first	0.00023174285888671875	0.09474254948196295	0.9209688901901245
-large_first	0.00048732757568359375	0.10486573046307435	0.91756272315979
-brute_force	462.00712180137634	0.09476104461394885	0.9213436841964722
+QVM::selection::costs::	random	0.00011277198791503906
+compute_unit_list	[{2}, {3}, {5}, {0}, {1, 12}, {10}, {8, 11}, {6}]
+QVM::selection::costs::	naive	0.00024271011352539062
+compute_unit_list	[{5}, {2}, {0}, {3}, {4, 7}, {10}, {1, 12}, {6}]
+QVM::selection::costs::	naive_reverse	0.00039386749267578125
+compute_unit_list	[{0}, {4}, {2}, {11}, {3, 6}, {10}, {1, 12}, {5}]
+random	0.00011277198791503906	0.09504132245292587	0.9212223291397095
+small_first	0.00024271011352539062	0.09842128839323679	0.9207712411880493
+large_first	0.00039386749267578125	0.0921615547985547	0.9209903478622437
+brute_force	unknown	failed	failed
 .
 
 =============================== warnings summary ===============================
@@ -37,4 +35,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 41 warnings in 930.65s (0:15:30) ===========
+========== 1 passed, 54 deselected, 41 warnings in 303.78s (0:05:03) ===========

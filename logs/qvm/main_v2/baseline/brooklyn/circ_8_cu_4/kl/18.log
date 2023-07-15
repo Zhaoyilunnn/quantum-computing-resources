@@ -7,8 +7,8 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-FRP::online_compilation::costs::	17.11630392074585
-Fid of baseline	0.34063443514052916
+FRP::online_compilation::costs::	16.783290147781372
+Fid of baseline	0.3407333740592201
 .
 
 =============================== warnings summary ===============================
@@ -37,4 +37,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-================ 1 passed, 54 deselected, 15 warnings in 52.07s ================
+================ 1 passed, 54 deselected, 15 warnings in 51.86s ================

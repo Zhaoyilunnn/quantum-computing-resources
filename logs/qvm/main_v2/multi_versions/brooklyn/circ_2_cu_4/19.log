@@ -7,18 +7,18 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	2.2649765014648438e-05
-compute_unit_list	[{0, 10, 4}, {1, 12}]
-QVM::selection::costs::	naive	5.340576171875e-05
-compute_unit_list	[{0, 10, 4}, {1, 12}]
-QVM::selection::costs::	naive_reverse	9.083747863769531e-05
-compute_unit_list	[{0, 10, 4}, {1, 12}]
-QVM::selection::costs::	brute_force	0.00017714500427246094
-compute_unit_list	[{0, 10, 4}, {1, 12}]
-random	2.2649765014648438e-05	0.41187481976141627	0.8042597770690918
-small_first	5.340576171875e-05	0.4120090575986388	0.804295539855957
-large_first	9.083747863769531e-05	0.41109724685943105	0.8046536445617676
-brute_force	0.00017714500427246094	0.41246482214186886	0.8039789199829102
+QVM::selection::costs::	random	9.679794311523438e-05
+compute_unit_list	[{0, 10, 4}, {3, 6}]
+QVM::selection::costs::	naive	0.00011181831359863281
+compute_unit_list	[{0, 10, 4}, {3, 6}]
+QVM::selection::costs::	naive_reverse	0.0001933574676513672
+compute_unit_list	[{0, 10, 4}, {3, 6}]
+QVM::selection::costs::	brute_force	0.0003261566162109375
+compute_unit_list	[{0, 10, 4}, {3, 6}]
+random	9.679794311523438e-05	0.39917427518415427	0.8111777305603027
+small_first	0.00011181831359863281	0.3996000203051674	0.8116393089294434
+large_first	0.0001933574676513672	0.3997533759437161	0.8114194869995117
+brute_force	0.0003261566162109375	0.40021132489342476	0.8112978935241699
 .
 
 =============================== warnings summary ===============================
@@ -28,4 +28,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========== 1 passed, 54 deselected, 2 warnings in 80.57s (0:01:20) ============
+================ 1 passed, 54 deselected, 2 warnings in 56.63s =================

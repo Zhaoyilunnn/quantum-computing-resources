@@ -7,22 +7,20 @@ collected 55 items / 54 deselected / 1 selected
 tst/qvm/integration/bench_test.py 
 ------------------- Testing --------------
 
-QVM::selection::costs::	random	3.0279159545898438e-05
+QVM::selection::costs::	random	0.00012230873107910156
 compute_unit_list	[{2}, {3}, {5}, {0, 10}, {9}, {6}, {4}]
-QVM::selection::costs::	naive	0.0001289844512939453
+QVM::selection::costs::	naive	0.00021839141845703125
 compute_unit_list	[{5}, {2}, {6}, {8, 11}, {10}, {3}, {0}]
-QVM::selection::costs::	naive_reverse	0.0001761913299560547
+QVM::selection::costs::	naive_reverse	0.00024056434631347656
 compute_unit_list	[{5}, {4}, {2}, {0, 10}, {3}, {1}, {6}]
-QVM::selection::costs::	brute_force	91.29769349098206
-compute_unit_list	[{2}, {3}, {5}, {8, 11}, {10}, {0}, {6}]
-random	3.0279159545898438e-05	0.10807530832112898	0.9102591105869838
-small_first	0.0001289844512939453	0.10398173401612346	0.9110435758318219
-large_first	0.0001761913299560547	0.10851467494970682	0.9074164799281529
-brute_force	91.29769349098206	0.09839977456195459	0.9164458683558873
+random	0.00012230873107910156	0.10861082426444472	0.9101121085030692
+small_first	0.00021839141845703125	0.10307789653278551	0.9120127814156669
+large_first	0.00024056434631347656	0.10923571058375603	0.9069288798740932
+brute_force	unknown	failed	failed
 .
 
 =============================== warnings summary ===============================
-qcs/tst/qvm/integration/bench_test.py: 20 warnings
+qcs/tst/qvm/integration/bench_test.py: 19 warnings
   /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
     noise_model = NoiseModel.from_backend(self, warnings=False)
 
@@ -36,4 +34,4 @@ qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_bench_
     warn("Device model returned an invalid T_2 relaxation time greater than"
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-========== 1 passed, 54 deselected, 34 warnings in 344.52s (0:05:44) ===========
+========== 1 passed, 54 deselected, 33 warnings in 153.15s (0:02:33) ===========
