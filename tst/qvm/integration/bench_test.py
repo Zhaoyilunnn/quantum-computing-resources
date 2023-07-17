@@ -484,7 +484,8 @@ class TestBenchQvmFrpV2(TestBenchQvmBfs):
 
 
 class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
-    fid_calculator = KlReliabilityCalculator()
+    # fid_calculator = KlReliabilityCalculator()
+    fid_calculator = QvmFidCalculator()
 
     def setup_class(self):
         pass
@@ -605,9 +606,6 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         if qvm_version != "vanilla":
             self.init_proc_cache(qasm, backend, cu_size)
 
-        if metric == "pst":
-            self.fid_calculator = PstCalculator()
-
         # Prepare circuits
         shots = QVM_SHOTS
         qasms = qasm.split(",")
@@ -626,7 +624,14 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
                 "[vanilla, random, small_first, large_first, brute_force, baseline]"
             )
 
+        # if metric == "pst":
+        #     self.fid_calculator = PstCalculator()
+
+        self.fid_calculator.metric = metric
+
         fid = self.fid_calculator.calc_fidelity(circ_list, res, shots=self.shots)
+        if isinstance(fid, list):
+            fid = "\t".join([str(f) for f in fid])
         print(f"Fid of {qvm_version}\t{fid}")
 
     def test_bench_multi_methods_multi_metrics(

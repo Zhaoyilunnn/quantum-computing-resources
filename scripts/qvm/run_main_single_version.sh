@@ -1,5 +1,5 @@
 if [ $# -ne 4 ]; then
-    echo "Usage: bash $0 <backend: FakeCairo|FakeBrooklyn|...> <metric: kl|pst> <version: vanilla|random|small_first|large_first|brute_force> <num_circ: 2~6>"
+    echo "Usage: bash $0 <backend: FakeCairo|FakeBrooklyn|...> <metric: kl|pst|hybrid> <version: vanilla|random|small_first|large_first|brute_force> <num_circ: 2~6>"
     exit 1
 fi
 
