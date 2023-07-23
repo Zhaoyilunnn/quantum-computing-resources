@@ -18,3 +18,4 @@ sim-beta/compile_commands.json
 *.err
 *.pkl
 bench.log
+*.dot

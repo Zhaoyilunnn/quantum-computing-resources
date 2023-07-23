@@ -1,3 +1,9 @@
+"""
+Reference: https://github.com/Qiskit/qiskit-ibm-runtime/blob/main/docs/tutorials/qaoa_with_primitives.ipynb
+
+"""
+
+
 import numpy as np
 
 # Pre-defined ansatz circuit, operator class and visualization tools
