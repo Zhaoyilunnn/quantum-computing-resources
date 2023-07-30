@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     task = Task()
     task.config(backend="ScQ-P10", shots=2000, compile=True)
-    task.load_account()
+    #task.load_account()
 
     #res = task.send(q, wait=False, name="zhaoyilun-test", group=GROUP_NAME)
     #group_res = task.retrieve_group(GROUP_NAME)

@@ -144,23 +144,24 @@ class TestUtilMisc(QvmBaseTest):
         assert len(subgraphs) == 48
 
     def test_fake_backend_subgraph_num(self):
-        k_lst = [2, 3, 4, 5, 6, 7, 8]
+        # k_lst = [2, 3, 4, 5, 6, 7, 8]
+        k_lst = [9, 10]
 
-        backend = FakeMelbourne()
-        extractor = BackendAdjMatGraphExtractor(backend)
-        graph = extractor.extract()
-        print("\n========= test_fake_backend_subgraph_num ===========\n")
-        for i in k_lst:
-            subgraphs = find_all_connected_subgraphs_v2(graph, i)
-            print(f"FakeMelbourne\t{i}\t{len(subgraphs)}")
+        # backend = FakeMelbourne()
+        # extractor = BackendAdjMatGraphExtractor(backend)
+        # graph = extractor.extract()
+        # print("\n========= test_fake_backend_subgraph_num ===========\n")
+        # for i in k_lst:
+        #     subgraphs = find_all_connected_subgraphs_v2(graph, i)
+        #     print(f"FakeMelbourne\t{i}\t{len(subgraphs)}")
 
-        backend = FakeCairo()
-        extractor = BackendAdjMatGraphExtractor(backend)
-        graph = extractor.extract()
-        print("\n========= test_fake_backend_subgraph_num ===========\n")
-        for i in k_lst:
-            subgraphs = find_all_connected_subgraphs_v2(graph, i)
-            print(f"FakeCairo\t{i}\t{len(subgraphs)}")
+        # backend = FakeCairo()
+        # extractor = BackendAdjMatGraphExtractor(backend)
+        # graph = extractor.extract()
+        # print("\n========= test_fake_backend_subgraph_num ===========\n")
+        # for i in k_lst:
+        #     subgraphs = find_all_connected_subgraphs_v2(graph, i)
+        #     print(f"FakeCairo\t{i}\t{len(subgraphs)}")
 
         backend = FakeBrooklyn()
         extractor = BackendAdjMatGraphExtractor(backend)
@@ -170,10 +171,10 @@ class TestUtilMisc(QvmBaseTest):
             subgraphs = find_all_connected_subgraphs_v2(graph, i)
             print(f"FakeBrooklyn\t{i}\t{len(subgraphs)}")
 
-        backend = FakeWashington()
-        extractor = BackendAdjMatGraphExtractor(backend)
-        graph = extractor.extract()
-        print("\n========= test_fake_backend_subgraph_num ===========\n")
-        for i in k_lst:
-            subgraphs = find_all_connected_subgraphs_v2(graph, i)
-            print(f"FakeWashington\t{i}\t{len(subgraphs)}")
+        # backend = FakeWashington()
+        # extractor = BackendAdjMatGraphExtractor(backend)
+        # graph = extractor.extract()
+        # print("\n========= test_fake_backend_subgraph_num ===========\n")
+        # for i in k_lst:
+        #     subgraphs = find_all_connected_subgraphs_v2(graph, i)
+        #     print(f"FakeWashington\t{i}\t{len(subgraphs)}")

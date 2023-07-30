@@ -1,0 +1,317 @@
+VmRSS:	  189648 kB
+VmRSS:	  294600 kB
+VmRSS:	  387932 kB
+VmRSS:	  499120 kB
+VmRSS:	  572132 kB
+VmRSS:	  572132 kB
+gate_compile:consumed time:	7.812917470932007
+#Inst at gate level: 223
+pulse_compile:consumed time:	0.32595205307006836
+#Inst at pulse level: 2009
+dt: 2.2222222222222221e-10, duration: 251760
+VmRSS:	  192220 kB
+VmRSS:	  294864 kB
+VmRSS:	  389784 kB
+VmRSS:	  499288 kB
+VmRSS:	  572364 kB
+gate_compile:consumed time:	7.5368921756744385
+#Inst at gate level: 38
+pulse_compile:consumed time:	0.05244755744934082
+#Inst at pulse level: 279
+dt: 2.2222222222222221e-10, duration: 20400
+VmRSS:	  191156 kB
+VmRSS:	  294784 kB
+VmRSS:	  389364 kB
+VmRSS:	  499256 kB
+VmRSS:	  571596 kB
+gate_compile:consumed time:	7.48759126663208
+#Inst at gate level: 88
+pulse_compile:consumed time:	0.07754254341125488
+#Inst at pulse level: 302
+dt: 2.2222222222222221e-10, duration: 29872
+VmRSS:	  195812 kB
+VmRSS:	  292568 kB
+VmRSS:	  389920 kB
+VmRSS:	  497040 kB
+VmRSS:	  578340 kB
+VmRSS:	  578340 kB
+VmRSS:	  583488 kB
+VmRSS:	  583752 kB
+gate_compile:consumed time:	8.057011604309082
+#Inst at gate level: 2357
+pulse_compile:consumed time:	3.1053664684295654
+#Inst at pulse level: 12361
+dt: 2.2222222222222221e-10, duration: 1034544
+VmRSS:	  192244 kB
+VmRSS:	  294684 kB
+VmRSS:	  394220 kB
+VmRSS:	  499056 kB
+VmRSS:	  571220 kB
+gate_compile:consumed time:	7.417167663574219
+#Inst at gate level: 10
+pulse_compile:consumed time:	0.013013362884521484
+#Inst at pulse level: 57
+dt: 2.2222222222222221e-10, duration: 12016
+VmRSS:	  191068 kB
+VmRSS:	  294584 kB
+VmRSS:	  393740 kB
+VmRSS:	  499288 kB
+VmRSS:	  571280 kB
+gate_compile:consumed time:	7.433668851852417
+#Inst at gate level: 12
+pulse_compile:consumed time:	0.014870882034301758
+#Inst at pulse level: 45
+dt: 2.2222222222222221e-10, duration: 8048
+VmRSS:	  192620 kB
+VmRSS:	  294028 kB
+VmRSS:	  391024 kB
+VmRSS:	  498652 kB
+VmRSS:	  572080 kB
+gate_compile:consumed time:	7.537536144256592
+#Inst at gate level: 308
+pulse_compile:consumed time:	0.28754377365112305
+#Inst at pulse level: 1194
+dt: 2.2222222222222221e-10, duration: 172848
+VmRSS:	  467776 kB
+VmRSS:	  196048 kB
+VmRSS:	  292324 kB
+VmRSS:	  397448 kB
+VmRSS:	  495428 kB
+VmRSS:	  578280 kB
+VmRSS:	  578704 kB
+VmRSS:	  579884 kB
+gate_compile:consumed time:	8.868337869644165
+#Inst at gate level: 1470
+pulse_compile:consumed time:	1.377394437789917
+#Inst at pulse level: 6533
+dt: 2.2222222222222221e-10, duration: 179888
+VmRSS:	  192196 kB
+VmRSS:	  294472 kB
+VmRSS:	  392124 kB
+VmRSS:	  498936 kB
+VmRSS:	  572112 kB
+VmRSS:	  567892 kB
+gate_compile:consumed time:	7.647069692611694
+#Inst at gate level: 261
+pulse_compile:consumed time:	0.2771792411804199
+#Inst at pulse level: 1605
+dt: 2.2222222222222221e-10, duration: 111376
+VmRSS:	  191200 kB
+VmRSS:	  294816 kB
+VmRSS:	  392792 kB
+VmRSS:	  499400 kB
+VmRSS:	  572232 kB
+gate_compile:consumed time:	7.5685060024261475
+#Inst at gate level: 35
+pulse_compile:consumed time:	0.05102419853210449
+#Inst at pulse level: 301
+dt: 2.2222222222222221e-10, duration: 34896
+VmRSS:	  192520 kB
+VmRSS:	  294960 kB
+VmRSS:	  389588 kB
+VmRSS:	  499300 kB
+VmRSS:	  571348 kB
+gate_compile:consumed time:	7.415416717529297
+#Inst at gate level: 17
+pulse_compile:consumed time:	0.022034645080566406
+#Inst at pulse level: 73
+dt: 2.2222222222222221e-10, duration: 12048
+VmRSS:	  193172 kB
+VmRSS:	  293680 kB
+VmRSS:	  395212 kB
+VmRSS:	  501128 kB
+VmRSS:	  575416 kB
+VmRSS:	  575416 kB
+gate_compile:consumed time:	7.828747034072876
+#Inst at gate level: 1115
+pulse_compile:consumed time:	1.254084825515747
+#Inst at pulse level: 6594
+dt: 2.2222222222222221e-10, duration: 573072
+VmRSS:	  191208 kB
+VmRSS:	  294768 kB
+VmRSS:	  391172 kB
+VmRSS:	  499272 kB
+VmRSS:	  571204 kB
+gate_compile:consumed time:	7.478920936584473
+#Inst at gate level: 32
+pulse_compile:consumed time:	0.033236026763916016
+#Inst at pulse level: 124
+dt: 2.2222222222222221e-10, duration: 12048
+VmRSS:	  192452 kB
+VmRSS:	  294032 kB
+VmRSS:	  395136 kB
+VmRSS:	  498608 kB
+VmRSS:	  572936 kB
+VmRSS:	  572936 kB
+gate_compile:consumed time:	7.820806980133057
+#Inst at gate level: 425
+pulse_compile:consumed time:	0.5249953269958496
+#Inst at pulse level: 2250
+dt: 2.2222222222222221e-10, duration: 44368
+VmRSS:	  190752 kB
+VmRSS:	  294388 kB
+VmRSS:	  389864 kB
+VmRSS:	  498860 kB
+VmRSS:	  571144 kB
+gate_compile:consumed time:	7.415221929550171
+#Inst at gate level: 16
+pulse_compile:consumed time:	0.018713712692260742
+#Inst at pulse level: 70
+dt: 2.2222222222222221e-10, duration: 12048
+VmRSS:	  191144 kB
+VmRSS:	  294820 kB
+VmRSS:	  392004 kB
+VmRSS:	  499160 kB
+VmRSS:	  571216 kB
+gate_compile:consumed time:	7.478827476501465
+#Inst at gate level: 29
+pulse_compile:consumed time:	0.032006263732910156
+#Inst at pulse level: 129
+dt: 2.2222222222222221e-10, duration: 15536
+VmRSS:	  192180 kB
+VmRSS:	  294672 kB
+VmRSS:	  392344 kB
+VmRSS:	  499264 kB
+VmRSS:	  571200 kB
+VmRSS:	  571340 kB
+VmRSS:	  571340 kB
+VmRSS:	  571836 kB
+gate_compile:consumed time:	12.219727277755737
+#Inst at gate level: 22
+pulse_compile:consumed time:	0.023277759552001953
+#Inst at pulse level: 81
+dt: 2.2222222222222221e-10, duration: 7568
+VmRSS:	  191292 kB
+VmRSS:	  294628 kB
+VmRSS:	  390988 kB
+VmRSS:	  499164 kB
+VmRSS:	  572352 kB
+VmRSS:	  518404 kB
+gate_compile:consumed time:	7.673465013504028
+#Inst at gate level: 131
+pulse_compile:consumed time:	0.21253705024719238
+#Inst at pulse level: 1163
+dt: 2.2222222222222221e-10, duration: 113904
+VmRSS:	  193116 kB
+VmRSS:	  294080 kB
+VmRSS:	  384960 kB
+VmRSS:	  498576 kB
+VmRSS:	  573068 kB
+VmRSS:	  573068 kB
+gate_compile:consumed time:	7.883529186248779
+#Inst at gate level: 421
+pulse_compile:consumed time:	0.4241971969604492
+#Inst at pulse level: 2076
+dt: 2.2222222222222221e-10, duration: 115952
+VmRSS:	  190760 kB
+VmRSS:	  294600 kB
+VmRSS:	  392016 kB
+VmRSS:	  499164 kB
+VmRSS:	  572192 kB
+gate_compile:consumed time:	7.535455226898193
+#Inst at gate level: 61
+pulse_compile:consumed time:	0.07122611999511719
+#Inst at pulse level: 412
+dt: 2.2222222222222221e-10, duration: 40336
+VmRSS:	  191096 kB
+VmRSS:	  294908 kB
+VmRSS:	  386516 kB
+VmRSS:	  499360 kB
+VmRSS:	  572220 kB
+gate_compile:consumed time:	7.6098926067352295
+#Inst at gate level: 59
+pulse_compile:consumed time:	0.08762121200561523
+#Inst at pulse level: 402
+dt: 2.2222222222222221e-10, duration: 36688
+VmRSS:	  368744 kB
+VmRSS:	  191060 kB
+VmRSS:	  294736 kB
+VmRSS:	  394880 kB
+VmRSS:	  499156 kB
+VmRSS:	  572608 kB
+VmRSS:	  573232 kB
+gate_compile:consumed time:	7.610724925994873
+#Inst at gate level: 222
+pulse_compile:consumed time:	0.35602831840515137
+#Inst at pulse level: 1775
+dt: 2.2222222222222221e-10, duration: 164272
+VmRSS:	  190900 kB
+VmRSS:	  294748 kB
+VmRSS:	  394172 kB
+VmRSS:	  499168 kB
+VmRSS:	  571220 kB
+gate_compile:consumed time:	7.409545183181763
+#Inst at gate level: 16
+pulse_compile:consumed time:	0.01569676399230957
+#Inst at pulse level: 40
+dt: 2.2222222222222221e-10, duration: 4048
+VmRSS:	  192052 kB
+VmRSS:	  294528 kB
+VmRSS:	  392980 kB
+VmRSS:	  499176 kB
+VmRSS:	  570888 kB
+gate_compile:consumed time:	7.468455076217651
+#Inst at gate level: 40
+pulse_compile:consumed time:	0.04407143592834473
+#Inst at pulse level: 135
+dt: 2.2222222222222221e-10, duration: 16688
+VmRSS:	  192476 kB
+VmRSS:	  294668 kB
+VmRSS:	  389120 kB
+VmRSS:	  499244 kB
+VmRSS:	  571944 kB
+gate_compile:consumed time:	7.5658652782440186
+#Inst at gate level: 117
+VmRSS:	  572084 kB
+VmRSS:	  191920 kB
+VmRSS:	  294416 kB
+VmRSS:	  392744 kB
+VmRSS:	  499088 kB
+VmRSS:	  571880 kB
+VmRSS:	  572152 kB
+VmRSS:	  572168 kB
+gate_compile:consumed time:	9.905597686767578
+#Inst at gate level: 74
+pulse_compile:consumed time:	0.09556293487548828
+#Inst at pulse level: 496
+dt: 2.2222222222222221e-10, duration: 51376
+VmRSS:	  192284 kB
+VmRSS:	  294852 kB
+VmRSS:	  394340 kB
+VmRSS:	  499244 kB
+VmRSS:	  571008 kB
+gate_compile:consumed time:	7.441013336181641
+#Inst at gate level: 15
+pulse_compile:consumed time:	0.019492626190185547
+#Inst at pulse level: 67
+dt: 2.2222222222222221e-10, duration: 9552
+VmRSS:	  191076 kB
+VmRSS:	  294692 kB
+VmRSS:	  391712 kB
+VmRSS:	  499232 kB
+VmRSS:	  571960 kB
+gate_compile:consumed time:	7.492135763168335
+#Inst at gate level: 28
+pulse_compile:consumed time:	0.038283348083496094
+#Inst at pulse level: 184
+dt: 2.2222222222222221e-10, duration: 19376
+VmRSS:	  191272 kB
+VmRSS:	  294872 kB
+VmRSS:	  390316 kB
+VmRSS:	  499288 kB
+VmRSS:	  571684 kB
+gate_compile:consumed time:	7.419214248657227
+#Inst at gate level: 62
+pulse_compile:consumed time:	0.0808405876159668
+#Inst at pulse level: 342
+dt: 2.2222222222222221e-10, duration: 31440
+VmRSS:	  190740 kB
+VmRSS:	  294528 kB
+VmRSS:	  394440 kB
+VmRSS:	  499028 kB
+VmRSS:	  572100 kB
+gate_compile:consumed time:	7.570406913757324
+#Inst at gate level: 51
+pulse_compile:consumed time:	0.06594300270080566
+#Inst at pulse level: 327
+dt: 2.2222222222222221e-10, duration: 36752
