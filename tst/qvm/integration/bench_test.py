@@ -490,6 +490,10 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
     def setup_class(self):
         pass
 
+    def run_oracle(self, circuits, **kwargs):
+        # TODO() impl
+        pass
+
     def init_back_manager(self, cu_size, vs="random"):
         """Initialize backend manager"""
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
@@ -618,6 +622,8 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
             )
         elif qvm_version == "baseline":
             res = self.run_frp(circ_list, independent=True, shots=self.shots)
+        elif qvm_version == "oracle":
+            res = self.run_oracle(circ_list, shots=self.shots)
         else:
             raise ValueError(
                 "Unsupported version, should be in one of "
@@ -630,7 +636,7 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self.fid_calculator.metric = metric
 
         fid = self.fid_calculator.calc_fidelity(circ_list, res, shots=self.shots)
-        if isinstance(fid, list):
+        if len(fid) > 1:
             fid = "\t".join([str(f) for f in fid])
         print(f"Fid of {qvm_version}\t{fid}")
 
@@ -721,6 +727,7 @@ class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
             self._backend, name=self._backend_name, method="random"
         )
         self.frp_proc = QuafuFrpProcessManager(self._backend, name=self._backend_name)
+        self.quafu_proc = QuafuNativeProcessManager(self._backend, name=self._backend_name)
 
     def prepare_for_test(self, backend, cu_size, vs="random"):
         self.init_backend(backend)
@@ -737,15 +744,28 @@ class TestQuafuBackendRealMachineQvmFrpV2(TestBenchDiffBackendQvmFrpV2):
     ):
         self.qvm_proc.method = method
         qvm_res = self.qvm_proc.run(processes)
-        qvm_counts = Counts(qvm_res.counts)
+        # bistring is reversed version of qiskit
+        counts = {c[::-1]: v for c, v in qvm_res.counts.items()}
+        qvm_counts = Counts(counts)
+        # qvm_counts = Counts(qvm_res.counts)
         return qvm_counts, 0
 
     def run_frp(
         self, circ_list: List[QuantumCircuit], is_run=True, independent=False, **kwargs
     ):
         res = self.frp_proc.run(circ_list)
-        frp_counts = Counts(res.counts)
+        # bistring is reversed version of qiskit
+        counts = {c[::-1]: v for c, v in res.counts.items()}
+        frp_counts = Counts(counts)
+        # frp_counts = Counts(res.counts)
         return frp_counts
+
+    def run_oracle(self, circ_list, **kwargs):
+        res = self.quafu_proc.run(circ_list)
+        counts = {c[::-1]: v for c, v in res.counts.items()}
+        quafu_counts = Counts(counts)
+        # quafu_counts = Counts(res.counts)
+        return quafu_counts
 
 
 # FIXME(): directly using QvmProcessManagerV2.run cannot calculate fidelity

@@ -12,8 +12,11 @@ def main():
     with open(oracle_res_file, "r") as f:
         for line in f:
             items = line.strip().split("\t")
-            b_name, fid = items[0], float(items[1])
-            oracle_res[b_name] = fid
+            try:
+                b_name, fid = items[0], float(items[1])
+                oracle_res[b_name] = fid
+            except Exception:
+                continue
 
     bench_name_list = sys.argv[2].split(",")
     try:
