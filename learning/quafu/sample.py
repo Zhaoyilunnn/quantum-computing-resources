@@ -10,13 +10,14 @@ GROUP_NAME = "zhaoyilun"
 
 if __name__ == '__main__':
 
-    run = 1
+    measure_only = 0
     if len(sys.argv) == 2:
-        run = int(sys.argv[1])
+        measure_only = int(sys.argv[1])
 
     q = QuantumCircuit(2)
-    q.h(0)
-    q.cnot(0, 1)
+    if not measure_only:
+        q.h(0)
+        q.cnot(0, 1)
 
     measures = [0,1]
     cbits = [0,1]
