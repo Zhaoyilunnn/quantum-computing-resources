@@ -1,3 +1,10 @@
+"""
+paddle-bfloat            0.1.2
+paddle-quantum           2.2.2
+paddlepaddle             2.3.0
+
+"""
+
 # 加载量桨、飞桨的相关模块
 import paddle
 from paddle_quantum.ansatz import Circuit
