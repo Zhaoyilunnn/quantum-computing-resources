@@ -20,3 +20,4 @@ sim-beta/compile_commands.json
 bench.log
 *.dot
 *.gz
+quafu*.json
