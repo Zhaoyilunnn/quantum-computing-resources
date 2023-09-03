@@ -10,7 +10,6 @@ Besides this book, there are some tutorials of different software frameworks. We
 The "Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
 
 Currently we primarily focus on three aspects of quantum computer system.
-
  - Design automation of quantum circuits.
  - Quantum computer system software.
  - Quantum circuit simulation.
@@ -18,15 +17,19 @@ Currently we primarily focus on three aspects of quantum computer system.
 Our target conferences include top conferences in computer architecture and design automation listed in [CS rankings](https://csrankings.org/), i.e., [ISCA](https://csconferences.org/#ISCA), [MICRO](https://csconferences.org/#MICRO), [HPCA](https://csconferences.org/#HPCA), [ASPLOS](https://csconferences.org/#ASPLOS), [DAC](https://dblp.org/db/conf/dac/index.html), [ICCAD](https://dblp.org/db/conf/iccad/index.html).
 
 ### How to find papers
-[DBLP](https://dblp.org/) and [Google Scholar]()
+[DBLP](https://dblp.org/) and [Google Scholar](https://scholar.google.com/) are recommended to search papers. We also build a [script](https://github.com/Zhaoyilunnn/utils/tree/main/research) to find papers from DBLP. 
 
 ### How to read papers
+Bare in mind the following questions when reading papers.
+ - What problem this paper is trying to solve?
+ - Why this is a problem?
+ - How they solve it?
+ - Why they are better than other state-of-the-art approaches?
 
 # Miscellaneous
 
 ## Notes
 There some notes of learning quantum basis and reading papers. You could find some representative papers in different directions.
-
  - [Quantum Basis](https://gist.github.com/Zhaoyilunnn/788c9eac3d8af18b3e3258e982505d40)
  - [Quantum Computer Architecture](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae)
  - [Quantum Compiler](https://gist.github.com/Zhaoyilunnn/c3a031815ac43c5894b3b8cdf643775a)
@@ -39,5 +42,5 @@ There some notes of learning quantum basis and reading papers. You could find so
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5NzE4MzM1MzddfQ==
+eyJoaXN0b3J5IjpbNDQzNTc1ODhdfQ==
 -->
