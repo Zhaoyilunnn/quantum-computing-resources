@@ -2,16 +2,11 @@
 
 ## Learning Quantum Basis
 
-There're lots of tutorials for quantum computing, we recommend to start from the book "[Quantum computation and quantum information, 10th anniversary](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/Quantum%20computation%20and%20quantum%20information.pdf)".
-To get familiar with some basic concepts, reading Sec. 1.2-1.3 and Sec. 2.1-2.2 is more than enough.
+There're lots of tutorials for quantum computing, we recommend to start from the book "[Quantum computation and quantum information, 10th anniversary](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/Quantum%20computation%20and%20quantum%20information.pdf)". To get familiar with some basic concepts, reading Sec. 1.2-1.3 and Sec. 2.1-2.2 is more than enough. Trying to solve the exercise problems of this book is extremely helpful, you can refer to this [forked repository](https://github.com/Zhaoyilunnn/SolutionQCQINielsenChuang) for solutions of Sec. 2 and Sec. 9, and we encourage you to add solutions for other sections and we can contribute to the original repository.
 
+Besides this book, there are some tutorials of different software frameworks. We recommend [qiskit tutorials]()
 
-If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (Use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy)
-
-# Foundation
-
-1. Quantum computation and quantum information.
-2. Quantum Computer Systems.
+## 
 
 # Quantum Circuit Simulation
 
@@ -19,12 +14,7 @@ If you find some interesting papers, please add an bibtex entry (use [this tool]
 2. Quantum Computer Systems - Chapter 9.
 3. [Papers](https://gist.github.com/Zhaoyilunnn/788c9eac3d8af18b3e3258e982505d40#papers-4).
 
-# Projects
-
-- QVM: https://www.overleaf.com/read/kfpqgwjyghdn
-- QDAO: https://www.overleaf.com/read/jxfbxtbgztbb
-
-# Additional Resources
+# Miscellaneous
 
 ## Notes
 There some notes of learning quantum basis and reading papers. You could find some representative papers in different directions.
@@ -36,6 +26,10 @@ There some notes of learning quantum basis and reading papers. You could find so
  - [Quantum System Software](https://gist.github.com/Zhaoyilunnn/c43d40f895f57ce136b9b3701e7a5668)
  - [Quantum Circuit Simulation](https://gist.github.com/Zhaoyilunnn/07f5e6913dfa00fefbd4a8bff638f0bf)
 
+## Reference
+
+If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQyNTg0ODU2M119
+eyJoaXN0b3J5IjpbLTk4ODQyMTkwNV19
 -->
