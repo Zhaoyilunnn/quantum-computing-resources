@@ -7,7 +7,7 @@ There're lots of tutorials for quantum computing, we recommend to start from the
 Besides this book, there are some tutorials of different software frameworks. We recommend [qiskit tutorials](https://qiskit.org/documentation/tutorials.html) and Baidu [qulearn](https://qulearn.baidu.com/). It is also recommended to get familiar with qiskit framework.
 
 ## Reading Papers
-The "Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
+The "[Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/Quantum%20Computer%20Systems.pdf)" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
 
 Currently we primarily focus on three aspects of quantum computer system.
  - Design automation of quantum circuits.
@@ -42,5 +42,5 @@ There some notes of learning quantum basis and reading papers. You could find so
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDQzNTc1ODhdfQ==
+eyJoaXN0b3J5IjpbMTAzNzM4MzQxOF19
 -->
