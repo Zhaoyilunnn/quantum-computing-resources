@@ -30,5 +30,5 @@ if __name__ == '__main__':
     #res = task.send(q, wait=False, name="zhaoyilun-test", group=GROUP_NAME)
     #group_res = task.retrieve_group(GROUP_NAME)
     #print(group_res)
-    res = task.send(q, wait=False)
+    res = task.send(q, wait=True)
     print(res)
