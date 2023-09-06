@@ -6,11 +6,9 @@ import numpy as np
 from qiskit import QuantumCircuit, qiskit
 
 from qiskit.compiler import transpile
-from qiskit.compiler.transpiler import parallel
 from qiskit.quantum_info import Statevector, random_density_matrix
 from qdao.circuit import BaselinePartitioner
 from qdao.simulator import QdaoSimObj
-from quafu.qfasm.qfasm_convertor import qasm_to_circuit
 
 from test.qdao import QdaoBaseTest
 from qdao.engine import Engine
