@@ -40,11 +40,12 @@ There some notes of learning quantum basis and reading papers. You could find so
  - [Quantum Programming Language](https://gist.github.com/Zhaoyilunnn/ddd4eeaeb475cd2b075fda176e4692c6)
  - [Quantum System Software](https://gist.github.com/Zhaoyilunnn/c43d40f895f57ce136b9b3701e7a5668)
  - [Quantum Circuit Simulation](https://gist.github.com/Zhaoyilunnn/07f5e6913dfa00fefbd4a8bff638f0bf)
+	 - [Tensor Network]()
 
 ## Reference
 
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjMzMzgzNTQyLDEwMzczODM0MThdfQ==
+eyJoaXN0b3J5IjpbNDEyNDU4Mzk3LDEwMzczODM0MThdfQ==
 -->
