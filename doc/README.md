@@ -32,6 +32,10 @@ Bare in mind the following questions when reading papers.
 There some notes of learning quantum basis and reading papers. You could find some representative papers in different directions.
  - [Quantum Basis](https://gist.github.com/Zhaoyilunnn/788c9eac3d8af18b3e3258e982505d40)
  - [Quantum Computer Architecture](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae)
+	 - [Qudit](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae#multi-level)
+ - [Quantum Error]
+	 - [Error Mitigation](https://gist.github.com/Zhaoyilunnn/1eb8a512f0c087b47a233c0720004994#error-mitigation)
+	 - [Error Correction](https://gist.github.com/Zhaoyilunnn/1eb8a512f0c087b47a233c0720004994#error-correction)
  - [Quantum Compiler](https://gist.github.com/Zhaoyilunnn/c3a031815ac43c5894b3b8cdf643775a)
  - [Quantum Programming Language](https://gist.github.com/Zhaoyilunnn/ddd4eeaeb475cd2b075fda176e4692c6)
  - [Quantum System Software](https://gist.github.com/Zhaoyilunnn/c43d40f895f57ce136b9b3701e7a5668)
@@ -42,5 +46,5 @@ There some notes of learning quantum basis and reading papers. You could find so
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAzNzM4MzQxOF19
+eyJoaXN0b3J5IjpbMjI2OTYxOTY3LDEwMzczODM0MThdfQ==
 -->
