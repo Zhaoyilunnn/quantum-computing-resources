@@ -1,4 +1,5 @@
 """Configurations"""
+import os
 
 
 WORK_DIR = "/root/projects/"
@@ -60,6 +61,6 @@ LARGE_BENCHES = [
     "wstate_n27"
 ]
 
-QCS_BENCHMARKS_DIR = WORK_DIR + "qcs/benchmarks/qasm/"
+QCS_BENCHMARKS_DIR = os.path.join(os.getcwd(), "benchmarks/qasm/")
 
 QVM_SHOTS = 2**20
