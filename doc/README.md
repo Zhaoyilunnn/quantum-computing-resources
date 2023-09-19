@@ -49,5 +49,5 @@ There some notes of learning quantum basis and reading papers. You could find so
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMjk1OTE4MDksMTAzNzM4MzQxOF19
+eyJoaXN0b3J5IjpbLTY2NjUzNTA5NiwxMDM3MzgzNDE4XX0=
 -->
