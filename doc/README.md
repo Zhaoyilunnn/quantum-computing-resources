@@ -35,6 +35,7 @@ There are some of my personal notes of learning quantum basis and reading papers
  - [Quantum Basis](https://gist.github.com/Zhaoyilunnn/788c9eac3d8af18b3e3258e982505d40)
  - [Quantum Computer Architecture](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae)
 	 - [Qudit](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae#multi-level)
+  	 - [Control Architecture](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae#control-processor)
  - [Quantum Error](https://gist.github.com/Zhaoyilunnn/1eb8a512f0c087b47a233c0720004994)
 	 - [Error Mitigation](https://gist.github.com/Zhaoyilunnn/1eb8a512f0c087b47a233c0720004994#error-mitigation)
 	 - [Error Correction](https://gist.github.com/Zhaoyilunnn/1eb8a512f0c087b47a233c0720004994#error-correction)
