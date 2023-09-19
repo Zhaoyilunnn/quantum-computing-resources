@@ -2,14 +2,14 @@
 
 ## Learning Quantum Basis
 
-There're lots of tutorials for quantum computing, we recommend to start from the book "[Quantum computation and quantum information, 10th anniversary](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/Quantum%20computation%20and%20quantum%20information.pdf)". To get familiar with some basic concepts, reading Sec. 1.2-1.3 and Sec. 2.1-2.2 is more than enough. Trying to solve the exercise problems of this book is extremely helpful, you can refer to this [forked repository](https://github.com/Zhaoyilunnn/SolutionQCQINielsenChuang) for solutions of Sec. 2 and Sec. 9, and we encourage you to add solutions for other sections and we can contribute to the original repository.
+There're lots of tutorials for quantum computing, we recommend to start from the book "[Quantum computation and quantum information, 10th anniversary](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/tutorials/Quantum%20computation%20and%20quantum%20information.pdf)". To get familiar with some basic concepts, reading Sec. 1.2-1.3 and Sec. 2.1-2.2 is more than enough. Trying to solve the exercise problems of this book is extremely helpful, you can refer to this [forked repository](https://github.com/Zhaoyilunnn/SolutionQCQINielsenChuang) for solutions of Sec. 2 and Sec. 9, and we encourage you to add solutions for other sections and we can contribute to the original repository.
 
 Besides this book, there are some tutorials of different software frameworks. We recommend [qiskit tutorials](https://qiskit.org/documentation/tutorials.html) and Baidu [qulearn](https://qulearn.baidu.com/). It is also recommended to get familiar with qiskit framework.
 
 You can also go through this [awesome list](https://github.com/desireevl/awesome-quantum-computing) of quantum computing.
 
 ## Reading Papers
-The "[Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/Quantum%20Computer%20Systems.pdf)" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
+The "[Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/tutorials/Quantum%20Computer%20Systems.pdf)" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
 
 Currently we primarily focus on three aspects of quantum computer system.
  - Design automation of quantum circuits.
@@ -19,7 +19,7 @@ Currently we primarily focus on three aspects of quantum computer system.
 Our target conferences include top conferences in computer architecture and design automation listed in [CS rankings](https://csrankings.org/), i.e., [ISCA](https://csconferences.org/#ISCA), [MICRO](https://csconferences.org/#MICRO), [HPCA](https://csconferences.org/#HPCA), [ASPLOS](https://csconferences.org/#ASPLOS), [DAC](https://dblp.org/db/conf/dac/index.html), [ICCAD](https://dblp.org/db/conf/iccad/index.html).
 
 ### How to find papers
-[DBLP](https://dblp.org/) and [Google Scholar](https://scholar.google.com/) are recommended to search papers. We also build a [script](https://github.com/Zhaoyilunnn/utils/tree/main/research) to find papers from DBLP. 
+[DBLP](https://dblp.org/) and [Google Scholar](https://scholar.google.com/) are recommended to search papers. We also build a [script](https://github.com/Zhaoyilunnn/utils/tree/main/research) to find papers from DBLP.
 
 ### How to read papers
 Bare in mind the following questions when reading papers.
@@ -31,7 +31,7 @@ Bare in mind the following questions when reading papers.
 # Miscellaneous
 
 ## Notes
-There some notes of learning quantum basis and reading papers. You could find some representative papers in different directions.
+There are some of my personal notes of learning quantum basis and reading papers. You could find some representative papers in different directions.
  - [Quantum Basis](https://gist.github.com/Zhaoyilunnn/788c9eac3d8af18b3e3258e982505d40)
  - [Quantum Computer Architecture](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae)
 	 - [Qudit](https://gist.github.com/Zhaoyilunnn/4f050154941fb87b33d47c2d09aa23ae#multi-level)
