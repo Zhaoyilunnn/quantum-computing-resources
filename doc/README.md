@@ -6,6 +6,8 @@ There're lots of tutorials for quantum computing, we recommend to start from the
 
 Besides this book, there are some tutorials of different software frameworks. We recommend [qiskit tutorials](https://qiskit.org/documentation/tutorials.html) and Baidu [qulearn](https://qulearn.baidu.com/). It is also recommended to get familiar with qiskit framework.
 
+You can also go through this [awesome list](https://github.com/desireevl/awesome-quantum-computing) of quantum computing.
+
 ## Reading Papers
 The "[Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/Quantum%20Computer%20Systems.pdf)" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
 
