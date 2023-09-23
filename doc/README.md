@@ -8,8 +8,11 @@ Besides this book, there are some tutorials of different software frameworks. We
 
 You can also go through this [awesome list](https://github.com/desireevl/awesome-quantum-computing) of quantum computing.
 
-### NISQ
-We're now in the [Noisy Intermediate Scale Quantum](http://arxiv.org/abs/1801.00862) era. It is recommended to go through [this paper](http://arxiv.org/abs/1801.00862) to understand the fundamental 
+### Know about NISQ
+We're now in the [Noisy Intermediate Scale Quantum](http://arxiv.org/abs/1801.00862) era. It is recommended to go through [this paper](http://arxiv.org/abs/1801.00862) to understand the fundamental concepts and limitations of NISQ quantum computers. Moreover, it is helpful to learn about NISQ algorithms. Many well-know algorithms like [Shor's algorithm](https://doi.org/10.1137/S0036144598347011) and [Grover's algorithm](https://link.aps.org/doi/10.1103/PhysRevLett.79.325) require fault-tolerant quantum computers, which may take decades to realize. NISQ algorithms are developed for NISQ devices and potentially have practical applications in the near future.
+There're some great review papers of NISQ algorithms.
+1. [Noisy intermediate-scale quantum (NISQ) algorithms](http://arxiv.org/abs/2101.08448) 
+2. [Variational quantum algorithms](https://www.nature.com/articles/s42254-021-00348-9)
 
 ### Check Your Knowledge
 Generally we recommend to *learn through research*. However it is necessary to get familiar with some basic concepts.
@@ -64,6 +67,6 @@ There are some of my personal notes of learning quantum basis and reading papers
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg3NzI2MTMwMSwtMTE1OTQ2MTczNSwxMD
-M3MzgzNDE4XX0=
+eyJoaXN0b3J5IjpbLTEzMzk4MTczMzEsLTExNTk0NjE3MzUsMT
+AzNzM4MzQxOF19
 -->
