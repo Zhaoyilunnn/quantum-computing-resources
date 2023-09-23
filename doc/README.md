@@ -8,15 +8,19 @@ Besides this book, there are some tutorials of different software frameworks. We
 
 You can also go through this [awesome list](https://github.com/desireevl/awesome-quantum-computing) of quantum computing.
 
+### NISQ
+We're now in the [Noisy Intermediate Scale Quantum](http://arxiv.org/abs/1801.00862) era. It is recommended to go through [this paper](http://arxiv.org/abs/1801.00862) to understand the fundamental 
+
 ### Check Your Knowledge
 Generally we recommend to *learn through research*. However it is necessary to get familiar with some basic concepts.
 If you could answer following questions without referring to textbooks, you should be ready to move forward to read papers in the field of quantum computer system.
 1. What is the state of an $N$-qubit system?
 2. What is pure state and mixed state?
-3. Can you write down the matrix form of following quantum operations: $X$, $Y$, $Z$, $X$, $H$, $CNOT$?
+3. Could you write down the matrix form of following quantum operations: $X$, $Y$, $Z$, $X$, $H$, $CNOT$?
 4. How could a single qubit be represented in a bloch sphere?
 5. Could you write down the state of a quantum system after measurement?
-6. What are projection
+6. What are projective measurements and POVM measurements?
+7. What is an *observable*?
 
 ## Reading Papers
 The "[Quantum Computer Systems -- Research for Noisy Intermediate-Scale Quantum Computers](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/tutorials/Quantum%20Computer%20Systems.pdf)" by [Yongshan Ding](https://www.yongshanding.com/) and [Fred Chong](http://people.cs.uchicago.edu/~ftchong/) is a great book to glance through and learn about the topics that system-architecture community cares.
@@ -60,6 +64,6 @@ There are some of my personal notes of learning quantum basis and reading papers
 If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc1NDY0MjYzOSwtMTE1OTQ2MTczNSwxMD
+eyJoaXN0b3J5IjpbLTg3NzI2MTMwMSwtMTE1OTQ2MTczNSwxMD
 M3MzgzNDE4XX0=
 -->
