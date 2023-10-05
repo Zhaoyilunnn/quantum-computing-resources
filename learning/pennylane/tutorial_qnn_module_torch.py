@@ -18,6 +18,9 @@ Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 two-layer network that could be used for binary classification:
 """
 
+# import time
+# time.sleep(10)
+
 import torch
 
 layer_1 = torch.nn.Linear(2, 2)
@@ -84,7 +87,7 @@ n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev, diff_method="parameter-shift")
-# @qml.qnode(dev)
+#@qml.qnode(dev)
 def qnode(inputs, weights):
     qml.AngleEmbedding(inputs, wires=range(n_qubits))
     qml.BasicEntanglerLayers(weights, wires=range(n_qubits))
@@ -144,7 +147,8 @@ qlayer = qml.qnn.TorchLayer(qnode, weight_shapes)
 clayer_1 = torch.nn.Linear(2, 2)
 clayer_2 = torch.nn.Linear(2, 2)
 softmax = torch.nn.Softmax(dim=1)
-layers = [clayer_1, qlayer, clayer_2, softmax]
+# layers = [clayer_1, qlayer, clayer_2, softmax]
+layers = [qlayer, clayer_2, softmax]
 model = torch.nn.Sequential(*layers)
 
 ###############################################################################
@@ -168,11 +172,13 @@ loss = torch.nn.L1Loss()
 X = torch.tensor(X, requires_grad=True).float()
 y_hot = y_hot.float()
 
-batch_size = 5
+# FIXME(zhaoyilun): set it as 1 temporally
+# batch_size = 5
+batch_size = 1
 batches = 200 // batch_size
 
 data_loader = torch.utils.data.DataLoader(
-    list(zip(X, y_hot)), batch_size=5, shuffle=True, drop_last=True
+    list(zip(X, y_hot)), batch_size=batch_size, shuffle=True, drop_last=True
 )
 
 epochs = 6
