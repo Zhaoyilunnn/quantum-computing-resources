@@ -4,14 +4,21 @@
 
 There're lots of tutorials for quantum computing, we recommend to start from the book "[Quantum computation and quantum information, 10th anniversary](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/tutorials/Quantum%20computation%20and%20quantum%20information.pdf)". To get familiar with some basic concepts, reading Sec. 1.2-1.3 and Sec. 2.1-2.2 is more than enough. Trying to solve the exercise problems of this book is extremely helpful, you can refer to this [forked repository](https://github.com/Zhaoyilunnn/SolutionQCQINielsenChuang) for solutions of Sec. 2 and Sec. 9, and we encourage you to add solutions for other sections and we can contribute to the original repository.
 
-Besides this book, there are some tutorials of different software frameworks. We recommend [qiskit tutorials](https://qiskit.org/documentation/tutorials.html) and Baidu [qulearn](https://qulearn.baidu.com/). It is also recommended to get familiar with qiskit framework.
+Besides this book, there are some tutorials of different software frameworks.
+
+- IBM: [qiskit tutorials](https://qiskit.org/documentation/tutorials.html) (Qiskit is currently the most popular framework).
+- Microsoft: [Azure Quantum](https://learn.microsoft.com/en-us/azure/quantum/)
+- Baidu: [qulearn](https://qulearn.baidu.com/).
+- Google: Qsim
+- Huawei: mind-quantum
+- ...
 
 You can also go through this [awesome list](https://github.com/desireevl/awesome-quantum-computing) of quantum computing.
 
 ### Know about NISQ
 We're now in the [Noisy Intermediate Scale Quantum](http://arxiv.org/abs/1801.00862) era. It is recommended to go through [this paper](http://arxiv.org/abs/1801.00862) to understand the fundamental concepts and limitations of NISQ quantum computers. Moreover, it is helpful to learn about NISQ algorithms. Many well-know algorithms like [Shor's algorithm](https://doi.org/10.1137/S0036144598347011) and [Grover's algorithm](https://link.aps.org/doi/10.1103/PhysRevLett.79.325) require fault-tolerant quantum computers, which may take decades to realize. NISQ algorithms are developed for NISQ devices and potentially have practical applications in the near future.
 There're some great review papers of NISQ algorithms.
-1. [Noisy intermediate-scale quantum (NISQ) algorithms](http://arxiv.org/abs/2101.08448) 
+1. [Noisy intermediate-scale quantum (NISQ) algorithms](http://arxiv.org/abs/2101.08448)
 2. [Variational quantum algorithms](https://www.nature.com/articles/s42254-021-00348-9)
 
 ### Check Your Knowledge

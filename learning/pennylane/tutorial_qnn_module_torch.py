@@ -87,6 +87,7 @@ n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev, diff_method="parameter-shift")
+#@qml.qnode(dev, diff_method="backprop")
 #@qml.qnode(dev)
 def qnode(inputs, weights):
     qml.AngleEmbedding(inputs, wires=range(n_qubits))
@@ -147,8 +148,8 @@ qlayer = qml.qnn.TorchLayer(qnode, weight_shapes)
 clayer_1 = torch.nn.Linear(2, 2)
 clayer_2 = torch.nn.Linear(2, 2)
 softmax = torch.nn.Softmax(dim=1)
-# layers = [clayer_1, qlayer, clayer_2, softmax]
-layers = [qlayer, clayer_2, softmax]
+layers = [clayer_1, qlayer, clayer_2, softmax]
+# layers = [qlayer, clayer_2, softmax]
 model = torch.nn.Sequential(*layers)
 
 ###############################################################################
@@ -173,8 +174,8 @@ X = torch.tensor(X, requires_grad=True).float()
 y_hot = y_hot.float()
 
 # FIXME(zhaoyilun): set it as 1 temporally
-# batch_size = 5
-batch_size = 1
+batch_size = 5
+# batch_size = 1
 batches = 200 // batch_size
 
 data_loader = torch.utils.data.DataLoader(
