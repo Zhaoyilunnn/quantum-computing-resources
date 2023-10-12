@@ -18,6 +18,17 @@ Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 two-layer network that could be used for binary classification:
 """
 
+################ Version #############
+# PennyLane                    0.32.0
+# PennyLane-Lightning          0.32.0
+# PennyLane-qiskit             0.32.0
+# torch                        2.0.1+cpu
+# torchaudio                   2.0.2+cpu
+# torchpack                    0.3.1
+# torchvision                  0.15.2+cpu
+################ Version #############
+
+
 # import time
 # time.sleep(10)
 

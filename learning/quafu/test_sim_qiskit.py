@@ -1,3 +1,12 @@
+"""
+qiskit                   0.39.0
+qiskit-aer               0.11.0
+qiskit-ibmq-provider     0.19.2
+qiskit-terra             0.22.0
+
+"""
+
+
 from qiskit import QuantumCircuit
 from qiskit_aer import Aer
 from qiskit.quantum_info import Statevector
