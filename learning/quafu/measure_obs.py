@@ -14,5 +14,5 @@ task = Task()
 task.config(backend="ScQ-P136")
 
 test_Ising = [["X", [i]] for i in range(5)]
-test_Ising.extend([["ZZ", [i, i+1]] for i in range(4)])
+test_Ising.extend([["ZZ", [i, i + 1]] for i in range(4)])
 res, obsexp = task.submit(q, test_Ising)

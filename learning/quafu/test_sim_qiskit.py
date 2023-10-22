@@ -24,7 +24,7 @@ def main():
     sim = Aer.get_backend("aer_simulator")
     sim.set_options(method="statevector")
     qasm = sys.argv[1]
-    with open(qasm, 'r') as f:
+    with open(qasm, "r") as f:
         qasm_str = f.read()
         quafu_circ = quafu.QuantumCircuit(1)
         quafu_circ.from_openqasm(qasm_str)
@@ -35,5 +35,5 @@ def main():
         print(Statevector(sv_qiskit).equiv(Statevector(sv_quafu)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 # n 是图 G 的顶点数，同时也是量子比特的个数
@@ -46,8 +47,8 @@ plt.show()
 
 # 以 list 的形式构建哈密顿量 H_D
 H_D_list = []
-for (u, v) in E:
-    H_D_list.append([-1.0, 'z'+str(u) + ',z' + str(v)])
+for u, v in E:
+    H_D_list.append([-1.0, "z" + str(u) + ",z" + str(v)])
 print(H_D_list)
 
 
@@ -59,7 +60,8 @@ H_D_diag = np.diag(H_D_matrix).real
 H_max = np.max(H_D_diag)
 
 print(H_D_diag)
-print('H_max:', H_max)
+print("H_max:", H_max)
+
 
 def circuit_QAOA(num_qubits, depth, edges, vertices):
     # 初始化 n 个量子比特的量子电路
@@ -71,13 +73,14 @@ def circuit_QAOA(num_qubits, depth, edges, vertices):
 
     return cir
 
+
 # 构造损失函数
 loss_func = ExpecVal(Hamiltonian(H_D_list))
 
-depth = 4   # 量子电路的层数
-ITR = 120   # 训练迭代的次数
-LR = 0.1    # 基于梯度下降的优化方法的学习率
-SEED = 1024 #设置全局随机数种子
+depth = 4  # 量子电路的层数
+ITR = 120  # 训练迭代的次数
+LR = 0.1  # 基于梯度下降的优化方法的学习率
+SEED = 1024  # 设置全局随机数种子
 
 paddle.seed(SEED)
 

@@ -14,7 +14,12 @@ circ.cnot(0, 1)
 
 print(circ)
 
-hamiltonian = (1 * I^I^I^Z^Z) + (1 * Z^Z^I^I^I) + (1 * I^Z^Z^I^I) + (1 * Z^I^I^I^Z)
+hamiltonian = (
+    (1 * I ^ I ^ I ^ Z ^ Z)
+    + (1 * Z ^ Z ^ I ^ I ^ I)
+    + (1 * I ^ Z ^ Z ^ I ^ I)
+    + (1 * Z ^ I ^ I ^ I ^ Z)
+)
 
 est = Estimator()
 res = est.run(circ, hamiltonian).result()

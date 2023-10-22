@@ -21,7 +21,7 @@ g = generate_weighted_graph(nodes, edges)
 #     g.add_edge(int(u), int(v), weight=int(w))
 
 qulacs_bc = CircuitByQulacs()
-optc = COBYLA(options={'tol': 1e-3, 'disp': True})
+optc = COBYLA(options={"tol": 1e-3, "disp": True})
 qc = Qcover(g, p=p, optimizer=optc, backend=qulacs_bc)
 res = qc.run()
 print("the result of problem is:\n", res)

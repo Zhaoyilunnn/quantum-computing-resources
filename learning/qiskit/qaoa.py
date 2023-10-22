@@ -26,9 +26,16 @@ from scipy.optimize import minimize
 
 # Problem to Hamiltonian operator
 # hamiltonian = SparsePauliOp.from_list([("IIIZZ", 1), ("IIZIZ", 1), ("IZIIZ", 1), ("ZIIIZ", 1)])
-hamiltonian = (1 * I^I^I^Z^Z) + (1 * I^I^Z^I^Z) + (1 * I^Z^I^I^Z) + (1 * Z^I^I^I^Z)
+hamiltonian = (
+    (1 * I ^ I ^ I ^ Z ^ Z)
+    + (1 * I ^ I ^ Z ^ I ^ Z)
+    + (1 * I ^ Z ^ I ^ I ^ Z)
+    + (1 * Z ^ I ^ I ^ I ^ Z)
+)
 np.save("test_hamiltonian.npy", hamiltonian.to_matrix())
-hamiltonian_2 = (0.3980 * Y^Z) + (-0.3980 * Z^I) + (-0.0113 * Z^Z) + (0.1810 * X^X)
+hamiltonian_2 = (
+    (0.3980 * Y ^ Z) + (-0.3980 * Z ^ I) + (-0.0113 * Z ^ Z) + (0.1810 * X ^ X)
+)
 np.save("vqe_hamiltonian.npy", hamiltonian_2.to_matrix())
 # hamiltonian = 1 * Z^I^I^I^Z
 # QAOA ansatz circuit
@@ -51,7 +58,9 @@ def cost_func(params, ansatz, hamiltonian, estimator):
     Returns:
         float: Energy estimate
     """
-    cost = estimator.run(ansatz, hamiltonian, parameter_values=params).result().values[0]
+    cost = (
+        estimator.run(ansatz, hamiltonian, parameter_values=params).result().values[0]
+    )
     return cost
 
 

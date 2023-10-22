@@ -97,13 +97,15 @@ import pennylane as qml
 n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
-#@qml.qnode(dev, diff_method="parameter-shift")
-#@qml.qnode(dev, diff_method="backprop")
-@qml.qnode(dev)
+
+@qml.qnode(dev, diff_method="parameter-shift")
+# @qml.qnode(dev, diff_method="backprop")
+# @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.AngleEmbedding(inputs, wires=range(n_qubits))
     qml.BasicEntanglerLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
+
 
 ###############################################################################
 # Interfacing with Torch
@@ -196,7 +198,6 @@ data_loader = torch.utils.data.DataLoader(
 epochs = 6
 
 for epoch in range(epochs):
-
     running_loss = 0
 
     for xs, ys in data_loader:
@@ -252,6 +253,7 @@ print(f"Accuracy: {accuracy * 100}%")
 # ``torch.nn`` `Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`__ and
 # overriding the ``forward()`` method:
 
+
 class HybridModel(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -270,6 +272,7 @@ class HybridModel(torch.nn.Module):
         x = self.clayer_2(x)
         return self.softmax(x)
 
+
 model = HybridModel()
 
 ###############################################################################
@@ -279,7 +282,6 @@ opt = torch.optim.SGD(model.parameters(), lr=0.2)
 epochs = 6
 
 for epoch in range(epochs):
-
     running_loss = 0
 
     for xs, ys in data_loader:
