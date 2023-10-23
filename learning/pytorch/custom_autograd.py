@@ -5,7 +5,6 @@ torchvision              0.16.0+cpu
 """
 
 import numpy as np
-from math import cos, sin
 import torch
 from torch.autograd import Function
 
@@ -80,6 +79,21 @@ class LinearFunction(Function):
         return grad_input, grad_weight, grad_bias
 
 
+class MyModel(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.linear = torch.nn.Linear(2, 2)
+        self.myrx = MyRxFunction.apply
+
+    def forward(self, x, theta):
+        x = self.linear(x)
+        norm = torch.norm(x)
+        x_norm = x / norm
+        x = self.myrx(x, theta)
+        return x
+
+
 # # 创建输入和参数
 # x = torch.randn(3, 4, requires_grad=True)
 # w = torch.randn(6, 4, requires_grad=True)
@@ -106,7 +120,9 @@ norm = torch.norm(x)
 x_norm = x / norm
 theta = torch.randn(1, requires_grad=True)
 
-y = MyRxFunction.apply(x_norm, theta)
+# y = MyRxFunction.apply(x_norm, theta)
+model = MyModel()
+y = model(x_norm, theta)
 
 target = torch.tensor(0.5, dtype=torch.double)
 criterion = torch.nn.MSELoss()
