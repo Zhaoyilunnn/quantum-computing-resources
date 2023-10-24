@@ -93,16 +93,21 @@ plt.show()
 # operations from the :doc:`templates <introduction/templates>` module.
 
 import pennylane as qml
+# from custom_template import MyAmplitudeEmbedding
+from amplitude import AmplitudeEmbedding
 
 n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
 
-@qml.qnode(dev, diff_method="parameter-shift")
+#@qml.qnode(dev, diff_method="parameter-shift")
 # @qml.qnode(dev, diff_method="backprop")
-# @qml.qnode(dev)
+@qml.qnode(dev)
 def qnode(inputs, weights):
-    qml.AngleEmbedding(inputs, wires=range(n_qubits))
+    # qml.AngleEmbedding(inputs, wires=range(n_qubits))
+    # MyAmplitudeEmbedding(inputs, wires=range(n_qubits), pad_with=0., normalize=True)
+    # AmplitudeEmbedding(inputs, wires=range(n_qubits), pad_with=0., normalize=True)
+    qml.AmplitudeEmbedding(inputs, wires=range(n_qubits), pad_with=0., normalize=True)
     qml.BasicEntanglerLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 

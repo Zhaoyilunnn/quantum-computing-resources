@@ -24,7 +24,7 @@ def RX(input: torch.Tensor, theta: torch.Tensor):
 
 
 def expectation_z(statevector):
-    return np.double(np.matmul(np.matmul(statevector, Z), statevector.conj()))
+    return np.matmul(np.matmul(statevector.conj().T, Z), statevector).real
 
 
 def param_shift(input, theta):
