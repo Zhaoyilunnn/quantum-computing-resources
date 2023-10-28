@@ -499,7 +499,7 @@ class TestBenchDiffBackendQvmFrpV2(TestBenchQvmFrpV2):
         self._backend_manager = QvmFrpBackendManagerV2(self._backend)
         if vs == "vanilla":
             self._backend_manager.method = "vanilla"
-        self.cu_size = int(cu_size)
+        self._backend_manager.cu_size = int(cu_size)
         self._backend_manager.init_helpers()
         self._backend_manager.init_cus()
 

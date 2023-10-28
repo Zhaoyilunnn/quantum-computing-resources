@@ -1,0 +1,89 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py FRP::online_compilation::costs::	1.4392266273498535
+F
+
+=================================== FAILURES ===================================
+_ TestBenchDiffBackendQvmFrpV2.test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10] _
+
+self = <bench_test.TestBenchDiffBackendQvmFrpV2 object at 0x7fb982166560>
+bench = 'qasm', nq = 10
+qasm = '/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm'
+backend = 'FakeCairo', cu_size = '2'
+
+    def test_kl_independent_two_bench_frp(self, bench, nq, qasm, backend, cu_size):
+        """Execute qvm/frp exes on their own backend"""
+        self.prepare_for_test(backend, cu_size)
+>       super().test_two_bench_frp(bench, nq, qasm, independent=True)
+
+tst/qvm/integration/bench_test.py:579: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tst/qvm/integration/bench_test.py:475: in test_two_bench_frp
+    fid_qvm = self.fid_calculator.calc_fidelity(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qvm.util.circuit.QvmFidCalculator object at 0x7fb9fa8bbc40>
+circ = [<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7fb981cc45e0>, <qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x7fb981cc4610>]
+counts = ResourceConflictError('`naive` method cannot select executables from all processes, sort=False, reverse=False')
+kwargs = {'shots': 1048576}
+
+    def calc_fidelity(
+        self,
+        circ: QuantumCircuit | List[QuantumCircuit],
+        counts: Counts | List[Counts],
+        **kwargs,
+    ):
+        """Calculate fidelity using KL-divergence between two prob distributions"""
+        if isinstance(counts, Counts) and isinstance(circ, QuantumCircuit):
+            counts_ideal = self.get_ideal_counts(circ, **kwargs)
+            return self.calc_single_fidelity(circ, counts_ideal, counts)
+        if isinstance(counts, Counts) and isinstance(circ, list):
+            merged_circ = merge_circuits_v2(circ)
+            counts_ideal = self.get_ideal_counts(merged_circ, **kwargs)
+            return self.calc_single_fidelity(merged_circ, counts_ideal, counts)
+    
+>       assert len(circ) == len(counts)
+E       TypeError: object of type 'ResourceConflictError' has no len()
+
+/root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qvm/util/circuit.py:393: TypeError
+------------------------------ Captured log call -------------------------------
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 17, current visited status: {3, 5, 8, 9, 14, 15, 16, 17, 18, 19, 20, 21, 23}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 17'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 6, current visited status: {1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 6'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 10, current visited status: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 10'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 22, current visited status: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 22'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 0, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 0'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 26, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 26'
+WARNING  root:graph.py:571 Failed to grow a subgraph from root: 11, current visited status: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}, error message is 'Cannot grow a graph that satisfy the subgraph size from current root: 11'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fb97ce02e60>, error: 'Number of qubits (4) in circuit-88 is greater than maximum (2) in the coupling_map'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fb975927f10>, error: 'Number of qubits (4) in circuit-88 is greater than maximum (2) in the coupling_map'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fb975a07c40>, error: 'Number of qubits (4) in circuit-88 is greater than maximum (2) in the coupling_map'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fb974e27d90>, error: 'Number of qubits (4) in circuit-88 is greater than maximum (2) in the coupling_map'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fb97532ce20>, error: 'Number of qubits (10) in circuit-90 is greater than maximum (8) in the coupling_map'
+WARNING  root:backend_manager.py:432 cannot compile on compute unit <qvm.model.compute_unit.ComputeUnit object at 0x7fb975229300>, error: 'Number of qubits (10) in circuit-90 is greater than maximum (2) in the coupling_map'
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (196328.6961892367 > 2 * 96478.49546055387). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small//ising_n10/ising_n10.qasm-FakeCairo-2-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00019632869618923672 > 2 * 9.647849546055387e-05). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small/cat_state_n4/cat_state_n4.qasm,/root/projects/QASMBench/small/ising_n10/ising_n10.qasm-FakeCairo-2-10]
+================ 1 failed, 54 deselected, 9 warnings in 17.76s =================

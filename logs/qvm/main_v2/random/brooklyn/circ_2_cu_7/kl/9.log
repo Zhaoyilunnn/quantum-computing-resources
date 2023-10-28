@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	random	5.793571472167969e-05
+compute_unit_list	[{2}, {3}]
+FRP::online_compilation::costs::	2.807410955429077
+Fid of qvm & frp	0.07893809256219725	0.07269071969658328
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm-FakeBrooklyn-7-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm-FakeBrooklyn-7-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm-FakeBrooklyn-7-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//basis_change_n3/basis_change_n3.qasm,/root/projects/QASMBench/small//linearsolver_n3/linearsolver_n3.qasm-FakeBrooklyn-7-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 1 passed, 54 deselected, 4 warnings in 76.00s (0:01:15) ============

@@ -215,9 +215,10 @@ def get_backend_list(args):
             backend = provider.get_backend(backend_name)
         elif backend_name == FAKE_BACKEND:
             # backend = FakeWashingtonV2()
-            # backend = FakeWashington()
+            backend = FakeWashington()
+            # backend = FakeMelbourne()
             # backend = FakeCairo()
-            backend = FakeBrooklyn()
+            # backend = FakeBrooklyn()
         else:
             backend = Aer.get_backend(backend_name)
             backend.set_options(fusion_enable=(False if args.fusion == 0 else True))
@@ -286,7 +287,7 @@ def run_circ(args, circ):
             run(qobj, backend, noise_model=noise_model, save_sv=args.save_sv)
 
 
-@profile
+@profile(t=2)
 def compile_circ(circ, backend, coupling_map=None, basis_gates=None):
     transpiled = transpile(
         circ, backend, coupling_map=coupling_map, basis_gates=basis_gates
@@ -297,7 +298,7 @@ def compile_circ(circ, backend, coupling_map=None, basis_gates=None):
     return qobj
 
 
-@profile
+@profile(t=2)
 def gate_compile(circ, backend, coupling_map=None, basis_gates=None):
     transpiled = transpile(
         circ, backend, coupling_map=coupling_map, basis_gates=basis_gates
@@ -305,7 +306,7 @@ def gate_compile(circ, backend, coupling_map=None, basis_gates=None):
     return transpiled
 
 
-@profile
+@profile(t=2)
 def pulse_compile(circ, backend):
     scheduled = schedule(circ, backend)
     return scheduled
@@ -318,7 +319,7 @@ def run_analysis_only(args):
     do_analysis(qobj_dict)
 
 
-@profile
+@profile(t=2)
 def run(qobj, backend, noise_model=None, save_sv=False):
     # TODO: `noise_model` is not an option for IBMQ and will be ignored
     #       Be careful if version changed

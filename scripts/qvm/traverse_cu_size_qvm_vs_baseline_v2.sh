@@ -1,0 +1,1 @@
+for i in 5 6 7 8; do bash scripts/qvm/post_run_main_qvm_vs_baseline_v2.sh logs/qvm/main_v2/random/brooklyn/circ_2_cu_${i}/kl/ "Fid" | awk -F'\t' '{if(NF>3)print $3}' | awk 'BEGIN{sum=0}{sum+=$0};END{print sum/30}'; done

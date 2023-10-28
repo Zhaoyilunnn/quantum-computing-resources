@@ -1,0 +1,50 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0
+rootdir: /root/projects/qvm
+plugins: anyio-3.6.2
+collected 55 items / 54 deselected / 1 selected
+
+tst/qvm/integration/bench_test.py QVM::selection::costs::	random	8.225440979003906e-05
+compute_unit_list	[{1}, {0}]
+FRP::online_compilation::costs::	1.06695556640625
+Fid of qvm & frp	0.05515989543501999	0.13164215841058402
+.
+
+=============================== warnings summary ===============================
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit/providers/fake_provider/fake_backend.py:462: PendingDeprecationWarning: "warnings" argument will be deprecated as part of the qiskit-aer 0.12.0 and subsequently removed
+    noise_model = NoiseModel.from_backend(self, warnings=False)
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (196328.6961892367 > 2 * 96478.49546055387). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (210788.50669687917 > 2 * 104325.12715207216). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00021078850669687914 > 2 * 0.00010432512715207217). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+qcs/tst/qvm/integration/bench_test.py::TestBenchDiffBackendQvmFrpV2::test_kl_independent_two_bench_frp[qasm-/root/projects/QASMBench/small//qft_n4/qft_n4.qasm,/root/projects/QASMBench/small//variational_n4/variational_n4.qasm-FakeCairo-10-10]
+  /root/anaconda3/envs/qcs-noise/lib/python3.10/site-packages/qiskit_aer/noise/device/models.py:365: UserWarning: Device model returned an invalid T_2 relaxation time greater than the theoretical maximum value 2 * T_1 (0.00019632869618923672 > 2 * 9.647849546055387e-05). Truncating to maximum value.
+    warn("Device model returned an invalid T_2 relaxation time greater than"
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 1 passed, 54 deselected, 20 warnings in 23.71s ================
