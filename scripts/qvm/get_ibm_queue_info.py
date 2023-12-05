@@ -16,6 +16,9 @@ backend_list = provider.backends()
 #print(backend.status().pending_jobs)
 
 if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print(f"Usage: python {sys.argv[0]} <log-dir-path>")
+        sys.exit(1)
     log_dir = sys.argv[1]
     log_name = date.isoformat(datetime.now()) + '.log'
     file_path = os.path.join(log_dir, log_name)
