@@ -1,3 +1,3 @@
-# QCS
+# Contents
 
-Collection of common resource for quantum computer system research
+- [Getting Started](https://github.com/Zhaoyilunnn/quantum-computing-resources/blob/main/doc/README.md)
