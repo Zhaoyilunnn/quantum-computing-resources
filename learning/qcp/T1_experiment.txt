@@ -1,0 +1,35 @@
+LDI r1 , 10000
+
+LDI r3 , 50 # 1 us
+
+LDI r2 , 50 # 1 us
+
+LDI r4 , 5000 # 100 us
+
+
+LDI r31 , 1
+
+SMIS S0 , { 0 }
+LDI r0 , 0
+Round_Start :
+LDI r5 , 50
+
+iteration_start :
+QWAIT 10000
+X S0
+
+QWAITR r5
+MEASZ S0
+
+# go to next iteration if not reaching the maximal interval
+ADD r5 , r5 , r2
+CMP r5 , r4
+NOP
+BR LTU , iteration_start
+
+ADD r0 , r0 , r31
+
+# go to next round if the repition is insufficient
+CMP r0 , r1
+NOP
+BR LTU , round_start

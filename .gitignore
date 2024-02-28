@@ -8,6 +8,8 @@
 *.pkl
 *.png
 *.svg
+*.vscode
+*build
 *core*
 *temp*
 *tmp
@@ -18,7 +20,5 @@ nohup.out
 quafu*.json
 sim-beta/.ccls*
 sim-beta/Debug
-sim-beta/build
 sim-beta/compile_commands.json
 test_data*
-*.vscode
