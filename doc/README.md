@@ -48,6 +48,8 @@ Our target conferences include (*but definitely not limited to*) top conferences
 ### How to find papers
 [DBLP](https://dblp.org/) and [Google Scholar](https://scholar.google.com/) are recommended to search papers. We also build a [script](https://github.com/Zhaoyilunnn/utils/tree/main/research) to find papers from DBLP.
 
+Additionally, domain-specific journals including [ACM TQC](https://dl.acm.org/journal/tqc), [IEEE TQE](https://tqe.ieee.org/) and conferences like [QCE](https://qce.quantum.ieee.org/) also contain many valuable works.
+
 ### How to read papers
 Bare in mind the following questions when reading papers.
  - What problem this paper is trying to solve?
