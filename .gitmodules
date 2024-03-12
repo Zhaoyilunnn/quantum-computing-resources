@@ -1,0 +1,6 @@
+[submodule "learning/qcontrol/dax-example"]
+	path = learning/qcontrol/dax-example
+	url = https://gitlab.com/duke-artiq/dax-example.git
+[submodule "learning/qcontrol/dax"]
+	path = learning/qcontrol/dax
+	url = https://gitlab.com/duke-artiq/dax.git
