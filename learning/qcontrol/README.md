@@ -1,4 +1,9 @@
-# Install ARTIQ
+# Install nix
+
+- https://nixos.org/download
+
+
+# Install DAX
 
 Refer to the [official document](https://m-labs.hk/artiq/manual/installing.html#installing-via-nix-linux)
 
