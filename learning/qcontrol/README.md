@@ -32,3 +32,8 @@ nix develop
 artiq_session
 
 ```
+
+
+# Install QCoDeS
+
+[15-minutes-to-QCoDeS](https://github.com/microsoft/Qcodes/blob/main/docs/examples/15_minutes_to_QCoDeS.ipynb)
