@@ -4,3 +4,12 @@
 [submodule "learning/qcontrol/dax"]
 	path = learning/qcontrol/dax
 	url = https://gitlab.com/duke-artiq/dax.git
+[submodule "benchmarks/QASMBench"]
+	path = benchmarks/QASMBench
+	url = https://github.com/pnnl/QASMBench.git
+[submodule "benchmarks/openqasm"]
+	path = benchmarks/openqasm
+	url = https://github.com/openqasm/openqasm.git
+[submodule "benchmarks/nwqbench"]
+	path = benchmarks/nwqbench
+	url = https://github.com/pnnl/nwqbench.git
