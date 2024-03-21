@@ -1,3 +1,5 @@
+"""qiskit 1.0 is not stable yet"""
+
 from qiskit import QuantumCircuit, schedule, transpile
 from qiskit.providers.fake_provider import FakeWashington
 
@@ -8,7 +10,9 @@ from qiskit.pulse import Schedule
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("qasm_file", type=str, help="File path of OpenQASM3 benchmark file")
+    parser.add_argument(
+        "qasm_file", type=str, help="File path of OpenQASM3 benchmark file"
+    )
 
     return parser.parse_args()
 
@@ -21,7 +25,6 @@ def num_condition_ops(circ: QuantumCircuit):
         if op.condition:
             num_cond_ops += 1
     return num_cond_ops
-
 
 
 def main():
@@ -40,7 +43,7 @@ def main():
     print(f"\n------------------ Transpiled Circuit ------------------\n")
     print(transpiled_circ)
     print(f"\n------------------ Transpiled QASM ------------------\n")
-    #print(qasm2.dumps(transpiled_circ))
+    # print(qasm2.dumps(transpiled_circ))
     print(transpiled_circ.qasm())
     print(f"\n------------------ Duration ------------------\n")
     assert isinstance(scheduled_pulses, Schedule)
@@ -49,6 +52,5 @@ def main():
     print(f"num-of-cond-ops:\t{num_condition_ops(transpiled_circ)}")
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
