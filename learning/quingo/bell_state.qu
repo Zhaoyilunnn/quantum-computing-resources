@@ -1,0 +1,6 @@
+operation main(): unit {
+     int a = 1;
+     for(int i = 0; i < 10; i += 1) {
+          a += 1; //for loop will be executed 10 times
+     }
+}
