@@ -1,0 +1,42 @@
+// References:
+//  - https://github.com/pnnl/QASMBench/blob/master/medium/bv_n14/bv_n14.qasm
+// Hidden string is 1111111111111
+
+using std, im, fm
+.file:
+.gate:
+.body:
+    func BV(qubit q, int num) -> (int[] c):
+        int i, targ
+        subi targ, num, 1
+        ld i, 0
+        loop1:
+            H q[i]
+            addi i, i, 1
+            blt i, targ, loop1
+        X q[targ]
+        H q[targ]
+        ld i, 0
+        loop2:
+            CNOT q[i], q[targ]
+            addi i, i, 1
+            blt i, targ, loop2
+        ld i, 0
+        loop3:
+            H q[i]
+            addi i, i, 1
+            blt i, targ, loop3
+        ld i, 0
+        loop4:
+            measure(q[i]) -> c[i]
+            addi i, i, 1
+            blt i, targ, loop4
+    end
+
+    func main():
+        int n;
+        ld n, 14
+        qubit[n] q
+        int[n] 4
+        BV(q, n) -> c
+    end
