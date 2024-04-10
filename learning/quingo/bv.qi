@@ -6,7 +6,7 @@ using std, im, fm
 .file:
 .gate:
 .body:
-    func BV(qubit q, int num) -> (int[] c):
+    func BV(qubit[] q, int num) -> (int[] c):
         int i, targ
         subi targ, num, 1
         ld i, 0
@@ -34,9 +34,9 @@ using std, im, fm
     end
 
     func main():
-        int n;
+        int n
         ld n, 14
         qubit[n] q
-        int[n] 4
+        int[n] c
         BV(q, n) -> c
     end

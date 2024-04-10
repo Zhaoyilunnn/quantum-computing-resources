@@ -2,56 +2,39 @@ using std,im,fm  //这是注释
 .file:
 .gate:
 .body:
-    func CP(double theta, qubit q1, qubit q2):
-        double halftheta,neghalftheta
-        divdi halftheta, theta, 2.0
-        subd neghalftheta, halftheta, theta
-        U4(0,0,0,halftheta) q2
-        CNOT q1,q2
-        U4(0,0,0,neghalftheta) q2
-        CNOT q1,q2
-        U4(0,0,0,halftheta) q2
-    end
-    func QFT(qubit q, int num) -> int[] c:
-        int i,j,len,count,f
-        double k,phase
-        ld i, 0
-        loop1:
-            H q[i]
-            addi i, i, 1
-            blt i, num, loop1
-        ld i, 0
-        loop2:
-            mov j, i
-            loop3:
-                addi j, j, 1
-                sub len, j, i
-                ld count, 0
-                ldd k, 1.0
-                loop4:
-                    muldi k, k, 2.0
-                    addi count, count, 1
-                    blt count, len, loop4
-                divdi phase, pi, k
-                CP(phase, q[j], q[i])
-                blt j, num, loop3
-            addi i, i, 1
-            blt i, num, loop2
-        ld i, 0
-        divi f, num, 2
-        subi f, f, 1
-        loop5:
-            mov j, num
-            sub  j,  j,  i
-            subi j,  j,  1
-            SWAP q[i], q[j]
-            addi i, i, 1
-            blt i, f, loop5
-        ld i, 0
-        loop6:
-            measure(q[i]) -> c[i]
-            addi i, i, 1
-            blt i, num, loop6
+    func QFT(qubit[] q, int num) -> (int[] c):
+        int index, it, arg, snum, zero
+        double theta, PI
+        ld zero, 0
+        ldd PI, pi
+        rotation:
+            subi index, num, 1
+            ld it, 0
+            ld arg, 1
+            H q[index]
+            cphase:
+                phasecal:
+                    divdi theta, PI, 2.0
+                    sub arg, index, it
+                    bgt arg, zero, phasecal
+                CP(theta) q[it], q[index]
+                addi it, it, 1
+                blt it, index, cphase
+            bgt index, zero, rotation
+        H q[index]
+        divi snum, num, 2
+        ld it, 0
+        swap:
+            sub index, num, it
+            subi index, index, 1
+            SWAP q[it], q[index]
+            addi it, it, 1
+            blt it, snum, swap
+        ld index, 0
+        result:
+            measure(q[index]) -> c[index]
+            addi index, index, 1
+            blt index, num, result
     end
     func main():
         int n

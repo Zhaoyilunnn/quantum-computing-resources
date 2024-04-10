@@ -1,7 +1,7 @@
 from antlr4 import *
-from antlr.QuietLexer import QuietLexer
-from antlr.QuietParser import QuietParser
-from QiVisitor.QuietVisitor import *
+from pyquiet.antlr.QuietLexer import QuietLexer
+from pyquiet.antlr.QuietParser import QuietParser
+from pyquiet.QiVisitor.QuietVisitor import *
 
 import argparse
 
