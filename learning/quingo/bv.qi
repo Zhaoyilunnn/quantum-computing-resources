@@ -6,37 +6,56 @@ using std, im, fm
 .file:
 .gate:
 .body:
-    func BV(qubit[] q, int num) -> (int[] c):
-        int i, targ
-        subi targ, num, 1
+    // Args:
+    //  q: qubits
+    //  n: number of qubits
+    //  s: hidden string
+    //  m: length of string
+    func BV(qubit[] q, int n, int[] s, int m) -> (int[] c):
+        int i
         ld i, 0
         loop1:
             H q[i]
             addi i, i, 1
-            blt i, targ, loop1
-        X q[targ]
-        H q[targ]
+            blt i, m, loop1
+        X q[m]
+        H q[m]
         ld i, 0
+        int flag
+        ld flag, 1
         loop2:
-            CNOT q[i], q[targ]
-            addi i, i, 1
-            blt i, targ, loop2
+            beq s[i], flag, label0
+            jump label1
+            label0:
+                CNOT q[i], q[m]
+            label1:
+                addi i, i, 1
+                blt i, m, loop2
         ld i, 0
         loop3:
             H q[i]
             addi i, i, 1
-            blt i, targ, loop3
+            blt i, m, loop3
         ld i, 0
         loop4:
             measure(q[i]) -> c[i]
             addi i, i, 1
-            blt i, targ, loop4
+            blt i, m, loop4
     end
 
     func main():
-        int n
+        int n, m    // num_qubits, length_hidden_string
         ld n, 14
+        subi m, n, 1
         qubit[n] q
-        int[n] c
-        BV(q, n) -> c
+        int[n] c    // classical bits to store measurement results
+        int[m] s    // hidden string
+        int i
+        // load hidden string 1111111111111 into s
+        ld i 0
+        loop0:
+            ld s[i], 1
+            addi i, i, 1
+            blt i, m, loop0
+        BV(q, n, s, m) -> c
     end
