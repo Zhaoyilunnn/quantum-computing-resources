@@ -1,0 +1,67 @@
+using im, fm
+.body:
+func main ():
+  int i_0
+  int i_1
+  qubit q_0
+  qubit q_1
+  qubit q_2
+  int i_2
+  int i_3
+  ld i_0, 1
+  ld i_1, 0
+  X q_2
+  H q_0
+  H q_1
+  H q_2
+  X q_0
+  Rz(1.570796) q_2
+  H q_2
+  CZ q_0, q_2
+  H q_2
+  Ry(-0.785398) q_2
+  H q_2
+  CZ q_0, q_2
+  H q_2
+  Ry(0.785398) q_2
+  Rz(-1.570796) q_2
+  H q_0
+  CZ q_1, q_0
+  H q_0
+  Rz(-1.570796) q_2
+  H q_2
+  CZ q_0, q_2
+  H q_2
+  Ry(-0.785398) q_2
+  H q_2
+  CZ q_0, q_2
+  H q_2
+  Ry(0.785398) q_2
+  Rz(1.570796) q_2
+  H q_0
+  CZ q_1, q_0
+  H q_0
+  Rz(1.570796) q_2
+  H q_2
+  CZ q_1, q_2
+  H q_2
+  Ry(-0.785398) q_2
+  H q_2
+  CZ q_1, q_2
+  H q_2
+  Ry(0.785398) q_2
+  Rz(-1.570796) q_2
+  X q_0
+  H q_1
+  H q_0
+  X q_1
+  X q_0
+  CZ q_1, q_0
+  X q_1
+  X q_0
+  H q_1
+  H q_0
+  measure(q_0) -> i_2
+  measure(q_1) -> i_3
+end
+

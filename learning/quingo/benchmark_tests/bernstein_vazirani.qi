@@ -1,0 +1,72 @@
+using im, fm
+.body:
+func main ()-> (int[] res_i_0):
+  int i_1
+  int i_2
+  qubit q_0
+  qubit q_1
+  qubit q_2
+  qubit q_3
+  qubit q_4
+  qubit q_5
+  qubit q_6
+  qubit q_7
+  qubit q_8
+  int i_3
+  int i_4
+  int i_5
+  int i_6
+  int i_7
+  int i_8
+  int i_9
+  int i_10
+  ld i_1, -1
+  ld i_2, 0
+  X q_8
+  H q_0
+  H q_1
+  H q_2
+  H q_3
+  H q_4
+  H q_5
+  H q_6
+  H q_7
+  H q_8
+  H q_8
+  CZ q_1, q_8
+  H q_8
+  H q_8
+  CZ q_4, q_8
+  H q_8
+  H q_8
+  CZ q_5, q_8
+  H q_8
+  H q_8
+  CZ q_7, q_8
+  H q_8
+  H q_0
+  H q_1
+  H q_2
+  H q_3
+  H q_4
+  H q_5
+  H q_6
+  H q_7
+  measure(q_0) -> i_3
+  mov res_i_0[-1], i_3
+  measure(q_1) -> i_4
+  mov res_i_0[-1], i_4
+  measure(q_2) -> i_5
+  mov res_i_0[-1], i_5
+  measure(q_3) -> i_6
+  mov res_i_0[-1], i_6
+  measure(q_4) -> i_7
+  mov res_i_0[-1], i_7
+  measure(q_5) -> i_8
+  mov res_i_0[-1], i_8
+  measure(q_6) -> i_9
+  mov res_i_0[-1], i_9
+  measure(q_7) -> i_10
+  mov res_i_0[-1], i_10
+end
+

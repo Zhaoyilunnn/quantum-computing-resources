@@ -1,0 +1,15 @@
+using im, fm
+.body:
+func main ()-> (int[] res_i_0):
+  int i_1
+  qubit q_0
+  qubit q_1
+  int i_2
+  int i_3
+  ld i_1, 0
+  measure(q_0) -> i_2
+  mov res_i_0[-1], i_2
+  measure(q_1) -> i_3
+  mov res_i_0[-1], i_3
+end
+

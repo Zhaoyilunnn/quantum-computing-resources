@@ -1,0 +1,13 @@
+using im, fm
+.body:
+func main ()-> (int[] res_i_0):
+  int i_1
+  int i_2
+  ld i_1, 1
+  ld i_2, 0
+  mov res_i_0[-1], i_2
+  mov res_i_0[-1], i_1
+  mov res_i_0[-1], i_2
+  mov res_i_0[-1], i_2
+end
+

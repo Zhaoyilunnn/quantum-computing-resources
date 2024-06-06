@@ -1,0 +1,25 @@
+    H    Q1
+    H    Q1
+   CZ    Q0           Q1
+    H    Q1
+   RZ    Q1   -0.7853982
+    H    Q1
+   CZ    Q0           Q1
+    H    Q1
+   RZ    Q1    0.7853982
+   RZ    Q0    0.7853982
+    H    Q0
+   RZ    Q1   -3.1415927
+    H    Q0
+    H    Q1
+   CZ    Q0           Q1
+    H    Q1
+   RZ    Q1    0.7853982
+    H    Q1
+   CZ    Q0           Q1
+    H    Q1
+   RZ    Q1   -0.7853982
+   RZ    Q0   -0.7853982
+    H    Q1
+    M    Q0
+    M    Q1

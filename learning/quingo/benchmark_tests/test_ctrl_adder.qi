@@ -1,0 +1,309 @@
+using im, fm
+.body:
+func main ()-> (int[] res_i_0):
+  double d_0
+  double d_1
+  double d_2
+  double d_3
+  double d_4
+  double d_5
+  double d_6
+  double d_7
+  double d_8
+  double d_9
+  int i_1
+  int i_2
+  int[4] i_3
+  int[4] i_4
+  qubit q_0
+  qubit q_1
+  qubit q_2
+  qubit q_3
+  qubit q_4
+  qubit q_5
+  int i_5
+  int i_6
+  int i_7
+  int i_8
+  ldd d_0, 0.39
+  ldd d_1, 0.20
+  ldd d_2, 0.10
+  ldd d_3, -0.10
+  ldd d_4, -0.20
+  ldd d_5, -0.39
+  ldd d_6, 0.00
+  ldd d_7, -0.00
+  ldd d_8, -0.79
+  ldd d_9, 0.79
+  ld i_1, 1
+  ld i_2, 0
+  mov i_3[-1], i_2
+  mov i_3[-1], i_1
+  mov i_3[-1], i_2
+  mov i_3[-1], i_2
+  mov i_4[-1], i_1
+  mov i_4[-1], i_1
+  mov i_4[-1], i_2
+  mov i_4[-1], i_2
+  X q_2
+  X q_3
+  X q_0
+  X q_1
+  H q_5
+  H q_5
+  CZ q_4, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_4, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_4
+  H q_5
+  CZ q_3, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_3, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_3
+  H q_5
+  CZ q_2, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_2, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_2
+  H q_4
+  H q_4
+  CZ q_3, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_3, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_3
+  H q_4
+  CZ q_2, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_2, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_2
+  H q_3
+  H q_3
+  CZ q_2, q_3
+  H q_3
+  Rz(0.000000) q_3
+  H q_3
+  CZ q_2, q_3
+  H q_3
+  Rz(0.000000) q_3
+  Rz(0.000000) q_2
+  H q_2
+  H q_5
+  CZ q_1, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_1, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_5
+  CZ q_1, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_1, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_5
+  CZ q_0, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_0, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_0
+  H q_4
+  CZ q_1, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_1, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_4
+  CZ q_1, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_1, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_4
+  CZ q_0, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_0, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_0
+  H q_3
+  CZ q_1, q_3
+  H q_3
+  Rz(0.000000) q_3
+  H q_3
+  CZ q_1, q_3
+  H q_3
+  Rz(0.000000) q_3
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_3
+  CZ q_1, q_3
+  H q_3
+  Rz(0.000000) q_3
+  H q_3
+  CZ q_1, q_3
+  H q_3
+  Rz(0.000000) q_3
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_3
+  CZ q_0, q_3
+  H q_3
+  Rz(0.000000) q_3
+  H q_3
+  CZ q_0, q_3
+  H q_3
+  Rz(0.000000) q_3
+  Rz(0.000000) q_0
+  H q_2
+  CZ q_1, q_2
+  H q_2
+  Rz(0.000000) q_2
+  H q_2
+  CZ q_1, q_2
+  H q_2
+  Rz(0.000000) q_2
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_2
+  CZ q_1, q_2
+  H q_2
+  Rz(0.000000) q_2
+  H q_2
+  CZ q_1, q_2
+  H q_2
+  Rz(0.000000) q_2
+  Rz(0.000000) q_1
+  H q_1
+  CZ q_0, q_1
+  H q_1
+  H q_2
+  CZ q_0, q_2
+  H q_2
+  Rz(0.000000) q_2
+  H q_2
+  CZ q_0, q_2
+  H q_2
+  Rz(0.000000) q_2
+  Rz(0.000000) q_0
+  H q_2
+  H q_3
+  CZ q_2, q_3
+  H q_3
+  Rz(0.000000) q_3
+  H q_3
+  CZ q_2, q_3
+  H q_3
+  Rz(0.000000) q_3
+  Rz(0.000000) q_2
+  H q_3
+  H q_4
+  CZ q_2, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_2, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_2
+  H q_4
+  CZ q_3, q_4
+  H q_4
+  Rz(0.000000) q_4
+  H q_4
+  CZ q_3, q_4
+  H q_4
+  Rz(0.000000) q_4
+  Rz(0.000000) q_3
+  H q_4
+  H q_5
+  CZ q_2, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_2, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_2
+  H q_5
+  CZ q_3, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_3, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_3
+  H q_5
+  CZ q_4, q_5
+  H q_5
+  Rz(0.000000) q_5
+  H q_5
+  CZ q_4, q_5
+  H q_5
+  Rz(0.000000) q_5
+  Rz(0.000000) q_4
+  H q_5
+  measure(q_2) -> i_5
+  mov res_i_0[-1], i_5
+  measure(q_3) -> i_6
+  mov res_i_0[-1], i_6
+  measure(q_4) -> i_7
+  mov res_i_0[-1], i_7
+  measure(q_5) -> i_8
+  mov res_i_0[-1], i_8
+end
+
