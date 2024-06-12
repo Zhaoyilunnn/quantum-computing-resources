@@ -2,9 +2,16 @@ import logging
 from quingo import *
 from pathlib import Path
 import qututor.global_config as gc
+import argparse
 
 
 qu_file = gc.quingo_dir / "test_qft.qu"
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--isa", default="QUIET", help="QUIET or QCIS")
+    return parser.parse_args()
 
 
 def is_number(s):
@@ -41,25 +48,26 @@ cfg = ExeConfig(ExeMode.SimShots, 1)
 
 
 class Test_QFT_BB:
-    def test_qft_bb(self):
+    def test_qft_bb(self, isa):
+        if isa == "QUIET":
+            isa_type = Qisa.QUIET
+            suffix = ".qi"
+        elif isa == "QCIS":
+            isa_type = Qisa.QCIS
+            suffix = ".qcis"
+        else:
+            raise NotImplementedError("Unsupported ISA type")
         num_qubits = 2
         for i in range(1 << num_qubits):
             str_bin = get_bin(i, num_qubits)
             blist = [int(b) for b in str_bin]
             print("input :", str_bin)
             blist.reverse()
-            task = Quingo_task(qu_file, "test_qft_bb", qisa=Qisa.QUIET)
-            fn = compile(task, params=(blist,), qasm_fn=f"test_qft_bb_{blist}.qi")
+            task = Quingo_task(qu_file, "test_qft_bb", qisa=isa_type)
+            fn = compile(task, params=(blist,), qasm_fn=f"test_qft_bb_{blist}{suffix}")
             print(fn)
-            # res = call(
-            #     task,
-            #     (blist,),
-            #     BackendType.QUANTUM_SIM,
-            #     cfg,
-            # )
-            # k = get_first_non_zero_res(res)
-            # assert k == i
 
 
 if __name__ == "__main__":
-    Test_QFT_BB().test_qft_bb()
+    args = get_args()
+    Test_QFT_BB().test_qft_bb(args.isa)

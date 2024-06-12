@@ -1,0 +1,23 @@
+    X    Q1
+    H    Q1
+ CNOT    Q0           Q1
+   RZ    Q1   -0.7853982
+ CNOT    Q0           Q1
+   RZ    Q1    0.7853982
+   RZ    Q0    0.7853982
+    H    Q0
+ CNOT    Q0           Q1
+ CNOT    Q1           Q0
+ CNOT    Q0           Q1
+ CNOT    Q0           Q1
+ CNOT    Q1           Q0
+ CNOT    Q0           Q1
+    H    Q0
+ CNOT    Q0           Q1
+   RZ    Q1    0.7853982
+ CNOT    Q0           Q1
+   RZ    Q1   -0.7853982
+   RZ    Q0   -0.7853982
+    H    Q1
+    M    Q0
+    M    Q1

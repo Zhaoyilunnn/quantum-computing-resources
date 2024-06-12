@@ -1,20 +1,36 @@
 from quingo import *
 from quingo.backend.qisa import Qisa
 import qututor.global_config as gc
-import sys
+import argparse
 
-qu_file = gc.quingo_dir / sys.argv[1]
+parser = argparse.ArgumentParser()
+parser.add_argument("qu", help="quingo source file name")
+parser.add_argument("func", help="function name in the source file")
+parser.add_argument("--isa", default="QUIET", help="ISA type, QCIS or QUIET")
 
-circ_name = sys.argv[2]
+args = parser.parse_args()
 
-task = Quingo_task(qu_file, circ_name, qisa=Qisa.QUIET)
+qu_file = gc.quingo_dir / args.qu
+
+circ_name = args.func
+
+if args.isa == "QUIET":
+    isa_type = Qisa.QUIET
+    suffix = ".qi"
+elif args.isa == "QCIS":
+    isa_type = Qisa.QCIS
+    suffix = ".qcis"
+else:
+    raise NotImplementedError("Unsupported QISA type, please choose QCIS or QUIET")
+
+task = Quingo_task(qu_file, circ_name, qisa=isa_type)
 cfg = ExeConfig(ExeMode.SimShots, num_shots=10)
 
 if circ_name == "GHZ_state":
-    fn = compile(task, params=(3,), qasm_fn=f"{circ_name}.qi")
+    fn = compile(task, params=(3,), qasm_fn=f"{circ_name}{suffix}")
 elif circ_name == "test_ctrl_adder":
-    fn = compile(task, params=(1, 1, 2, 3, 3), qasm_fn=f"{circ_name}.qi")
+    fn = compile(task, params=(1, 1, 2, 3, 3), qasm_fn=f"{circ_name}{suffix}")
 else:
-    fn = compile(task, params=(), qasm_fn=f"{circ_name}.qi")
+    fn = compile(task, params=(), qasm_fn=f"{circ_name}{suffix}")
 
 print(fn)
