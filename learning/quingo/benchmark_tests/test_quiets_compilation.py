@@ -3,6 +3,12 @@ from quingo.backend.qisa import Qisa
 import qututor.global_config as gc
 import argparse
 
+import logging
+
+logger = logging.getLogger("compile")
+logger.setLevel("DEBUG")
+logger.disabled = False
+
 parser = argparse.ArgumentParser()
 parser.add_argument("qu", help="quingo source file name")
 parser.add_argument("func", help="function name in the source file")
@@ -23,7 +29,7 @@ elif args.isa == "QCIS":
 else:
     raise NotImplementedError("Unsupported QISA type, please choose QCIS or QUIET")
 
-task = Quingo_task(qu_file, circ_name, qisa=isa_type)
+task = Quingo_task(qu_file, circ_name, qisa=isa_type, debug_mode=True)
 cfg = ExeConfig(ExeMode.SimShots, num_shots=10)
 
 if circ_name == "GHZ_state":

@@ -8,7 +8,7 @@ import qututor.global_config as gc
 
 import termcolor as tc
 
-logger = get_logger("adder_test")
+logger = get_logger("compile")
 logger.setLevel(logging.DEBUG)
 logger.disabled = False
 
@@ -17,7 +17,7 @@ kernel_file = gc.quingo_dir / "draper_test.qu"
 
 class Test_Draper_adder:
     def add_or_sub(i, j, num_qubits, subtract=False):
-        task = Quingo_task(kernel_file, "test_sc_adder", qisa=Qisa.QUIET)
+        task = Quingo_task(kernel_file, "test_sc_adder", qisa=Qisa.QUIET, debug_mode=True)
         i_bits = int2bit_list(i, num_qubits)
         j_bits = int2bit_list(j, num_qubits)
         logger.debug("a: {} '{}'   b: {} '{}'".format(i, bin(i), j, bin(j)))
@@ -45,14 +45,14 @@ class Test_Draper_adder:
         num_qubits = 2
         for i in range(1 << num_qubits):
             for j in range(1 << num_qubits):
-                trigger_task(Test_Draper_adder.add_or_sub, (i, j, num_qubits), True)
+                trigger_task(Test_Draper_adder.add_or_sub, (i, j, num_qubits), False)
 
     def test_subtracter(self):
         num_qubits = 2
         for i in range(1 << num_qubits):
             for j in range(1 << num_qubits):
                 trigger_task(
-                    Test_Draper_adder.add_or_sub, (i, j, num_qubits, True), True
+                    Test_Draper_adder.add_or_sub, (i, j, num_qubits, True), False
                 )
 
 

@@ -60,8 +60,8 @@ class Test_Addback:
 
     def test_add_backs(self):
         def single_test(params):
-            trigger_task(Test_Addback.add_back, (params,), True)
-            trigger_task(Test_Addback.mod_adder_nc, (params,), True)
+            trigger_task(Test_Addback.add_back, (params,), False)
+            trigger_task(Test_Addback.mod_adder_nc, (params,), False)
 
         # a, b, N, width
         # N > a,b
