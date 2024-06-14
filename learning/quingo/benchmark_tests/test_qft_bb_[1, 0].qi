@@ -5,22 +5,16 @@ func main ()-> (int[] res_i_0):
   double d_1
   double d_2
   double d_3
-  double d_4
-  double d_5
   int i_1
-  int i_2
   qubit q_0
   qubit q_1
-  int i_5
-  int i_6
+  int i_3
+  int i_4
   ldd d_0, 0.39
   ldd d_1, -0.39
   ldd d_2, -0.79
   ldd d_3, 0.79
-  ldd d_4, 1.57
-  ldd d_5, 3.14
-  ld i_1, 1
-  ld i_2, 0
+  ld i_1, 0
   H q_1
   CNOT q_0, q_1
   Rz(-0.785398) q_1
@@ -28,8 +22,12 @@ func main ()-> (int[] res_i_0):
   Rz(0.785398) q_1
   Rz(0.785398) q_0
   H q_0
-  Rz(1.570796) q_1
-  Rz(3.141593) q_0
+  CNOT q_0, q_1
+  CNOT q_1, q_0
+  CNOT q_0, q_1
+  CNOT q_0, q_1
+  CNOT q_1, q_0
+  CNOT q_0, q_1
   H q_0
   CNOT q_0, q_1
   Rz(0.785398) q_1
@@ -37,9 +35,9 @@ func main ()-> (int[] res_i_0):
   Rz(-0.785398) q_1
   Rz(-0.785398) q_0
   H q_1
-  measure(q_0) -> i_5
-  mov res_i_0[0], i_5
-  measure(q_1) -> i_6
-  mov res_i_0[1], i_6
+  measure(q_0) -> i_3
+  mov res_i_0[0], i_3
+  measure(q_1) -> i_4
+  mov res_i_0[1], i_4
 end
 

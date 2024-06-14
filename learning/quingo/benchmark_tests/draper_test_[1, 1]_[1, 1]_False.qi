@@ -1,28 +1,49 @@
-    X    Q0
-    X    Q1
-    H    Q1
-    H    Q1
-   CZ    Q0           Q1
-    H    Q1
-   RZ    Q1   -0.7853982
-    H    Q1
-   CZ    Q0           Q1
-    H    Q1
-   RZ    Q1    0.7853982
-   RZ    Q0    0.7853982
-    H    Q0
-   RZ    Q1    4.7123890
-   RZ    Q0    3.1415927
-    H    Q0
-    H    Q1
-   CZ    Q0           Q1
-    H    Q1
-   RZ    Q1    0.7853982
-    H    Q1
-   CZ    Q0           Q1
-    H    Q1
-   RZ    Q1   -0.7853982
-   RZ    Q0   -0.7853982
-    H    Q1
-    M    Q0
-    M    Q1
+using im, fm
+.body:
+func main ()-> (int[] res_i_0):
+  double d_0
+  double d_1
+  double d_2
+  double d_3
+  double d_4
+  double d_5
+  double d_6
+  double d_7
+  int i_1
+  qubit q_0
+  qubit q_1
+  int i_4
+  int i_5
+  ldd d_0, 0.39
+  ldd d_1, -0.39
+  ldd d_2, -0.79
+  ldd d_3, 0.79
+  ldd d_4, 2.36
+  ldd d_5, 1.57
+  ldd d_6, 3.14
+  ldd d_7, 4.71
+  ld i_1, 1
+  X q_0
+  X q_1
+  H q_1
+  CNOT q_0, q_1
+  Rz(-0.785398) q_1
+  CNOT q_0, q_1
+  Rz(0.785398) q_1
+  Rz(0.785398) q_0
+  H q_0
+  Rz(4.712389) q_1
+  Rz(3.141593) q_0
+  H q_0
+  CNOT q_0, q_1
+  Rz(0.785398) q_1
+  CNOT q_0, q_1
+  Rz(-0.785398) q_1
+  Rz(-0.785398) q_0
+  H q_1
+  measure(q_0) -> i_4
+  mov res_i_0[0], i_4
+  measure(q_1) -> i_5
+  mov res_i_0[1], i_5
+end
+

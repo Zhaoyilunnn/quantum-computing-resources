@@ -5,16 +5,16 @@ import qututor.global_config as gc
 from qututor.tools import *
 import termcolor as tc
 
-logger = get_logger("add_N_back")
+logger = get_logger("compile")
 logger.setLevel(logging.DEBUG)
-logger.disabled = True
+logger.disabled = False
 
 mod_adder_module = gc.quingo_dir / "modular_adder.qu"
 
 
 class Test_Addback:
     def add_back(params):
-        task = Quingo_task(mod_adder_module, "test_mod_add_back_nc", qisa=Qisa.QUIET)
+        task = Quingo_task(mod_adder_module, "test_mod_add_back_nc", qisa=Qisa.QUIET, debug_mode=True)
         a, b, N, w = params
         logger.debug("add_back: a: {}, b: {}, N: {}, w: {}".format(a, b, N, w))
         exp_res = a + b
