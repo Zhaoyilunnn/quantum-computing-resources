@@ -50,6 +50,9 @@ Our target conferences include (*but definitely not limited to*) top conferences
 
 Additionally, domain-specific journals including [ACM TQC](https://dl.acm.org/journal/tqc), [IEEE TQE](https://tqe.ieee.org/) and conferences like [QCE](https://qce.quantum.ieee.org/) also contain many valuable works.
 
+Tips
+- [Search for articles from a specific journal in Google Scholar](https://academia.stackexchange.com/questions/102122/how-to-search-for-articles-from-a-specific-journal-in-google-scholar-when-the-jo): `"key word" site:<site-address>`.
+
 ### How to read papers
 Bare in mind the following questions when reading papers.
  - What problem this paper is trying to solve?
