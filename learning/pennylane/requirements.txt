@@ -1,5 +1,5 @@
 PennyLane==0.32.0
 PennyLane-Lightning==0.32.0
 PennyLane-qiskit==0.32.0
-torch==2.0.1
+torch==2.2.0
 qiskit==0.43.0
