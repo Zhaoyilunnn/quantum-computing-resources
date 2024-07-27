@@ -1,3 +1,5 @@
+// https://www.zhihu.com/question/28300645/answer/2488146755
+
 #include <cstddef>
 #include <cerrno>
 #include <cstdlib>
