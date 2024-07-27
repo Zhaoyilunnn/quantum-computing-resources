@@ -1,0 +1,23 @@
+using im, fm
+.body:
+func main ():
+  qubit q_0
+  qubit q_1
+  int i_0
+  int i_1
+  int i_2
+  measure(q_0) -> i_0
+  ld i_1, 1
+  beq i_0, i_1, label_0
+  jump label_1
+  label_0:
+  X q_0
+  jump label_2
+  label_1:
+  Y q_1
+  jump label_2
+  label_2:
+  H q_1
+  measure(q_1) -> i_2
+end
+

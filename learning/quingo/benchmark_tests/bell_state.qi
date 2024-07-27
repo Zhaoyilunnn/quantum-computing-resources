@@ -1,15 +1,19 @@
 using im, fm
 .body:
 func main ()-> (int[] res_i_0):
-  qubit q_0
-  qubit q_1
   int i_1
   int i_2
+  qubit q_0
+  qubit q_1
+  int i_3
+  int i_4
+  ld i_1, 1
+  ld i_2, 0
   H q_0
   CNOT q_0, q_1
-  measure(q_0) -> i_1
-  mov res_i_0[0], i_1
-  measure(q_1) -> i_2
-  mov res_i_0[1], i_2
+  measure(q_0) -> i_3
+  mov res_i_0[0], i_3
+  measure(q_1) -> i_4
+  mov res_i_0[1], i_4
 end
 

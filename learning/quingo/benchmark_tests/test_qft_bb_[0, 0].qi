@@ -1,20 +1,10 @@
 using im, fm
 .body:
 func main ()-> (int[] res_i_0):
-  double d_0
-  double d_1
-  double d_2
-  double d_3
-  int i_1
   qubit q_0
   qubit q_1
   int i_3
   int i_4
-  ldd d_0, 0.39
-  ldd d_1, -0.39
-  ldd d_2, -0.79
-  ldd d_3, 0.79
-  ld i_1, 0
   H q_1
   CNOT q_0, q_1
   Rz(-0.785398) q_1

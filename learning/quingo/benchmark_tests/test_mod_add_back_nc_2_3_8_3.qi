@@ -1,20 +1,6 @@
 using im, fm
 .body:
 func main ()-> (int[] res_i_0):
-  double d_0
-  double d_1
-  double d_2
-  double d_3
-  double d_4
-  double d_5
-  double d_6
-  double d_7
-  double d_8
-  double d_9
-  double d_10
-  double d_11
-  double d_12
-  double d_13
   int i_1
   int i_2
   int[4] i_3
@@ -30,20 +16,6 @@ func main ()-> (int[] res_i_0):
   int i_8
   int i_9
   int i_10
-  ldd d_0, 0.39
-  ldd d_1, 0.20
-  ldd d_2, 0.10
-  ldd d_3, -0.39
-  ldd d_4, -0.20
-  ldd d_5, -0.10
-  ldd d_6, -0.79
-  ldd d_7, 0.79
-  ldd d_8, 1.57
-  ldd d_9, 0.00
-  ldd d_10, -1.57
-  ldd d_11, -0.00
-  ldd d_12, 3.14
-  ldd d_13, -3.14
   ld i_1, 0
   ld i_2, 1
   mov i_3[0], i_1

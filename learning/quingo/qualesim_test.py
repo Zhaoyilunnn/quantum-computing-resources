@@ -31,5 +31,6 @@ print(f"res\n{res}")
 
 sim.stop()
 final_state = dict()
+print(res)
 final_state = res["res"]
 print(final_state)

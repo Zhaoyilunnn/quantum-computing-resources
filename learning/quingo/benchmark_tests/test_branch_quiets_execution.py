@@ -41,5 +41,5 @@ elif circ_name == "test_ctrl_adder":
     fn = compile(task, params=(1, 1, 2, 3, 3), qasm_fn=f"{circ_name}{suffix}")
 else:
     fn = compile(task, params=(), qasm_fn=f"{circ_name}{suffix}")
-
-print(fn)
+res = execute(fn, BackendType.QUALESIM_QUANTUMSIM)
+print(res)
