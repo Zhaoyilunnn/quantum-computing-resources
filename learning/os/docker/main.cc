@@ -13,6 +13,8 @@
 
 using namespace std;
 
+const char *child_hostname = "container";
+
 static string cmd(int argc, char **argv) {
   string cmd = "";
   for (int i = 0; i < argc; i++) {
@@ -22,10 +24,30 @@ static string cmd(int argc, char **argv) {
 }
 
 static void run_child(int argc, char **argv) {
+  cout << "Child running " << cmd(argc, argv) << " as " << getpid() << endl;
+
   int flags = CLONE_NEWUTS;
 
+  // namespace isolation
   if (unshare(flags) < 0) {
     cerr << "Failed to unshare in child: " << strerror(errno) << endl;
+    exit(-1);
+  }
+
+  // file system isolation, this requires to have an extra ubuntu file system
+  // see: https://github.com/Kirhhoff/mini-docker
+  // if (chroot("../container-fs") < 0) {
+  //   cerr << "Failed to chroot" << endl;
+  //   exit(-1);
+  // }
+
+  // if (chdir("/") < 0) {
+  //   cerr << "Failed to chdir" << endl;
+  //   exit(-1);
+  // }
+
+  if (sethostname(child_hostname, strlen(child_hostname)) < 0) {
+    cerr << "Failed to set hostname" << endl;
     exit(-1);
   }
 
@@ -35,7 +57,13 @@ static void run_child(int argc, char **argv) {
 }
 
 static void run(int argc, char **argv) {
-  cout << "Running " << cmd(argc, argv) << endl;
+  cout << "Parent running " << cmd(argc, argv) << " as " << getpid() << endl;
+
+  // PID isolation
+  if (unshare(CLONE_NEWPID) < 0) {
+    cerr << "Failed to unshare PID namespace" << endl;
+    exit(-1);
+  }
 
   pid_t child_pid = fork();
 
