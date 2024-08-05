@@ -22,6 +22,7 @@ sim-beta/.ccls*
 sim-beta/Debug
 sim-beta/compile_commands.json
 test_data*
+*.swp
 
 # executables
 *.out

@@ -60,6 +60,11 @@ Bare in mind the following questions when reading papers.
  - How they solve it?
  - Why they are better than other state-of-the-art approaches?
 
+My paper notes convention
+- red: Challenges to solve / drawbacks of SOTA.
+- green: Insights / Novelty / Philosophy.
+- blue: Other key info.
+
 # Miscellaneous
 
 ## Notes
