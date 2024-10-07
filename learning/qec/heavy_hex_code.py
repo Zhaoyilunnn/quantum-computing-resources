@@ -34,7 +34,6 @@ def apply_measure_w_block(qc: QuantumCircuit):
     qc.t(6).inverse()
 
 
-
 def apply_measure_sz_block(qc: QuantumCircuit):
 
     qc.h(0)
@@ -68,8 +67,15 @@ def measure_ancilla(qc: QuantumCircuit):
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="Implementation of the paper 'Encoding a magic state with beyond break-even fidelity'")
-    parser.add_argument("--stage", type=int, default=1, help="How many stages to construct the quantum circuit in Fig. 2(a); 1: Only code preparation; 2: 1 + magic state initialization by measurement; 3: 1 + 2 + Error detection measurement")
+    parser = argparse.ArgumentParser(
+        description="Implementation of the paper 'Encoding a magic state with beyond break-even fidelity'"
+    )
+    parser.add_argument(
+        "--stage",
+        type=int,
+        default=1,
+        help="How many stages to construct the quantum circuit in Fig. 2(a); 1: Only code preparation; 2: 1 + magic state initialization by measurement; 3: 1 + 2 + Error detection measurement",
+    )
     return parser.parse_args()
 
 
@@ -124,6 +130,7 @@ def main():
     # qc.measure(1, 0)
     # qc.measure(3, 1)
     # qc.measure(5, 2)
+
 
 if __name__ == "__main__":
     main()
