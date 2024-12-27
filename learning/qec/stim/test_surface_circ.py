@@ -50,6 +50,7 @@ if __name__ == "__main__":
         )
         for d in [3, 5, 7, 9]
     ]
+    print(surface_code_tasks[0].circuit)
     collected_surface_code_stats = sinter.collect(
         num_workers=int(os.cpu_count() // 2),
         tasks=surface_code_tasks,
