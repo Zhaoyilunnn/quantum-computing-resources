@@ -32,8 +32,22 @@ def count_logical_errors(circuit: stim.Circuit, num_shots: int) -> int:
     return num_errors
 
 
-if __name__ == "__main__":
+def test_unrotated_surface_circ():
+    circ = stim.Circuit.generated(
+        "surface_code:unrotated_memory_z", rounds=3, distance=3
+    )
+    with open("unrotated_surface_circ.stim", "w") as f:
+        f.write(str(circ))
 
+    sampler = circ.compile_detector_sampler()
+    print(sampler.sample(10))
+
+    diagram = circ.diagram(type="detslice-with-ops-svg")
+    with open("unrotated_surface_circ.svg", "w") as f:
+        print(diagram, file=f)
+
+
+def test_rotated_surface_circ():
     # Surface Code Task Collection
     surface_code_tasks = [
         sinter.Task(
@@ -98,3 +112,8 @@ if __name__ == "__main__":
     ax.legend()
     fig.set_dpi(120)
     plt.savefig("surface_code_circ_res.pdf")
+
+
+if __name__ == "__main__":
+    test_rotated_surface_circ()
+    test_unrotated_surface_circ()

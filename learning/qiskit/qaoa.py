@@ -1,5 +1,5 @@
 """
-Reference: https://github.com/Qiskit/qiskit-ibm-runtime/blob/main/docs/tutorials/qaoa_with_primitives.ipynb
+Reference: https://github.com/Qiskit/qiskit-ibm-runtime/blob/0.21.0/docs/tutorials/quantum_approximate_optimization_algorithm/qaoa_with_primitives.ipynb
 
 qiskit                   0.39.0
 qiskit-aer               0.11.0
@@ -8,7 +8,6 @@ qiskit-terra             0.22.0
 
 
 """
-
 
 import numpy as np
 
