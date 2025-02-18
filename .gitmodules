@@ -13,3 +13,6 @@
 [submodule "benchmarks/QASMBench"]
 	path = benchmarks/QASMBench
 	url = https://github.com/pnnl/QASMBench.git
+[submodule "learning/qec/tqec"]
+	path = learning/qec/tqec
+	url = https://github.com/tqec/tqec.git
