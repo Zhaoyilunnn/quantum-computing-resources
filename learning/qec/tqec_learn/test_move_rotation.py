@@ -5,6 +5,11 @@ from tqec import compile_block_graph, NoiseModel
 block_graph = move_rotation(Basis.Z)
 
 correlation_surfaces = block_graph.find_correlation_surfaces()
+block_graph.view_as_html(
+    write_html_filepath="move_rotation.html",
+    pop_faces_at_direction="+Z",
+    show_correlation_surface=correlation_surfaces[0],
+)
 compiled_computation = compile_block_graph(block_graph, observables="auto")
 
 # 3. Generate the `stim.Circuit` of target code distance
