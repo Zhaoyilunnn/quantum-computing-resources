@@ -1,6 +1,11 @@
 """
 Reference:
     https://www.nature.com/articles/s41586-023-06846-3
+
+qiskit==1.1.0
+qiskit-aer==0.15.0
+qiskit-ibm-runtime==0.25.0
+qiskit-qasm3-import==0.5.0
 """
 
 import sys
@@ -35,7 +40,6 @@ def apply_measure_w_block(qc: QuantumCircuit):
 
 
 def apply_measure_sz_block(qc: QuantumCircuit):
-
     qc.h(0)
     qc.h(2)
     qc.h(3)
@@ -85,7 +89,7 @@ def breakdown_sv(sv):
     for k, v in prob_dict.items():
         if v > 1e-6:
             k = str(k)
-            print(f"{k}\t{v}\t{k[1]+k[3]+k[5]}\t\t{k[0]+k[2]+k[4]+k[6]}")
+            print(f"{k}\t{v}\t{k[1] + k[3] + k[5]}\t\t{k[0] + k[2] + k[4] + k[6]}")
 
 
 def probe_sv(qc):
@@ -94,7 +98,6 @@ def probe_sv(qc):
 
 
 def main():
-
     args = get_args()
     stage = args.stage
 
