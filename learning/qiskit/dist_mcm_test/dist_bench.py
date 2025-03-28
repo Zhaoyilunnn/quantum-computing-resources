@@ -1,3 +1,16 @@
+"""
+A simple dynamic circuit program to test how runtime change with the number of qubits increases
+
+
+Environment:
+
+  qiskit==1.1.1
+  qiskit-aer==0.14.1
+  qiskit-ibm-runtime==0.25.0
+  qiskit-qasm3-import==0.5.0
+
+"""
+
 from typing import Tuple
 from numpy import random
 from qiskit import QuantumCircuit
