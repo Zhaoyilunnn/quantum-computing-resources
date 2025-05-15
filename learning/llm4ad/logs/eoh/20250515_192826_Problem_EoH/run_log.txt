@@ -1,0 +1,49 @@
+[2025-05-15 19:28:28] profile.py(249) : ====================================================================
+[2025-05-15 19:28:28] profile.py(250) : LLM Parameters
+[2025-05-15 19:28:28] profile.py(251) : --------------------------------------------------------------------
+[2025-05-15 19:28:28] profile.py(252) :   - LLM: HttpsApi
+[2025-05-15 19:28:28] profile.py(255) :   - do_auto_trim: True
+[2025-05-15 19:28:28] profile.py(255) :   - debug_mode: False
+[2025-05-15 19:28:28] profile.py(255) :   - _host: api.deepseek.com
+[2025-05-15 19:28:28] profile.py(255) :   - _key: sk-c9375d7dd2f74cb296a5d2af363c9564
+[2025-05-15 19:28:28] profile.py(255) :   - _model: deepseek-chat
+[2025-05-15 19:28:28] profile.py(255) :   - _timeout: 20
+[2025-05-15 19:28:28] profile.py(255) :   - _kwargs: {}
+[2025-05-15 19:28:28] profile.py(255) :   - _cumulative_error: 0
+[2025-05-15 19:28:28] profile.py(256) : ====================================================================
+[2025-05-15 19:28:28] profile.py(257) : Problem Parameters
+[2025-05-15 19:28:28] profile.py(258) : --------------------------------------------------------------------
+[2025-05-15 19:28:28] profile.py(259) :   - Problem: OBPEvaluation
+[2025-05-15 19:28:28] profile.py(262) :   - task_description: Implement a function that returns the priority with which we want to add an item to each bin.
+[2025-05-15 19:28:28] profile.py(262) :   - use_numba_accelerate: False
+[2025-05-15 19:28:28] profile.py(262) :   - use_protected_div: False
+[2025-05-15 19:28:28] profile.py(262) :   - protected_div_delta: 1e-05
+[2025-05-15 19:28:28] profile.py(262) :   - random_seed: None
+[2025-05-15 19:28:28] profile.py(262) :   - timeout_seconds: 30
+[2025-05-15 19:28:28] profile.py(262) :   - exec_code: True
+[2025-05-15 19:28:28] profile.py(262) :   - safe_evaluate: True
+[2025-05-15 19:28:28] profile.py(262) :   - daemon_eval_process: False
+[2025-05-15 19:28:28] profile.py(262) :   - n_instances: 5
+[2025-05-15 19:28:28] profile.py(262) :   - n_items: 5000
+[2025-05-15 19:28:28] profile.py(262) :   - capacity: 100
+[2025-05-15 19:28:28] profile.py(264) : ====================================================================
+[2025-05-15 19:28:28] profile.py(265) : Method Parameters
+[2025-05-15 19:28:28] profile.py(266) : --------------------------------------------------------------------
+[2025-05-15 19:28:28] profile.py(267) :   - Method: EoH
+[2025-05-15 19:28:28] profile.py(271) :   - _max_generations: 10
+[2025-05-15 19:28:28] profile.py(271) :   - _max_sample_nums: 20
+[2025-05-15 19:28:28] profile.py(271) :   - _pop_size: 4
+[2025-05-15 19:28:28] profile.py(271) :   - _selection_num: 2
+[2025-05-15 19:28:28] profile.py(271) :   - _use_e2_operator: True
+[2025-05-15 19:28:28] profile.py(271) :   - _use_m1_operator: True
+[2025-05-15 19:28:28] profile.py(271) :   - _use_m2_operator: True
+[2025-05-15 19:28:28] profile.py(271) :   - _num_samplers: 1
+[2025-05-15 19:28:28] profile.py(271) :   - _num_evaluators: 1
+[2025-05-15 19:28:28] profile.py(271) :   - _resume_mode: False
+[2025-05-15 19:28:28] profile.py(271) :   - _debug_mode: False
+[2025-05-15 19:28:28] profile.py(271) :   - _multi_thread_or_process_eval: thread
+[2025-05-15 19:28:28] profile.py(271) :   - _function_to_evolve_name: priority
+[2025-05-15 19:28:28] profile.py(271) :   - _tot_sample_nums: 0
+[2025-05-15 19:28:28] profile.py(271) :   - _initial_sample_nums_max: 8
+[2025-05-15 19:28:28] profile.py(271) :   - _evaluation_executor: <concurrent.futures.thread.ThreadPoolExecutor object at 0x7ea6b5c87dd0>
+[2025-05-15 19:28:28] profile.py(273) : =====================================================================

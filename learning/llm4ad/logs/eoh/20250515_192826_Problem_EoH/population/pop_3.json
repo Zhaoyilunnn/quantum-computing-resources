@@ -1,0 +1,22 @@
+[
+    {
+        "algorithm": "{The algorithm calculates priority scores for each bin by first determining the remaining capacity after adding the item, then prioritizing bins with the smallest remaining capacity if the item fits, otherwise assigning zero priority.}",
+        "function": "def priority(item: float, bins: np.ndarray) -> np.ndarray:\n    remaining = bins - item\n    valid = remaining >= 0\n    priority_scores = np.where(valid, -remaining, 0)\n    return priority_scores\n\n",
+        "score": -2091.8
+    },
+    {
+        "algorithm": "{\\it Prioritize bins with the least remaining capacity that can still accommodate the item, ensuring efficient space utilization.}",
+        "function": "def priority(item: float, bins: np.ndarray) -> np.ndarray:\n    remaining = bins - item\n    valid = remaining >= 0\n    priority_scores = np.where(valid, remaining, np.inf)\n    return priority_scores\n\n",
+        "score": -5000.0
+    },
+    {
+        "algorithm": "{The algorithm calculates priority scores for each bin by first normalizing the remaining capacity after adding the item, then applying a sigmoid function to emphasize bins with capacities close to the item size.}",
+        "function": "def priority(item: float, bins: np.ndarray) -> np.ndarray:\n    \"\"\"Returns priority with which we want to add item to each bin.\n    Args:\n        item: Size of item to be added to the bin.\n        bins: Array of capacities for each bin.\n    Return:\n        Array of same size as bins with priority score of each bin.\n    \"\"\"\n    remaining_capacity = bins - item\n    normalized = remaining_capacity / np.max(np.abs(remaining_capacity))\n    sigmoid = 1 / (1 + np.exp(-normalized))\n    return sigmoid\n\n",
+        "score": -Infinity
+    },
+    {
+        "algorithm": "{The algorithm calculates priority scores for each bin by first normalizing the remaining capacity after adding the item, then prioritizing bins with the least remaining capacity to minimize wasted space.}",
+        "function": "def priority(item: float, bins: np.ndarray) -> np.ndarray:\n    \"\"\"Returns priority with which we want to add item to each bin.\n    Args:\n        item: Size of item to be added to the bin.\n        bins: Array of capacities for each bin.\n    Return:\n        Array of same size as bins with priority score of each bin.\n    \"\"\"\n    remaining_capacity = bins - item\n    valid_bins = remaining_capacity >= 0\n    priority_scores = np.where(valid_bins, 1 / (remaining_capacity + 1e-10), -np.inf)\n    return priority_scores\n\n",
+        "score": -Infinity
+    }
+]
