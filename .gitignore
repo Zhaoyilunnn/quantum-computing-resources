@@ -26,3 +26,7 @@ test_data*
 
 # executables
 *.out
+
+
+# notebooks
+*.ipynb_checkpoints
