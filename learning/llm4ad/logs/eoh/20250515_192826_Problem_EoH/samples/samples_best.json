@@ -1,8 +1,0 @@
-[
-    {
-        "sample_order": 1,
-        "algorithm": "{The algorithm calculates priority scores for each bin by first determining the remaining capacity after adding the item, then prioritizing bins with the smallest remaining capacity if the item fits, otherwise assigning zero priority.}",
-        "function": "def priority(item: float, bins: np.ndarray) -> np.ndarray:\n    \"\"\"Returns priority with which we want to add item to each bin.\n    Args:\n        item: Size of item to be added to the bin.\n        bins: Array of capacities for each bin.\n    Return:\n        Array of same size as bins with priority score of each bin.\n    \"\"\"\n    remaining = bins - item\n    valid = remaining >= 0\n    priority_scores = np.where(valid, -remaining, 0)\n    return priority_scores\n\n",
-        "score": -2091.8
-    }
-]
