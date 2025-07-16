@@ -2,6 +2,11 @@ import numpy as np
 from scipy.sparse import csc_matrix
 import pymatching
 import matplotlib.pyplot as plt
+import inspect
+from pygments import highlight
+from pygments.lexers import PythonLexer
+from pygments.formatters import SvgFormatter
+
 
 def step1_define_matrix():
     # 1. Define the parity check matrix (H)
@@ -20,11 +25,9 @@ def step1_define_matrix():
     # Visually, the graph looks like this:
     # (boundary) --4-- D0 --3-- D1 --2-- D2 --3-- D3 --4-- (boundary)
     # (The numbers are the weights defined below)
-    H = csc_matrix([[1, 1, 0, 0, 0],
-                    [0, 1, 1, 0, 0],
-                    [0, 0, 1, 1, 0],
-                    [0, 0, 0, 1, 1]])
+    H = csc_matrix([[1, 1, 0, 0, 0], [0, 1, 1, 0, 0], [0, 0, 1, 1, 0], [0, 0, 0, 1, 1]])
     return H
+
 
 def step2_define_weights():
     # 2. Define the weights for the errors (edges)
@@ -34,12 +37,14 @@ def step2_define_weights():
     weights = np.array([4, 3, 2, 3, 4])
     return weights
 
+
 def step3_create_matching(H, weights):
     # 3. Create the Matching object
     # This takes our check matrix and weights and builds the internal
     # matching graph used by the decoder.
     matching = pymatching.Matching(H, weights=weights)
     return matching
+
 
 def step4_define_syndrome():
     # 4. Define a syndrome to be decoded
@@ -49,36 +54,29 @@ def step4_define_syndrome():
     syndrome = np.array([0, 1, 0, 1])
     return syndrome
 
+
 def step5_decode(matching, syndrome):
     # 5. Decode the syndrome
     # The `decode` method finds a set of errors (a "prediction") that
     # results in the given syndrome and has the minimum possible total weight.
     # This is the Minimum Weight Perfect Matching solution.
     prediction = matching.decode(syndrome)
-    prediction_with_weight, solution_weight = matching.decode(syndrome, return_weight=True)
+    prediction_with_weight, solution_weight = matching.decode(
+        syndrome, return_weight=True
+    )
     return prediction, prediction_with_weight, solution_weight
 
-def draw_matching_graph(matching, filename, title=None, highlight_edges=None):
-    # Draw the matching graph and save as SVG.
-    # Optionally highlight certain edges (by index).
-    import networkx as nx
-    fig, ax = plt.subplots(figsize=(6, 3))
-    plt.sca(ax)
-    matching.draw()
-    if highlight_edges is not None:
-        # Highlight the selected edges in red
-        G = matching.to_networkx()
-        edge_list = list(G.edges)
-        pos = nx.spring_layout(G, seed=42)
-        for idx in highlight_edges:
-            if idx < len(edge_list):
-                u, v = edge_list[idx]
-                nx.draw_networkx_edges(G, pos=pos, edgelist=[(u, v)], edge_color='red', width=3, ax=ax)
-    if title:
-        ax.set_title(title)
-    plt.tight_layout()
-    plt.savefig(filename, format='svg')
-    plt.close(fig)
+
+def save_code_as_svg(obj, filename):
+    """
+    Save the source code of a function or class as a syntax-highlighted SVG.
+    """
+    code = inspect.getsource(obj)
+    formatter = SvgFormatter(font_size=16, line_numbers=True)
+    svg_code = highlight(code, PythonLexer(), formatter)
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(svg_code)
+
 
 def main():
     # Step 1: Define matrix
@@ -90,13 +88,17 @@ def main():
     # Step 4: Define syndrome
     syndrome = step4_define_syndrome()
     # Step 5: Decode
-    prediction, prediction_with_weight, solution_weight = step5_decode(matching, syndrome)
+    prediction, prediction_with_weight, solution_weight = step5_decode(
+        matching, syndrome
+    )
 
-    # Draw SVGs for each step
-    draw_matching_graph(matching, "step3_matching_graph.svg", title="Step 3: Matching Graph")
-    # Highlight the predicted errors in the graph for the decode step
-    highlight_edges = [i for i, val in enumerate(prediction) if val]
-    draw_matching_graph(matching, "step5_decoded_solution.svg", title="Step 5: Decoded Solution", highlight_edges=highlight_edges)
+    # Save code for each step as SVG
+    save_code_as_svg(step1_define_matrix, "step1_define_matrix.svg")
+    save_code_as_svg(step2_define_weights, "step2_define_weights.svg")
+    save_code_as_svg(step3_create_matching, "step3_create_matching.svg")
+    save_code_as_svg(step4_define_syndrome, "step4_define_syndrome.svg")
+    save_code_as_svg(step5_decode, "step5_decode.svg")
+    save_code_as_svg(main, "main_function.svg")
 
     print("--- PyMatching Example ---")
     print(f"Syndrome (detectors that fired): {syndrome}")
@@ -104,15 +106,26 @@ def main():
     print(f"Total weight of the solution: {solution_weight}")
     print("\n--- Explanation ---")
     print("The syndrome [0, 1, 0, 1] means detectors 1 and 3 have fired.")
-    print("The decoder found that the lowest-weight set of errors to cause this is to apply errors 2 and 3.")
+    print(
+        "The decoder found that the lowest-weight set of errors to cause this is to apply errors 2 and 3."
+    )
     print("Error 2 connects detectors 1 and 2, and has weight 2.")
     print("Error 3 connects detectors 2 and 3, and has weight 3.")
-    print("This 'path' of errors flips detectors 1 and 3, and the intermediate detector 2 is flipped twice, so its final state is 0.")
+    print(
+        "This 'path' of errors flips detectors 1 and 3, and the intermediate detector 2 is flipped twice, so its final state is 0."
+    )
     print(f"The total weight is 2 + 3 = {solution_weight}.")
-    print(f"The prediction vector {prediction} has 1s at indices 2 and 3, indicating which errors were chosen.")
+    print(
+        f"The prediction vector {prediction} has 1s at indices 2 and 3, indicating which errors were chosen."
+    )
     print("\nSVGs generated:")
-    print(" - step3_matching_graph.svg: The matching graph after construction.")
-    print(" - step5_decoded_solution.svg: The graph with the decoded solution highlighted.")
+    print(" - step1_define_matrix.svg: SVG of the code for step 1.")
+    print(" - step2_define_weights.svg: SVG of the code for step 2.")
+    print(" - step3_create_matching.svg: SVG of the code for step 3.")
+    print(" - step4_define_syndrome.svg: SVG of the code for step 4.")
+    print(" - step5_decode.svg: SVG of the code for step 5.")
+    print(" - main_function.svg: SVG of the code for the main function.")
+
 
 if __name__ == "__main__":
     main()
