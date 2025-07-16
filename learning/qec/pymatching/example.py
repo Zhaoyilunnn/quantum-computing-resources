@@ -78,6 +78,35 @@ def save_code_as_svg(obj, filename):
         f.write(svg_code)
 
 
+def draw_matching_graph(matching, filename, title=None, highlight_edges=None):
+    """
+    Draw the matching graph using matching.draw, and highlight the predicted edges.
+    """
+    # Draw the matching graph and save as SVG.
+    # Optionally highlight certain edges (by index).
+    import networkx as nx
+
+    fig, ax = plt.subplots(figsize=(6, 3))
+    plt.sca(ax)
+    matching.draw()
+    if highlight_edges is not None:
+        # Highlight the selected edges in red
+        G = matching.to_networkx()
+        edge_list = list(G.edges)
+        pos = nx.spring_layout(G, seed=42)
+        for idx in highlight_edges:
+            if idx < len(edge_list):
+                u, v = edge_list[idx]
+                nx.draw_networkx_edges(
+                    G, pos=pos, edgelist=[(u, v)], edge_color="red", width=3, ax=ax
+                )
+    if title:
+        ax.set_title(title)
+    plt.tight_layout()
+    plt.savefig(filename, format="svg")
+    plt.close(fig)
+
+
 def main():
     # Step 1: Define matrix
     H = step1_define_matrix()
@@ -99,6 +128,19 @@ def main():
     save_code_as_svg(step4_define_syndrome, "step4_define_syndrome.svg")
     save_code_as_svg(step5_decode, "step5_decode.svg")
     save_code_as_svg(main, "main_function.svg")
+
+    # Draw SVGs for each step
+    draw_matching_graph(
+        matching, "step3_matching_graph.svg", title="Step 3: Matching Graph"
+    )
+    # Highlight the predicted errors in the graph for the decode step
+    highlight_edges = [i for i, val in enumerate(prediction) if val]
+    draw_matching_graph(
+        matching,
+        "step5_decoded_solution.svg",
+        title="Step 5: Decoded Solution",
+        highlight_edges=highlight_edges,
+    )
 
     print("--- PyMatching Example ---")
     print(f"Syndrome (detectors that fired): {syndrome}")
@@ -125,6 +167,9 @@ def main():
     print(" - step4_define_syndrome.svg: SVG of the code for step 4.")
     print(" - step5_decode.svg: SVG of the code for step 5.")
     print(" - main_function.svg: SVG of the code for the main function.")
+    print(
+        " - matching_graph_highlighted.svg: Matching graph with decoded edges highlighted."
+    )
 
 
 if __name__ == "__main__":
