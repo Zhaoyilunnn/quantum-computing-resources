@@ -78,7 +78,9 @@ def save_code_as_svg(obj, filename):
         f.write(svg_code)
 
 
-def draw_matching_graph(matching, filename, title=None, highlight_edges=None):
+def draw_matching_graph(
+    matching: pymatching.Matching, filename, title=None, highlight_edges=None
+):
     """
     Draw the matching graph using matching.draw, and highlight the predicted edges.
     """
@@ -88,18 +90,36 @@ def draw_matching_graph(matching, filename, title=None, highlight_edges=None):
 
     fig, ax = plt.subplots(figsize=(6, 3))
     plt.sca(ax)
-    matching.draw()
     if highlight_edges is not None:
         # Highlight the selected edges in red
+        edges = matching.edges()
+        final_highligt_edges = []
+        for edge in edges:
+            if len(edge) == 3 and edge[2] is not None:
+                u, v, attr = edge
+                if "fault_ids" in attr:
+                    if len(attr["fault_ids"]) == 1:
+                        fault_id = next(iter(attr["fault_ids"]))
+                        if fault_id in highlight_edges:
+                            final_highligt_edges.append((u, v))
         G = matching.to_networkx()
-        edge_list = list(G.edges)
         pos = nx.spring_layout(G, seed=42)
-        for idx in highlight_edges:
-            if idx < len(edge_list):
-                u, v = edge_list[idx]
-                nx.draw_networkx_edges(
-                    G, pos=pos, edgelist=[(u, v)], edge_color="red", width=3, ax=ax
-                )
+        nx.draw(G, ax=ax, pos=pos)
+        # Draw node labels (node id)
+        nx.draw_networkx_labels(G, pos=pos, ax=ax)
+        # Draw edge labels (edge id: use fault_id if available, else index)
+        edge_labels = {}
+        for i, edge in enumerate(G.edges(data=True)):
+            u, v, attr = edge
+            if "fault_ids" in attr and len(attr["fault_ids"]) == 1:
+                fault_id = next(iter(attr["fault_ids"]))
+                edge_labels[(u, v)] = str(fault_id)
+            else:
+                edge_labels[(u, v)] = str(i)
+        nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels, ax=ax)
+        nx.draw_networkx_edges(
+            G, pos=pos, edgelist=final_highligt_edges, edge_color="red", width=3, ax=ax
+        )
     if title:
         ax.set_title(title)
     plt.tight_layout()
@@ -135,6 +155,7 @@ def main():
     )
     # Highlight the predicted errors in the graph for the decode step
     highlight_edges = [i for i, val in enumerate(prediction) if val]
+
     draw_matching_graph(
         matching,
         "step5_decoded_solution.svg",
