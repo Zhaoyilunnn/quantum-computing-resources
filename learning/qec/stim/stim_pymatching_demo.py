@@ -1,6 +1,10 @@
 import stim
 import pymatching
 import numpy as np
+import inspect
+from pygments import highlight
+from pygments.lexers import PythonLexer
+from pygments.formatters import SvgFormatter
 
 
 def build_simple_repetition_code_circuit(distance=3, rounds=3):
@@ -300,6 +304,17 @@ def demo_universal_adapter():
     print("4. Easily extensible to other quantum simulators (Qiskit, Cirq, etc.)")
 
     return adapter
+
+
+def save_code_as_svg(obj, filename):
+    """
+    Save the source code of a function or class as a syntax-highlighted SVG.
+    """
+    code = inspect.getsource(obj)
+    formatter = SvgFormatter(font_size=16, line_numbers=True)
+    svg_code = highlight(code, PythonLexer(), formatter)
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(svg_code)
 
 
 def main():
