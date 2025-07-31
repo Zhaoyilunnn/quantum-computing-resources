@@ -141,6 +141,9 @@ def main():
         matching, syndrome
     )
 
+    # https://pymatching.readthedocs.io/en/stable/index.html#loading-from-a-parity-check-matrix
+    assert (H @ prediction % 2 == syndrome).all()
+
     # Save code for each step as SVG
     save_code_as_svg(step1_define_matrix, "step1_define_matrix.svg")
     save_code_as_svg(step2_define_weights, "step2_define_weights.svg")
