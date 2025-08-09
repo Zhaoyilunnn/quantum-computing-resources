@@ -16,3 +16,6 @@
 [submodule "learning/qec/tqec"]
 	path = learning/qec/tqec
 	url = https://github.com/tqec/tqec.git
+[submodule "learning/qiskit/qasm3_test/openqasm"]
+	path = learning/qiskit/qasm3_test/openqasm
+	url = https://github.com/openqasm/openqasm.git
