@@ -1,0 +1,6 @@
+sample,num_qubits,depth_param,seed,original_depth,synthesized_depth
+1,6,5,42,21,3525
+2,7,6,43,11,14775
+3,7,3,44,13,14646
+4,5,8,45,21,821
+5,7,5,46,13,14741
