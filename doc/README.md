@@ -4,7 +4,7 @@
 
 There're lots of tutorials for quantum computing, we recommend to start from the book "[Quantum computation and quantum information, 10th anniversary](https://github.com/Zhaoyilunnn/qcs/blob/main/doc/tutorials/Quantum%20computation%20and%20quantum%20information.pdf)". To get familiar with some basic concepts, reading Sec. 1.2-1.3 and Sec. 2.1-2.2 is more than enough. Trying to solve the exercise problems of this book is extremely helpful, you can refer to this [forked repository](https://github.com/Zhaoyilunnn/SolutionQCQINielsenChuang) for solutions of Sec. 2 and Sec. 9, and we encourage you to add solutions for other sections and we can contribute to the original repository.
 
-### Tutorials from various software frameworks.
+### Tutorials from various software frameworks
 
 - IBM: [qiskit tutorials](https://qiskit.org/documentation/tutorials.html) (Qiskit is currently the most popular framework).
 - Microsoft: [Azure Quantum](https://learn.microsoft.com/en-us/azure/quantum/)
@@ -75,12 +75,3 @@ My paper notes convention
 - red: Challenges to solve / drawbacks of SOTA.
 - green: Insights / Novelty / Philosophy.
 - blue: Other key info.
-
-## Reference
-
-If you find some interesting papers, please add an bibtex entry (use [this tool](https://www.doi2bib.org/) or google scholar to get bibtex entry) in [references.bib](https://github.com/Zhaoyilunnn/qcs/blob/master/doc/references.bib). (You can use this [tool](https://github.com/FlamingTempura/bibtex-tidy) ([website](https://flamingtempura.github.io/bibtex-tidy/)) to remove redundancy). We can reuse this file when writting papers.
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY0Mjc3NDIxMCwtMTE1OTQ2MTczNSwxMD
-M3MzgzNDE4XX0=
--->
