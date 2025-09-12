@@ -8,7 +8,7 @@ This document aims to record some extended illustrations of the `Stim` framework
 
 Understanding the internal data structures of Stim.
 
-## SparseUnsignedRevFrameTracker
+## `SparseUnsignedRevFrameTracker`
 
 **Purpose:**  
 Tracks how Pauli errors (X, Z, or both) propagate through a quantum circuit, enabling efficient error analysis and detector error model extraction.
@@ -80,9 +80,25 @@ void SparseUnsignedRevFrameTracker::undo_MX(const CircuitInstruction &dat) {
 
 If `handle_z_gauges` finds that a detector or observable is affected by a Z error that anti-commutes with the X measurement, it will record this as a non-deterministic event and, if configured, throw an error.
 
-**Why this matters:**  
-This structure allows Stim to efficiently answer questions like:  
+**Why this matters:**
+This structure allows Stim to efficiently answer questions like:
 
 - “If an X error occurs on qubit 5, which detectors or logical observables could be affected?”
 - “How do errors propagate through repeated circuit blocks or complex gate sequences?”
 - “Are there any detectors or observables whose outcomes are fundamentally unreliable due to error propagation?”
+
+## `ErrorAnalyzer`
+
+### The Role of `check_for_gauge`
+
+The function `check_for_gauge` is a key part of Stim's error analysis process. Its main purpose is to detect when a set of detectors or observables forms a "gauge degree of freedom"—that is, when the circuit's behavior becomes non-deterministic due to anti-commutation with resets or measurements.
+
+**Usage Scenario:**  
+
+- After undoing certain gates (such as resets or measurements), the error tracker checks if any detectors or observables remain sensitive to errors that should have been collapsed.
+- If such a set is non-empty, it means there is a non-deterministic effect (a gauge), which may or may not be allowed depending on the configuration.
+- If gauge detectors are allowed, `check_for_gauge` will remove the gauge by introducing a random error mechanism.
+- If not allowed, it throws a detailed exception with debugging information, including which qubits and detectors are involved, and instructions for visualizing the issue.
+
+**Why is this important?**  
+This function ensures that the output detector error model is valid and deterministic unless explicitly permitted to include random (gauge) detectors. It provides extensive debugging information to help users understand and fix issues in their quantum circuits, making it easier to identify and resolve sources of non-determinism.
