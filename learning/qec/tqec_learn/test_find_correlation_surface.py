@@ -2,6 +2,7 @@
 Commit id: 62099b293cf0d824ddf932421553b5589819fb6e
 """
 
+import argparse
 from collections import defaultdict
 from time import time
 
@@ -11,14 +12,12 @@ from tqec.gallery import steane_encoding
 from tqec.interop.pyzx.correlation import _find_correlation_surfaces_from_leaf
 from tqec.interop.pyzx.positioned import PositionedZX
 
-NUM_REPLICATE = 4
 
-
-def construct_chain_of_steane_codes() -> BlockGraph:
+def construct_chain_of_steane_codes(num_replicate: int) -> BlockGraph:
     """Construct a chain of steane codes to create a larger graph for testing."""
     block_graph: BlockGraph | None = None
     graph_clone: BlockGraph | None = None
-    for i in range(NUM_REPLICATE):
+    for i in range(num_replicate):
         g = steane_encoding()
         g.relabel_cubes({f"Port{j}": f"Port{j}_{i}" for j in range(7)})
         if block_graph is None:
@@ -31,7 +30,7 @@ def construct_chain_of_steane_codes() -> BlockGraph:
     return graph_clone
 
 
-def test_find_correlation_surface(graph: BlockGraph):
+def test_find_correlation_surface(graph: BlockGraph, show_details: bool = False):
     """Test the performance and redundancy of finding correlation surfaces from leaf nodes."""
     # 1. Convert to pyzx graph
     positioned_zx = PositionedZX.from_block_graph(graph)
@@ -95,7 +94,7 @@ def test_find_correlation_surface(graph: BlockGraph):
             redundant_computation_time += duration
             print(
                 f" Found {len(surfaces_from_this_leaf)} surfaces "
-                f"(0new) in {duration:.6f} seconds. (Redundant)"
+                f"(0 new) in {duration:.6f} seconds. (Redundant)"
             )
 
     print("\n3. Analysis Results:")
@@ -126,25 +125,39 @@ def test_find_correlation_surface(graph: BlockGraph):
             f"Percentage of time wasted on redundant computations: {redundancy_percentage:.2f}%"
         )
 
-    print("\nDetails of redundant findings:")
-    for k, surface in enumerate(unique_surfaces):
-        finders = surface_to_leaf_map[surface]
-        if len(finders) > 1:
-            print(
-                f"  - Surface {k + 1} was found {len(finders)} times by leaves: {finders}"
-            )
+    if show_details:
+        print("\nDetails of redundant findings:")
+        for k, surface in enumerate(unique_surfaces):
+            finders = surface_to_leaf_map[surface]
+            if len(finders) > 1:
+                print(
+                    f"  - Surface {k + 1} was found {len(finders)} times by leaves: {finders}"
+                )
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Test correlation surface finding on Steane code chains."
+    )
+    parser.add_argument(
+        "--num_replicate",
+        type=int,
+        default=4,
+        help="Number of Steane code blocks to chain together (default: 4)",
+    )
+    args = parser.parse_args()
+
     print("1. Constructing a chain of Steane codes...")
-    test_graph = construct_chain_of_steane_codes()
+    test_graph = construct_chain_of_steane_codes(args.num_replicate)
     print("   - Construction complete.\n")
     test_find_correlation_surface(test_graph)
 
     print("\n" + "-" * 30)
     print("4. Comparing with the original `find_correlation_surfaces` function.")
     start_time = time()
-    surfaces = test_graph.find_correlation_surfaces()
+    surfaces = test_graph.find_correlation_surfaces(
+        reduce_to_minimal_generators=False
+    )  # for fair comparison
     end_time = time()
     print(f"Total time taken: {end_time - start_time:.6f} seconds")
     print(f"Total number of surfaces found: {len(surfaces)}")
