@@ -31,3 +31,6 @@ test_data*
 # notebooks
 *.ipynb_checkpoints
 .aider*
+
+.gemini/
+gha-creds-*.json

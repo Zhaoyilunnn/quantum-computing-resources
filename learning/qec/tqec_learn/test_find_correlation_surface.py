@@ -30,8 +30,8 @@ def construct_chain_of_steane_codes(num_replicate: int) -> BlockGraph:
     return graph_clone
 
 
-def test_find_correlation_surface(graph: BlockGraph, show_details: bool = False):
-    """Test the performance and redundancy of finding correlation surfaces from leaf nodes."""
+def collect_correlation_surface_stats(graph: BlockGraph):
+    """Collect statistics about correlation surfaces found from leaf nodes."""
     # 1. Convert to pyzx graph
     positioned_zx = PositionedZX.from_block_graph(graph)
     zx_g = positioned_zx.g
@@ -97,18 +97,37 @@ def test_find_correlation_surface(graph: BlockGraph, show_details: bool = False)
                 f"(0 new) in {duration:.6f} seconds. (Redundant)"
             )
 
+    stats = {
+        "num_total_found": len(all_surfaces_found),
+        "num_unique_found": len(unique_surfaces),
+        "num_redundant_computations": len(all_surfaces_found) - len(unique_surfaces),
+        "total_computation_time": total_computation_time,
+        "new_discovery_time": new_discovery_time,
+        "redundant_computation_time": redundant_computation_time,
+        "surface_to_leaf_map": surface_to_leaf_map,
+        "unique_surfaces": unique_surfaces,
+    }
+    return stats
+
+
+def analyze_correlation_surface_stats(stats, show_details=False):
+    """Analyze and print statistics about correlation surfaces."""
     print("\n3. Analysis Results:")
     print("-" * 30)
 
-    num_total_found = len(all_surfaces_found)
-    num_unique_found = len(unique_surfaces)
-    num_redundant_computations = num_total_found - num_unique_found
+    num_total_found = stats["num_total_found"]
+    num_unique_found = stats["num_unique_found"]
+    num_redundant_computations = stats["num_redundant_computations"]
 
     print(f"Total surfaces found (including duplicates): {num_total_found}")
     print(f"Unique surfaces found: {num_unique_found}")
     print(f"Number of redundant surfaces found: {num_redundant_computations}")
 
     print("\nPerformance Impact:")
+    total_computation_time = stats["total_computation_time"]
+    new_discovery_time = stats["new_discovery_time"]
+    redundant_computation_time = stats["redundant_computation_time"]
+
     print(f"Total computation time: {total_computation_time:.6f} seconds")
     print(
         f"Time spent on computations yielding new surfaces: {new_discovery_time:.6f} seconds"
@@ -127,6 +146,8 @@ def test_find_correlation_surface(graph: BlockGraph, show_details: bool = False)
 
     if show_details:
         print("\nDetails of redundant findings:")
+        surface_to_leaf_map = stats["surface_to_leaf_map"]
+        unique_surfaces = stats["unique_surfaces"]
         for k, surface in enumerate(unique_surfaces):
             finders = surface_to_leaf_map[surface]
             if len(finders) > 1:
@@ -150,7 +171,15 @@ if __name__ == "__main__":
     print("1. Constructing a chain of Steane codes...")
     test_graph = construct_chain_of_steane_codes(args.num_replicate)
     print("   - Construction complete.\n")
-    test_find_correlation_surface(test_graph)
+
+    # Convert to zx-graph and save to disk
+    print("   - Saving the constructed graph to 'test_steane_chain.svg'...")
+    zx_graph = test_graph.to_zx_graph()
+    fig, _ = zx_graph.draw()
+    fig.savefig("test_steane_chain.svg")
+
+    stats = collect_correlation_surface_stats(test_graph)
+    analyze_correlation_surface_stats(stats)
 
     print("\n" + "-" * 30)
     print("4. Comparing with the original `find_correlation_surfaces` function.")
