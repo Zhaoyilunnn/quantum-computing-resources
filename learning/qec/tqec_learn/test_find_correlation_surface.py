@@ -8,9 +8,31 @@ from time import time
 
 from tqec.computation.block_graph import BlockGraph
 from tqec.computation.cube import ZXCube
-from tqec.gallery import steane_encoding
+from tqec.gallery import cnot, steane_encoding
 from tqec.interop.pyzx.correlation import _find_correlation_surfaces_from_leaf
 from tqec.interop.pyzx.positioned import PositionedZX
+
+
+def analyze_original_steane_encoding():
+    """Get the original steane encoding graph for reference."""
+    # graph = steane_encoding()
+    graph = cnot()
+
+    correlation_surfaces = graph.find_correlation_surfaces()
+    positioned_zx = PositionedZX.from_block_graph(graph)
+    zx_g = positioned_zx.g
+    p2v = positioned_zx.p2v
+
+    # 2. Get leaf nodes
+    leaf_cubes = graph.leaf_cubes
+    leaves = {p2v[cube.position] for cube in leaf_cubes}
+
+    # This is the function we want to test
+    surfaces_from_first_leaf = _find_correlation_surfaces_from_leaf(zx_g, leaves.pop())
+
+    print("Original Steane Encoding:")
+    print(f" - Total surfaces found: {len(correlation_surfaces)}")
+    print(f" - Surfaces from first leaf: {len(surfaces_from_first_leaf)}")
 
 
 def construct_chain_of_steane_codes(num_replicate: int) -> BlockGraph:
@@ -156,18 +178,7 @@ def analyze_correlation_surface_stats(stats, show_details=False):
                 )
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Test correlation surface finding on Steane code chains."
-    )
-    parser.add_argument(
-        "--num_replicate",
-        type=int,
-        default=4,
-        help="Number of Steane code blocks to chain together (default: 4)",
-    )
-    args = parser.parse_args()
-
+def analyze_steane_chain(args):
     print("1. Constructing a chain of Steane codes...")
     test_graph = construct_chain_of_steane_codes(args.num_replicate)
     print("   - Construction complete.\n")
@@ -190,3 +201,18 @@ if __name__ == "__main__":
     end_time = time()
     print(f"Total time taken: {end_time - start_time:.6f} seconds")
     print(f"Total number of surfaces found: {len(surfaces)}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Test correlation surface finding on Steane code chains."
+    )
+    parser.add_argument(
+        "--num_replicate",
+        type=int,
+        default=4,
+        help="Number of Steane code blocks to chain together (default: 4)",
+    )
+    args = parser.parse_args()
+    analyze_original_steane_encoding()
+    # analyze_steane_chain(args)
