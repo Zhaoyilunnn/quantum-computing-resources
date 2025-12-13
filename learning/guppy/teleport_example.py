@@ -1,3 +1,8 @@
+"""
+Name: guppylang
+Version: 0.21.6
+"""
+
 from guppylang import guppy
 from guppylang.std.builtins import owned
 from guppylang.std.quantum import cx, h, measure, qubit, x, z
